@@ -1,7 +1,7 @@
 Aura Filter
-=============
+===========
 
-The Aura Filter package provider validation and sanitizing for user data.
+The Aura Filter package provides validation and sanitizing for user data.
 
 This package is compliant with [PSR-0][], [PSR-1][], and [PSR-2][]. If you
 notice compliance oversights, please send a patch via pull request.
