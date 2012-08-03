@@ -35,7 +35,7 @@ class StrlenBetween extends AbstractRule
     {
         $value = $this->getValue();
         if (strlen($value) < $min) {
-            $this->setValue(str_pad($value, $pad_string, $pad_type));
+            $this->setValue(str_pad($value, $min, $pad_string, $pad_type));
         }
         if (strlen($value) > $max) {
             $this->setValue(substr($value, 0, $max));
