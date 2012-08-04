@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/src/Aura/Filter/Chain.php';
 require_once __DIR__ . '/src/Aura/Filter/Exception.php';
+require_once __DIR__ . '/src/Aura/Filter/Exception/RuleNotMapped.php';
+require_once __DIR__ . '/src/Aura/Filter/Exception/UnexpectedDataType.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/AbstractRule.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Alnum.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Alpha.php';
