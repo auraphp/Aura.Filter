@@ -39,6 +39,7 @@ class Word extends AbstractRule
      */
     protected function sanitize()
     {
-        $this->setValue(preg_replace('/\W/', '', $this->getValue()));
+        return $this->setValue(preg_replace('/\W/', '', $this->getValue()));
     }
 }
+ 
