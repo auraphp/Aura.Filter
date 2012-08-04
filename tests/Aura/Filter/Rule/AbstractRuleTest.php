@@ -53,7 +53,8 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testIs($value)
     {
-        $rule = $this->newRule(['field' => $value], 'field');
+        list($data, $field) = $this->prepForValidate($value);
+        $rule = $this->newRule($data, $field);
         $this->assertTrue($this->ruleIs($rule));
     }
     
@@ -62,7 +63,8 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsNot($value)
     {
-        $rule = $this->newRule(['field' => $value], 'field');
+        list($data, $field) = $this->prepForValidate($value);
+        $rule = $this->newRule($data, $field);
         $this->assertTrue($this->ruleIsNot($rule));
     }
     
@@ -71,7 +73,8 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsBlankOr($value)
     {
-        $rule = $this->newRule(['field' => $value], 'field');
+        list($data, $field) = $this->prepForValidate($value);
+        $rule = $this->newRule($data, $field);
         $this->assertTrue($this->ruleIsBlankOr($rule));
     }
     
@@ -80,7 +83,8 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testFix($value, $expect)
     {
-        $rule = $this->newRule(['field' => $value], 'field');
+        list($data, $field) = $this->prepForSanitize($value);
+        $rule = $this->newRule($data, $field);
         $this->ruleFix($rule);
         $actual = $rule->getValue();
         $this->assertSame($expect, $actual);
@@ -91,10 +95,27 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testFixBlankOr($value, $expect)
     {
-        $rule = $this->newRule(['field' => $value], 'field');
+        list($data, $field) = $this->prepForSanitize($value);
+        $rule = $this->newRule($data, $field);
         $this->ruleFixBlankOr($rule);
         $actual = $rule->getValue();
         $this->assertSame($expect, $actual);
+    }
+    
+    // DATA/FIELD FOR PREP ===================================================
+    
+    public function prepForValidate($value)
+    {
+        $data  = ['field' => $value];
+        $field = 'field';
+        return [$data, $field];
+    }
+    
+    public function prepForSanitize($value)
+    {
+        $data  = ['field' => $value];
+        $field = 'field';
+        return [$data, $field];
     }
     
     // RULE INVOCATIONS ======================================================
