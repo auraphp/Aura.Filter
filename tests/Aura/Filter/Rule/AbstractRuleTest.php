@@ -57,13 +57,6 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->ruleIs($rule));
     }
     
-    public function ruleIs($rule)
-    {
-        return $rule->is();
-    }
-    
-    abstract public function providerIs();
-    
     /**
      * @dataProvider providerIsNot
      */
@@ -73,13 +66,6 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->ruleIsNot($rule));
     }
     
-    public function ruleIsNot($rule)
-    {
-        return $rule->isNot();
-    }
-    
-    abstract public function providerIsNot();
-    
     /**
      * @dataProvider providerIsBlankOr
      */
@@ -87,20 +73,6 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
     {
         $rule = $this->newRule(['field' => $value], 'field');
         $this->assertTrue($this->ruleIsBlankOr($rule));
-    }
-    
-    public function ruleIsBlankOr($rule)
-    {
-        return $rule->isBlankOr();
-    }
-    
-    public function providerIsBlankOr()
-    {
-        return array_merge($this->providerIs(), [
-            [null],
-            [''],
-            ["\r \t \n"],
-        ]);
     }
     
     /**
@@ -114,11 +86,6 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function ruleFix($rule)
-    {
-        return $rule->fix();
-    }
-    
     /**
      * @dataProvider providerFixBlankOr
      */
@@ -130,10 +97,49 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
+    // RULE INVOCATIONS ======================================================
+    
+    public function ruleIs($rule)
+    {
+        return $rule->is();
+    }
+    
+    public function ruleIsBlankOr($rule)
+    {
+        return $rule->isBlankOr();
+    }
+    
+    public function ruleIsNot($rule)
+    {
+        return $rule->isNot();
+    }
+    
+    public function ruleFix($rule)
+    {
+        return $rule->fix();
+    }
+    
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr();
     }
+    
+    // PROVIDERS =============================================================
+    
+    abstract public function providerIs();
+    
+    abstract public function providerIsNot();
+    
+    public function providerIsBlankOr()
+    {
+        return array_merge($this->providerIs(), [
+            [null],
+            [''],
+            ["\r \t \n"],
+        ]);
+    }
+    
+    abstract public function providerFix();
     
     public function providerFixBlankOr()
     {
