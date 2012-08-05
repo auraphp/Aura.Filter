@@ -1,7 +1,7 @@
 <?php
 use Aura\Filter\Value;
 
-$filter_chain = dir(__DIR__). 'scripts/instance.php';
+$filter_chain = dirname(__DIR__). '/scripts/instance.php';
 
 // set up the filter chain.
 // $filter_chain->add($field, $method, $name, $param1, $param2, $paramN);
@@ -24,6 +24,16 @@ $filter_chain->add('accept_terms', Value::FIX, 'bool');
 
 $filter_chain->add('password_plaintext', Value::IS, 'strlenBetween', 6, null);
 $filter_chain->add('password_confirmed', Value::IS, 'equalToField', 'password_plaintext');
+
+$data = [
+    'username' => 'username',
+    'birthday' => '27-08-1990',
+    'nickname' => 'awesomenick',
+    'something' => 'Hello World',
+    'accept_terms' => true,
+    'password_plaintext' => 'passwd',
+    'password_confirmed' => 'passwd'
+];
 
 // execute the chain on a data object or array
 $passed = $filter_chain->exec($data);
