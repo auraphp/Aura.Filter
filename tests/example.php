@@ -1,7 +1,7 @@
 <?php
 use Aura\Filter\Value;
 
-$filter_chain = dirname(__DIR__). '/scripts/instance.php';
+$filter_chain = require_once dirname(__DIR__). '/scripts/instance.php';
 
 // set up the filter chain.
 // $filter_chain->add($field, $method, $name, $param1, $param2, $paramN);

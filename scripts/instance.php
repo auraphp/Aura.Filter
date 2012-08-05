@@ -3,9 +3,9 @@ namespace Aura\Filter;
 require_once dirname(__DIR__) . '/src.php';
 $registry = [
     'alnum' => new Rule\Alnum,
-    'alpha' => new Rule\Rule\Alpha,
-    'between' => new Rule\Rule\Between,
-    'blank' => new Rule\Rule\Blank,
+    'alpha' => new Rule\Alpha,
+    'between' => new Rule\Between,
+    'blank' => new Rule\Blank,
     'bool' => new Rule\Bool,
     'countryCode' => new Rule\CountryCode,
     'creditCard' => new Rule\CreditCard,
