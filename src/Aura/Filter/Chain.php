@@ -51,7 +51,7 @@ class Chain
     {
         if (is_array($data)) {
             $object = (object) $data;
-            $this->exec($data);
+            $this->exec($object);
             return (array) $object;
         }
         
@@ -95,7 +95,11 @@ class Chain
             }
         }
         
-        return (bool) $this->messages;
+        if ($this->messages) {
+            return false;
+        } else {
+            return true;
+        }
     }
     
     public function getMessages()

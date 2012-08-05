@@ -7,7 +7,7 @@ $filter_chain = require_once dirname(__DIR__). '/scripts/instance.php';
 // $filter_chain->add($field, $method, $name, $param1, $param2, $paramN);
 
 $filter_chain->add('username', Value::IS, 'alnum');
-$filter_chain->add('username', Value::IS, 'between', 6, 12);
+$filter_chain->add('username', Value::IS, 'strlenBetween', 6, 12);
 $filter_chain->add('username', Value::FIX, 'alnum');
 
 $filter_chain->add('birthday', Value::IS, 'isoDate');
@@ -27,18 +27,19 @@ $filter_chain->add('password_confirmed', Value::IS, 'equalToField', 'password_pl
 
 $data = [
     'username' => 'username',
-    'birthday' => '27-08-1990',
+    'birthday' => '1990-08-27',
     'nickname' => 'awesomenick',
     'something' => 'Hello World',
     'accept_terms' => true,
     'password_plaintext' => 'passwd',
-    'password_confirmed' => 'passwd'
+    'password_confirmed' => 'passwdx'
 ];
 
+
 // execute the chain on a data object or array
-$passed = $filter_chain->exec($data);
-if (! $passed) {
+$success = $filter_chain->exec($data);
+if (! $success) {
     // an array of failure messages, with info about the failures
-    $failed = $filter_chain->getMessages();
-    var_dump($failed);
+    $failure = $filter_chain->getMessages();
+    var_dump($failure);
 }
