@@ -72,7 +72,8 @@ class Upload extends AbstractRule
         
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
-            return $this->_invalid('FILTER_UPLOAD_ERR_ARRAY_KEYS');
+            $this->message = 'FILTER_UPLOAD_ERR_ARRAY_KEYS';
+            return false;
         }
         
         // was the upload explicitly ok?
@@ -94,7 +95,8 @@ class Upload extends AbstractRule
         // is it actually an uploaded file?
         if (! is_uploaded_file($value['tmp_name'])) {
             // nefarious happenings are afoot.
-            return $this->_invalid('FILTER_UPLOAD_ERR_IS_UPLOADED_FILE');
+            $this->message = 'FILTER_UPLOAD_ERR_IS_UPLOADED_FILE';
+            return false;
         }
         
         // check file extension?
