@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Filter;
 
+use InvalidArgumentException;
+
 class Chain
 {
     protected $rules = [];
@@ -47,15 +49,10 @@ class Chain
         ];
     }
     
-    public function exec($data)
+    public function exec(&$data)
     {
-        if (is_array($data)) {
-            $object = (object) $data;
-            return $this->exec($object);
-        }
-        
         if (! is_object($data)) {
-            throw new Exception\UnexpectedDataType;
+            throw new InvalidArgumentException;
         }
         
         $this->messages = [];
