@@ -51,8 +51,7 @@ class Chain
     {
         if (is_array($data)) {
             $object = (object) $data;
-            $this->exec($object);
-            return (array) $object;
+            return $this->exec($object);
         }
         
         if (! is_object($data)) {
