@@ -46,5 +46,6 @@ class Trim extends AbstractRule
             $chars = $this->chars;
         }
         $this->setValue(trim($this->getValue(), $chars));
+        return true;
     }
 }

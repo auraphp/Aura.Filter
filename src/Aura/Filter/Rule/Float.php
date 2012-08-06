@@ -103,5 +103,6 @@ class Float extends AbstractRule
         
         // done
         $this->setValue((float) $value);
+        return true;
     }
 }

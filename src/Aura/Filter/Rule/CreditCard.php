@@ -26,7 +26,7 @@ class CreditCard extends AbstractRule
         // get the value; remove spaces, dashes, and dots
         $value = str_replace([' ', '-', '.'], '', (string) $this->getValue());
         
-        // is it numeric
+        // is it composed only of digits?
         if (! ctype_digit($value)) {
             return false;
         }

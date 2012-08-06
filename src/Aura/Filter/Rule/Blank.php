@@ -35,5 +35,6 @@ class Blank extends AbstractRule
     protected function sanitize()
     {
         $this->setValue(null);
+        return true;
     }
 }
