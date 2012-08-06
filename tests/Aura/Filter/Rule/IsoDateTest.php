@@ -50,7 +50,7 @@ class IsoDateTest extends AbstractRuleTest
                 ],
                 '2012-08-14',
             ],
-            [1343945988, '2012-08-02'],
+            [strtotime('2012-08-02'), '2012-08-02'],
         ];
     }
 }
