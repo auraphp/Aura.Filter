@@ -52,7 +52,7 @@ class IsoTimeTest extends AbstractRuleTest
                 ],
                 '17:28:06',
             ],
-            [1343947049, '17:37:29'],
+            [strtotime('17:37:29'), '17:37:29'],
         ];
     }
 }
