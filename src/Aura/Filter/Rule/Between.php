@@ -43,6 +43,9 @@ class Between extends AbstractRule
     protected function validate($min, $max)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         return ($value >= $min && $value <= $max);
     }
 
@@ -61,6 +64,9 @@ class Between extends AbstractRule
     protected function sanitize($min, $max)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if ($value < $min) {
             $this->setValue($min);
         } elseif ($value > $max) {

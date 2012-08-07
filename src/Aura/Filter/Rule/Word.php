@@ -41,8 +41,12 @@ class Word extends AbstractRule
      */
     protected function validate()
     {
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         $expr = '/^\w+$/D';
-        return (bool) preg_match($expr, $this->getValue());
+        return (bool) preg_match($expr, $value);
     }
 
     /**
@@ -54,7 +58,11 @@ class Word extends AbstractRule
      */
     protected function sanitize()
     {
-        return $this->setValue(preg_replace('/\W/', '', $this->getValue()));
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        $this->setValue(preg_replace('/\W/', '', $value));
+        return true;
     }
 }
-

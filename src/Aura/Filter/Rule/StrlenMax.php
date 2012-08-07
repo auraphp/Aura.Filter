@@ -41,7 +41,11 @@ class StrlenMax extends AbstractRule
      */
     protected function validate($max)
     {
-        return strlen($this->getValue()) <= $max;
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return strlen($value) <= $max;
     }
 
     /**
@@ -55,6 +59,9 @@ class StrlenMax extends AbstractRule
     protected function sanitize($max)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if (strlen($value) > $max) {
             $this->setValue(substr($value, 0, $max));
         }

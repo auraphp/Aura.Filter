@@ -40,7 +40,11 @@ class Min extends AbstractRule
      */
     protected function validate($min)
     {
-        return $this->getValue() >= $min;
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return $value >= $min;
     }
 
     /**
@@ -54,6 +58,9 @@ class Min extends AbstractRule
     protected function sanitize($min)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if ($value < $min) {
             $this->setValue($min);
         }

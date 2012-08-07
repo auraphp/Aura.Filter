@@ -40,7 +40,11 @@ class Max extends AbstractRule
      */
     protected function validate($max)
     {
-        return $this->getValue() <= $max;
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return $value <= $max;
     }
 
     /**
@@ -54,6 +58,9 @@ class Max extends AbstractRule
     protected function sanitize($max)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if ($value > $max) {
             $this->setValue($max);
         }

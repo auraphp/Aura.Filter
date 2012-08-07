@@ -42,6 +42,9 @@ class Url extends AbstractRule
     protected function validate()
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
 
         // first, make sure there are no invalid chars, list from ext/filter
         $other = "$-_.+"        // safe

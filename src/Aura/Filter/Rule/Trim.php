@@ -49,6 +49,9 @@ class Trim extends AbstractRule
     protected function validate($chars = null)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if (! $chars) {
             $chars = $this->chars;
         }
@@ -66,10 +69,14 @@ class Trim extends AbstractRule
      */
     public function sanitize($chars = null)
     {
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if (! $chars) {
             $chars = $this->chars;
         }
-        $this->setValue(trim($this->getValue(), $chars));
+        $this->setValue(trim($value, $chars));
         return true;
     }
 }

@@ -40,7 +40,11 @@ class Strlen extends AbstractRule
      */
     protected function validate($len)
     {
-        return strlen($this->getValue()) == $len;
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return strlen($value) == $len;
     }
 
     /**
@@ -58,6 +62,9 @@ class Strlen extends AbstractRule
     protected function sanitize($len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if (strlen($value) < $len) {
             $this->setValue(str_pad($value, $len, $pad_string, $pad_type));
         }

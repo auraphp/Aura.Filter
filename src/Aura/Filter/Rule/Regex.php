@@ -43,7 +43,11 @@ class Regex extends AbstractRule
      */
     protected function validate($expr)
     {
-        return (bool) preg_match($expr, $this->getValue());
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return (bool) preg_match($expr, $value);
     }
 
     /**
@@ -60,6 +64,9 @@ class Regex extends AbstractRule
     protected function sanitize($expr, $replace)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         $this->setValue(preg_replace($expr, $replace, $value));
         return true;
     }

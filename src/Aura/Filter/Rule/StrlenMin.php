@@ -41,7 +41,11 @@ class StrlenMin extends AbstractRule
      */
     protected function validate($min)
     {
-        return strlen($this->getValue()) >= $min;
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return strlen($value) >= $min;
     }
 
     /**
@@ -59,6 +63,9 @@ class StrlenMin extends AbstractRule
     protected function sanitize($min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
         if (strlen($value) < $min) {
             $this->setValue(str_pad($value, $min, $pad_string, $pad_type));
         }
