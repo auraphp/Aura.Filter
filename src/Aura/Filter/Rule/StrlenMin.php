@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,13 +21,19 @@ namespace Aura\Filter\Rule;
  */
 class StrlenMin extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_STRLEN_MIN';
-    
+
     /**
      * 
      * Validates that a string is no longer than a certain length.
      * 
-     * @param mixed $max The value must have no more than this many
+     * @param mixed $min The value must have no more than this many
      * characters.
      * 
      * @return bool True if valid, false if not.
@@ -28,7 +43,19 @@ class StrlenMin extends AbstractRule
     {
         return strlen($this->getValue()) >= $min;
     }
-    
+
+    /**
+     * 
+     * fix to min length
+     * 
+     * @param int $min
+     * 
+     * @param string $pad_string
+     * 
+     * @param constant $pad_type
+     * 
+     * @return boolean
+     */
     protected function sanitize($min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
@@ -38,3 +65,4 @@ class StrlenMin extends AbstractRule
         return true;
     }
 }
+

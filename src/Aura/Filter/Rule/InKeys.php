@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class InKeys extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_IN_KEYS';
-    
+
     /**
      * 
      * Validates that the value is a key in a given array.
@@ -31,10 +46,16 @@ class InKeys extends AbstractRule
     {
         return array_key_exists($this->getValue(), (array) $array);
     }
-    
-    // cannot fix the value
+
+    /**
+     * 
+     * cannot fix the value
+     * 
+     * @return boolean
+     */
     protected function sanitize()
     {
         return false;
     }
 }
+

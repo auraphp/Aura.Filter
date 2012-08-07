@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class Alnum extends AbstractRule
 {
+    /**
+     * 
+     * Error message
+     *
+     * @var string
+     */
     protected $message = 'FILTER_ALNUM';
-    
+
     /**
      * 
      * Validates that the value is only letters (upper/lower case) and digits.
@@ -25,7 +40,7 @@ class Alnum extends AbstractRule
     {
         return ctype_alnum((string) $this->getValue());
     }
-    
+
     /**
      * 
      * Strips non-alphanumeric characters from the value.
@@ -39,3 +54,4 @@ class Alnum extends AbstractRule
         return true;
     }
 }
+

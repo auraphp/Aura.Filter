@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class IsoDate extends IsoTimestamp
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_ISO_DATE';
-    
+
     /**
      * 
      * Validates that the value is an ISO 8601 date string.
@@ -29,15 +44,15 @@ class IsoDate extends IsoTimestamp
     protected function validate()
     {
         $value = $this->getValue();
-        
+
         // look for Ymd keys?
         if (is_array($value)) {
             $value = $this->arrayToDate($value);
         }
-        
+
         return $this->isDate($value);
     }
-    
+
     /**
      * 
      * Forces the value to an ISO-8601 formatted date ("yyyy-mm-dd").
@@ -48,12 +63,12 @@ class IsoDate extends IsoTimestamp
     protected function sanitize()
     {
         $value = $this->getValue();
-        
+
         // look for Ymd keys?
         if (is_array($value)) {
             $value = $this->arrayToDate($value);
         }
-        
+
         // normal sanitize
         $format = 'Y-m-d';
         if (is_int($value)) {
@@ -61,8 +76,9 @@ class IsoDate extends IsoTimestamp
         } else {
             $this->setValue(date($format, strtotime($value)));
         }
-        
+
         // done
         return true;
     }
 }
+

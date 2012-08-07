@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class Bool extends AbstractRule
 {
+    /**
+     * 
+     * Error message
+     *
+     * @var string
+     */
     protected $message = 'FILTER_BOOL';
-    
+
     /**
      * 
      * Pseudo-true representations.
@@ -22,7 +37,7 @@ class Bool extends AbstractRule
      * 
      */
     protected $true = array('1', 'on', 'true', 't', 'yes', 'y');
-    
+
     /**
      * 
      * Pseudo-false representations; `null` and empty-string are *not* included.
@@ -31,7 +46,7 @@ class Bool extends AbstractRule
      * 
      */
     protected $false = array('0', 'off', 'false', 'f', 'no', 'n');
-    
+
     /**
      * 
      * Validates that the value is a boolean representation.
@@ -42,12 +57,12 @@ class Bool extends AbstractRule
     protected function validate()
     {
         $value = $this->getValue();
-        
+
         // php boolean
         if ($value === true || $value === false) {
             return true;
         }
-        
+
         // pseudo-boolean
         $lower  = strtolower(trim($value));
         if (in_array($lower, $this->true, true)) {
@@ -61,7 +76,7 @@ class Bool extends AbstractRule
             return false;
         }
     }
-    
+
     /**
      * 
      * Forces the value to a boolean.
@@ -74,13 +89,13 @@ class Bool extends AbstractRule
     protected function sanitize()
     {
         $value = $this->getValue();
-        
+
         // PHP booleans
         if ($value === true || $value === false) {
             // nothing to fix
             return true;
         }
-        
+
         // pseudo booleans
         $lower = strtolower(trim($value));
         if (in_array($lower, $this->true)) {
@@ -93,8 +108,9 @@ class Bool extends AbstractRule
             // cast to a boolean
             $this->setValue((bool) $value);
         }
-        
+
         // done!
         return true;
     }
 }
+

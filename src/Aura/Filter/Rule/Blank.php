@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -13,8 +22,14 @@ namespace Aura\Filter\Rule;
  */
 class Blank extends AbstractRule
 {
+    /**
+     * 
+     * Error message
+     *
+     * @var string
+     */
     protected $message = 'FILTER_BLANK';
-    
+
     /**
      * 
      * Validates that the value is null, or is a string composed only of
@@ -31,10 +46,17 @@ class Blank extends AbstractRule
     {
         return $this->isBlank();
     }
-    
+
+    /**
+     * 
+     * set value to null
+     * 
+     * @return boolean
+     */
     protected function sanitize()
     {
         $this->setValue(null);
         return true;
     }
 }
+

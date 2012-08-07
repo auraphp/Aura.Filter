@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class StrlenBetween extends AbstractRule
 {
+    /**
+     * 
+     * Error message
+     *
+     * @var string
+     */
     protected $message = 'FILTER_STRLEN_BETWEEN';
-    
+
     /**
      * 
      * Validates that the length of the value is within a given range.
@@ -30,7 +45,21 @@ class StrlenBetween extends AbstractRule
         $len = strlen($this->getValue());
         return ($len >= $min && $len <= $max);
     }
-    
+
+    /**
+     * 
+     * Sanitize
+     * 
+     * @param int $min
+     * 
+     * @param int $max
+     * 
+     * @param string $pad_string
+     * 
+     * @param constant $pad_type
+     * 
+     * @return boolean
+     */
     protected function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
@@ -43,3 +72,4 @@ class StrlenBetween extends AbstractRule
         return true;
     }
 }
+

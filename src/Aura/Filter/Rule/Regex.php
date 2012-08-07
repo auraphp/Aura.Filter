@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class Regex extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_REGEX';
-    
+
     /**
      * 
      * Validates the value against a regular expression.
@@ -30,7 +45,7 @@ class Regex extends AbstractRule
     {
         return (bool) preg_match($expr, $this->getValue());
     }
-    
+
     /**
      * 
      * Applies [[php::preg_replace() | ]] to the value.
@@ -49,3 +64,4 @@ class Regex extends AbstractRule
         return true;
     }
 }
+

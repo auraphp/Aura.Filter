@@ -20,4 +20,4 @@ namespace Aura\Filter;
 class Exception extends \Exception
 {
 }
- 
+

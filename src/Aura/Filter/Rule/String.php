@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class String extends AbstractRule
 {
+    /**
+     * 
+     * Error message
+     *
+     * @var string
+     */
     protected $message = 'FILTER_STRING';
-    
+
     /**
      * 
      * Validates that the value can be represented as a string.
@@ -30,13 +45,16 @@ class String extends AbstractRule
     {
         return is_scalar($this->getValue());
     }
-    
+
     /**
      * 
      * Forces the value to a string, optionally applying str_replace().
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @param string $find
      * 
+     * @param string $replace
+     * 
+     * @return bool True if the value was fixed, false if not.
      */
     protected function sanitize($find = null, $replace = null)
     {
@@ -48,3 +66,4 @@ class String extends AbstractRule
         return true;
     }
 }
+

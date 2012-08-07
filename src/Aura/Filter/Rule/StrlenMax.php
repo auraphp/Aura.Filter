@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class StrlenMax extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_STRLEN_MAX';
-    
+
     /**
      * 
      * Validates that a string is no longer than a certain length.
@@ -28,7 +43,15 @@ class StrlenMax extends AbstractRule
     {
         return strlen($this->getValue()) <= $max;
     }
-    
+
+    /**
+     * 
+     * If the value is greater than max, set to max value
+     * 
+     * @param int $max
+     * 
+     * @return boolean
+     */
     protected function sanitize($max)
     {
         $value = $this->getValue();
@@ -38,3 +61,4 @@ class StrlenMax extends AbstractRule
         return true;
     }
 }
+
