@@ -20,6 +20,7 @@ class UrlTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             [''],
             [' '],
             ['example.com'],
@@ -33,6 +34,7 @@ class UrlTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             ['not a url', 'not a url'], // cannot fix
         ];
     }

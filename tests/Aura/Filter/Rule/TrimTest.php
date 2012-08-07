@@ -15,6 +15,7 @@ class TrimTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             [' abc '],
         ];
     }
@@ -22,6 +23,7 @@ class TrimTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             [' abc ','abc'],
         ];
     }

@@ -44,6 +44,7 @@ class StrlenMaxTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             ['abcd'],
             ['abcdefg'],
         ];
@@ -52,6 +53,7 @@ class StrlenMaxTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             ['a', 'a'],
             ['abc', 'abc'],
             ['abcd', 'abc'],

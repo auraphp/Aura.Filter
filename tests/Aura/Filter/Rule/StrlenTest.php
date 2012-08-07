@@ -43,6 +43,7 @@ class StrlenTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             ['abc'],
             ['defgh'],
         ];
@@ -51,6 +52,7 @@ class StrlenTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             ['a', 'a   '],
             ['abcd', 'abcd'],
             ['abcdef', 'abcd'],

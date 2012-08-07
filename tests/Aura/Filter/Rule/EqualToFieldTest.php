@@ -79,11 +79,11 @@ class EqualToFieldTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [0, '1'],
-            [1, '1'],
-            ['1', '1'],
-            [true, '1'],
-            [false, '1'],
+            [0,         '1'],
+            [1,         '1'],
+            ['1',       '1'],
+            [true,      '1'],
+            [false,     '1'],
         ];
     }
     

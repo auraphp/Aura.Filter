@@ -46,6 +46,7 @@ class StrlenBetweenTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             ['abc'],
             ['defghij'],
         ];
@@ -54,6 +55,7 @@ class StrlenBetweenTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             ['abc',         'abc '],
             ['abcd',        'abcd'],
             ['abcde',       'abcde'],

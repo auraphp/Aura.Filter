@@ -48,6 +48,7 @@ class RegexTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             [' '],
             [''],
             ['-abc.123'],
@@ -60,6 +61,7 @@ class RegexTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             ['abc 123 ,./', 'abc@@@@@@@@'],
         ];
     }

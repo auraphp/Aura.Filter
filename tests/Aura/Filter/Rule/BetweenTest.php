@@ -46,6 +46,7 @@ class BetweenTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             [2],
             [3],
             [7],
@@ -56,6 +57,7 @@ class BetweenTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             [2, 4],
             [3, 4],
             [4, 4],

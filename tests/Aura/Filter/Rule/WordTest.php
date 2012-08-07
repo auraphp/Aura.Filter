@@ -28,7 +28,7 @@ class WordTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
-            [""],
+            [array()],
             [''],
             ['a!'],
             ['^b'],
@@ -40,6 +40,7 @@ class WordTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             ['abc _ 123 - ,./', 'abc_123'],
         ];
     }

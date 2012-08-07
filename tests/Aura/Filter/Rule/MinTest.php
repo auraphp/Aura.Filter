@@ -44,6 +44,7 @@ class MinTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             [1],
             [2],
             [3],
@@ -53,6 +54,7 @@ class MinTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             [1, 4],
             [2, 4],
             [3, 4],

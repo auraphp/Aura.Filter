@@ -44,6 +44,7 @@ class MaxTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [array()],
             [4],
             [5],
             [6],
@@ -53,6 +54,7 @@ class MaxTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
+            [array(), array()],
             [1, 1],
             [2, 2],
             [3, 3],
