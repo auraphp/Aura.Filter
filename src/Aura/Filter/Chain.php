@@ -104,6 +104,11 @@ class Chain
         $this->addRule($field, $method, $name, $params, false);
     }
 
+    public function getRules()
+    {
+        return $this->rules;
+    }
+    
     /**
      * 
      * add a rule
@@ -140,7 +145,7 @@ class Chain
      * 
      * @throws InvalidArgumentException
      */
-    public function exec(&$data)
+    public function exec($data)
     {
         if (! is_object($data)) {
             throw new InvalidArgumentException;
@@ -158,9 +163,10 @@ class Chain
             // if the field has failure messages, and we're supposed to
             // stop on failures, then don't apply further rules for this
             // field.
-            $continue = isset($this->messages[$field])
-                     && isset($this->failstop[$field]);
-            if ($continue) {
+            $failstop = isset($this->messages[$field])
+                     && isset($this->failstop[$field])
+                     && $this->failstop[$field];
+            if ($failstop) {
                 continue;
             }
 

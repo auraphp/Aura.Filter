@@ -38,7 +38,11 @@ class Alpha extends AbstractRule
      */
     protected function validate()
     {
-        return ctype_alpha($this->getValue());
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return ctype_alpha($value);
     }
 
     /**

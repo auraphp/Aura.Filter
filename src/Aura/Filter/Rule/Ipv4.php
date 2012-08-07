@@ -45,10 +45,6 @@ class Ipv4 extends AbstractRule
         if ($result == -1 || $result === false) {
             // does not properly convert to a "long" result
             return false;
-        } elseif (long2ip($result) !== $value) {
-            // the long result does not convert back to an identical original
-            // value
-            return false;
         } else {
             // looks valid
             return true;

@@ -8,7 +8,6 @@ require_once __DIR__ . '/src/Aura/Filter/Rule/Alpha.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Between.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Blank.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Bool.php';
-require_once __DIR__ . '/src/Aura/Filter/Rule/CountryCode.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/CreditCard.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Email.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/EqualToField.php';

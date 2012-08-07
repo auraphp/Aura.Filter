@@ -70,4 +70,12 @@ class UploadTest extends AbstractRuleTest
             [$this->good_upload, $fixed],
         ];
     }
+    
+    public function testRuleIs_notUploadedFile()
+    {
+        list($data, $field) = $this->prepForValidate($this->good_upload);
+        $rule = $this->newRule($data, $field);
+        $rule->is_uploaded_file = false;
+        $this->assertFalse($rule->is());
+    }
 }

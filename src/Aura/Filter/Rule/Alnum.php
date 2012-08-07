@@ -38,7 +38,11 @@ class Alnum extends AbstractRule
      */
     protected function validate()
     {
-        return ctype_alnum((string) $this->getValue());
+        $value = $this->getValue();
+        if (! is_scalar($value)) {
+            return false;
+        }
+        return ctype_alnum((string) $value);
     }
 
     /**

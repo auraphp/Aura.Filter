@@ -29,6 +29,7 @@ class AlnumTest extends AbstractRuleTest
             [' '],
             ["Seven 8 nine"],
             ["non:alpha-numeric's"],
+            [[]],
         ];
     }
     

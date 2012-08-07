@@ -29,6 +29,7 @@ class AlphaTest extends AbstractRuleTest
             ["Seven 8 nine"],
             ["non:alpha-numeric's"],
             ['someThing8else'],
+            [[]],
         ];
     }
     
