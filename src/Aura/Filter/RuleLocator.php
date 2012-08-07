@@ -27,7 +27,7 @@ class RuleLocator
      * 
      */
     protected $registry;
-    
+
     /**
      * 
      * Constructor.
@@ -45,7 +45,7 @@ class RuleLocator
             $this->set($name, $spec);
         }
     }
-    
+
     /**
      * 
      * Sets a helper into the registry by name.
@@ -63,7 +63,7 @@ class RuleLocator
     {
         $this->registry[$name] = $spec;
     }
-    
+
     /**
      * 
      * Gets a helper from the registry by name.
@@ -78,12 +78,13 @@ class RuleLocator
         if (! isset($this->registry[$name])) {
             throw new Exception\RuleNotMapped($name);
         }
-        
+
         if ($this->registry[$name] instanceof \Closure) {
             $func = $this->registry[$name];
             $this->registry[$name] = $func();
         }
-        
+
         return $this->registry[$name];
     }
 }
+

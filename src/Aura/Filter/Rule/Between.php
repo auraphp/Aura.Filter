@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class Between extends AbstractRule
 {
+    /**
+     * 
+     * Error message
+     *
+     * @var string
+     */
     protected $message = 'FILTER_BETWEEN';
-    
+
     /**
      * 
      * Validates that the value is within a given range.
@@ -30,7 +45,19 @@ class Between extends AbstractRule
         $value = $this->getValue();
         return ($value >= $min && $value <= $max);
     }
-    
+
+    /**
+     * 
+     * If the value is < min , will set the min value,
+     * and if value is greater than max, set the max value
+     * 
+     * @param mixed $min The minimum valid value.
+     * 
+     * @param mixed $max The maximum valid value.
+     * 
+     * @return bool
+     * 
+     */
     protected function sanitize($min, $max)
     {
         $value = $this->getValue();
@@ -42,3 +69,4 @@ class Between extends AbstractRule
         return true;
     }
 }
+

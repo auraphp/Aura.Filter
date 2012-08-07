@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class Url extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_URL';
-    
+
     /**
      * 
      * Validates the value as a URL.
@@ -27,20 +42,20 @@ class Url extends AbstractRule
     protected function validate()
     {
         $value = $this->getValue();
-        
+
         // first, make sure there are no invalid chars, list from ext/filter
         $other = "$-_.+"        // safe
                . "!*'(),"       // extra
                . "{}|\\^~[]`"   // national
                . "<>#%\""       // punctuation
                . ";/?:@&=";     // reserved
-        
+
         $valid = 'a-zA-Z0-9' . preg_quote($other, '/');
         $clean = preg_replace("/[^$valid]/", '', $value);
         if ($value != $clean) {
             return false;
         }
-        
+
         // now make sure it parses as a URL with scheme and host
         $result = @parse_url($value);
         if (empty($result['scheme']) || trim($result['scheme']) == '' ||
@@ -52,10 +67,16 @@ class Url extends AbstractRule
             return true;
         }
     }
-    
-    // cannot fix URLs
+
+    /**
+     * 
+     * cannot fix URLs
+     * 
+     * @return boolean
+     */
     protected function sanitize()
     {
         return false;
     }
 }
+

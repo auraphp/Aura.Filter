@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -12,8 +21,14 @@ namespace Aura\Filter\Rule;
  */
 class Word extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_WORD';
-    
+
     /**
      * 
      * Validates that the value is composed only of word characters.
@@ -29,7 +44,7 @@ class Word extends AbstractRule
         $expr = '/^\w+$/D';
         return (bool) preg_match($expr, $this->getValue());
     }
-    
+
     /**
      * 
      * Strips non-word characters within the value.
@@ -42,4 +57,4 @@ class Word extends AbstractRule
         return $this->setValue(preg_replace('/\W/', '', $this->getValue()));
     }
 }
- 
+

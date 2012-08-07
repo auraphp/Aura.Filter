@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -13,9 +22,21 @@ namespace Aura\Filter\Rule;
  */
 class CountryCode extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_COUNTRY_CODE';
-    
-    // via http://en.wikipedia.org/wiki/ISO_3166-1
+
+    /**
+     * 2 letter country codes and country
+     * 
+     * via http://en.wikipedia.org/wiki/ISO_3166-1
+     * 
+     * @var array
+     */
     protected $codes = [
         'AF' => 'Afghanistan',
         'AX' => 'Åland Islands',
@@ -267,19 +288,38 @@ class CountryCode extends AbstractRule
         'ZM' => 'Zambia',
         'ZW' => 'Zimbabwe',
     ];
-    
+
+    /**
+     * 
+     * Validate whether the code exists in the list
+     * 
+     * @return bool
+     */
     protected function validate()
     {
         return array_key_exists($this->getValue(), $this->codes);
     }
-    
+
+    /**
+     * 
+     * sanitize country code
+     * 
+     * @return boolean
+     */
     protected function sanitize()
     {
         return false;
     }
-    
+
+    /**
+     * 
+     * get the codes
+     * 
+     * @return array
+     */
     public function getCodes()
     {
         return $this->codes;
     }
 }
+

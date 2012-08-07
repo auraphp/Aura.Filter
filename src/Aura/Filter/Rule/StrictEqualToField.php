@@ -1,4 +1,13 @@
 <?php
+/**
+ * 
+ * This file is part of the Aura project for PHP.
+ * 
+ * @package Aura.Filter
+ * 
+ * @license http://opensource.org/licenses/bsd-license.php BSD
+ * 
+ */
 namespace Aura\Filter\Rule;
 
 /**
@@ -13,8 +22,14 @@ namespace Aura\Filter\Rule;
  */
 class StrictEqualToField extends AbstractRule
 {
+    /**
+     *
+     * Error message
+     * 
+     * @var string
+     */
     protected $message = 'FILTER_STRICT_EQUAL_TO_FIELD';
-    
+
     /**
      * 
      * Validates that this value is equal in value and type to some other 
@@ -35,19 +50,27 @@ class StrictEqualToField extends AbstractRule
         if (! isset($this->data->$other_field)) {
             return false;
         }
-        
+
         return $this->getValue() === $this->data->$other_field;
     }
-    
-    // force the field to the value of the other field
+
+    /**
+     * 
+     * force the field to the value of the other field
+     * 
+     * @param string $other_field
+     * 
+     * @return boolean
+     */
     protected function sanitize($other_field)
     {
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {
             return false;
         }
-        
+
         $this->setValue($this->data->$other_field);
         return true;
     }
 }
+
