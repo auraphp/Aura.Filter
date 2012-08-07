@@ -5,9 +5,14 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
 {
     protected $expect_message;
     
+    protected function getClass()
+    {
+        return substr(get_class($this), 0, -4);
+    }
+    
     protected function newRule($data, $field)
     {
-        $class = substr(get_class($this), 0, -4);
+        $class = $this->getClass();
         $rule = new $class();
         $rule->prep((object) $data, $field);
         return $rule;

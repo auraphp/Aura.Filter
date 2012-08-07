@@ -80,25 +80,11 @@ class Upload extends AbstractRule
     {
         $value = $this->getValue();
 
-        // has to be an array
-        if (! is_array($value)) {
-            $this->message = 'FILTER_UPLOAD_ERR_ARRAY';
+        $success = $this->preCheck($value);
+        if (! $success) {
             return false;
         }
-
-        // presorted list of expected keys
-        $expect = array('error', 'name', 'size', 'tmp_name', 'type');
-
-        // sort the list of actual keys
-        $actual = array_keys($value);
-        sort($actual);
-
-        // make sure the expected and actual keys match up
-        if ($expect != $actual) {
-            $this->message = 'FILTER_UPLOAD_ERR_ARRAY_KEYS';
-            return false;
-        }
-
+        
         // was the upload explicitly ok?
         if ($value['error'] != UPLOAD_ERR_OK) {
 
@@ -116,33 +102,9 @@ class Upload extends AbstractRule
         }
 
         // is it actually an uploaded file?
-        if (! is_uploaded_file($value['tmp_name'])) {
+        if (! $this->isUploadedFile($value['tmp_name'])) {
             // nefarious happenings are afoot.
             $this->message = 'FILTER_UPLOAD_ERR_IS_UPLOADED_FILE';
-            return false;
-        }
-
-        // check file extension?
-        if ($file_ext) {
-
-            // find the file name extension, minus the dot
-            $ext = substr(strrchr($value['name'], '.'), 1);
-
-            // force to lower-case for comparisons
-            $ext = strtolower($ext);
-
-            // check against the allowed extensions
-            foreach ((array) $file_ext as $val) {
-                // force to lower-case for comparisons
-                $val = strtolower($val);
-                if ($ext == $val) {
-                    // it's an allowed extension
-                    return true;
-                }
-            }
-
-            // didn't find the extension in the allowed list
-            $this->message = 'FILTER_UPLOAD_ERR_FILE_EXT';
             return false;
         }
 
@@ -161,11 +123,23 @@ class Upload extends AbstractRule
     protected function sanitize()
     {
         $value = $this->getValue();
-
+        
+        // pre-check
+        $success = $this->preCheck($value);
+        if (! $success) {
+            return false;
+        }
+        
+        // everything looks ok; some keys may have been removed.
+        $this->setValue($value);
+        return true;
+    }
+    
+    protected function preCheck(&$value)
+    {
         // has to be an array
         if (! is_array($value)) {
-            $this->setValue(null);
-            return true;
+            return false;
         }
 
         // presorted list of expected keys
@@ -184,24 +158,16 @@ class Upload extends AbstractRule
 
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
-            $this->setValue(null);
-            return true;
+            $this->message = 'FILTER_UPLOAD_ERR_ARRAY_KEYS';
+            return false;
         }
 
-        // if all the non-error values are empty, still null
-        $empty = empty($value['name']) &&
-                 empty($value['size']) &&
-                 empty($value['tmp_name']) &&
-                 empty($value['type']);
-
-        if ($empty) {
-            $this->setValue(null);
-            return true;
-        }
-
-        // everything looks ok; some keys may have been removed.
-        $this->setValue($value);
+        // looks ok
         return true;
     }
+    
+    protected function isUploadedFile($file)
+    {
+        return is_uploaded_file($file);
+    }
 }
-
