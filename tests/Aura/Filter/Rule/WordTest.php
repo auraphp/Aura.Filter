@@ -40,8 +40,8 @@ class WordTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            ['abc _ 123 - ,./', 'abc_123'],
+            [array(), false, array()],
+            ['abc _ 123 - ,./', true, 'abc_123'],
         ];
     }
 }

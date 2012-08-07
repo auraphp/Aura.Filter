@@ -42,7 +42,7 @@ class IsoTimestampTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['Nov 7, 1979, 12:34pm', '1979-11-07 12:34:00'],
+            ['Nov 7, 1979, 12:34pm', true, '1979-11-07 12:34:00'],
             [
                 [
                     'Y' => '2001',
@@ -52,9 +52,10 @@ class IsoTimestampTest extends AbstractRuleTest
                     'i' => '28',
                     's' => '06',
                 ],
+                true,
                 '2001-07-19 17:28:06',
             ],
-            [strtotime('2012-08-02 17:37:29'), '2012-08-02 17:37:29'],
+            [strtotime('2012-08-02 17:37:29'), true, '2012-08-02 17:37:29'],
 
         ];
     }

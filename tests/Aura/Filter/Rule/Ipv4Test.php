@@ -39,7 +39,7 @@ class Ipv4Test extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [12345, 12345], // can't fix
+            [12345, false, 12345], // can't fix
         ];
     }
 }

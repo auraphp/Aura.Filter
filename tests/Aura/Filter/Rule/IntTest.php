@@ -31,10 +31,10 @@ class IntTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()], // cannot sanitize
-            ['abc ... 123.45 ,.../', 12345],
-            ['a-bc .1. alkasldjf 23 aslk.45 ,.../', -12345],
-            ['1E5', 100000],
+            [array(), false, array()], // cannot sanitize
+            ['abc ... 123.45 ,.../', true, 12345],
+            ['a-bc .1. alkasldjf 23 aslk.45 ,.../', true, -12345],
+            ['1E5', true, 100000],
         ];
     }
 }

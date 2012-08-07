@@ -63,7 +63,7 @@ class InValuesTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['no-good', 'no-good'], // cannot fix
+            ['no-good', false, 'no-good'], // cannot fix
         ];
     }
 }

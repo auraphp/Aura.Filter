@@ -69,6 +69,7 @@ class Int extends AbstractRule
             // (int) 1E5 == 15, but (int) (float) 1E5 == 100000
             $value = (float) $value;
             $this->setValue((int) $value);
+            return true;
         }
 
         if (! is_string($value)) {

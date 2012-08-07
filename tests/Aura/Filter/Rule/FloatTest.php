@@ -31,11 +31,11 @@ class FloatTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()], // can't fix
-            [123.45, 123.45],
-            ['abc ... 123.45 ,.../', 123.450],
-            ['a-bc .1. alkasldjf 23 aslk.45 ,.../', -.123450],
-            ['1E5', 100000.0],
+            [array(), false, array()], // can't fix
+            [123.45, true, 123.45],
+            ['abc ... 123.45 ,.../', true, 123.450],
+            ['a-bc .1. alkasldjf 23 aslk.45 ,.../', true, -.123450],
+            ['1E5', true, 100000.0],
         ];
     }
 }

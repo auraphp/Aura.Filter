@@ -36,7 +36,7 @@ class AlphaTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['^&* abc 123 ,./', 'abc'],
+            ['^&* abc 123 ,./', true, 'abc'],
         ];
     }
 }

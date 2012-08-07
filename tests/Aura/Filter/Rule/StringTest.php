@@ -7,12 +7,12 @@ class StringTest extends AbstractRuleTest
     
     public function ruleFix($rule)
     {
-        $rule->fix(' ', '@');
+        return $rule->fix(' ', '@');
     }
     
     public function ruleFixBlankOr($rule)
     {
-        $rule->fixBlankOr(' ', '@');
+        return $rule->fixBlankOr(' ', '@');
     }
     
     public function providerIs()
@@ -37,8 +37,8 @@ class StringTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['abc 123 ,./', 'abc@123@,./'],
-            [12345, '12345'],
+            ['abc 123 ,./', true, 'abc@123@,./'],
+            [12345, true, '12345'],
         ];
     }
 }

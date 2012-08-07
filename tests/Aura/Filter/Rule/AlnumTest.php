@@ -36,8 +36,8 @@ class AlnumTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            // value, expect
-            ['$#% abc () 123 ,./', 'abc123'],
+            // value, result, expect
+            ['$#% abc () 123 ,./', true, 'abc123'],
         ];
     }
 }

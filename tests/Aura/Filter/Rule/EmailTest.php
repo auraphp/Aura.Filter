@@ -32,7 +32,7 @@ class EmailTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ["non:alpha@example.com", "non:alpha@example.com"], // can't fix
+            ["non:alpha@example.com", false, "non:alpha@example.com"], // can't fix
         ];
     }
 }

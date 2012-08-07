@@ -53,10 +53,10 @@ class StrlenMinTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            ['a', 'a   '],
-            ['abcd', 'abcd'],
-            ['abcdefg', 'abcdefg'],
+            [array(), false, array()],
+            ['a',       true, 'a   '],
+            ['abcd',    true, 'abcd'],
+            ['abcdefg', true, 'abcdefg'],
         ];
     }
 }

@@ -55,13 +55,13 @@ class StrlenBetweenTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            ['abc',         'abc '],
-            ['abcd',        'abcd'],
-            ['abcde',       'abcde'],
-            ['abcdef',      'abcdef'],
-            ['abcdefg',     'abcdef'],
-            ['abcdefgh',    'abcdef'],
+            [array(), false, array()],
+            ['abc',         true, 'abc '],
+            ['abcd',        true, 'abcd'],
+            ['abcde',       true, 'abcde'],
+            ['abcdef',      true, 'abcdef'],
+            ['abcdefg',     true, 'abcdef'],
+            ['abcdefgh',    true, 'abcdef'],
         ];
     }
 }

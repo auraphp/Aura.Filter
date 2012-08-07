@@ -41,16 +41,17 @@ class IsoDateTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['Nov 7, 1979, 12:34pm', '1979-11-07'],
+            ['Nov 7, 1979, 12:34pm', true, '1979-11-07'],
             [
                 [
                     'Y' => '2012',
                     'm' => '08',
                     'd' => '14',
                 ],
+                true, 
                 '2012-08-14',
             ],
-            [strtotime('2012-08-02'), '2012-08-02'],
+            [strtotime('2012-08-02'), true, '2012-08-02'],
         ];
     }
 }

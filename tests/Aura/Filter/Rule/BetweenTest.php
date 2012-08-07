@@ -57,14 +57,14 @@ class BetweenTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            [2, 4],
-            [3, 4],
-            [4, 4],
-            [5, 5],
-            [6, 6],
-            [7, 6],
-            [8, 6],
+            [array(), false, array()],
+            [2, true, 4],
+            [3, true, 4],
+            [4, true, 4],
+            [5, true, 5],
+            [6, true, 6],
+            [7, true, 6],
+            [8, true, 6],
         ];
     }
 }

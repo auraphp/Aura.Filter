@@ -54,13 +54,13 @@ class MinTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            [1, 4],
-            [2, 4],
-            [3, 4],
-            [4, 4],
-            [5, 5],
-            [6, 6],
+            [array(), false, array()],
+            [1, true, 4],
+            [2, true, 4],
+            [3, true, 4],
+            [4, true, 4],
+            [5, true, 5],
+            [6, true, 6],
         ];
     }
 }

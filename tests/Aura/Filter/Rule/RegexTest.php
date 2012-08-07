@@ -61,8 +61,8 @@ class RegexTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            ['abc 123 ,./', 'abc@@@@@@@@'],
+            [array(), false, array()],
+            ['abc 123 ,./', true, 'abc@@@@@@@@'],
         ];
     }
 }

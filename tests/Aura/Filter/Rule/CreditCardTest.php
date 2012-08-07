@@ -33,7 +33,7 @@ class CreditCardTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['bad', 'bad'], // cannot fix
+            ['bad', false, 'bad'], // cannot fix
         ];
     }
 }

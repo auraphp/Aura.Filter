@@ -43,16 +43,17 @@ class IsoTimeTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['Nov 7, 1979, 12:34pm', '12:34:00'],
+            ['Nov 7, 1979, 12:34pm', true, '12:34:00'],
             [
                 [
                     'H' => '17',
                     'i' => '28',
                     's' => '06',
                 ],
+                true,
                 '17:28:06',
             ],
-            [strtotime('17:37:29'), '17:37:29'],
+            [strtotime('17:37:29'), true, '17:37:29'],
         ];
     }
 }

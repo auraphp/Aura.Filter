@@ -66,8 +66,8 @@ class UploadTest extends AbstractRuleTest
         ];
         
         return [
-            [[],[]], // can't fix
-            [$this->good_upload, $fixed],
+            [[], false, []], // can't fix
+            [$this->good_upload, true, $fixed],
         ];
     }
     

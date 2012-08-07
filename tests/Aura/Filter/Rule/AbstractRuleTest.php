@@ -86,11 +86,11 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerFix
      */
-    public function testFix($value, $expect)
+    public function testFix($value, $result, $expect)
     {
         list($data, $field) = $this->prepForSanitize($value);
         $rule = $this->newRule($data, $field);
-        $this->ruleFix($rule);
+        $this->assertSame($result, $this->ruleFix($rule));
         $actual = $rule->getValue();
         $this->assertSame($expect, $actual);
     }
@@ -98,11 +98,11 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider providerFixBlankOr
      */
-    public function testFixBlankOr($value, $expect)
+    public function testFixBlankOr($value, $result, $expect)
     {
         list($data, $field) = $this->prepForSanitize($value);
         $rule = $this->newRule($data, $field);
-        $this->ruleFixBlankOr($rule);
+        $this->assertSame($result, $this->ruleFixBlankOr($rule));
         $actual = $rule->getValue();
         $this->assertSame($expect, $actual);
     }
@@ -170,9 +170,9 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
     public function providerFixBlankOr()
     {
         return array_merge($this->providerFix(), [
-            [null, null],
-            ['', null],
-            ["\r \t \n", null],
+            [null, true, null],
+            ['', true, null],
+            ["\r \t \n", true, null],
         ]);
     }
 }

@@ -34,8 +34,8 @@ class UrlTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            [array(), array()],
-            ['not a url', 'not a url'], // cannot fix
+            [array(), false, array()],
+            ['not a url', false, 'not a url'], // cannot fix
         ];
     }
 }

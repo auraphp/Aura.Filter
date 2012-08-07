@@ -33,12 +33,12 @@ class BlankTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ["", null],
-            [" ", null],
-            ["\t", null],
-            ["\n", null],
-            ["\r", null],
-            [" \t \n \r ", null],
+            ["",                true, null],
+            [" ",               true, null],
+            ["\t",              true, null],
+            ["\n",              true, null],
+            ["\r",              true, null],
+            [" \t \n \r ",      true, null],
         ];
     }
 }
