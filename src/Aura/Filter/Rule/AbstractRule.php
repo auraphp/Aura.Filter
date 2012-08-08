@@ -19,39 +19,45 @@ use StdClass;
  * @package Aura.Filter
  * 
  */
-abstract class AbstractRule
+abstract class AbstractRule implements RuleInterface
 {
     /**
      * 
-     * A standard class of data
+     * The full set of data to be filtered.
      *
-     * @var StdClass
+     * @var object
+     * 
      */
     protected $data;
 
     /**
      * 
-     * field name
+     * The field to be filtered within the data.
      *
      * @var string
+     * 
      */
     protected $field;
 
     /**
      * 
-     * Error message
+     * The message to use validate or sanitize fails.
      *
      * @var string
+     * 
      */
     protected $message;
 
     /**
      * 
-     * prepare the rule for reuse
+     * Prepare the rule for reuse.
      * 
-     * @param StdClass $data
+     * @param object $data The full set of data to be filtered.
      * 
-     * @param string $field
+     * @param string $field The field to be filtered within the data.
+     * 
+     * @return void
+     * 
      */
     public function prep(StdClass $data, $field)
     {
@@ -61,9 +67,11 @@ abstract class AbstractRule
 
     /**
      * 
-     * Get the error message
+     * Get the error message; note that this returns the message whether or
+     * not there was an error when validating or sanitizing.
      * 
      * @return string
+     * 
      */
     public function getMessage()
     {
@@ -72,9 +80,11 @@ abstract class AbstractRule
 
     /**
      * 
-     * Get the value of the field
+     * Get the value of the field being filtered, or null if the field is
+     * not set in the data.
      * 
-     * @return null|string
+     * @return mixed
+     * 
      */
     public function getValue()
     {
@@ -88,9 +98,12 @@ abstract class AbstractRule
 
     /**
      * 
-     * Set value of field
+     * Set value of field, creating it in the data if needed.
      * 
-     * @param string $value
+     * @param string $value The new value of the field.
+     * 
+     * @return void
+     * 
      */
     public function setValue($value)
     {
@@ -100,9 +113,10 @@ abstract class AbstractRule
 
     /**
      * 
-     * check whether the rule is right
+     * Is the value valid?
      * 
-     * @return bool
+     * @return bool True if valid, false if not valid.
+     * 
      */
     public function is()
     {
@@ -111,9 +125,10 @@ abstract class AbstractRule
 
     /**
      * 
-     * check the rule is wrong
+     * Is the value *not* valid?
      * 
-     * @return bool
+     * @return bool True if not valid, false if valid.
+     * 
      */
     public function isNot()
     {
@@ -122,11 +137,63 @@ abstract class AbstractRule
 
     /**
      * 
-     * checks whether the field value is blank
+     * Is the value blank, or otherwise valid?
      * 
-     * @return boolean
+     * @return bool True if blank or valid, false if not.
+     * 
      */
-    public function isBlank()
+    public function isBlankOr()
+    {
+        if ($this->isBlank()) {
+            return true;
+        } else {
+            return call_user_func_array([$this, 'validate'], func_get_args());
+        }
+    }
+
+    /**
+     * 
+     * Sanitize the value, transforming it as needed.
+     * 
+     * @return bool True if the value was sanitized, false if not.
+     * 
+     */
+    public function fix()
+    {
+        return call_user_func_array([$this, 'sanitize'], func_get_args());
+    }
+
+    /**
+     * 
+     * If the value is blank, set to null; sanitize if not blank, transforming
+     * it as needed.
+     * 
+     * @return bool True if the value was set to null or sanitized, false if
+     * not.
+     * 
+     */
+    public function fixBlankOr()
+    {
+        if ($this->isBlank()) {
+            $this->setValue(null);
+            return true;
+        }
+
+        return call_user_func_array([$this, 'sanitize'], func_get_args());
+    }
+
+    /**
+     * 
+     * Is the value blank?
+     * 
+     * Blank is null, empty string, or a string of only whitespace. Non-null
+     * non-string values are not blank; e.g., integer zero, float zero, an
+     * empty array, boolean false, etc. are not blank.
+     * 
+     * @return bool True if blank, false if not.
+     * 
+     */
+    protected function isBlank()
     {
         $value = $this->getValue();
 
@@ -142,48 +209,6 @@ abstract class AbstractRule
 
         // strings that trim down to exactly nothing are blank
         return trim($value) === '';
-    }
-
-    /**
-     * 
-     * check whether its blank or check rule is right
-     * 
-     * @return boolean
-     */
-    public function isBlankOr()
-    {
-        if ($this->isBlank()) {
-            return true;
-        } else {
-            return call_user_func_array([$this, 'validate'], func_get_args());
-        }
-    }
-
-    /**
-     * 
-     * try to sanitize the field
-     * 
-     * @return bool
-     */
-    public function fix()
-    {
-        return call_user_func_array([$this, 'sanitize'], func_get_args());
-    }
-
-    /**
-     * 
-     * if blank set to null or try to sanitiza field
-     * 
-     * @return boolean
-     */
-    public function fixBlankOr()
-    {
-        if ($this->isBlank()) {
-            $this->setValue(null);
-            return true;
-        }
-
-        return call_user_func_array([$this, 'sanitize'], func_get_args());
     }
 }
 
