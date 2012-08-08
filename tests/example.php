@@ -10,8 +10,8 @@ $filter_chain->addHardRule('username', Value::IS, 'alnum');
 $filter_chain->addHardRule('username', Value::IS, 'strlenBetween', 6, 12);
 $filter_chain->addHardRule('username', Value::FIX, 'alnum');
 
-$filter_chain->addHardRule('birthday', Value::IS, 'isoDate');
-$filter_chain->addHardRule('birthday', Value::FIX, 'isoDate');
+$filter_chain->addHardRule('birthday', Value::IS, 'dateTime');
+$filter_chain->addHardRule('birthday', Value::FIX, 'dateTime', 'Y-m-d');
 $filter_chain->addHardRule('birthday', Value::IS, 'min', '1970-08-08'); // at least 42 on Aug 8
 
 $filter_chain->addHardRule('nickname', Value::IS_BLANK_OR, 'string');
