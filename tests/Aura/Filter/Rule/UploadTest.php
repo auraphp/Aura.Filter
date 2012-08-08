@@ -73,7 +73,7 @@ class UploadTest extends AbstractRuleTest
     
     public function testRuleIs_notUploadedFile()
     {
-        list($data, $field) = $this->prepForValidate($this->good_upload);
+        list($data, $field) = $this->getPrep($this->good_upload);
         $rule = $this->newRule($data, $field);
         $rule->is_uploaded_file = false;
         $this->assertFalse($rule->is());

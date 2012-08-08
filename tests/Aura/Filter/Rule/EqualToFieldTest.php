@@ -34,19 +34,7 @@ class EqualToFieldTest extends AbstractRuleTest
         return $rule->fixBlankOr($this->other_field);
     }
     
-    public function prepForValidate($value)
-    {
-        $data = [
-            'field' => $value,
-            $this->other_field => $this->other_value
-        ];
-        
-        $field = 'field';
-        
-        return [$data, $field];
-    }
-    
-    public function prepForSanitize($value)
+    public function getPrep($value)
     {
         $data = [
             'field' => $value,
@@ -89,21 +77,21 @@ class EqualToFieldTest extends AbstractRuleTest
     
     public function testRuleIs_fieldNotSet()
     {
-        list($data, $field) = $this->prepForValidate('foo');
+        list($data, $field) = $this->getPrep('foo');
         $rule = $this->newRule($data, $field);
         $this->assertFalse($rule->is('no_such_field'));
     }
     
     public function testRuleIsNot_fieldNotSet()
     {
-        list($data, $field) = $this->prepForValidate('foo');
+        list($data, $field) = $this->getPrep('foo');
         $rule = $this->newRule($data, $field);
         $this->assertTrue($rule->isNot('no_such_field'));
     }
     
     public function testRuleFix_fieldNotSet()
     {
-        list($data, $field) = $this->prepForValidate('foo');
+        list($data, $field) = $this->getPrep('foo');
         $rule = $this->newRule($data, $field);
         $this->assertFalse($rule->fix('no_such_field'));
     }
