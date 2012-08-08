@@ -1,11 +1,11 @@
 {
-    "name": "Aura/Filter",
+    "name": "aura/filter",
     "type": "library",
     "description": "The Aura Filter package provider validators and sanitizers for user data.",
     "keywords": [
         "filter",
         "validate",
-        "sanitize",
+        "sanitize"
     ],
     "homepage": "http://auraphp.github.com/Aura.Filter",
     "version": "1.0.0-dev",
