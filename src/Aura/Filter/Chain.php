@@ -11,6 +11,7 @@
 namespace Aura\Filter;
 
 use InvalidArgumentException;
+use StdClass;
 
 /**
  * 
@@ -24,28 +25,46 @@ use InvalidArgumentException;
 class Chain
 {
     /**
+     * Stop filtering on a field when a rule fails.
+     */
+    const HARD_RULE = 'HARD_RULE';
+    
+    /**
+     * Continue filtering on a field when a rule fails.
+     */
+    const SOFT_RULE = 'SOFT_RULE';
+    
+    /**
+     * Stop filtering on all fields when a rule fails.
+     */
+    const STOP_RULE = 'STOP_RULE';
+    
+    /**
      * 
-     * Array of rules
+     * The rules to be applied to a data object.
      *
      * @var array
+     * 
      */
     protected $rules = [];
 
     /**
      * 
-     * Error messages
+     * Error messages from failed rules.
      *
      * @var array
+     * 
      */
     protected $messages = [];
 
     /**
      * 
-     * Fail stop
+     * Fields that have errored on a hard rule.
      *
      * @var array
+     * 
      */
-    protected $failstop = [];
+    protected $hardrule = [];
 
     /**
      *
@@ -67,7 +86,8 @@ class Chain
     }
 
     /**
-     * add a rule; if it fails, stop processing that field
+     * 
+     * Add a rule; keep applying all other rules even if it fails.
      * 
      * @param string $field
      * 
@@ -78,18 +98,19 @@ class Chain
      * @return $this
      * 
      */
-    public function add($field, $method, $name)
+    public function addSoftRule($field, $method, $name)
     {
         $params = func_get_args();
         array_shift($params); // $field
         array_shift($params); // $method
         array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, true);
+        $this->addRule($field, $method, $name, $params, self::SOFT_RULE);
         return $this;
     }
 
     /**
-     * add a rule; if it fails, keep processing that field anyway
+     * 
+     * Add a rule; if it fails, stop applying rules on that field.
      * 
      * @param string $field
      * 
@@ -100,16 +121,46 @@ class Chain
      * @return $this
      * 
      */
-    public function addContinue($field, $method, $name)
+    public function addHardRule($field, $method, $name)
     {
         $params = func_get_args();
         array_shift($params); // $field
         array_shift($params); // $method
         array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, false);
+        $this->addRule($field, $method, $name, $params, self::HARD_RULE);
         return $this;
     }
 
+    /**
+     * 
+     * Add a rule; if it fails, stop applying rules on all remaining data.
+     * 
+     * @param string $field
+     * 
+     * @param string $method
+     * 
+     * @param string $name
+     * 
+     * @return $this
+     * 
+     */
+    public function addStopRule($field, $method, $name)
+    {
+        $params = func_get_args();
+        array_shift($params); // $field
+        array_shift($params); // $method
+        array_shift($params); // $name
+        $this->addRule($field, $method, $name, $params, self::STOP_RULE);
+        return $this;
+    }
+    
+    /**
+     * 
+     * Returns the collection of rules to be applied.
+     * 
+     * @return array
+     * 
+     */
     public function getRules()
     {
         return $this->rules;
@@ -117,7 +168,7 @@ class Chain
     
     /**
      * 
-     * add a rule
+     * Add a rule.
      * 
      * @param string $field
      * 
@@ -127,52 +178,45 @@ class Chain
      * 
      * @param string $params
      * 
-     * @param string $failstop
+     * @param string $type The rule type: soft, hard, stop.
      * 
      */
-    protected function addRule($field, $method, $name, $params, $failstop)
+    protected function addRule($field, $method, $name, $params, $type)
     {
         $this->rules[] = [
             'field'     => $field,
             'method'    => $method,
             'name'      => $name,
             'params'    => $params,
-            'failstop'  => $failstop,
+            'type'      => $type,
+            'applied'   => false,
         ];
     }
 
     /**
      * 
-     * Executes the rules
+     * Applies the rules to a data object.
      * 
-     * @param array $data
+     * @param object $data The data object to be filtered.
      * 
-     * @return boolean
+     * @return boolean True if all rules were applied without error; false if
+     * there was at least one error.
      * 
-     * @throws InvalidArgumentException
      */
-    public function exec($data)
+    public function exec(StdClass $data)
     {
-        if (! is_object($data)) {
-            throw new InvalidArgumentException;
-        }
-
+        // reset messages and hard-rule notices
         $this->messages = [];
+        $this->hardrule = [];
 
-        $this->failstop = [];
-
-        foreach ($this->rules as $rule) {
+        foreach ($this->rules as $i => &$rule) {
 
             // the field name
             $field = $rule['field'];
 
-            // if the field has failure messages, and we're supposed to
-            // stop on failures, then don't apply further rules for this
-            // field.
-            $failstop = isset($this->messages[$field])
-                     && isset($this->failstop[$field])
-                     && $this->failstop[$field];
-            if ($failstop) {
+            // if we've hit a hard rule for this field, then don't apply 
+            // further rules on this field.
+            if (in_array($field, $this->hardrule)) {
                 continue;
             }
 
@@ -182,34 +226,45 @@ class Chain
             $method = $rule['method'];
             $params = $rule['params'];
             $passed = call_user_func_array([$object, $method], $params);
+            $rule['applied'] = true;
+            
             if (! $passed) {
+                
+                // failed. keep the failure message.
                 $this->messages[$field][] = [
                     'field'   => $field,
                     'method'  => $rule['method'],
                     'name'    => $rule['name'],
                     'params'  => $rule['params'],
                     'message' => $object->getMessage(),
+                    'type'    => $rule['type'],
                 ];
-                $this->failstop[$field] = $rule['failstop'];
+                
+                // should we stop filtering this field?
+                if ($rule['type'] == static::HARD_RULE) {
+                    $this->hardrule[] = $field;
+                }
+                
+                // should we stop filtering entirely?
+                if ($rule['type'] == static::STOP_RULE) {
+                    return false;
+                }
             }
         }
 
-        if ($this->messages) {
-            return false;
-        } else {
-            return true;
-        }
+        // if there are messages, it's a failure
+        return $this->messages ? false : true;
     }
 
     /**
      * 
-     * gets the array of messages
+     * Returns the array of failure messages.
      * 
-     * @return string
+     * @return array
+     * 
      */
     public function getMessages()
     {
         return $this->messages;
     }
 }
-

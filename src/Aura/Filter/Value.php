@@ -12,7 +12,7 @@ namespace Aura\Filter;
 
 /**
  * 
- * A class to keep constants
+ * A class for constants related to filter chain method names.
  * 
  * @package Aura.Filter
  * 
@@ -25,4 +25,3 @@ class Value
     const FIX = 'fix';
     const FIX_BLANK_OR = 'fixBlankOr';
 }
-

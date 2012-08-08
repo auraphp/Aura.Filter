@@ -4,24 +4,24 @@ use Aura\Filter\Value;
 $filter_chain = require_once dirname(__DIR__). '/scripts/instance.php';
 
 // set up the filter chain.
-// $filter_chain->add($field, $method, $name, $param1, $param2, $paramN);
+// $filter_chain->addHardRule($field, $method, $name, $param1, $param2, $paramN);
 
-$filter_chain->add('username', Value::IS, 'alnum');
-$filter_chain->add('username', Value::IS, 'strlenBetween', 6, 12);
-$filter_chain->add('username', Value::FIX, 'alnum');
+$filter_chain->addHardRule('username', Value::IS, 'alnum');
+$filter_chain->addHardRule('username', Value::IS, 'strlenBetween', 6, 12);
+$filter_chain->addHardRule('username', Value::FIX, 'alnum');
 
-$filter_chain->add('birthday', Value::IS, 'isoDate');
-$filter_chain->add('birthday', Value::FIX, 'isoDate');
-$filter_chain->add('birthday', Value::IS, 'min', '1970-08-08'); // at least 42 on Aug 8
+$filter_chain->addHardRule('birthday', Value::IS, 'isoDate');
+$filter_chain->addHardRule('birthday', Value::FIX, 'isoDate');
+$filter_chain->addHardRule('birthday', Value::IS, 'min', '1970-08-08'); // at least 42 on Aug 8
 
-$filter_chain->add('nickname', Value::IS_BLANK_OR, 'string');
-$filter_chain->add('nickname', Value::FIX_BLANK_OR, 'string');
+$filter_chain->addHardRule('nickname', Value::IS_BLANK_OR, 'string');
+$filter_chain->addHardRule('nickname', Value::FIX_BLANK_OR, 'string');
 
-$filter_chain->add('accept_terms', Value::IS, 'bool', true);
-$filter_chain->add('accept_terms', Value::FIX, 'bool');
+$filter_chain->addHardRule('accept_terms', Value::IS, 'bool', true);
+$filter_chain->addHardRule('accept_terms', Value::FIX, 'bool');
 
-$filter_chain->add('password_plaintext', Value::IS, 'strlenMin', 6);
-$filter_chain->add('password_confirmed', Value::IS, 'equalToField', 'password_plaintext');
+$filter_chain->addHardRule('password_plaintext', Value::IS, 'strlenMin', 6);
+$filter_chain->addHardRule('password_confirmed', Value::IS, 'equalToField', 'password_plaintext');
 
 $data = (object) [
     'username' => 'username',
