@@ -71,14 +71,13 @@ Soft, Hard, and Stop Rules
 There are three types of rule processing we can apply:
 
 - The `addSoftRule()` method adds a soft rule: if the rule fails, the filter
-  will keep applying the the remaining rules to that field and all other
-  fields.
+  will keep applying all remaining rules to that field and all other fields.
 
 - The `addHardRule()` method adds a hard rule: if the rule fails, the filter
-  will not apply any more filters to that field, but it will keep filtering
+  will not apply any more rules to that field, but it will keep filtering
   other fields.
 
-- The `addStopRule()` method adds a stopping rule: if the rules fails, the
+- The `addStopRule()` method adds a stopping rule: if the rule fails, the
   filter will not apply any more filters to any more fields; this stops all
   filtering on the data object.
 
