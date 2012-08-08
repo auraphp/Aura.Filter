@@ -75,6 +75,8 @@ class Chain
      * 
      * @param string $name
      * 
+     * @return $this
+     * 
      */
     public function add($field, $method, $name)
     {
@@ -83,6 +85,7 @@ class Chain
         array_shift($params); // $method
         array_shift($params); // $name
         $this->addRule($field, $method, $name, $params, true);
+        return $this;
     }
 
     /**
@@ -94,6 +97,8 @@ class Chain
      * 
      * @param string $name
      * 
+     * @return $this
+     * 
      */
     public function addContinue($field, $method, $name)
     {
@@ -102,6 +107,7 @@ class Chain
         array_shift($params); // $method
         array_shift($params); // $name
         $this->addRule($field, $method, $name, $params, false);
+        return $this;
     }
 
     public function getRules()
