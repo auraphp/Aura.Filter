@@ -150,7 +150,7 @@ Available Rules
   alphabetic characters.
 
 - `between`: Validate the value as being within or equal to a minimum and
-  maximum value. Sanitize to that values lower than the range are forced up
+  maximum value. Sanitize so that values lower than the range are forced up
   to the minimum; values higher than the range are forced down to the maximum.
 
 - `blank`: Validate the value as being blank. Sanitize to `null`.
@@ -163,50 +163,76 @@ Available Rules
 - `creditCard`: Validate the value as being a credit card number. The value
   cannot be sanitized.
 
-- `dateTime`:
+- `dateTime`: Validate the value as representing a date and/or time. Sanitize
+  the value to a specified format, default `'Y-m-d H:i:s`.
 
-- `email`:
+- `email`: Validate the value as being a properly-formed email address. The
+  value cannot be sanitized.
 
-- `equalToField`:
+- `equalToField`: Validate the value as loosely equal to the value of another
+  field in the data object. Sanitize to the value of that other field.
 
-- `equalToValue`:
+- `equalToValue`: Validate the value as loosely equal to a specified value.
+  Sanitize to the specified value.
 
-- `float`:
+- `float`: Validate the value as representing a float. Sanitize the value to
+  transform it into a float; for weird strings, this may not be what you
+  expect.
 
-- `inKeys`:
+- `inKeys`: Validate that the value is loosely equal to a key in a given
+  array. The value cannot be sanitized.
 
-- `inValues`:
+- `inValues`: Validate that the value is strictly equal to at least one value
+  in a given array. The value cannot be sanitized.
 
-- `int`:
+- `int`: Validate the value as representing an integer Sanitize the value to
+  transform it into an integer; for weird strings, this may not be what you
+  expect.
 
-- `ipv4`:
+- `ipv4`: Validate the value as an IPv4 address. The value cannot be
+  sanitized.
 
-- `max`:
+- `max`: Validate the value as being less than or equal to a maximum. Sanitize
+  so that values higher than the maximum are forced down to the maxiumum.
 
-- `min`:
+- `min`: Validate the value as being greater than or equal to a minimum.
+  Sanitize so that values lower than the minimum are forced up to the
+  miniumum.
 
-- `regex`:
+- `regex`: Validate the value using `preg_match()`. Sanitize the value using
+  `preg_replace()`.
 
-- `strictEqualToField`:
+- `strictEqualToField`: Validate the value as strictly equal to the value of
+  another field in the data object. Sanitize to the value of that other field.
 
-- `strictEqualToValue`:
+- `strictEqualToValue`: Validate the value as strictly equal to a specified
+  value. Sanitize to the specified value.
 
-- `string`:
+- `string`: Validate the value can be represented by a string. Sanitize the
+  value by casting to a string and using `str_replace().`
 
-- `strlen`:
+- `strlen`: Validate the value has a specified length. Sanitize the value
+  to cut off longer values at the right, and `str_pad()` shorter ones.
 
-- `strlenBetween`:
+- `strlenBetween`: Validate the value length as being within or equal to a
+  minimum and maximum value. Sanitize the value to cut off values longer than
+  the maximum, longer values at the right, and `str_pad()` shorter ones.
 
-- `strlenMax`:
+- `strlenMax`: Validate the value length as being no longer than a maximum.
+  Sanitize the value to cut off values longer than the maximum.
 
-- `strlenMin`:
+- `strlenMin`: Validate the value length as being no shorter than a minimum.
+  Sanitize the value to `str_pad()` values shorter than the minimum.
 
-- `trim`:
+- `trim`: Validate the value is `trim()`med. Sanitze the value to `trim()` it.
 
-- `upload`:
+- `upload`: Validate the value represents a PHP upload information array, and
+  that the file is an uploaded file. The value cannot be sanitized.
 
-- `url`:
+- `url`: Validate the value is a well-formed URL. The value cannot be
+  sanitized.
 
-- `word`:
+- `word`: Validate the value as being composed only of word characters.
+ Sanitize the value to remove non-word characters.
 
 * * *
