@@ -254,7 +254,8 @@ Available Rules
         $filter->addSoftRule('field', Value::IS, 'strictEqualToValue', $other_value);
 
 - `string`: Validate the value can be represented by a string. Sanitize the
-  value by casting to a string and using `str_replace().` Usage:
+  value by casting to a string and optionally using `str_replace().` Usage
+  (note that this is to sanitize, not validate):
 
         <?php
         $filter->addSoftRule('field', Value::FIX, 'string', $find, $replace);
