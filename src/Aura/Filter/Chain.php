@@ -166,6 +166,11 @@ class Chain
         return $this->rules;
     }
     
+    public function getRuleLocator()
+    {
+        return $this->rule_locator;
+    }
+    
     /**
      * 
      * Add a rule.

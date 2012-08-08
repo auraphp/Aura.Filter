@@ -21,6 +21,13 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         ]));
     }
     
+    public function testGetRuleLocator()
+    {
+        $actual = $this->chain->getRuleLocator();
+        $expect = 'Aura\Filter\RuleLocator';
+        $this->assertInstanceOf($expect, $actual);
+    }
+    
     public function testAddAndGetRules()
     {
         $this->chain->addSoftRule('field1', Value::IS, 'alnum');
