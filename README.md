@@ -351,7 +351,7 @@ Here's an example of a hexadecimal rule:
     <?php
     namespace Vendor\Package\Filter\Rule;
     
-    use Aura\Filter\Rule\AbstractRule;
+    use Aura\Filter\AbstractRule;
     
     class Hex extends AbstractRule
     {
