@@ -80,8 +80,8 @@ Alternatively, we can apply a filter rule to an individual value:
         echo "Username is not alphanumeric.";
     }
 
-> N.b.: Filtering must be applied to variables, not constants or literals,
-> becaue of the way rule processing works under-the-hood.
+> N.b.: The `value()` method must be applied to variables, not constants or
+> literals, becaue of the way rule processing works under-the-hood.
 
 
 Applying Rules
