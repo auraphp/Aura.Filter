@@ -65,27 +65,9 @@ object.
         var_export($messages);
     }
 
-Alternatively, we can apply a filter rule to an individual value:
 
-    <?php
-    // get a new filter
-    $filter = require "/path/to/Aura.Filter/scripts/instance.php";
-    
-    // an individual value
-    $username = 'new_username';
-    
-    // filter the individual value
-    $success = $filter->value($username, $filter::IS, 'alnum');
-    if (! $success) {
-        echo "Username is not alphanumeric.";
-    }
-
-> N.b.: The `value()` method must be applied to variables, not constants or
-> literals, becaue of the way rule processing works under-the-hood.
-
-
-Applying Rules
-==============
+Applying Rules to Data Objects
+==============================
 
 Soft, Hard, and Stop Rules
 --------------------------
@@ -355,12 +337,31 @@ Available Rules
         $filter->addSoftRule('field', $filter::IS, 'word');
 
 
-Advanced Usage
-==============
+Applying Rules to Individual Values
+===================================
+
+Normally, we use the filter with data objects. Alternatively, we can apply a
+filter rule to an individual value:
+
+    <?php
+    // get a new filter
+    $filter = require "/path/to/Aura.Filter/scripts/instance.php";
+    
+    // an individual value
+    $username = 'new_username';
+    
+    // filter the individual value
+    $success = $filter->value($username, $filter::IS, 'alnum');
+    if (! $success) {
+        echo "Username is not alphanumeric.";
+    }
+
+> N.b.: The `value()` method must be applied to variables, not constants or
+> literals, becaue of the way rule processing works under-the-hood.
 
 
-Writing Rules
--------------
+Creating and Using Custom Rules
+===============================
 
 There are three steps to creating and using new rules:
 
@@ -370,7 +371,8 @@ There are three steps to creating and using new rules:
 
 3. Use the new rule in our filter chain
 
-### Writing a Rule Class
+Writing a Rule Class
+--------------------
 
 Writing a rule class is straightforward:
 
@@ -442,7 +444,8 @@ Here's an example of a hexadecimal rule:
         }
     }
 
-### Set The Class As A Service
+Set The Class As A Service
+--------------------------
 
 Now we set the rule class into the `RuleLocator`.
 
@@ -452,9 +455,10 @@ Now we set the rule class into the `RuleLocator`.
         return new Vendor\Package\Filter\Rule\Hex;
     });
 
-### Apply The New Rule
+Apply The New Rule
+------------------
 
-Finally, we can use the rule in our filter chain:
+Finally, we can use the rule in our filter:
 
     <?php
     // the 'color' field must be a hex value of no more than 6 digits
