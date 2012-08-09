@@ -68,10 +68,13 @@ object.
 Alternatively, we can apply a filter rule to an individual value:
 
     <?php
+    // get a new filter
     $filter = require "/path/to/Aura.Filter/scripts/instance.php";
     
+    // an individual value
     $username = 'new_username';
     
+    // filter the individual value
     $valid = $filter->value($username, $filter::IS, 'alnum');
     if (! $valid) {
         echo "Username is not alphanumeric.";
