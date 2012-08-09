@@ -208,7 +208,7 @@ class Chain
      * 
      * Applies the rules to a data object.
      * 
-     * @param object $data The data object to be filtered.
+     * @param StdClass $data The data object to be filtered.
      * 
      * @return boolean True if all rules were applied without error; false if
      * there was at least one error.

@@ -52,7 +52,7 @@ abstract class AbstractRule implements RuleInterface
      * 
      * Prepare the rule for reuse.
      * 
-     * @param object $data The full set of data to be filtered.
+     * @param StdClass $data The full set of data to be filtered.
      * 
      * @param string $field The field to be filtered within the data.
      * 
