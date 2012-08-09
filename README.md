@@ -150,7 +150,7 @@ even if they evaluate to zero:
 Available Rules
 ---------------
 
-- `alnum`: Validate the value as alphanumeric only. Sanitize to leave only
+*- `alnum`: Validate the value as alphanumeric only. Sanitize to leave only
   alphanumeric characters. Usage:
         
         <?php
@@ -190,10 +190,11 @@ Available Rules
         $filter->addSoftRule('field', $filter::IS, 'creditCard');
 
 - `dateTime`: Validate the value as representing a date and/or time. Sanitize
-  the value to a specified format, default `'Y-m-d H:i:s`. Usage:
+  the value to a specified format, default `'Y-m-d H:i:s`. Usage (note that
+  this is to sanitize, not validate):
         
         <?php
-        $filter->addSoftRule('field', $filter::IS, 'dateTime', $format);
+        $filter->addSoftRule('field', $filter::FIX, 'dateTime', $format);
 
 - `email`: Validate the value as being a properly-formed email address. The
   value cannot be sanitized. Usage:
