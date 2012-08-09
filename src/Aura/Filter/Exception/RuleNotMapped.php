@@ -22,4 +22,3 @@ use Aura\Filter\Exception;
 class RuleNotMapped extends Exception
 {
 }
-

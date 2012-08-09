@@ -24,10 +24,10 @@ Alternatively, we can add the `Aura.Filter` package to an autoloader, and
 instantiate manually:
 
     <?php
-    use Aura\Filter\Chain;
+    use Aura\Filter\RuleCollection;
     use Aura\Filter\RuleLocator;
     
-    $filter = new Chain(new RuleLocator);
+    $filter = new RuleCollection(new RuleLocator);
 
 (Note that if we instantiate manually, we will need to configure the
 `RuleLocator` manually to add rule services. See the "Advanced Usage" section
@@ -36,21 +36,19 @@ near the end of this page for more information.)
 Add field rules to the filter, then apply those rules to a data object.
 
     <?php
-    use Aura\Filter\Value;
-    
-    // get a new filter chain
+    // get a new filter
     $filter = require "/path/to/Aura.Filter/scripts/instance.php";
     
     // the username must be alphanumeric, between 6 and 12 characters long,
     // and cast to a string
-    $filter->addSoftRule('username', Value::IS, 'alnum');
-    $filter->addSoftRule('username', Value::IS, 'strlenBetween', 6, 12);
-    $filter->addSoftRule('username', Value::FIX, 'string');
+    $filter->addSoftRule('username', $filter::VALUE_IS, 'alnum');
+    $filter->addSoftRule('username', $filter::VALUE_IS, 'strlenBetween', 6, 12);
+    $filter->addSoftRule('username', $filter::VALUE_FIX, 'string');
     
     // the password must be at least 6 characters long, and must match a
     // confirmation field
-    $filter->addSoftRule('password', Value::IS, 'strlenMin', 6);
-    $filter->addSoftRule('password_confirm', Value::IS, 'equalToField', 'password');
+    $filter->addSoftRule('password', $filter::VALUE_IS, 'strlenMin', 6);
+    $filter->addSoftRule('password_confirm', $filter::VALUE_IS, 'equalToField', 'password');
     
     // the data object to be filtered:
     $data = (object) [
@@ -60,11 +58,28 @@ Add field rules to the filter, then apply those rules to a data object.
     ];
     
     // filter the object and see if there were failures
-    $success = $filter->exec($data);
+    $success = $filter->object($data);
     if (! $success) {
         $messages = $filter->getMessages();
         var_export($messages);
     }
+
+Alternatively, we can apply a filter rule to an individual value:
+
+    <?php
+    use Aura\Filter\Value;
+    
+    $filter = require "/path/to/Aura.Filter/scripts/instance.php";
+    
+    $username = 'new_username';
+    
+    $valid = $filter->value($username, $filter::VALUE_IS, 'alnum');
+    if (! $valid) {
+        echo "Username is not alphanumeric.";
+    }
+
+> N.b.: Filtering must be applied to variables, not constants or literals,
+> becaue of the way rule processing works under-the-hood.
 
 
 Applying Rules
@@ -92,21 +107,21 @@ Validating and Sanitizing
 
 We validate data by applying a rule with one of the following requirements:
 
-- `Value::IS` means the field value must match the rule.
+- `$filter::VALUE_IS` means the field value must match the rule.
 
-- `Value::IS_NOT` means the field value must *not* match the rule.
+- `$filter::VALUE_IS_NOT` means the field value must *not* match the rule.
 
-- `Value::IS_BLANK_OR` means the field value must *either* be blank, *or*
+- `$filter::VALUE_IS_BLANK_OR` means the field value must *either* be blank, *or*
   match the rule. This is useful for optional field values that may or may not
   be filled in.
 
 We sanitize data by applying a rule with one of the following transformations:
 
-- `Value::FIX` to force the field value to comply with the rule; this may
+- `$filter::VALUE_FIX` to force the field value to comply with the rule; this may
   forcibly transform the value. Some transformations are not possible, so
   sanitizing the field may result in an error message.
 
-- `Value::FIX_BLANK_OR` will convert blank values to `null`; non-blank fields
+- `$filter::VALUE_FIX_BLANK_OR` will convert blank values to `null`; non-blank fields
   will be forced to comply with the rule. This is useful for sanitizing
   optional field values that may or may not match the rule.
 
@@ -162,7 +177,7 @@ Available Rules
   Usage:
         
         <?php
-        $filter->addSoftRule('field', Value::IS, 'between', $max, $min);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'between', $max, $min);
 
 - `blank`: Validate the value as being blank. Sanitize to `null`.
 
@@ -178,7 +193,7 @@ Available Rules
   the value to a specified format, default `'Y-m-d H:i:s`. Usage:
         
         <?php
-        $filter->addSoftRule('field', Value::IS, 'dateTime', $format);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'dateTime', $format);
 
 - `email`: Validate the value as being a properly-formed email address. The
   value cannot be sanitized.
@@ -188,13 +203,13 @@ Available Rules
   Usage:
         
         <?php
-        $filter->addSoftRule('field', Value::IS, 'equalToField', 'other_field_name');
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'equalToField', 'other_field_name');
 
 - `equalToValue`: Validate the value as loosely equal to a specified value.
   Sanitize to the specified value. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'equalToValue', $other_value);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'equalToValue', $other_value);
         
 - `float`: Validate the value as representing a float. Sanitize the value to
   transform it into a float; for weird strings, this may not be what you
@@ -204,13 +219,13 @@ Available Rules
   array. The value cannot be sanitized. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'inKeys', $array);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'inKeys', $array);
 
 - `inValues`: Validate that the value is strictly equal to at least one value
   in a given array. The value cannot be sanitized. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'inValues', $array);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'inValues', $array);
         
 - `int`: Validate the value as representing an integer Sanitize the value to
   transform it into an integer; for weird strings, this may not be what you
@@ -224,7 +239,7 @@ Available Rules
   Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'max', $max);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'max', $max);
 
 
 - `min`: Validate the value as being greater than or equal to a minimum.
@@ -232,39 +247,39 @@ Available Rules
   miniumum.Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'min', $min);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'min', $min);
 
 - `regex`: Validate the value using `preg_match()`. Sanitize the value using
   `preg_replace()`.
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'regex', $expr);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'regex', $expr);
         
 - `strictEqualToField`: Validate the value as strictly equal to the value of
   another field in the data object. Sanitize to the value of that other field.
   Usage:
         
         <?php
-        $filter->addSoftRule('field', Value::IS, 'strictEqualToField', 'other_field_name');
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'strictEqualToField', 'other_field_name');
 
 - `strictEqualToValue`: Validate the value as strictly equal to a specified
   value. Sanitize to the specified value. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'strictEqualToValue', $other_value);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'strictEqualToValue', $other_value);
 
 - `string`: Validate the value can be represented by a string. Sanitize the
   value by casting to a string and optionally using `str_replace().` Usage
   (note that this is to sanitize, not validate):
 
         <?php
-        $filter->addSoftRule('field', Value::FIX, 'string', $find, $replace);
+        $filter->addSoftRule('field', $filter::VALUE_FIX, 'string', $find, $replace);
 
 - `strlen`: Validate the value has a specified length. Sanitize the value
   to cut off longer values at the right, and `str_pad()` shorter ones. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'strlen', $len);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'strlen', $len);
 
 - `strlenBetween`: Validate the value length as being within or equal to a
   minimum and maximum value. Sanitize the value to cut off values longer than
@@ -272,26 +287,26 @@ Available Rules
   Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'strlenBetween', $min, $max);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'strlenBetween', $min, $max);
         
 - `strlenMax`: Validate the value length as being no longer than a maximum.
   Sanitize the value to cut off values longer than the maximum. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'strlenMax', $max);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'strlenMax', $max);
         
 
 - `strlenMin`: Validate the value length as being no shorter than a minimum.
   Sanitize the value to `str_pad()` values shorter than the minimum. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'strlenMin', $min);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'strlenMin', $min);
         
 - `trim`: Validate the value is `trim()`med. Sanitize the value to `trim()` it.
   Optionally specify characters to trim. Usage:
 
         <?php
-        $filter->addSoftRule('field', Value::IS, 'trim', $chars);
+        $filter->addSoftRule('field', $filter::VALUE_IS, 'trim', $chars);
         
 - `upload`: Validate the value represents a PHP upload information array, and
   that the file is an uploaded file. The value cannot be sanitized.
@@ -406,6 +421,6 @@ Finally, we can use the rule in our filter chain:
 
     <?php
     // the 'color' field must be a hex value of no more than 6 digits
-    $filter->addHardRule('color', Value::IS, 'hex', 6);
+    $filter->addHardRule('color', $filter::VALUE_IS, 'hex', 6);
 
 That's it!

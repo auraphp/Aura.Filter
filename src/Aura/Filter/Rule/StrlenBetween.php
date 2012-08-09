@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Validates that a value's length is within a given range.
@@ -79,4 +81,3 @@ class StrlenBetween extends AbstractRule
         return true;
     }
 }
-

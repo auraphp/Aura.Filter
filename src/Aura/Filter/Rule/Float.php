@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Rule for floats.
@@ -121,4 +123,3 @@ class Float extends AbstractRule
         return true;
     }
 }
-

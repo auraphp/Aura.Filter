@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 use StdClass;
 
 /**
@@ -188,4 +190,3 @@ class Upload extends AbstractRule
         return is_uploaded_file($file);
     }
 }
-

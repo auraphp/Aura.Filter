@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter;
 require_once dirname(__DIR__) . '/src.php';
-return new Chain(new RuleLocator([
+return new RuleCollection(new RuleLocator([
     'alnum'                 => function() { return new Rule\Alnum; },
     'alpha'                 => function() { return new Rule\Alpha; },
     'between'               => function() { return new Rule\Between; },

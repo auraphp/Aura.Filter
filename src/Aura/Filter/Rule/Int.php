@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Sanitizes a value to an integer.
@@ -101,4 +103,3 @@ class Int extends AbstractRule
         return true;
     }
 }
-

@@ -87,4 +87,3 @@ class RuleLocator
         return $this->registry[$name];
     }
 }
-

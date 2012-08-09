@@ -1,23 +1,25 @@
 <?php
 namespace Aura\Filter;
 
-class ChainTest extends \PHPUnit_Framework_TestCase
+use Aura\Filter\RuleCollection as Filter;
+
+class RuleCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    protected $chain;
+    protected $filter;
     
     protected function setUp()
     {
-        $this->chain = new Chain(new RuleLocator([
-            'alnum'                 => function() { return new Rule\Alnum; },
-            'alpha'                 => function() { return new Rule\Alpha; },
-            'between'               => function() { return new Rule\Between; },
-            'blank'                 => function() { return new Rule\Blank; },
-            'int'                   => function() { return new Rule\Int; },
-            'max'                   => function() { return new Rule\Max; },
-            'min'                   => function() { return new Rule\Min; },
-            'regex'                 => function() { return new Rule\Regex; },
-            'string'                => function() { return new Rule\String; },
-            'strlen'                => function() { return new Rule\Strlen; },
+        $this->filter = new Filter(new RuleLocator([
+            'alnum'   => function() { return new Rule\Alnum; },
+            'alpha'   => function() { return new Rule\Alpha; },
+            'between' => function() { return new Rule\Between; },
+            'blank'   => function() { return new Rule\Blank; },
+            'int'     => function() { return new Rule\Int; },
+            'max'     => function() { return new Rule\Max; },
+            'min'     => function() { return new Rule\Min; },
+            'regex'   => function() { return new Rule\Regex; },
+            'string'  => function() { return new Rule\String; },
+            'strlen'  => function() { return new Rule\Strlen; },
         ]));
     }
     
@@ -25,37 +27,38 @@ class ChainTest extends \PHPUnit_Framework_TestCase
     {
         // validate
         $actual = 'abc123def';
-        $this->assertTrue($this->chain->value($actual, Value::IS, 'alnum'));
+        $this->assertTrue($this->filter->value($actual, Filter::VALUE_IS, 'alnum'));
         
         // sanitize in place
         $expect = 123;
-        $this->assertTrue($this->chain->value($actual, Value::FIX, 'int'));
+        $this->assertTrue($this->filter->value($actual, Filter::VALUE_FIX, 'int'));
         $this->assertSame(123, $actual);
     }
     
     public function testGetRuleLocator()
     {
-        $actual = $this->chain->getRuleLocator();
+        $filter = $this->filter;
+        $actual = $this->filter->getRuleLocator();
         $expect = 'Aura\Filter\RuleLocator';
         $this->assertInstanceOf($expect, $actual);
     }
     
     public function testAddAndGetRules()
     {
-        $this->chain->addSoftRule('field1', Value::IS, 'alnum');
-        $this->chain->addHardRule('field1', Value::IS, 'alpha');
+        $this->filter->addSoftRule('field1', Filter::VALUE_IS, 'alnum');
+        $this->filter->addHardRule('field1', Filter::VALUE_IS, 'alpha');
         
-        $this->chain->addSoftRule('field2', Value::IS, 'alnum');
-        $this->chain->addHardRule('field2', Value::IS, 'alpha');
+        $this->filter->addSoftRule('field2', Filter::VALUE_IS, 'alnum');
+        $this->filter->addHardRule('field2', Filter::VALUE_IS, 'alpha');
         
-        $actual = $this->chain->getRules();
+        $actual = $this->filter->getRules();
         $expect = [
             0 => [
                 'field' => 'field1',
                 'method' => 'is',
                 'name' => 'alnum',
                 'params' => [],
-                'type' => Chain::SOFT_RULE,
+                'type' => Filter::RULE_SOFT,
                 'applied' => false,
             ],
             1 => [
@@ -63,7 +66,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alpha',
                 'params' => [],
-                'type' => Chain::HARD_RULE,
+                'type' => Filter::RULE_HARD,
                 'applied' => false,
             ],
             2 => [
@@ -71,7 +74,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alnum',
                 'params' => [],
-                'type' => Chain::SOFT_RULE,
+                'type' => Filter::RULE_SOFT,
                 'applied' => false,
             ],
             3 => [
@@ -79,7 +82,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alpha',
                 'params' => [],
-                'type' => Chain::HARD_RULE,
+                'type' => Filter::RULE_HARD,
                 'applied' => false,
             ],
         ];
@@ -89,23 +92,23 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
     public function testExec()
     {
-        $this->chain->addSoftRule('field', Value::IS, 'alnum');
-        $this->chain->addHardRule('field', Value::IS, 'alpha');
+        $this->filter->addSoftRule('field', Filter::VALUE_IS, 'alnum');
+        $this->filter->addHardRule('field', Filter::VALUE_IS, 'alpha');
         
         $data = (object) ['field' => 'foo'];
-        $result = $this->chain->exec($data);
+        $result = $this->filter->object($data);
         $this->assertTrue($result);
-        $messages = $this->chain->getMessages();
+        $messages = $this->filter->getMessages();
         $this->assertTrue(empty($messages));
     }
     
     public function testExec_hardRule()
     {
-        $this->chain->addHardRule('field', Value::IS, 'alnum');
-        $this->chain->addHardRule('field', Value::IS, 'alpha');
+        $this->filter->addHardRule('field', Filter::VALUE_IS, 'alnum');
+        $this->filter->addHardRule('field', Filter::VALUE_IS, 'alpha');
         
         $data = (object) ['field' => array()];
-        $result = $this->chain->exec($data);
+        $result = $this->filter->object($data);
         $this->assertFalse($result);
         
         $expect = [
@@ -116,30 +119,30 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alnum',
                     'params' => [],
                     'message' => 'FILTER_ALNUM',
-                    'type' => 'HARD_RULE',
+                    'type' => 'RULE_HARD',
                 ],
             ],
         ];
 
-        $actual = $this->chain->getMessages();
+        $actual = $this->filter->getMessages();
         
         $this->assertSame($expect, $actual);
     }
 
     public function testExec_softRule()
     {
-        $this->chain->addSoftRule('field1', Value::IS, 'alnum');
-        $this->chain->addHardRule('field1', Value::IS, 'alpha');
-        $this->chain->addHardRule('field1', Value::FIX, 'string');
-        $this->chain->addHardRule('field2', Value::IS, 'int');
-        $this->chain->addHardRule('field2', Value::FIX, 'int');
+        $this->filter->addSoftRule('field1', Filter::VALUE_IS, 'alnum');
+        $this->filter->addHardRule('field1', Filter::VALUE_IS, 'alpha');
+        $this->filter->addHardRule('field1', Filter::VALUE_FIX, 'string');
+        $this->filter->addHardRule('field2', Filter::VALUE_IS, 'int');
+        $this->filter->addHardRule('field2', Filter::VALUE_FIX, 'int');
         
         $data = (object) [
             'field1' => array(),
             'field2' => 88
         ];
         
-        $result = $this->chain->exec($data);
+        $result = $this->filter->object($data);
         $this->assertFalse($result);
         
         $expect = [
@@ -150,7 +153,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alnum',
                     'params' => [],
                     'message' => 'FILTER_ALNUM',
-                    'type' => 'SOFT_RULE',
+                    'type' => 'RULE_SOFT',
                 ],
                 1 => [
                     'field' => 'field1',
@@ -158,23 +161,23 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alpha',
                     'params' => [],
                     'message' => 'FILTER_ALPHA',
-                    'type' => 'HARD_RULE',
+                    'type' => 'RULE_HARD',
                 ],
             ],
         ];
 
-        $actual = $this->chain->getMessages();
+        $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
     }
     
     public function testExec_stopRule()
     {
-        $this->chain->addSoftRule('field1', Value::IS, 'alnum');
-        $this->chain->addStopRule('field1', Value::IS, 'alpha');
-        $this->chain->addHardRule('field2', Value::IS, 'int');
+        $this->filter->addSoftRule('field1', Filter::VALUE_IS, 'alnum');
+        $this->filter->addStopRule('field1', Filter::VALUE_IS, 'alpha');
+        $this->filter->addHardRule('field2', Filter::VALUE_IS, 'int');
         
         $data = (object) ['field1' => array()];
-        $result = $this->chain->exec($data);
+        $result = $this->filter->object($data);
         $this->assertFalse($result);
         
         $expect = [
@@ -185,7 +188,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alnum',
                     'params' => [],
                     'message' => 'FILTER_ALNUM',
-                    'type' => 'SOFT_RULE',
+                    'type' => 'RULE_SOFT',
                 ],
                 1 => [
                     'field' => 'field1',
@@ -193,21 +196,21 @@ class ChainTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alpha',
                     'params' => [],
                     'message' => 'FILTER_ALPHA',
-                    'type' => 'STOP_RULE',
+                    'type' => 'RULE_STOP',
                 ],
             ],
         ];
 
-        $actual = $this->chain->getMessages();
+        $actual = $this->filter->getMessages();
         
         $this->assertSame($expect, $actual);
     }
     
     public function testExec_sanitizesInPlace()
     {
-        $this->chain->addHardRule('field', Value::FIX, 'string', 'foo', 'bar');
+        $this->filter->addHardRule('field', Filter::VALUE_FIX, 'string', 'foo', 'bar');
         $data = (object) ['field' => 'foo'];
-        $result = $this->chain->exec($data);
+        $result = $this->filter->object($data);
         $this->assertTrue($result);
         $this->assertSame($data->field, 'bar');
     }

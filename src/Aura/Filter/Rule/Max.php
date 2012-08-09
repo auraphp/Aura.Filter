@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Validates that a value is less than than or equal to a maximum.
@@ -67,4 +69,3 @@ class Max extends AbstractRule
         return true;
     }
 }
-

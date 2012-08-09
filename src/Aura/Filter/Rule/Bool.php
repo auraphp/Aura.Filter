@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Rule for booleans.
@@ -113,4 +115,3 @@ class Bool extends AbstractRule
         return true;
     }
 }
-
