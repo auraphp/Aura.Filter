@@ -27,42 +27,42 @@ class RuleCollection
     /**
      * Stop filtering on a field when a rule fails.
      */
-    const RULE_HARD = 'RULE_HARD';
+    const HARD_RULE = 'HARD_RULE';
 
     /**
      * Continue filtering on a field when a rule fails.
      */
-    const RULE_SOFT = 'RULE_SOFT';
+    const SOFT_RULE = 'SOFT_RULE';
 
     /**
      * Stop filtering on all fields when a rule fails.
      */
-    const RULE_STOP = 'RULE_STOP';
+    const STOP_RULE = 'STOP_RULE';
 
     /**
      * Apply a rule to check if the value is valid.
      */
-    const VALUE_IS = 'is';
+    const IS = 'is';
 
     /**
      * Apply a rule to check if the value **is not** valid.
      */
-    const VALUE_IS_NOT = 'isNot';
+    const IS_NOT = 'isNot';
 
     /**
      * Apply a rule to check if the value is blank **or** is valid.
      */
-    const VALUE_IS_BLANK_OR = 'isBlankOr';
+    const IS_BLANK_OR = 'isBlankOr';
 
     /**
      * Sanitize the value according to the rule.
      */
-    const VALUE_FIX = 'fix';
+    const FIX = 'fix';
 
     /**
      * Sanitize the value to `null` if blank, or according to the rule if not.
      */
-    const VALUE_FIX_BLANK_OR = 'fixBlankOr';
+    const FIX_BLANK_OR = 'fixBlankOr';
     
     /**
      * 
@@ -130,7 +130,7 @@ class RuleCollection
         array_shift($params); // $field
         array_shift($params); // $method
         array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, self::RULE_SOFT);
+        $this->addRule($field, $method, $name, $params, self::SOFT_RULE);
         return $this;
     }
 
@@ -153,7 +153,7 @@ class RuleCollection
         array_shift($params); // $field
         array_shift($params); // $method
         array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, self::RULE_HARD);
+        $this->addRule($field, $method, $name, $params, self::HARD_RULE);
         return $this;
     }
 
@@ -176,7 +176,7 @@ class RuleCollection
         array_shift($params); // $field
         array_shift($params); // $method
         array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, self::RULE_STOP);
+        $this->addRule($field, $method, $name, $params, self::STOP_RULE);
         return $this;
     }
 
@@ -278,12 +278,12 @@ class RuleCollection
                 ];
 
                 // should we stop filtering this field?
-                if ($rule['type'] == static::RULE_HARD) {
+                if ($rule['type'] == static::HARD_RULE) {
                     $this->hardrule[] = $field;
                 }
 
                 // should we stop filtering entirely?
-                if ($rule['type'] == static::RULE_STOP) {
+                if ($rule['type'] == static::STOP_RULE) {
                     return false;
                 }
             }
@@ -311,7 +311,7 @@ class RuleCollection
      * @param mixed &$value Apply the rule to this value; the rule may modify
      * the value in place.
      * 
-     * @param string $method The rule method to use; e.g., Filter::VALUE_IS.
+     * @param string $method The rule method to use; e.g., Filter::IS.
      * 
      * @param string $name The of the rule to apply.
      * 

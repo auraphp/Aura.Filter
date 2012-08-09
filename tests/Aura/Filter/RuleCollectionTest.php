@@ -27,11 +27,11 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     {
         // validate
         $actual = 'abc123def';
-        $this->assertTrue($this->filter->value($actual, Filter::VALUE_IS, 'alnum'));
+        $this->assertTrue($this->filter->value($actual, Filter::IS, 'alnum'));
         
         // sanitize in place
         $expect = 123;
-        $this->assertTrue($this->filter->value($actual, Filter::VALUE_FIX, 'int'));
+        $this->assertTrue($this->filter->value($actual, Filter::FIX, 'int'));
         $this->assertSame(123, $actual);
     }
     
@@ -45,11 +45,11 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     
     public function testAddAndGetRules()
     {
-        $this->filter->addSoftRule('field1', Filter::VALUE_IS, 'alnum');
-        $this->filter->addHardRule('field1', Filter::VALUE_IS, 'alpha');
+        $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field1', Filter::IS, 'alpha');
         
-        $this->filter->addSoftRule('field2', Filter::VALUE_IS, 'alnum');
-        $this->filter->addHardRule('field2', Filter::VALUE_IS, 'alpha');
+        $this->filter->addSoftRule('field2', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field2', Filter::IS, 'alpha');
         
         $actual = $this->filter->getRules();
         $expect = [
@@ -58,7 +58,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alnum',
                 'params' => [],
-                'type' => Filter::RULE_SOFT,
+                'type' => Filter::SOFT_RULE,
                 'applied' => false,
             ],
             1 => [
@@ -66,7 +66,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alpha',
                 'params' => [],
-                'type' => Filter::RULE_HARD,
+                'type' => Filter::HARD_RULE,
                 'applied' => false,
             ],
             2 => [
@@ -74,7 +74,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alnum',
                 'params' => [],
-                'type' => Filter::RULE_SOFT,
+                'type' => Filter::SOFT_RULE,
                 'applied' => false,
             ],
             3 => [
@@ -82,7 +82,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'method' => 'is',
                 'name' => 'alpha',
                 'params' => [],
-                'type' => Filter::RULE_HARD,
+                'type' => Filter::HARD_RULE,
                 'applied' => false,
             ],
         ];
@@ -92,8 +92,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testExec()
     {
-        $this->filter->addSoftRule('field', Filter::VALUE_IS, 'alnum');
-        $this->filter->addHardRule('field', Filter::VALUE_IS, 'alpha');
+        $this->filter->addSoftRule('field', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field', Filter::IS, 'alpha');
         
         $data = (object) ['field' => 'foo'];
         $result = $this->filter->object($data);
@@ -104,8 +104,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     
     public function testExec_hardRule()
     {
-        $this->filter->addHardRule('field', Filter::VALUE_IS, 'alnum');
-        $this->filter->addHardRule('field', Filter::VALUE_IS, 'alpha');
+        $this->filter->addHardRule('field', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field', Filter::IS, 'alpha');
         
         $data = (object) ['field' => array()];
         $result = $this->filter->object($data);
@@ -119,7 +119,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alnum',
                     'params' => [],
                     'message' => 'FILTER_ALNUM',
-                    'type' => 'RULE_HARD',
+                    'type' => 'HARD_RULE',
                 ],
             ],
         ];
@@ -131,11 +131,11 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testExec_softRule()
     {
-        $this->filter->addSoftRule('field1', Filter::VALUE_IS, 'alnum');
-        $this->filter->addHardRule('field1', Filter::VALUE_IS, 'alpha');
-        $this->filter->addHardRule('field1', Filter::VALUE_FIX, 'string');
-        $this->filter->addHardRule('field2', Filter::VALUE_IS, 'int');
-        $this->filter->addHardRule('field2', Filter::VALUE_FIX, 'int');
+        $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field1', Filter::IS, 'alpha');
+        $this->filter->addHardRule('field1', Filter::FIX, 'string');
+        $this->filter->addHardRule('field2', Filter::IS, 'int');
+        $this->filter->addHardRule('field2', Filter::FIX, 'int');
         
         $data = (object) [
             'field1' => array(),
@@ -153,7 +153,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alnum',
                     'params' => [],
                     'message' => 'FILTER_ALNUM',
-                    'type' => 'RULE_SOFT',
+                    'type' => 'SOFT_RULE',
                 ],
                 1 => [
                     'field' => 'field1',
@@ -161,7 +161,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alpha',
                     'params' => [],
                     'message' => 'FILTER_ALPHA',
-                    'type' => 'RULE_HARD',
+                    'type' => 'HARD_RULE',
                 ],
             ],
         ];
@@ -172,9 +172,9 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     
     public function testExec_stopRule()
     {
-        $this->filter->addSoftRule('field1', Filter::VALUE_IS, 'alnum');
-        $this->filter->addStopRule('field1', Filter::VALUE_IS, 'alpha');
-        $this->filter->addHardRule('field2', Filter::VALUE_IS, 'int');
+        $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
+        $this->filter->addStopRule('field1', Filter::IS, 'alpha');
+        $this->filter->addHardRule('field2', Filter::IS, 'int');
         
         $data = (object) ['field1' => array()];
         $result = $this->filter->object($data);
@@ -188,7 +188,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alnum',
                     'params' => [],
                     'message' => 'FILTER_ALNUM',
-                    'type' => 'RULE_SOFT',
+                    'type' => 'SOFT_RULE',
                 ],
                 1 => [
                     'field' => 'field1',
@@ -196,7 +196,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                     'name' => 'alpha',
                     'params' => [],
                     'message' => 'FILTER_ALPHA',
-                    'type' => 'RULE_STOP',
+                    'type' => 'STOP_RULE',
                 ],
             ],
         ];
@@ -208,7 +208,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     
     public function testExec_sanitizesInPlace()
     {
-        $this->filter->addHardRule('field', Filter::VALUE_FIX, 'string', 'foo', 'bar');
+        $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
         $data = (object) ['field' => 'foo'];
         $result = $this->filter->object($data);
         $this->assertTrue($result);
