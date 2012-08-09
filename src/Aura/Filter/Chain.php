@@ -68,7 +68,7 @@ class Chain
 
     /**
      *
-     * A RuleLocator object
+     * A RuleLocator object.
      * 
      * @var RuleLocator
      */
@@ -76,15 +76,52 @@ class Chain
 
     /**
      * 
-     * Constructor
+     * Constructor.
      * 
      * @param RuleLocator $rule_locator
+     * 
      */
     public function __construct($rule_locator)
     {
         $this->rule_locator = $rule_locator;
     }
 
+    /**
+     * 
+     * Apply a rule directly to an individual value, not a value as part of
+     * a data object.
+     * 
+     * @param mixed &$value Apply the rule to this value.
+     * 
+     * @param string $method The Value::* method to use use; e.g., Value::IS.
+     * 
+     * @param string $name The of the rule to apply.
+     * 
+     * @return bool True if the rule was applied successfully, false if not.
+     * 
+     */
+    public function value(&$value, $method, $name)
+    {
+        // get the params
+        $params = func_get_args();
+        array_shift($params); // $value
+        array_shift($params); // $method
+        array_shift($params); // $name
+        
+        // set up the field name and data
+        $field = 'field';
+        $data = (object) [$field => $value];
+        
+        // prep and call the rule object
+        $rule = $this->rule_locator->get($name);
+        $rule->prep($data, $field);
+        $passed = call_user_func_array([$rule, $method], $params);
+        
+        // retain the value and return the pass/fail result
+        $value = $rule->getValue();
+        return $passed;
+    }
+    
     /**
      * 
      * Add a rule; keep applying all other rules even if it fails.

@@ -21,6 +21,18 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         ]));
     }
     
+    public function testValue()
+    {
+        // validate
+        $actual = 'abc123def';
+        $this->assertTrue($this->chain->value($actual, Value::IS, 'alnum'));
+        
+        // sanitize in place
+        $expect = 123;
+        $this->assertTrue($this->chain->value($actual, Value::FIX, 'int'));
+        $this->assertSame(123, $actual);
+    }
+    
     public function testGetRuleLocator()
     {
         $actual = $this->chain->getRuleLocator();
