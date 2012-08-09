@@ -190,7 +190,7 @@ Available Rules
         $filter->addSoftRule('field', $filter::IS, 'creditCard');
 
 - `dateTime`: Validate the value as representing a date and/or time. Sanitize
-  the value to a specified format, default `'Y-m-d H:i:s`. Usage (note that
+  the value to a specified format, default `'Y-m-d H:i:s'`. Usage (note that
   this is to sanitize, not validate):
         
         <?php
