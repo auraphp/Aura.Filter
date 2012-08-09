@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Sanitizes a value to an IPv4 address.
@@ -63,4 +65,3 @@ class Ipv4 extends AbstractRule
         return false; // can't fix IP addresses
     }
 }
-

@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Rule for alphanumeric characters.
@@ -58,4 +60,3 @@ class Alnum extends AbstractRule
         return true;
     }
 }
-

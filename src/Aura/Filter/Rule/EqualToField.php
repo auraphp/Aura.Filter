@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Validates that this value is equal to some other element in the filter 
@@ -74,4 +76,3 @@ class EqualToField extends AbstractRule
         return true;
     }
 }
-

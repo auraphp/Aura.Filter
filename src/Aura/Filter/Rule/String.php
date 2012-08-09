@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Forces a value to a string, no encoding or escaping.
@@ -66,4 +68,3 @@ class String extends AbstractRule
         return true;
     }
 }
-

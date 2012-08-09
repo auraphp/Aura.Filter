@@ -1,5 +1,7 @@
 <?php
-namespace Aura\Filter\Rule;
+namespace Aura\Filter;
+
+use Aura\Filter\AbstractRule;
 
 abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
 {

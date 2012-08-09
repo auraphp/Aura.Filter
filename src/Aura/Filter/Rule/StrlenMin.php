@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Validates that a value is no longer than a certain length.
@@ -72,4 +74,3 @@ class StrlenMin extends AbstractRule
         return true;
     }
 }
-

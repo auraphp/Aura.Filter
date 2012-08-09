@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter;
 
 use StdClass;
 
@@ -211,4 +211,3 @@ abstract class AbstractRule implements RuleInterface
         return trim($value) === '';
     }
 }
-

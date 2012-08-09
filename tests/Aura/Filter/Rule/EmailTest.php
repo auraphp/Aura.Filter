@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRuleTest;
+
 class EmailTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_EMAIL';

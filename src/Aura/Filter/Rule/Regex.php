@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Sanitizes a value to a string using preg_replace().
@@ -71,4 +73,3 @@ class Regex extends AbstractRule
         return true;
     }
 }
-

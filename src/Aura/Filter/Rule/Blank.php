@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Validates that a value is blank (null, empty string, or string of only 
@@ -59,4 +61,3 @@ class Blank extends AbstractRule
         return true;
     }
 }
-

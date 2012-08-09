@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Sanitizes a value to a string using trim().
@@ -80,4 +82,3 @@ class Trim extends AbstractRule
         return true;
     }
 }
-

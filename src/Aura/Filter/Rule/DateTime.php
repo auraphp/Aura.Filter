@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 use DateTime as PhpDateTime;
 
 /**
@@ -87,4 +89,3 @@ class DateTime extends AbstractRule
         return true;
     }
 }
-
