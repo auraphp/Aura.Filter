@@ -25,3 +25,4 @@ class Value
     const FIX = 'fix';
     const FIX_BLANK_OR = 'fixBlankOr';
 }
+

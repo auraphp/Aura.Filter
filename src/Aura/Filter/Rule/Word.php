@@ -66,3 +66,4 @@ class Word extends AbstractRule
         return true;
     }
 }
+

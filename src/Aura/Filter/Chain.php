@@ -28,17 +28,17 @@ class Chain
      * Stop filtering on a field when a rule fails.
      */
     const HARD_RULE = 'HARD_RULE';
-    
+
     /**
      * Continue filtering on a field when a rule fails.
      */
     const SOFT_RULE = 'SOFT_RULE';
-    
+
     /**
      * Stop filtering on all fields when a rule fails.
      */
     const STOP_RULE = 'STOP_RULE';
-    
+
     /**
      * 
      * The rules to be applied to a data object.
@@ -153,7 +153,7 @@ class Chain
         $this->addRule($field, $method, $name, $params, self::STOP_RULE);
         return $this;
     }
-    
+
     /**
      * 
      * Returns the collection of rules to be applied.
@@ -165,12 +165,18 @@ class Chain
     {
         return $this->rules;
     }
-    
+
+    /**
+     * Return RuleLocator object
+     * 
+     * @return RuleLocator
+     * 
+     */
     public function getRuleLocator()
     {
         return $this->rule_locator;
     }
-    
+
     /**
      * 
      * Add a rule.
@@ -219,7 +225,7 @@ class Chain
             // the field name
             $field = $rule['field'];
 
-            // if we've hit a hard rule for this field, then don't apply 
+            // if we've hit a hard rule for this field, then don't apply
             // further rules on this field.
             if (in_array($field, $this->hardrule)) {
                 continue;
@@ -232,9 +238,9 @@ class Chain
             $params = $rule['params'];
             $passed = call_user_func_array([$object, $method], $params);
             $rule['applied'] = true;
-            
+
             if (! $passed) {
-                
+
                 // failed. keep the failure message.
                 $this->messages[$field][] = [
                     'field'   => $field,
@@ -244,12 +250,12 @@ class Chain
                     'message' => $object->getMessage(),
                     'type'    => $rule['type'],
                 ];
-                
+
                 // should we stop filtering this field?
                 if ($rule['type'] == static::HARD_RULE) {
                     $this->hardrule[] = $field;
                 }
-                
+
                 // should we stop filtering entirely?
                 if ($rule['type'] == static::STOP_RULE) {
                     return false;
@@ -273,3 +279,4 @@ class Chain
         return $this->messages;
     }
 }
+
