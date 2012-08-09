@@ -75,8 +75,8 @@ Alternatively, we can apply a filter rule to an individual value:
     $username = 'new_username';
     
     // filter the individual value
-    $valid = $filter->value($username, $filter::IS, 'alnum');
-    if (! $valid) {
+    $success = $filter->value($username, $filter::IS, 'alnum');
+    if (! $success) {
         echo "Username is not alphanumeric.";
     }
 
