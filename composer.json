@@ -1,6 +1,6 @@
 {
     "name": "aura/filter",
-    "type": "library",
+    "type": "aura-package",
     "description": "The Aura Filter package provider validators and sanitizers for user data.",
     "keywords": [
         "filter",
