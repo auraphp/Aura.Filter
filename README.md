@@ -377,14 +377,18 @@ Writing a Rule Class
 
 Writing a rule class is straightforward:
 
-- Extend `AbstractRule` with two methods: `validate` and `sanitize`.
+- Extend `Aura\Filter\AbstractRule` with two methods: `validate()` and
+  `sanitize()`.
 
 - Add params as needed to each method.
 
 - Each method should return a boolean: true on success, or false on failure.
 
-- Use `getValue()` to get the value being validated, and setValue() to change
+- Use `getValue()` to get the value being validated, and `setValue()` to change
   the value being sanitized.
+
+- Add a property `$message` to indicate a string that should be translated
+  as a message when validation or sanitizing fails.
 
 Here's an example of a hexadecimal rule:
 
@@ -395,6 +399,8 @@ Here's an example of a hexadecimal rule:
     
     class Hex extends AbstractRule
     {
+        protected $message = 'FILTER_HEX';
+        
         protected function validate($max = null)
         {
             // must be scalar
@@ -402,22 +408,22 @@ Here's an example of a hexadecimal rule:
             if (! is_scalar($value)) {
                 return false;
             }
-            
+        
             // must be hex
             $hex = ctype_xdigit($value);
             if (! $hex) {
                 return false;
             }
-            
+        
             // must be no longer than $max chars
-            if ($len && strlen($value) > $max) {
+            if ($max && strlen($value) > $max) {
                 return false;
             }
-            
+        
             // done!
             return true;
         }
-        
+    
         protected function sanitize($max = null)
         {
             // must be scalar
@@ -426,19 +432,19 @@ Here's an example of a hexadecimal rule:
                 // sanitizing failed
                 return false;
             }
-            
+        
             // strip out non-hex characters
-            $value = preg_replace('/[0-9a-f]/i', '', $value);
+            $value = preg_replace('/[^0-9a-f]/i', '', $value);
             if ($value === '') {
                 // failed to sanitize to a hex value
                 return false;
             }
-            
+        
             // now check length and chop if needed
-            if ($len && strlen($value) > $max) {
+            if ($max && strlen($value) > $max) {
                 $value = substr($value, 0, $max);
             }
-            
+        
             // retain the sanitized value, and done!
             $this->setValue($value);
             return true;
