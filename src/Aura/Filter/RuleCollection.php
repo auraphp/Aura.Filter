@@ -232,16 +232,30 @@ class RuleCollection
 
     /**
      * 
-     * Applies the rules to a data object.
+     * Applies the rules to a data object or array; note that sanitizing
+     * filters may modify the data values in place.
      * 
-     * @param StdClass $data The data object to be filtered.
+     * @param object|array &$data The data object or array to be filtered.
      * 
      * @return boolean True if all rules were applied without error; false if
      * there was at least one error.
      * 
      */
-    public function object(StdClass $data)
+    public function object(&$data)
     {
+        // convert array to object and recurse
+        if (is_array($data)) {
+            $object = (object) $data;
+            $result = $this->object($object);
+            $data = (array) $object;
+            return $result;
+        }
+        
+        // must be an object at this point
+        if (! is_object($data)) {
+            throw new InvalidArgumentException;
+        }
+        
         // reset messages and hard-rule notices
         $this->messages = [];
         $this->hardrule = [];

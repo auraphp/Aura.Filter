@@ -102,6 +102,13 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(empty($messages));
     }
     
+    public function testObject_invalidArgument()
+    {
+        $this->setExpectedException('InvalidArgumentException');
+        $data = 'string';
+        $this->filter->object($data);
+    }
+    
     public function testObject_hardRule()
     {
         $this->filter->addHardRule('field', Filter::IS, 'alnum');
@@ -221,5 +228,14 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $data = (object) ['other_field' => 'foo']; // 'field' is missing
         $result = $this->filter->object($data);
         $this->assertFalse($result);
+    }
+    
+    public function testObject_arraySanitizesInPlace()
+    {
+        $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
+        $data = ['field' => 'foo'];
+        $result = $this->filter->object($data);
+        $this->assertTrue($result);
+        $this->assertSame($data['field'], 'bar');
     }
 }
