@@ -1,7 +1,8 @@
 Aura Filter
 ===========
 
-The Aura Filter package provides validation and sanitizing for data objects.
+The Aura Filter package provides validation and sanitizing for data objects
+and arrays.
 
 This package is compliant with [PSR-0][], [PSR-1][], and [PSR-2][]. If you
 notice compliance oversights, please send a patch via pull request.
@@ -51,7 +52,7 @@ object.
     $filter->addSoftRule('password', $filter::IS, 'strlenMin', 6);
     $filter->addSoftRule('password_confirm', $filter::IS, 'equalToField', 'password');
     
-    // the data object to be filtered:
+    // the data object to be filtered; could also be an array
     $data = (object) [
         'username' => 'bolivar',
         'password' => 'p@55w0rd',
@@ -341,8 +342,8 @@ Available Rules
 Applying Rules to Individual Values
 ===================================
 
-Normally, we use the filter with data objects. Alternatively, we can apply a
-filter rule to an individual value:
+Normally, we use the filter with data objects and arrays. Alternatively, we
+can apply a filter rule to an individual value:
 
     <?php
     // get a new filter
