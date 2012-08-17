@@ -59,7 +59,7 @@ object.
     ];
     
     // filter the object and see if there were failures
-    $success = $filter->object($data);
+    $success = $filter->values($data);
     if (! $success) {
         $messages = $filter->getMessages();
         var_export($messages);

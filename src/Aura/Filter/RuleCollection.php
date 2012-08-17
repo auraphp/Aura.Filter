@@ -232,8 +232,8 @@ class RuleCollection
 
     /**
      * 
-     * Applies the rules to a data object or array; note that sanitizing
-     * filters may modify the data values in place.
+     * Applies the rules to the field values of a data object or array; note 
+     * that sanitizing filters may modify the values in place.
      * 
      * @param object|array &$data The data object or array to be filtered.
      * 
@@ -241,12 +241,12 @@ class RuleCollection
      * there was at least one error.
      * 
      */
-    public function object(&$data)
+    public function values(&$data)
     {
         // convert array to object and recurse
         if (is_array($data)) {
             $object = (object) $data;
-            $result = $this->object($object);
+            $result = $this->values($object);
             $data = (array) $object;
             return $result;
         }
@@ -318,6 +318,7 @@ class RuleCollection
     {
         return $this->messages;
     }
+    
     /**
      * 
      * Convenience method to apply a rule directly to an individual value.

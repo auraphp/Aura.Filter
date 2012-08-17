@@ -96,7 +96,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->filter->addHardRule('field', Filter::IS, 'alpha');
         
         $data = (object) ['field' => 'foo'];
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertTrue($result);
         $messages = $this->filter->getMessages();
         $this->assertTrue(empty($messages));
@@ -106,7 +106,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException('InvalidArgumentException');
         $data = 'string';
-        $this->filter->object($data);
+        $this->filter->values($data);
     }
     
     public function testObject_hardRule()
@@ -115,7 +115,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->filter->addHardRule('field', Filter::IS, 'alpha');
         
         $data = (object) ['field' => array()];
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertFalse($result);
         
         $expect = [
@@ -149,7 +149,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
             'field2' => 88
         ];
         
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertFalse($result);
         
         $expect = [
@@ -184,7 +184,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->filter->addHardRule('field2', Filter::IS, 'int');
         
         $data = (object) ['field1' => array()];
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertFalse($result);
         
         $expect = [
@@ -217,7 +217,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
         $data = (object) ['field' => 'foo'];
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertTrue($result);
         $this->assertSame($data->field, 'bar');
     }
@@ -226,7 +226,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->filter->addHardRule('field', Filter::IS, 'string');
         $data = (object) ['other_field' => 'foo']; // 'field' is missing
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertFalse($result);
     }
     
@@ -234,7 +234,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
         $data = ['field' => 'foo'];
-        $result = $this->filter->object($data);
+        $result = $this->filter->values($data);
         $this->assertTrue($result);
         $this->assertSame($data['field'], 'bar');
     }

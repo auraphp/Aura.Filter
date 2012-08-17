@@ -34,7 +34,7 @@ $data = (object) [
 ];
 
 // execute the chain on a data object or array
-$success = $filter_chain->object($data);
+$success = $filter_chain->values($data);
 if (! $success) {
     // an array of failure messages, with info about the failures
     $failure = $filter_chain->getMessages();
