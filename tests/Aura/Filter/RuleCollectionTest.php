@@ -90,7 +90,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testExec()
+    public function testObject()
     {
         $this->filter->addSoftRule('field', Filter::IS, 'alnum');
         $this->filter->addHardRule('field', Filter::IS, 'alpha');
@@ -102,7 +102,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(empty($messages));
     }
     
-    public function testExec_hardRule()
+    public function testObject_hardRule()
     {
         $this->filter->addHardRule('field', Filter::IS, 'alnum');
         $this->filter->addHardRule('field', Filter::IS, 'alpha');
@@ -129,7 +129,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testExec_softRule()
+    public function testObject_softRule()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
         $this->filter->addHardRule('field1', Filter::IS, 'alpha');
@@ -170,7 +170,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testExec_stopRule()
+    public function testObject_stopRule()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
         $this->filter->addStopRule('field1', Filter::IS, 'alpha');
@@ -206,12 +206,20 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testExec_sanitizesInPlace()
+    public function testObject_sanitizesInPlace()
     {
         $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
         $data = (object) ['field' => 'foo'];
         $result = $this->filter->object($data);
         $this->assertTrue($result);
         $this->assertSame($data->field, 'bar');
+    }
+    
+    public function testObject_missingField()
+    {
+        $this->filter->addHardRule('field', Filter::IS, 'string');
+        $data = (object) ['other_field' => 'foo']; // 'field' is missing
+        $result = $this->filter->object($data);
+        $this->assertFalse($result);
     }
 }
