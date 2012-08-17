@@ -12,7 +12,7 @@ namespace Aura\Filter;
 
 /**
  * 
- * A ServiceLocator implementation for loading and retaining helper objects.
+ * A ServiceLocator implementation for loading and retaining rule objects.
  * 
  * @package Aura.Filter
  * 
@@ -21,7 +21,7 @@ class RuleLocator
 {
     /**
      * 
-     * A registry to retain helper objects.
+     * A registry to retain rule objects.
      * 
      * @var array
      * 
@@ -33,10 +33,10 @@ class RuleLocator
      * Constructor.
      * 
      * @param array $registry An array of key-value pairs where the key is the
-     * helper name (doubles as a method name) and the value is the helper
-     * object. The value may also be a closure that returns a helper object.
+     * rule name (doubles as a method name) and the value is the rule
+     * object. The value may also be a closure that returns a rule object.
      * Note that is has to be a closure, not just any callable, because the
-     * helper object itself might be callable.
+     * rule object itself might be callable.
      * 
      */
     public function __construct(array $registry = [])
@@ -48,13 +48,13 @@ class RuleLocator
 
     /**
      * 
-     * Sets a helper into the registry by name.
+     * Sets a rule into the registry by name.
      * 
-     * @param string $name The helper name; this doubles as a method name
+     * @param string $name The rule name; this doubles as a method name
      * when called from a template.
      * 
-     * @param string $spec The helper specification, typically a closure that
-     * builds and returns a helper object.
+     * @param string $spec The rule specification, typically a closure that
+     * builds and returns a rule object.
      * 
      * @return void
      * 
@@ -66,11 +66,11 @@ class RuleLocator
 
     /**
      * 
-     * Gets a helper from the registry by name.
+     * Gets a rule from the registry by name.
      * 
-     * @param string $name The helper to retrieve.
+     * @param string $name The rule to retrieve.
      * 
-     * @return AbstractRule A helper object.
+     * @return AbstractRule A rule object.
      * 
      */
     public function get($name)
