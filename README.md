@@ -152,7 +152,7 @@ even if they evaluate to zero:
 Available Rules
 ---------------
 
-*- `alnum`: Validate the value as alphanumeric only. Sanitize to leave only
+- `alnum`: Validate the value as alphanumeric only. Sanitize to leave only
   alphanumeric characters. Usage:
         
         <?php
