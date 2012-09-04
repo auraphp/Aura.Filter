@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRuleTest;
+
 use DateTime as PhpDateTime;
 
 class DateTimeTest extends AbstractRuleTest

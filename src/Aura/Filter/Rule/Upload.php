@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 use StdClass;
 
 /**
@@ -84,7 +86,7 @@ class Upload extends AbstractRule
         if (! $success) {
             return false;
         }
-        
+
         // was the upload explicitly ok?
         if ($value['error'] != UPLOAD_ERR_OK) {
 
@@ -123,18 +125,27 @@ class Upload extends AbstractRule
     protected function sanitize()
     {
         $value = $this->getValue();
-        
+
         // pre-check
         $success = $this->preCheck($value);
         if (! $success) {
             return false;
         }
-        
+
         // everything looks ok; some keys may have been removed.
         $this->setValue($value);
         return true;
     }
-    
+
+    /**
+     * 
+     * check before the file is uploaded
+     * 
+     * @param string $value
+     * 
+     * @return boolean
+     * 
+     */
     protected function preCheck(&$value)
     {
         // has to be an array
@@ -165,7 +176,15 @@ class Upload extends AbstractRule
         // looks ok
         return true;
     }
-    
+
+    /**
+     * check whether the file was uploaded via HTTP POST
+     * 
+     * @param string $file
+     * 
+     * @return type
+     * 
+     */
     protected function isUploadedFile($file)
     {
         return is_uploaded_file($file);

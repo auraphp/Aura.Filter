@@ -1,9 +1,10 @@
 <?php
-require_once __DIR__ . '/src/Aura/Filter/Chain.php';
 require_once __DIR__ . '/src/Aura/Filter/Exception.php';
 require_once __DIR__ . '/src/Aura/Filter/Exception/RuleNotMapped.php';
-require_once __DIR__ . '/src/Aura/Filter/Rule/RuleInterface.php';
-require_once __DIR__ . '/src/Aura/Filter/Rule/AbstractRule.php';
+require_once __DIR__ . '/src/Aura/Filter/RuleInterface.php';
+require_once __DIR__ . '/src/Aura/Filter/AbstractRule.php';
+require_once __DIR__ . '/src/Aura/Filter/RuleLocator.php';
+require_once __DIR__ . '/src/Aura/Filter/RuleCollection.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Alnum.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Alpha.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Between.php';
@@ -33,5 +34,3 @@ require_once __DIR__ . '/src/Aura/Filter/Rule/Trim.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Upload.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Url.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Word.php';
-require_once __DIR__ . '/src/Aura/Filter/RuleLocator.php';
-require_once __DIR__ . '/src/Aura/Filter/Value.php';

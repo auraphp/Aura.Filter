@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Validates that a value is a URL.
@@ -82,4 +84,3 @@ class Url extends AbstractRule
         return false;
     }
 }
-

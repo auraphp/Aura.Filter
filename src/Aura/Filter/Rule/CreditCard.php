@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRule;
+
 /**
  * 
  * Rule for alphanumeric characters.
@@ -73,4 +75,3 @@ class CreditCard extends AbstractRule
         return false;
     }
 }
-

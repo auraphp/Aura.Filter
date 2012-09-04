@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRuleTest;
+
 class CreditCardTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_CREDIT_CARD';

@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\AbstractRuleTest;
+
 class StrictEqualToFieldTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_STRICT_EQUAL_TO_FIELD';

@@ -15,29 +15,54 @@ use StdClass;
 
 /**
  * 
- * Filter chain
+ * A collection of rules to be applied to a data object.
  * 
  * @package Aura.Filter
  * 
  * @license http://opensource.org/licenses/bsd-license.php BSD
  * 
  */
-class Chain
+class RuleCollection
 {
     /**
      * Stop filtering on a field when a rule fails.
      */
     const HARD_RULE = 'HARD_RULE';
-    
+
     /**
      * Continue filtering on a field when a rule fails.
      */
     const SOFT_RULE = 'SOFT_RULE';
-    
+
     /**
      * Stop filtering on all fields when a rule fails.
      */
     const STOP_RULE = 'STOP_RULE';
+
+    /**
+     * Apply a rule to check if the value is valid.
+     */
+    const IS = 'is';
+
+    /**
+     * Apply a rule to check if the value **is not** valid.
+     */
+    const IS_NOT = 'isNot';
+
+    /**
+     * Apply a rule to check if the value is blank **or** is valid.
+     */
+    const IS_BLANK_OR = 'isBlankOr';
+
+    /**
+     * Sanitize the value according to the rule.
+     */
+    const FIX = 'fix';
+
+    /**
+     * Sanitize the value to `null` if blank, or according to the rule if not.
+     */
+    const FIX_BLANK_OR = 'fixBlankOr';
     
     /**
      * 
@@ -68,7 +93,7 @@ class Chain
 
     /**
      *
-     * A RuleLocator object
+     * A RuleLocator object.
      * 
      * @var RuleLocator
      */
@@ -76,9 +101,10 @@ class Chain
 
     /**
      * 
-     * Constructor
+     * Constructor.
      * 
      * @param RuleLocator $rule_locator
+     * 
      */
     public function __construct($rule_locator)
     {
@@ -153,7 +179,7 @@ class Chain
         $this->addRule($field, $method, $name, $params, self::STOP_RULE);
         return $this;
     }
-    
+
     /**
      * 
      * Returns the collection of rules to be applied.
@@ -165,12 +191,18 @@ class Chain
     {
         return $this->rules;
     }
-    
+
+    /**
+     * Return RuleLocator object
+     * 
+     * @return RuleLocator
+     * 
+     */
     public function getRuleLocator()
     {
         return $this->rule_locator;
     }
-    
+
     /**
      * 
      * Add a rule.
@@ -200,16 +232,30 @@ class Chain
 
     /**
      * 
-     * Applies the rules to a data object.
+     * Applies the rules to the field values of a data object or array; note 
+     * that sanitizing filters may modify the values in place.
      * 
-     * @param object $data The data object to be filtered.
+     * @param object|array &$data The data object or array to be filtered.
      * 
      * @return boolean True if all rules were applied without error; false if
      * there was at least one error.
      * 
      */
-    public function exec(StdClass $data)
+    public function values(&$data)
     {
+        // convert array to object and recurse
+        if (is_array($data)) {
+            $object = (object) $data;
+            $result = $this->values($object);
+            $data = (array) $object;
+            return $result;
+        }
+        
+        // must be an object at this point
+        if (! is_object($data)) {
+            throw new InvalidArgumentException;
+        }
+        
         // reset messages and hard-rule notices
         $this->messages = [];
         $this->hardrule = [];
@@ -219,7 +265,7 @@ class Chain
             // the field name
             $field = $rule['field'];
 
-            // if we've hit a hard rule for this field, then don't apply 
+            // if we've hit a hard rule for this field, then don't apply
             // further rules on this field.
             if (in_array($field, $this->hardrule)) {
                 continue;
@@ -232,9 +278,9 @@ class Chain
             $params = $rule['params'];
             $passed = call_user_func_array([$object, $method], $params);
             $rule['applied'] = true;
-            
+
             if (! $passed) {
-                
+
                 // failed. keep the failure message.
                 $this->messages[$field][] = [
                     'field'   => $field,
@@ -244,12 +290,12 @@ class Chain
                     'message' => $object->getMessage(),
                     'type'    => $rule['type'],
                 ];
-                
+
                 // should we stop filtering this field?
                 if ($rule['type'] == static::HARD_RULE) {
                     $this->hardrule[] = $field;
                 }
-                
+
                 // should we stop filtering entirely?
                 if ($rule['type'] == static::STOP_RULE) {
                     return false;
@@ -271,5 +317,41 @@ class Chain
     public function getMessages()
     {
         return $this->messages;
+    }
+    
+    /**
+     * 
+     * Convenience method to apply a rule directly to an individual value.
+     * 
+     * @param mixed &$value Apply the rule to this value; the rule may modify
+     * the value in place.
+     * 
+     * @param string $method The rule method to use; e.g., Filter::IS.
+     * 
+     * @param string $name The of the rule to apply.
+     * 
+     * @return bool True if the rule was applied successfully, false if not.
+     * 
+     */
+    public function value(&$value, $method, $name)
+    {
+        // get the params
+        $params = func_get_args();
+        array_shift($params); // $value
+        array_shift($params); // $method
+        array_shift($params); // $name
+        
+        // set up the field name and data
+        $field = 'field';
+        $data = (object) [$field => $value];
+        
+        // prep and call the rule object
+        $rule = $this->rule_locator->get($name);
+        $rule->prep($data, $field);
+        $passed = call_user_func_array([$rule, $method], $params);
+        
+        // retain the value and return the pass/fail result
+        $value = $rule->getValue();
+        return $passed;
     }
 }

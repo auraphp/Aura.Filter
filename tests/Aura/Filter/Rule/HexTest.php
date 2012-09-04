@@ -3,34 +3,27 @@ namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRuleTest;
 
-class AlphaTest extends AbstractRuleTest
+class HexTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_ALPHA';
+    protected $expect_message = 'FILTER_HEX';
     
     public function providerIs()
     {
         return [
-            ['alphaonly'],
-            ['AlphaOnly'],
+            ['abcdef'],
+            ['01234f'],
+            ['a1b2c3'],
+            ['ffffff'],
         ];
     }
     
     public function providerIsNot()
     {
         return [
+            [""],
             [' '],
-            [''],
-            [0],
-            [1],
-            [2],
-            [5],
-            ['0'],
-            ['1'],
-            ['2'],
-            ['5'],
             ["Seven 8 nine"],
             ["non:alpha-numeric's"],
-            ['someThing8else'],
             [[]],
         ];
     }
@@ -38,7 +31,8 @@ class AlphaTest extends AbstractRuleTest
     public function providerFix()
     {
         return [
-            ['^&* abc 123 ,./', true, 'abc'],
+            // value, result, expect
+            ['$#% abc () 123 ,./', true, 'abc123'],
         ];
     }
 }
