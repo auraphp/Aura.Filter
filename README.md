@@ -132,12 +132,9 @@ blank:
 ```php
 <?php
 $blank = [
-    // a null value
-    null,
-    // an empty string
-    '',
-    // a whitespace-only string
-    " \r \n \t ",
+    null,           // a null value
+    '',             // an empty string
+    " \r \n \t ",   // a whitespace-only string
 ];
 ```
 
@@ -147,16 +144,11 @@ even if they evaluate to zero:
 ```php
 <?php
 $not_blank = [
-    // integer
-    0,
-    // float
-    0.00,
-    // boolean false
-    false,
-    // empty array
-    [],
-    // an object
-    (object) [],
+    0,              // integer
+    0.00,           // float
+    false,          // boolean false
+    [],             // empty array
+    (object) [],    // an object
 ];
 ```
 
