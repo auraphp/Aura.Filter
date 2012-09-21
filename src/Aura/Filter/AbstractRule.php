@@ -210,4 +210,28 @@ abstract class AbstractRule implements RuleInterface
         // strings that trim down to exactly nothing are blank
         return trim($value) === '';
     }
+
+    /**
+     *
+     * Make use of overriding, do we want to throw an exception here?
+     *
+     * @return bool true on success, or false on failure.
+     *
+     */
+    protected function validate()
+    {
+        return false;
+    }
+
+    /**
+     *
+     * Make use of overriding, do we want to throw an exception here?
+     *
+     * @return bool true on success, or false on failure.
+     *
+     */
+    protected function sanitize()
+    {
+        return false;
+    }
 }
