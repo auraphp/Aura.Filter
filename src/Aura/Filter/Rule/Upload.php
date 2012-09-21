@@ -72,13 +72,10 @@ class Upload extends AbstractRule
      * The required keys are 'error', 'name', 'size', 'tmp_name', 'type'. More
      * or fewer or different keys than this will return a "malformed" error.
      * 
-     * @param string|array $file_ext An array of allowed filename extensions
-     * (without dots) for the file name.  If empty, all extensions are allowed.
-     * 
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($file_ext = null)
+    protected function validate()
     {
         $value = $this->getValue();
 
