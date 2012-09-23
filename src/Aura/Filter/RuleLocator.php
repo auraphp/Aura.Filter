@@ -41,6 +41,22 @@ class RuleLocator
      */
     public function __construct(array $registry = [])
     {
+        $this->addRules($registry);
+    }
+
+    /**
+     * 
+     * Add Rules
+     * 
+     * @param array $registry An array of key-value pairs where the key is the
+     * rule name (doubles as a method name) and the value is the rule
+     * object. The value may also be a closure that returns a rule object.
+     * Note that is has to be a closure, not just any callable, because the
+     * rule object itself might be callable.
+     * 
+     */
+    public function addRules(array $registry = [])
+    {
         foreach ($registry as $name => $spec) {
             $this->set($name, $spec);
         }
