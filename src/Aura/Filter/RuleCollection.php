@@ -106,7 +106,7 @@ class RuleCollection
      * @param RuleLocator $rule_locator
      * 
      */
-    public function __construct($rule_locator)
+    public function __construct(RuleLocator $rule_locator)
     {
         $this->rule_locator = $rule_locator;
     }
