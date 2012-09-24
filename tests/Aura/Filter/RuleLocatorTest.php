@@ -16,10 +16,10 @@ class RuleLocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expect, $actual);
     }
 
-    public function test__constructAndAddRules()
+    public function test__constructAndMerge()
     {
         $rule_locator = new RuleLocator();
-        $rule_locator->addRules([
+        $rule_locator->merge([
             'alpha' => function() {
                 return new \Aura\Filter\Rule\Alpha;
             },
