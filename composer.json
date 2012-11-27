@@ -5,7 +5,7 @@
     "keywords": [ "filter", "validate", "sanitize" ],
     "homepage": "http://auraphp.github.com/Aura.Filter",
     "version": "1.0.0-dev",
-    "license": "BSD",
+    "license": "BSD-2-Clause",
     "authors": [
         {
             "name": "Aura Contributors",
