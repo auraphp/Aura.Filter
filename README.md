@@ -158,246 +158,160 @@ Available Rules
 - `alnum`: Validate the value as alphanumeric only. Sanitize to leave only
   alphanumeric characters. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'alnum');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'alnum');
 
 - `alpha`: Validate the value as alphabetic only. Sanitize to leave only
   alphabetic characters. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'alpha');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'alpha');
 
 - `between`: Validate the value as being within or equal to a minimum and
   maximum value. Sanitize so that values lower than the range are forced up
   to the minimum; values higher than the range are forced down to the maximum.
   Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'between', $max, $min);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'between', $max, $min);
 
 - `blank`: Validate the value as being blank. Sanitize to `null`. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'blank');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'blank');
 
 - `bool`: Validate the value as being a boolean, or a pseudo-boolean.
   Pseudo-true values include the strings '1', 'y', 'yes', and 'true';
   pseudo-false values include the strings '0', 'n', 'no', and 'false'.
   Sanitize to a strict PHP boolean. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'bool');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'bool');
 
 - `creditCard`: Validate the value as being a credit card number. The value
   cannot be sanitized. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'creditCard');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'creditCard');
 
 - `dateTime`: Validate the value as representing a date and/or time. Sanitize
   the value to a specified format, default `'Y-m-d H:i:s'`. Usage (note that
   this is to sanitize, not validate):
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::FIX, 'dateTime', $format);
-    ```
+        $filter->addSoftRule('field', $filter::FIX, 'dateTime', $format);
 
 - `email`: Validate the value as being a properly-formed email address. The
   value cannot be sanitized. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'email');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'email');
 
 - `equalToField`: Validate the value as loosely equal to the value of another
   field in the data object. Sanitize to the value of that other field.
   Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'equalToField', 'other_field_name');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'equalToField', 'other_field_name');
 
 - `equalToValue`: Validate the value as loosely equal to a specified value.
   Sanitize to the specified value. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'equalToValue', $other_value);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'equalToValue', $other_value);
 
 - `float`: Validate the value as representing a float. Sanitize the value to
   transform it into a float; for weird strings, this may not be what you
   expect. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'float');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'float');
 
 - `inKeys`: Validate that the value is loosely equal to a key in a given
   array. The value cannot be sanitized. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'inKeys', $array);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'inKeys', $array);
 
 - `inValues`: Validate that the value is strictly equal to at least one value
   in a given array. The value cannot be sanitized. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'inValues', $array);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'inValues', $array);
         
 - `int`: Validate the value as representing an integer Sanitize the value to
   transform it into an integer; for weird strings, this may not be what you
   expect. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'int');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'int');
 
 - `ipv4`: Validate the value as an IPv4 address. The value cannot be
   sanitized. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'ipv4');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'ipv4');
 
 - `max`: Validate the value as being less than or equal to a maximum. Sanitize
   so that values higher than the maximum are forced down to the maxiumum.
   Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'max', $max);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'max', $max);
 
 - `min`: Validate the value as being greater than or equal to a minimum.
   Sanitize so that values lower than the minimum are forced up to the
   miniumum.Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'min', $min);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'min', $min);
 
 - `regex`: Validate the value using `preg_match()`. Sanitize the value using
   `preg_replace()`.
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'regex', $expr);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'regex', $expr);
         
 - `strictEqualToField`: Validate the value as strictly equal to the value of
   another field in the data object. Sanitize to the value of that other field.
   Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'strictEqualToField', 'other_field_name');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'strictEqualToField', 'other_field_name');
 
 - `strictEqualToValue`: Validate the value as strictly equal to a specified
   value. Sanitize to the specified value. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'strictEqualToValue', $other_value);
+        $filter->addSoftRule('field', $filter::IS, 'strictEqualToValue', $other_value);
 
 - `string`: Validate the value can be represented by a string. Sanitize the
   value by casting to a string and optionally using `str_replace().` Usage
   (note that this is to sanitize, not validate):
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::FIX, 'string', $find, $replace);
-    ```
+        $filter->addSoftRule('field', $filter::FIX, 'string', $find, $replace);
     
 - `strlen`: Validate the value has a specified length. Sanitize the value
   to cut off longer values at the right, and `str_pad()` shorter ones. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'strlen', $len);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'strlen', $len);
 
 - `strlenBetween`: Validate the value length as being within or equal to a
   minimum and maximum value. Sanitize the value to cut off values longer than
   the maximum, longer values at the right, and `str_pad()` shorter ones.
   Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'strlenBetween', $min, $max);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'strlenBetween', $min, $max);
         
 - `strlenMax`: Validate the value length as being no longer than a maximum.
   Sanitize the value to cut off values longer than the maximum. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'strlenMax', $max);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'strlenMax', $max);
         
 - `strlenMin`: Validate the value length as being no shorter than a minimum.
   Sanitize the value to `str_pad()` values shorter than the minimum. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'strlenMin', $min);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'strlenMin', $min);
         
 - `trim`: Validate the value is `trim()`med. Sanitize the value to `trim()` it.
   Optionally specify characters to trim. Usage:
 
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'trim', $chars);
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'trim', $chars);
         
 - `upload`: Validate the value represents a PHP upload information array, and
   that the file is an uploaded file. The value cannot be sanitized. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'upload');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'upload');
 
 - `url`: Validate the value is a well-formed URL. The value cannot be
   sanitized. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'url');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'url');
 
 - `word`: Validate the value as being composed only of word characters.
  Sanitize the value to remove non-word characters. Usage:
         
-    ```php
-    <?php
-    $filter->addSoftRule('field', $filter::IS, 'word');
-    ```
+        $filter->addSoftRule('field', $filter::IS, 'word');
 
 
 Applying Rules to Individual Values
