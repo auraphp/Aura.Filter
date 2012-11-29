@@ -41,6 +41,23 @@ class RuleLocator
      */
     public function __construct(array $registry = [])
     {
+        $this->merge($registry);
+    }
+
+    /**
+     * 
+     * Merges a new registry of rules over the old registry; new rules will
+     * override old ones.
+     * 
+     * @param array $registry An array of key-value pairs where the key is the
+     * rule name (doubles as a method name) and the value is the rule
+     * object. The value may also be a closure that returns a rule object.
+     * Note that is has to be a closure, not just any callable, because the
+     * rule object itself might be callable.
+     * 
+     */
+    public function merge(array $registry = [])
+    {
         foreach ($registry as $name => $spec) {
             $this->set($name, $spec);
         }
@@ -48,7 +65,7 @@ class RuleLocator
 
     /**
      * 
-     * Sets a rule into the registry by name.
+     * Sets one rule into the registry by name.
      * 
      * @param string $name The rule name; this doubles as a method name
      * when called from a template.
