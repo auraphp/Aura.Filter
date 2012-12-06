@@ -36,7 +36,7 @@ class Regex extends AbstractRule
      * Validates the value against a regular expression.
      * 
      * Uses [[php::preg_match() | ]] to compare the value against the given
-     * regular epxression.
+     * regular expression.
      * 
      * @param string $expr The regular expression to validate against.
      * 
