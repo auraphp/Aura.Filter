@@ -236,6 +236,11 @@ Available Rules
   sanitized. Usage:
         
         $filter->addSoftRule('field', $filter::IS, 'ipv4');
+        
+- `locale`: Validate the given value against a list of locale strings. If it's 
+not found returns false. The value cannot be sanitized. Usage:
+        
+        $filter->addSoftRule('field', $filter::IS, 'locale');
 
 - `max`: Validate the value as being less than or equal to a maximum. Sanitize
   so that values higher than the maximum are forced down to the maxiumum.
