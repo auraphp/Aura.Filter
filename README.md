@@ -243,14 +243,14 @@ not found returns false. The value cannot be sanitized. Usage:
         $filter->addSoftRule('field', $filter::IS, 'locale');
 
 - `max`: Validate the value as being less than or equal to a maximum. Sanitize
-  so that values higher than the maximum are forced down to the maxiumum.
+  so that values higher than the maximum are forced down to the maximum.
   Usage:
 
         $filter->addSoftRule('field', $filter::IS, 'max', $max);
 
 - `min`: Validate the value as being greater than or equal to a minimum.
   Sanitize so that values lower than the minimum are forced up to the
-  miniumum.Usage:
+  minimum. Usage:
 
         $filter->addSoftRule('field', $filter::IS, 'min', $min);
 
@@ -341,7 +341,7 @@ if (! $success) {
 ```
 
 > N.b.: The `value()` method must be applied to variables, not constants or
-> literals, becaue of the way rule processing works under-the-hood.
+> literals, because of the way rule processing works under-the-hood.
 
 
 Creating and Using Custom Rules
