@@ -20,6 +20,7 @@ require_once __DIR__ . '/src/Aura/Filter/Rule/InKeys.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Int.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/InValues.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Ipv4.php';
+require_once __DIR__ . '/src/Aura/Filter/Rule/Locale.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Max.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Min.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Regex.php';
