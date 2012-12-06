@@ -38,3 +38,28 @@ $di->params['Aura\Filter\RuleLocator']['registry'] = [
     'url'                   => function() { return new \Aura\Filter\Rule\Url; },
     'word'                  => function() { return new \Aura\Filter\Rule\Word; },
 ];
+
+$di->params['Aura\Filter\RuleCollection']['rule_locator'] = $di->lazyNew('Aura\Filter\RuleLocator');
+
+$di->set('filter', function() use ($di) {
+    return $di->newInstance('Aura\Filter\RuleCollection');
+});
+
+/*
+ *
+ * Example how to call from controller.
+ *
+ * Add the below lines into the Vendor.Package/config/default.php
+ *
+ * $di->setter['Vendor\Package\Web\Post\Page']['setFilter'] = $di->lazyGet('filter');
+ *
+ * In controller you need a 
+ *
+ * public function setFilter($filter)
+ * {
+ *      $this->filter = $filter;
+ * }
+ *
+ * and now you have the object of class Aura\Filter\RuleCollection
+ *
+ */
