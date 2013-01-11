@@ -42,7 +42,7 @@ class StrlenBetween extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min, $max)
+    public function validate($min, $max)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -66,7 +66,7 @@ class StrlenBetween extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

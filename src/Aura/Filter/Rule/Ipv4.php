@@ -38,7 +38,7 @@ class Ipv4 extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
 
@@ -60,7 +60,7 @@ class Ipv4 extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false; // can't fix IP addresses
     }

@@ -43,7 +43,7 @@ class Regex extends AbstractRule
      * @return bool True if the value matches the expression, false if not.
      * 
      */
-    protected function validate($expr)
+    public function validate($expr)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -63,7 +63,7 @@ class Regex extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize($expr, $replace)
+    public function sanitize($expr, $replace)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

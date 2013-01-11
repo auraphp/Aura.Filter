@@ -41,7 +41,7 @@ class Word extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -58,7 +58,7 @@ class Word extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

@@ -42,7 +42,7 @@ class Between extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min, $max)
+    public function validate($min, $max)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -63,7 +63,7 @@ class Between extends AbstractRule
      * @return bool
      * 
      */
-    protected function sanitize($min, $max)
+    public function sanitize($min, $max)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

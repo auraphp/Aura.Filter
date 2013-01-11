@@ -7,7 +7,7 @@ class Hex extends AbstractRule
 {
     protected $message = 'FILTER_HEX';
     
-    protected function validate($max = null)
+    public function validate($max = null)
     {
         // must be scalar
         $value = $this->getValue();
@@ -30,7 +30,7 @@ class Hex extends AbstractRule
         return true;
     }
     
-    protected function sanitize($max = null)
+    public function sanitize($max = null)
     {
         // must be scalar
         $value = $this->getValue();

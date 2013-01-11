@@ -43,7 +43,7 @@ class DateTime extends AbstractRule
      * @return boolean
      * 
      */
-    protected function validate($format = 'Y-m-d H:i:s')
+    public function validate($format = 'Y-m-d H:i:s')
     {
         $value = $this->getValue();
 
@@ -69,7 +69,7 @@ class DateTime extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($format = 'Y-m-d H:i:s')
+    public function sanitize($format = 'Y-m-d H:i:s')
     {
         $value = $this->getValue();
 

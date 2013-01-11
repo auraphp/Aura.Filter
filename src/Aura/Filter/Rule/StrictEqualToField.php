@@ -46,7 +46,7 @@ class StrictEqualToField extends AbstractRule
      * @return bool True if the values are equal, false if not equal.
      * 
      */
-    protected function validate($other_field)
+    public function validate($other_field)
     {
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {
@@ -64,7 +64,7 @@ class StrictEqualToField extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($other_field)
+    public function sanitize($other_field)
     {
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {

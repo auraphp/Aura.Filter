@@ -84,7 +84,7 @@ class Email extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         return (bool) preg_match("!^{$this->expr}$!D", $this->getValue());
     }
@@ -95,7 +95,7 @@ class Email extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

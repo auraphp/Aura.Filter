@@ -41,7 +41,7 @@ class Url extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -79,7 +79,7 @@ class Url extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

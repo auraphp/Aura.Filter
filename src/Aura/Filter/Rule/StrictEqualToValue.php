@@ -40,7 +40,7 @@ class StrictEqualToValue extends AbstractRule
      * 
      * @return boolean
      */
-    protected function validate($other_value)
+    public function validate($other_value)
     {
         return $this->getValue() === $other_value;
     }
@@ -53,7 +53,7 @@ class StrictEqualToValue extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($other_value)
+    public function sanitize($other_value)
     {
         $this->setValue($other_value);
         return true;

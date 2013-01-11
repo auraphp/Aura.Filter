@@ -40,7 +40,7 @@ class Strlen extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($len)
+    public function validate($len)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -61,7 +61,7 @@ class Strlen extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function sanitize($len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

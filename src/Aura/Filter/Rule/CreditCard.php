@@ -38,7 +38,7 @@ class CreditCard extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         // get the value; remove spaces, dashes, and dots
         $value = str_replace([' ', '-', '.'], '', (string) $this->getValue());
@@ -70,7 +70,7 @@ class CreditCard extends AbstractRule
      * @return false
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

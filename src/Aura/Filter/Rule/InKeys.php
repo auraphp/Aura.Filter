@@ -44,7 +44,7 @@ class InKeys extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($array)
+    public function validate($array)
     {
         return array_key_exists($this->getValue(), (array) $array);
     }
@@ -55,7 +55,7 @@ class InKeys extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

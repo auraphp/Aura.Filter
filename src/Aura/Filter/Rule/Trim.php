@@ -48,7 +48,7 @@ class Trim extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($chars = null)
+    public function validate($chars = null)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

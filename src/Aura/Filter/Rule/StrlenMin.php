@@ -41,7 +41,7 @@ class StrlenMin extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min)
+    public function validate($min)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -62,7 +62,7 @@ class StrlenMin extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function sanitize($min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

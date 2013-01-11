@@ -43,7 +43,7 @@ class String extends AbstractRule
      * @todo allow for __toString() implementations
      * 
      */
-    protected function validate()
+    public function validate()
     {
         return is_scalar($this->getValue());
     }
@@ -58,7 +58,7 @@ class String extends AbstractRule
      * 
      * @return bool True if the value was fixed, false if not.
      */
-    protected function sanitize($find = null, $replace = null)
+    public function sanitize($find = null, $replace = null)
     {
         $value = (string) $this->getValue();
         if ($find || $replace) {

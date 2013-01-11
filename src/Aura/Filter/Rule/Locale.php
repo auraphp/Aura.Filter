@@ -57,7 +57,7 @@ class Locale extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
         return in_array($value, $this->codes);
@@ -70,7 +70,7 @@ class Locale extends AbstractRule
      * @return bool Always false.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

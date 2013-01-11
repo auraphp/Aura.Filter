@@ -44,7 +44,7 @@ class InValues extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($array)
+    public function validate($array)
     {
         return in_array($this->getValue(), (array) $array, true);
     }
@@ -54,7 +54,7 @@ class InValues extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

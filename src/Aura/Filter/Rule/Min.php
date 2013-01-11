@@ -40,7 +40,7 @@ class Min extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min)
+    public function validate($min)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -57,7 +57,7 @@ class Min extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($min)
+    public function sanitize($min)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {

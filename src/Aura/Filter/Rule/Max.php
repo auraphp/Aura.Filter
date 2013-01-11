@@ -40,7 +40,7 @@ class Max extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($max)
+    public function validate($max)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -57,7 +57,7 @@ class Max extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($max)
+    public function sanitize($max)
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
