@@ -10,6 +10,10 @@ $loader->add('Aura\Filter\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
 $di->params['Aura\Filter\RuleLocator']['registry'] = [
     'alnum'                 => function() { return new \Aura\Filter\Rule\Alnum; },
     'alpha'                 => function() { return new \Aura\Filter\Rule\Alpha; },
+    'any'                   => function() use ($di) {
+        $rule = new \Aura\Filter\Rule\Any;
+        $rule->setRuleLocator($di->newInstance('\Aura\Filter\Rule\Locator'));
+    },
     'between'               => function() { return new \Aura\Filter\Rule\Between; },
     'blank'                 => function() { return new \Aura\Filter\Rule\Blank; },
     'bool'                  => function() { return new \Aura\Filter\Rule\Bool; },

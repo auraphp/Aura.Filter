@@ -7,6 +7,7 @@ require_once __DIR__ . '/src/Aura/Filter/RuleLocator.php';
 require_once __DIR__ . '/src/Aura/Filter/RuleCollection.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Alnum.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Alpha.php';
+require_once __DIR__ . '/src/Aura/Filter/Rule/Any.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Between.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Blank.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Bool.php';

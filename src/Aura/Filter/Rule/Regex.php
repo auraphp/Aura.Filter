@@ -14,7 +14,8 @@ use Aura\Filter\AbstractRule;
 
 /**
  * 
- * Sanitizes a value to a string using preg_replace().
+ * Validates a value using preg_match(), and sanitizes a value to a string
+ * using preg_replace().
  * 
  * @package Aura.Filter
  * 
