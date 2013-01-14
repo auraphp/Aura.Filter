@@ -14,7 +14,7 @@ use Aura\Filter\AbstractRule;
 
 /**
  * 
- * Rule for alphanumeric characters.
+ * Validates the value as a credit card number.
  * 
  * @package Aura.Filter
  * 
@@ -25,15 +25,16 @@ class CreditCard extends AbstractRule
 {
     /**
      *
-     * Error message
+     * Error message.
      * 
      * @var string
+     * å
      */
     protected $message = 'FILTER_CREDIT_CARD';
 
     /**
      * 
-     * Validates that the value is only letters (upper/lower case) and digits.
+     * Validates the value as a credit card number.
      * 
      * @return bool True if valid, false if not.
      * 
