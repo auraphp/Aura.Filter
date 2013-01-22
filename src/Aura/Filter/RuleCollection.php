@@ -11,7 +11,6 @@
 namespace Aura\Filter;
 
 use InvalidArgumentException;
-use StdClass;
 
 /**
  * 
@@ -96,19 +95,34 @@ class RuleCollection
      * A RuleLocator object.
      * 
      * @var RuleLocator
+     * 
      */
     protected $rule_locator;
+
+    /**
+     *
+     * A Translator object.
+     * 
+     * @var TranslatorInterface
+     * 
+     */
+    protected $translator;
 
     /**
      * 
      * Constructor.
      * 
-     * @param RuleLocator $rule_locator
+     * @param RuleLocator $rule_locator The rule locator.
+     * 
+     * @param TranslatorInterface $translator The message translator.
      * 
      */
-    public function __construct(RuleLocator $rule_locator)
-    {
+    public function __construct(
+        RuleLocator         $rule_locator,
+        TranslatorInterface $translator
+    ) {
         $this->rule_locator = $rule_locator;
+        $this->translator   = $translator;
     }
 
     /**
@@ -193,7 +207,8 @@ class RuleCollection
     }
 
     /**
-     * Return RuleLocator object
+     * 
+     * Returns the rule locator.
      * 
      * @return RuleLocator
      * 
@@ -205,15 +220,28 @@ class RuleCollection
 
     /**
      * 
+     * Returns the translator.
+     * 
+     * @return TranslatorInterface
+     * 
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     * 
      * Add a rule.
      * 
-     * @param string $field
+     * @param string $field The field name.
      * 
-     * @param string $method
+     * @param string $method The rule method to use (is, isNot, isBlankOr,
+     * etc).
      * 
-     * @param string $name
+     * @param string $name The name of the rule to apply.
      * 
-     * @param string $params
+     * @param string $params Params for the rule.
      * 
      * @param string $type The rule type: soft, hard, stop.
      * 
@@ -226,7 +254,6 @@ class RuleCollection
             'name'      => $name,
             'params'    => $params,
             'type'      => $type,
-            'applied'   => false,
         ];
     }
 
@@ -260,10 +287,10 @@ class RuleCollection
         $this->messages = [];
         $this->hardrule = [];
 
-        foreach ($this->rules as $i => &$rule) {
+        foreach ($this->rules as $i => &$info) {
 
             // the field name
-            $field = $rule['field'];
+            $field = $info['field'];
 
             // if we've hit a hard rule for this field, then don't apply
             // further rules on this field.
@@ -271,33 +298,28 @@ class RuleCollection
                 continue;
             }
 
-            $object = $this->rule_locator->get($rule['name']);
-            $object->prep($data, $field);
+            $rule = $this->rule_locator->get($info['name']);
+            $rule->prep($data, $field);
 
-            $method = $rule['method'];
-            $params = $rule['params'];
-            $passed = call_user_func_array([$object, $method], $params);
-            $rule['applied'] = true;
+            $method = $info['method'];
+            $params = $info['params'];
+            $passed = call_user_func_array([$rule, $method], $params);
 
             if (! $passed) {
 
                 // failed. keep the failure message.
-                $this->messages[$field][] = [
-                    'field'   => $field,
-                    'method'  => $rule['method'],
-                    'name'    => $rule['name'],
-                    'params'  => $rule['params'],
-                    'message' => $object->getMessage(),
-                    'type'    => $rule['type'],
-                ];
+                $this->messages[$field][] = $this->translator->translate(
+                    $rule->getMessage(),
+                    $rule->getParams()
+                );
 
                 // should we stop filtering this field?
-                if ($rule['type'] == static::HARD_RULE) {
+                if ($info['type'] == static::HARD_RULE) {
                     $this->hardrule[] = $field;
                 }
 
                 // should we stop filtering entirely?
-                if ($rule['type'] == static::STOP_RULE) {
+                if ($info['type'] == static::STOP_RULE) {
                     return false;
                 }
             }
