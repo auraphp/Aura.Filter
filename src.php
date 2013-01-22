@@ -36,3 +36,5 @@ require_once __DIR__ . '/src/Aura/Filter/Rule/Trim.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Upload.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Url.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Word.php';
+require_once __DIR__ . '/src/Aura/Filter/TranslatorInterface.php';
+require_once __DIR__ . '/src/Aura/Filter/Translator.php';
