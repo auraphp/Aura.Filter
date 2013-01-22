@@ -25,12 +25,19 @@ use Aura\Filter\AbstractRule;
 class StrictEqualToField extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_STRICT_EQUAL_TO_FIELD';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRICT_EQUAL_TO_FIELD',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_STRICT_EQUAL_TO_FIELD',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_STRICT_EQUAL_TO_FIELD',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_STRICT_EQUAL_TO_FIELD',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_STRICT_EQUAL_TO_FIELD',
+    ];
 
     /**
      * 
@@ -48,6 +55,8 @@ class StrictEqualToField extends AbstractRule
      */
     public function validate($other_field)
     {
+        $this->setParams(get_defined_vars());
+        
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {
             return false;
@@ -58,14 +67,17 @@ class StrictEqualToField extends AbstractRule
 
     /**
      * 
-     * force the field to the value of the other field
+     * Force the field to the value of the other field.
      * 
      * @param string $other_field
      * 
      * @return boolean
+     * 
      */
     public function sanitize($other_field)
     {
+        $this->setParams(get_defined_vars());
+        
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {
             return false;

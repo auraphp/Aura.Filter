@@ -26,13 +26,19 @@ use DateTime as PhpDateTime;
 class DateTime extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string 
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
      * 
      */
-    protected $message = 'FILTER_DATETIME';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_DATE_TIME',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_DATE_TIME',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_DATE_TIME',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_DATE_TIME',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_DATE_TIME',
+    ];
 
     /**
      * 
@@ -45,6 +51,8 @@ class DateTime extends AbstractRule
      */
     public function validate($format = 'Y-m-d H:i:s')
     {
+        $this->setParams(get_defined_vars());
+        
         $value = $this->getValue();
 
         if ($value instanceof PhpDateTime) {
@@ -71,6 +79,8 @@ class DateTime extends AbstractRule
      */
     public function sanitize($format = 'Y-m-d H:i:s')
     {
+        $this->setParams(get_defined_vars());
+        
         $value = $this->getValue();
 
         if ($value instanceof PhpDateTime) {

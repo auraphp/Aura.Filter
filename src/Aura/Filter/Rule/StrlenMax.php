@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class StrlenMax extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_STRLEN_MAX';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRLEN_MAX',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_STRLEN_MAX',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_MAX',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_STRLEN_MAX',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_STRLEN_MAX',
+    ];
 
     /**
      * 
@@ -43,6 +50,7 @@ class StrlenMax extends AbstractRule
      */
     public function validate($max)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -60,6 +68,7 @@ class StrlenMax extends AbstractRule
      */
     public function sanitize($max)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

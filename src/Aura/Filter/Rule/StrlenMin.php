@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class StrlenMin extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_STRLEN_MIN';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRLEN_MIN',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_STRLEN_MIN',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_MIN',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_STRLEN_MIN',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_STRLEN_MIN',
+    ];
 
     /**
      * 
@@ -43,6 +50,7 @@ class StrlenMin extends AbstractRule
      */
     public function validate($min)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -64,6 +72,7 @@ class StrlenMin extends AbstractRule
      */
     public function sanitize($min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

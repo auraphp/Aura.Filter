@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Strlen extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_STRLEN';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRLEN',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_STRLEN',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_STRLEN',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_STRLEN',
+    ];
 
     /**
      * 
@@ -42,6 +49,7 @@ class Strlen extends AbstractRule
      */
     public function validate($len)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -63,6 +71,7 @@ class Strlen extends AbstractRule
      */
     public function sanitize($len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

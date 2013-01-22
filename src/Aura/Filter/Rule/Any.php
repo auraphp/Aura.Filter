@@ -8,7 +8,20 @@ class Any extends AbstractRule
 {
     protected $rule_locator;
     
-    protected $message = 'FILTER_ANY';
+    /**
+     * 
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
+     */
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_ANY',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_ANY',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_ANY',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_ANY',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_ANY',
+    ];
     
     // rule locator should be an new instance, not a shared service
     public function setRuleLocator(RuleLocator $rule_locator)

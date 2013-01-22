@@ -25,11 +25,18 @@ class String extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_STRING';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRING',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_STRING',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_STRING',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_STRING',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_STRING',
+    ];
 
     /**
      * 
@@ -60,6 +67,7 @@ class String extends AbstractRule
      */
     public function sanitize($find = null, $replace = null)
     {
+        $this->setParams(get_defined_vars());
         $value = (string) $this->getValue();
         if ($find || $replace) {
             $value = str_replace($find, $replace, $value);

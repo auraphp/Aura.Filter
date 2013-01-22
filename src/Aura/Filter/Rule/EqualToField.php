@@ -25,12 +25,19 @@ use Aura\Filter\AbstractRule;
 class EqualToField extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_EQUAL_TO_FIELD';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_EQUAL_TO_FIELD',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_EQUAL_TO_FIELD',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_EQUAL_TO_FIELD',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_EQUAL_TO_FIELD',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_EQUAL_TO_FIELD',
+    ];
 
     /**
      * 
@@ -50,6 +57,8 @@ class EqualToField extends AbstractRule
      */
     public function validate($other_field)
     {
+        $this->setParams(get_defined_vars());
+        
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {
             return false;
@@ -67,6 +76,8 @@ class EqualToField extends AbstractRule
      */
     public function sanitize($other_field)
     {
+        $this->setParams(get_defined_vars());
+        
         // the other field needs to exist and *not* be null
         if (! isset($this->data->$other_field)) {
             return false;

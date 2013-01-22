@@ -24,13 +24,19 @@ use Aura\Filter\AbstractRule;
 class CreditCard extends AbstractRule
 {
     /**
-     *
-     * Error message.
      * 
-     * @var string
-     * å
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_CREDIT_CARD';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_CREDIT_CARD',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_CREDIT_CARD',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_CREDIT_CARD',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_CREDIT_CARD',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_CREDIT_CARD',
+    ];
 
     /**
      * 

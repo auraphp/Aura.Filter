@@ -25,12 +25,19 @@ use Aura\Filter\AbstractRule;
 class EqualToValue extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_EQUAL_TO_VALUE';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_EQUAL_TO_VALUE',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_EQUAL_TO_VALUE',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_EQUAL_TO_VALUE',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_EQUAL_TO_VALUE',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_EQUAL_TO_VALUE',
+    ];
 
     /**
      * 
@@ -42,6 +49,7 @@ class EqualToValue extends AbstractRule
      */
     public function validate($other_value)
     {
+        $this->setParams(get_defined_vars());
         return $this->getValue() == $other_value;
     }
 
@@ -55,6 +63,7 @@ class EqualToValue extends AbstractRule
      */
     public function sanitize($other_value)
     {
+        $this->setParams(get_defined_vars());
         $this->setValue($other_value);
         return true;
     }

@@ -25,12 +25,19 @@ use Aura\Filter\AbstractRule;
 class Regex extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_REGEX';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_REGEX',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_REGEX',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_REGEX',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_REGEX',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_REGEX',
+    ];
 
     /**
      * 
@@ -46,6 +53,7 @@ class Regex extends AbstractRule
      */
     public function validate($expr)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -66,6 +74,7 @@ class Regex extends AbstractRule
      */
     public function sanitize($expr, $replace)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

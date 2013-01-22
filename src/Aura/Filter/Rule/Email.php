@@ -25,11 +25,18 @@ class Email extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_EMAIL';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_EMAIL',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_EMAIL',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_EMAIL',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_EMAIL',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_EMAIL',
+    ];
 
     /**
      * 

@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Float extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_FLOAT';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_FLOAT',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_FLOAT',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_FLOAT',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_FLOAT',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_FLOAT',
+    ];
 
     /**
      * 

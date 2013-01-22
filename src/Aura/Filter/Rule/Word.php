@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Word extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_WORD';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_WORD',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_WORD',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_WORD',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_WORD',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_WORD',
+    ];
 
     /**
      * 
