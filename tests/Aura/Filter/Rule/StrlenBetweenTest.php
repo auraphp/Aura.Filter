@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class StrlenBetweenTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_STRLEN_BETWEEN';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRLEN_BETWEEN';
     
     protected $min = 4;
     

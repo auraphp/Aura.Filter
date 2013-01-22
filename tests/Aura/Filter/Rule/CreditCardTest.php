@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class CreditCardTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_CREDIT_CARD';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_CREDIT_CARD';
     
     public function providerIs()
     {

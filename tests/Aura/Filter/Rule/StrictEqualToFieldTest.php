@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class StrictEqualToFieldTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_STRICT_EQUAL_TO_FIELD';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRICT_EQUAL_TO_FIELD';
     
     protected $other_field = 'other';
     

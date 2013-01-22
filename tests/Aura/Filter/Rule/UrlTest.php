@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class UrlTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_URL';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_URL';
     
     public function providerIs()
     {

@@ -7,7 +7,7 @@ use DateTime as PhpDateTime;
 
 class DateTimeTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_DATETIME';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_DATE_TIME';
     
     public function providerIs()
     {

@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class RegexTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_REGEX';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_REGEX';
     
     protected $expr_validate = '/^[\+\-]?[0-9]+$/';
     

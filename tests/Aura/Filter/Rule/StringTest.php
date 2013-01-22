@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class StringTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_STRING';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRING';
     
     public function ruleFix($rule)
     {

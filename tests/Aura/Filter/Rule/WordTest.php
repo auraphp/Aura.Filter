@@ -14,7 +14,7 @@ use Aura\Filter\AbstractRuleTest;
  */
 class WordTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_WORD';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_WORD';
     
     public function providerIs()
     {

@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class EmailTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_EMAIL';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_EMAIL';
     
     public function providerIs()
     {

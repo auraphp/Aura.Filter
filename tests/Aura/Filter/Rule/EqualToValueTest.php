@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class EqualToValueTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_EQUAL_TO_VALUE';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_EQUAL_TO_VALUE';
     
     protected $other_value = '1';
     

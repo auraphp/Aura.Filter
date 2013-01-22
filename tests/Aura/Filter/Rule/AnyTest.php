@@ -6,7 +6,7 @@ use Aura\Filter\RuleLocator;
 
 class AnyTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_ANY';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_ANY';
     
     protected $list = [
         // alphanumeric

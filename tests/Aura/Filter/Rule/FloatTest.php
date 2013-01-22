@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class FloatTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_FLOAT';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_FLOAT';
     
     public function providerIs()
     {

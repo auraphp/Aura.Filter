@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class StrlenTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_STRLEN';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRLEN';
     
     protected $len = 4;
     

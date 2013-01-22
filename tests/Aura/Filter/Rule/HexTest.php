@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class HexTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_HEX';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_HEX';
     
     public function providerIs()
     {

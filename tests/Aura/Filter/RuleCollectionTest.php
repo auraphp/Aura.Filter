@@ -9,18 +9,27 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     
     protected function setUp()
     {
-        $this->filter = new Filter(new RuleLocator([
-            'alnum'   => function() { return new Rule\Alnum; },
-            'alpha'   => function() { return new Rule\Alpha; },
-            'between' => function() { return new Rule\Between; },
-            'blank'   => function() { return new Rule\Blank; },
-            'int'     => function() { return new Rule\Int; },
-            'max'     => function() { return new Rule\Max; },
-            'min'     => function() { return new Rule\Min; },
-            'regex'   => function() { return new Rule\Regex; },
-            'string'  => function() { return new Rule\String; },
-            'strlen'  => function() { return new Rule\Strlen; },
-        ]));
+        $rule_locator = new RuleLocator([
+            'alnum'     => function() { return new Rule\Alnum; },
+            'alpha'     => function() { return new Rule\Alpha; },
+            'between'   => function() { return new Rule\Between; },
+            'blank'     => function() { return new Rule\Blank; },
+            'int'       => function() { return new Rule\Int; },
+            'max'       => function() { return new Rule\Max; },
+            'min'       => function() { return new Rule\Min; },
+            'regex'     => function() { return new Rule\Regex; },
+            'string'    => function() { return new Rule\String; },
+            'strlen'    => function() { return new Rule\Strlen; },
+            'strlenMin' => function() { return new Rule\StrlenMin; },
+        ]);
+        
+        $intl = require dirname(dirname(dirname(__DIR__)))
+              . DIRECTORY_SEPARATOR . 'intl'
+              . DIRECTORY_SEPARATOR . 'en_US.php';
+        
+        $translator = new Translator($intl);
+        
+        $this->filter = new Filter($rule_locator, $translator);
     }
     
     public function testValue()
@@ -35,9 +44,15 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(123, $actual);
     }
     
+    public function testGetTranslator()
+    {
+        $actual = $this->filter->getTranslator();
+        $expect = 'Aura\Filter\Translator';
+        $this->assertInstanceOf($expect, $actual);
+    }
+    
     public function testGetRuleLocator()
     {
-        $filter = $this->filter;
         $actual = $this->filter->getRuleLocator();
         $expect = 'Aura\Filter\RuleLocator';
         $this->assertInstanceOf($expect, $actual);
@@ -59,7 +74,6 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'name' => 'alnum',
                 'params' => [],
                 'type' => Filter::SOFT_RULE,
-                'applied' => false,
             ],
             1 => [
                 'field' => 'field1',
@@ -67,7 +81,6 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'name' => 'alpha',
                 'params' => [],
                 'type' => Filter::HARD_RULE,
-                'applied' => false,
             ],
             2 => [
                 'field' => 'field2',
@@ -75,7 +88,6 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'name' => 'alnum',
                 'params' => [],
                 'type' => Filter::SOFT_RULE,
-                'applied' => false,
             ],
             3 => [
                 'field' => 'field2',
@@ -83,7 +95,6 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
                 'name' => 'alpha',
                 'params' => [],
                 'type' => Filter::HARD_RULE,
-                'applied' => false,
             ],
         ];
         
@@ -93,9 +104,9 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     public function testObject()
     {
         $this->filter->addSoftRule('field', Filter::IS, 'alnum');
-        $this->filter->addHardRule('field', Filter::IS, 'alpha');
+        $this->filter->addHardRule('field', Filter::IS, 'strlenMin', 6);
         
-        $data = (object) ['field' => 'foo'];
+        $data = (object) ['field' => 'foobar'];
         $result = $this->filter->values($data);
         $this->assertTrue($result);
         $messages = $this->filter->getMessages();
@@ -112,7 +123,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     public function testObject_hardRule()
     {
         $this->filter->addHardRule('field', Filter::IS, 'alnum');
-        $this->filter->addHardRule('field', Filter::IS, 'alpha');
+        $this->filter->addHardRule('field', Filter::IS, 'strlenMin', 6);
         
         $data = (object) ['field' => array()];
         $result = $this->filter->values($data);
@@ -120,14 +131,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field' => [
-                0 => [
-                    'field' => 'field',
-                    'method' => 'is',
-                    'name' => 'alnum',
-                    'params' => [],
-                    'message' => 'FILTER_ALNUM',
-                    'type' => 'HARD_RULE',
-                ],
+                'Please use only alphanumeric characters.',
             ],
         ];
 
@@ -139,7 +143,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     public function testObject_softRule()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
-        $this->filter->addHardRule('field1', Filter::IS, 'alpha');
+        $this->filter->addHardRule('field1', Filter::IS, 'strlenMin', 6);
         $this->filter->addHardRule('field1', Filter::FIX, 'string');
         $this->filter->addHardRule('field2', Filter::IS, 'int');
         $this->filter->addHardRule('field2', Filter::FIX, 'int');
@@ -154,22 +158,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field1' => [
-                0 => [
-                    'field' => 'field1',
-                    'method' => 'is',
-                    'name' => 'alnum',
-                    'params' => [],
-                    'message' => 'FILTER_ALNUM',
-                    'type' => 'SOFT_RULE',
-                ],
-                1 => [
-                    'field' => 'field1',
-                    'method' => 'is',
-                    'name' => 'alpha',
-                    'params' => [],
-                    'message' => 'FILTER_ALPHA',
-                    'type' => 'HARD_RULE',
-                ],
+                'Please use only alphanumeric characters.',
+                'Please use at least 6 character(s).',
             ],
         ];
 
@@ -180,7 +170,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     public function testObject_stopRule()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
-        $this->filter->addStopRule('field1', Filter::IS, 'alpha');
+        $this->filter->addStopRule('field1', Filter::IS, 'strlenMin', 6);
         $this->filter->addHardRule('field2', Filter::IS, 'int');
         
         $data = (object) ['field1' => array()];
@@ -189,22 +179,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field1' => [
-                0 => [
-                    'field' => 'field1',
-                    'method' => 'is',
-                    'name' => 'alnum',
-                    'params' => [],
-                    'message' => 'FILTER_ALNUM',
-                    'type' => 'SOFT_RULE',
-                ],
-                1 => [
-                    'field' => 'field1',
-                    'method' => 'is',
-                    'name' => 'alpha',
-                    'params' => [],
-                    'message' => 'FILTER_ALPHA',
-                    'type' => 'STOP_RULE',
-                ],
+                'Please use only alphanumeric characters.',
+                'Please use at least 6 character(s).',
             ],
         ];
 

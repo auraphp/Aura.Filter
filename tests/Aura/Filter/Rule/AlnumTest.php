@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class AlnumTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_ALNUM';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_ALNUM';
     
     public function providerIs()
     {

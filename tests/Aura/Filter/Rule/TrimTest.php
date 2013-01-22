@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class TrimTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_TRIM';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_TRIM';
     
     public function providerIs()
     {
