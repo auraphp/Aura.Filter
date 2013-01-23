@@ -11,6 +11,9 @@ $di->params['Aura\Filter\RuleCollection']['translator'] = $di->lazy(function () 
     return $translators->get('Aura.Filter');
 });
 
+// the Any rule needs a rule locator
+$di->setter['Aura\Filter\Rule\Any']['setRuleLocator'] = $di->lazyNew('Aura\Filter\RuleLocator');
+
 /**
  * Intl
  */
@@ -31,10 +34,7 @@ $di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter'] = [
 $di->params['Aura\Filter\RuleLocator']['registry'] = [
     'alnum'                 => function() { return new \Aura\Filter\Rule\Alnum; },
     'alpha'                 => function() { return new \Aura\Filter\Rule\Alpha; },
-    'any'                   => function() use ($di) {
-        $rule = new \Aura\Filter\Rule\Any;
-        $rule->setRuleLocator($di->newInstance('\Aura\Filter\RuleLocator'));
-    },
+    'any'                   => function() use ($di) { return $di->newInstance('Aura\Filter\Rule\Any'); },
     'between'               => function() { return new \Aura\Filter\Rule\Between; },
     'blank'                 => function() { return new \Aura\Filter\Rule\Blank; },
     'bool'                  => function() { return new \Aura\Filter\Rule\Bool; },
