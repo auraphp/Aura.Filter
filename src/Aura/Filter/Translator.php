@@ -54,6 +54,10 @@ class Translator implements TranslatorInterface
      */
     public function translate($key, array $tokens_values = [])
     {
+        if (! isset($this->messages[$key])) {
+            return $key;
+        }
+        
         // retain the message string
         $message = $this->messages[$key];
 
