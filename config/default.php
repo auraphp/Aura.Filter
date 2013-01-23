@@ -8,15 +8,15 @@ $loader->add('Aura\Filter\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
 $di->params['Aura\Filter\RuleCollection']['rule_locator'] = $di->lazyNew('Aura\Filter\RuleLocator');
 $di->params['Aura\Filter\RuleCollection']['translator'] = $di->lazy(function () use ($di) {
     $translators = $di->get('intl_translator_locator');
-    return $translators->get('Aura.Cli');
+    return $translators->get('Aura.Filter');
 });
 
 /**
  * Intl
  */
-$di->params['Aura\Intl\PackageLocator']['registry']['Aura.Cli'] = [
+$di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter'] = [
     'en_US' => function () use ($system) {
-        $package = require "$system/package/Aura.Cli/intl/en_US.php";
+        $package = require "$system/package/Aura.Filter/intl/en_US.php";
         return new Aura\Intl\Package(
             $package['formatter'],
             $package['fallback'],
