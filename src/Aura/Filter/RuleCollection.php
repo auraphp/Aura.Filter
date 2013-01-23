@@ -74,7 +74,7 @@ class RuleCollection
 
     /**
      * 
-     * Error messages from failed rules.
+     * Messages from failed rules.
      *
      * @var array
      * 
@@ -83,13 +83,22 @@ class RuleCollection
 
     /**
      * 
-     * Fields that have errored on a hard rule.
+     * Fields that have failed on a hard rule.
      *
      * @var array
      * 
      */
     protected $hardrule = [];
 
+    /**
+     * 
+     * Alternative messages to use when a field fails its filters.
+     * 
+     * @var array
+     * 
+     */
+    protected $field_messages = [];
+    
     /**
      *
      * A RuleLocator object.
@@ -259,6 +268,24 @@ class RuleCollection
 
     /**
      * 
+     * Use a custom message for a field when it fails any of its rules; this
+     * single message will replace all the various rule messages.
+     * 
+     * @param string $field The field name.
+     * 
+     * @param string $message The message to use when the field fails any of
+     * its rules.
+     * 
+     * @return void
+     * 
+     */
+    public function useFieldMessage($field, $message)
+    {
+        $this->field_messages[$field] = $message;
+    }
+    
+    /**
+     * 
      * Applies the rules to the field values of a data object or array; note 
      * that sanitizing filters may modify the values in place.
      * 
@@ -308,10 +335,7 @@ class RuleCollection
             if (! $passed) {
 
                 // failed. keep the failure message.
-                $this->messages[$field][] = $this->translator->translate(
-                    $rule->getMessage(),
-                    $rule->getParams()
-                );
+                $this->addMessage($field, $rule);
 
                 // should we stop filtering this field?
                 if ($info['type'] == static::HARD_RULE) {
@@ -329,6 +353,44 @@ class RuleCollection
         return $this->messages ? false : true;
     }
 
+    /**
+     * 
+     * Adds a failure message for a field.
+     * 
+     * @param string $field The field that failed.
+     * 
+     * @param RuleInterface $rule The rule that the field failed to apss.
+     * 
+     * @return void
+     * 
+     */
+    protected function addMessage($field, RuleInterface $rule)
+    {
+        // should we use a field-specific message?
+        $message = isset($this->field_messages[$field])
+                 ? $this->field_messages[$field]
+                 : null;
+        
+        // is a field-specific message already set?
+        if ($message && isset($this->messages[$field])) {
+            // no need to set it again
+            return;
+        }
+        
+        // do we have a field-specific message at this point?
+        if ($message) {
+            // yes; note that we set this as the only element in an array.
+            $this->messages[$field] = [$this->translator->translate($message)];
+            return;
+        }
+        
+        // add the rule-specific message the the array of messages, and done.
+        $this->messages[$field][] = $this->translator->translate(
+            $rule->getMessage(),
+            $rule->getParams()
+        );
+    }
+    
     /**
      * 
      * Returns the array of failure messages.
