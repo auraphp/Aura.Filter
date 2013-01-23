@@ -58,11 +58,11 @@ return array(
         "FILTER_RULE_FAILURE_FIX_EMAIL" => "Could not sanitize to an email address.",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_EMAIL" => "Could not sanitize to blank or a valid email address.",
 
-        "FILTER_RULE_FAILURE_IS_EQUAL_TO_FIELD" => "Please use a value equal to the field '{field}'.",
-        "FILTER_RULE_FAILURE_IS_NOT_EQUAL_TO_FIELD" => "Please do not use a value equal to the field '{field}'.",
-        "FILTER_RULE_FAILURE_IS_BLANK_OR_EQUAL_TO_FIELD" => "Please leave blank or use a value equal to the field '{field}'.",
-        "FILTER_RULE_FAILURE_FIX_EQUAL_TO_FIELD" => "Could not sanitize to a value equal to the field '{field}'.",
-        "FILTER_RULE_FAILURE_FIX_BLANK_OR_EQUAL_TO_FIELD" => "Could not sanitize to blank or a value equal to the field '{field}'.",
+        "FILTER_RULE_FAILURE_IS_EQUAL_TO_FIELD" => "Please use a value equal to the field '{other_field}'.",
+        "FILTER_RULE_FAILURE_IS_NOT_EQUAL_TO_FIELD" => "Please do not use a value equal to the field '{other_field}'.",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_EQUAL_TO_FIELD" => "Please leave blank or use a value equal to the field '{other_field}'.",
+        "FILTER_RULE_FAILURE_FIX_EQUAL_TO_FIELD" => "Could not sanitize to a value equal to the field '{other_field}'.",
+        "FILTER_RULE_FAILURE_FIX_BLANK_OR_EQUAL_TO_FIELD" => "Could not sanitize to blank or a value equal to the field '{other_field}'.",
 
         "FILTER_RULE_FAILURE_IS_EQUAL_TO_VALUE" => "Please use the value '{value}'.",
         "FILTER_RULE_FAILURE_IS_NOT_EQUAL_TO_VALUE" => "Please do not use the value '{value}'.",
