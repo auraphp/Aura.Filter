@@ -33,7 +33,7 @@ $di->params['Aura\Filter\RuleLocator']['registry'] = [
     'alpha'                 => function() { return new \Aura\Filter\Rule\Alpha; },
     'any'                   => function() use ($di) {
         $rule = new \Aura\Filter\Rule\Any;
-        $rule->setRuleLocator($di->newInstance('\Aura\Filter\Rule\Locator'));
+        $rule->setRuleLocator($di->newInstance('\Aura\Filter\RuleLocator'));
     },
     'between'               => function() { return new \Aura\Filter\Rule\Between; },
     'blank'                 => function() { return new \Aura\Filter\Rule\Blank; },
