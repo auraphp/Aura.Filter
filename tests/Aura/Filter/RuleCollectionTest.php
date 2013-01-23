@@ -101,7 +101,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testObject()
+    public function testValues()
     {
         $this->filter->addSoftRule('field', Filter::IS, 'alnum');
         $this->filter->addHardRule('field', Filter::IS, 'strlenMin', 6);
@@ -113,14 +113,14 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(empty($messages));
     }
     
-    public function testObject_invalidArgument()
+    public function testValues_invalidArgument()
     {
         $this->setExpectedException('InvalidArgumentException');
         $data = 'string';
         $this->filter->values($data);
     }
     
-    public function testObject_hardRule()
+    public function testValues_hardRule()
     {
         $this->filter->addHardRule('field', Filter::IS, 'alnum');
         $this->filter->addHardRule('field', Filter::IS, 'strlenMin', 6);
@@ -140,7 +140,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testObject_softRule()
+    public function testValues_softRule()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
         $this->filter->addHardRule('field1', Filter::IS, 'strlenMin', 6);
@@ -167,7 +167,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testObject_stopRule()
+    public function testValues_stopRule()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
         $this->filter->addStopRule('field1', Filter::IS, 'strlenMin', 6);
@@ -189,7 +189,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testObject_sanitizesInPlace()
+    public function testValues_sanitizesInPlace()
     {
         $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
         $data = (object) ['field' => 'foo'];
@@ -198,7 +198,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data->field, 'bar');
     }
     
-    public function testObject_missingField()
+    public function testValues_missingField()
     {
         $this->filter->addHardRule('field', Filter::IS, 'string');
         $data = (object) ['other_field' => 'foo']; // 'field' is missing
@@ -206,12 +206,39 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result);
     }
     
-    public function testObject_arraySanitizesInPlace()
+    public function testValues_arraySanitizesInPlace()
     {
         $this->filter->addHardRule('field', Filter::FIX, 'string', 'foo', 'bar');
         $data = ['field' => 'foo'];
         $result = $this->filter->values($data);
         $this->assertTrue($result);
         $this->assertSame($data['field'], 'bar');
+    }
+    
+    public function testUseFieldMessage()
+    {
+        $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field1', Filter::IS, 'strlenMin', 6);
+        $this->filter->addHardRule('field1', Filter::FIX, 'string');
+        $this->filter->addHardRule('field2', Filter::IS, 'int');
+        $this->filter->addHardRule('field2', Filter::FIX, 'int');
+        $this->filter->useFieldMessage('field1', 'FILTER_FIELD_FAILURE_FIELD1');
+        
+        $data = (object) [
+            'field1' => array(),
+            'field2' => 88
+        ];
+        
+        $result = $this->filter->values($data);
+        $this->assertFalse($result);
+        
+        $expect = [
+            'field1' => [
+                'FILTER_FIELD_FAILURE_FIELD1',
+            ],
+        ];
+
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
     }
 }
