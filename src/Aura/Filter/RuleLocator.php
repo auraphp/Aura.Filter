@@ -30,13 +30,20 @@ class RuleLocator
 
     /**
      * 
+     * Tracks whether or not a registry entry has been converted from a 
+     * callable to a helper object.
+     * 
+     * @var array
+     * 
+     */
+    protected $converted = [];
+    
+    /**
+     * 
      * Constructor.
      * 
      * @param array $registry An array of key-value pairs where the key is the
-     * rule name (doubles as a method name) and the value is the rule
-     * object. The value may also be a closure that returns a rule object.
-     * Note that is has to be a closure, not just any callable, because the
-     * rule object itself might be callable.
+     * rule name and the value is a callable that returns a rule object.
      * 
      */
     public function __construct(array $registry = [])
@@ -50,10 +57,7 @@ class RuleLocator
      * override old ones.
      * 
      * @param array $registry An array of key-value pairs where the key is the
-     * rule name (doubles as a method name) and the value is the rule
-     * object. The value may also be a closure that returns a rule object.
-     * Note that is has to be a closure, not just any callable, because the
-     * rule object itself might be callable.
+     * rule name and the value is a callable that returns a rule object.
      * 
      */
     public function merge(array $registry = [])
@@ -67,18 +71,17 @@ class RuleLocator
      * 
      * Sets one rule into the registry by name.
      * 
-     * @param string $name The rule name; this doubles as a method name
-     * when called from a template.
+     * @param string $name The rule name.
      * 
-     * @param string $spec The rule specification, typically a closure that
-     * builds and returns a rule object.
+     * @param callable $spec A callable that returns a rule object.
      * 
      * @return void
      * 
      */
-    public function set($name, $spec)
+    public function set($name, callable $spec)
     {
         $this->registry[$name] = $spec;
+        $this->converted[$name] = false;
     }
 
     /**
@@ -96,9 +99,10 @@ class RuleLocator
             throw new Exception\RuleNotMapped($name);
         }
 
-        if ($this->registry[$name] instanceof \Closure) {
+        if (! $this->converted[$name]) {
             $func = $this->registry[$name];
             $this->registry[$name] = $func();
+            $this->converted[$name] = true;
         }
 
         return $this->registry[$name];

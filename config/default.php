@@ -17,16 +17,10 @@ $di->setter['Aura\Filter\Rule\Any']['setRuleLocator'] = $di->lazyNew('Aura\Filte
 /**
  * Intl
  */
-$di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter'] = [
-    'en_US' => function () use ($system) {
-        $package = require "$system/package/Aura.Filter/intl/en_US.php";
-        return new Aura\Intl\Package(
-            $package['formatter'],
-            $package['fallback'],
-            $package['messages']
-        );
-    },
-];
+$di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter'] = $di->lazyCall(
+    [$di->lazyGet('intl_package_factory'), 'newInstance'],
+    $di->lazyRequire("$system/package/Aura.Filter/intl/en_US.php")
+);
 
 /**
  * Rules for the locator
