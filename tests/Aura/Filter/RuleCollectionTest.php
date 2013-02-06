@@ -136,7 +136,16 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         ];
 
         $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
         
+        $actual = $this->filter->getMessages('field');
+        $expect = [
+            'Please use only alphanumeric characters.',
+        ];
+        $this->assertSame($expect, $actual);
+        
+        $expect = [];
+        $actual = $this->filter->getMessages('no-such-field');
         $this->assertSame($expect, $actual);
     }
 

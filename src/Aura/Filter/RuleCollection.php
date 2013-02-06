@@ -395,12 +395,23 @@ class RuleCollection
      * 
      * Returns the array of failure messages.
      * 
+     * @param string $field Return messages just for this field; if empty,
+     * return messages for all fields.
+     * 
      * @return array
      * 
      */
-    public function getMessages()
+    public function getMessages($field = null)
     {
-        return $this->messages;
+        if (! $field) {
+            return $this->messages;
+        }
+        
+        if (isset($this->messages[$field])) {
+            return $this->messages[$field];
+        }
+        
+        return [];
     }
     
     /**
