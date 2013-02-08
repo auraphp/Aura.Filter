@@ -30,8 +30,12 @@ instantiate manually:
 <?php
 use Aura\Filter\RuleCollection as Filter;
 use Aura\Filter\RuleLocator;
+use Aura\Filter\Translator;
 
-$filter = new Filter(new RuleLocator);
+$filter = new Filter(
+    new RuleLocator, 
+    new Translator(require 'path/to/Aura.Filter/intl/en_US.php')
+);
 ```
 
 (Note that if we instantiate manually, we will need to configure the
