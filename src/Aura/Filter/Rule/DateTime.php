@@ -52,22 +52,9 @@ class DateTime extends AbstractRule
     public function validate($format = 'Y-m-d H:i:s')
     {
         $this->setParams(get_defined_vars());
-        
         $value = $this->getValue();
-
-        if ($value instanceof PhpDateTime) {
-            return true;
-        }
-
-        if (! is_scalar($value)) {
-            return false;
-        }
-
-        if (trim($value) === '') {
-            return false;
-        }
-
-        return (bool) date_create($value);
+        $datetime = $this->newDateTime($value);
+        return (bool) $datetime;
     }
 
     /**
@@ -80,22 +67,43 @@ class DateTime extends AbstractRule
     public function sanitize($format = 'Y-m-d H:i:s')
     {
         $this->setParams(get_defined_vars());
-        
         $value = $this->getValue();
-
-        if ($value instanceof PhpDateTime) {
-            $datetime = $value;
-        } elseif (! is_scalar($value)) {
-            return false;
-        } else {
-            $datetime = date_create($value);
-        }
-
+        $datetime = $this->newDateTime($value);
         if (! $datetime) {
             return false;
         }
-
         $this->setValue($datetime->format($format));
         return true;
+    }
+    
+    protected function newDateTime($value)
+    {
+        if ($value instanceof PhpDateTime) {
+            return $value;
+        }
+        
+        if (! is_scalar($value)) {
+            return false;
+        }
+
+        if (trim($value) === '') {
+            return false;
+        }
+
+        $datetime = date_create($value);
+        
+        // generic failure
+        if (! $datetime) {
+            return false;
+        }
+        
+        // invalid dates (like 1979-02-29) show up as warnings.
+        $errors = PhpDateTime::getLastErrors();
+        if ($errors['warnings']) {
+            return false;
+        }
+        
+        // looks OK
+        return $datetime;
     }
 }
