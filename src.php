@@ -11,6 +11,7 @@ require_once __DIR__ . '/src/Aura/Filter/Rule/Any.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Between.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Blank.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Bool.php';
+require_once __DIR__ . '/src/Aura/Filter/Rule/Closure.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/CreditCard.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/DateTime.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Email.php';

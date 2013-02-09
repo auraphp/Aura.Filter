@@ -14,6 +14,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
             'alpha'     => function() { return new Rule\Alpha; },
             'between'   => function() { return new Rule\Between; },
             'blank'     => function() { return new Rule\Blank; },
+            'closure'   => function() { return new Rule\Closure; },
             'int'       => function() { return new Rule\Int; },
             'max'       => function() { return new Rule\Max; },
             'min'       => function() { return new Rule\Min; },
@@ -249,5 +250,52 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
 
         $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
+    }
+    
+    public function testRulesOnVirtualField()
+    {
+        $closure = function () {
+            
+            $check = checkdate(
+                $this->data->dob_m,
+                $this->data->dob_d,
+                $this->data->dob_y
+            );
+            
+            $dob = $this->data->dob_y . '-'
+                 . $this->data->dob_m . '-'
+                 . $this->data->dob_d;
+            
+            if ($check && date_create($dob)) {
+                $this->setValue($dob);
+                return true;
+            }
+            
+            return false;
+        };
+        
+        $this->filter->addSoftRule('dob', Filter::FIX, 'closure', $closure);
+        
+        $data = (object) [
+            'dob_y' => '1979',
+            'dob_m' => '11',
+            'dob_d' => '07',
+            'dob' => null,
+        ];
+        
+        $result = $this->filter->values($data);
+        $this->assertTrue($result);
+        $this->assertSame('1979-11-07', $data->dob);
+        
+        $data = (object) [
+            'dob_y' => '1979',
+            'dob_m' => '02',
+            'dob_d' => '29',
+            'dob' => null,
+        ];
+        
+        $result = $this->filter->values($data);
+        $this->assertFalse($result);
+        $this->assertNull($data->dob);
     }
 }
