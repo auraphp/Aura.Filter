@@ -136,6 +136,25 @@ class RuleCollection
 
     /**
      * 
+     * This is to help when implementing Aura.Input FilterInterface.
+     * 
+     * @param string $field The field for the rule.
+     * 
+     * @param string $message The message when the rule fails.
+     * 
+     * @param \Closure $closure The closure to use for the rule.
+     * 
+     */
+    public function setRule($field, $message, \Closure $closure)
+    {
+        // add a single hard rule for this field with a special method name
+        $this->addHardRule($field, '__closure__', $closure);
+        // add the message for this field
+        $this->useFieldMessage($field, $message);
+    }
+    
+    /**
+     * 
      * Add a rule; keep applying all other rules even if it fails.
      * 
      * @param string $field
@@ -325,12 +344,20 @@ class RuleCollection
                 continue;
             }
 
-            $rule = $this->rule_locator->get($info['name']);
-            $rule->prep($data, $field);
-
+            // apply the rule
             $method = $info['method'];
-            $params = $info['params'];
-            $passed = call_user_func_array([$rule, $method], $params);
+            if ($method == '__closure__') {
+                // from setRule()
+                $rule = null;
+                $closure = $info['name'];
+                $passed = $closure($data->$field);
+            } else {
+                // from add*Rule()
+                $rule = $this->rule_locator->get($info['name']);
+                $rule->prep($data, $field);
+                $params = $info['params'];
+                $passed = call_user_func_array([$rule, $method], $params);
+            }
 
             if (! $passed) {
 
@@ -364,7 +391,7 @@ class RuleCollection
      * @return void
      * 
      */
-    protected function addMessage($field, RuleInterface $rule)
+    protected function addMessage($field, RuleInterface $rule = null)
     {
         // should we use a field-specific message?
         $message = isset($this->field_messages[$field])

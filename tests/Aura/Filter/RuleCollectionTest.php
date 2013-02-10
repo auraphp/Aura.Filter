@@ -298,4 +298,49 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result);
         $this->assertNull($data->dob);
     }
+    
+    public function testSetRule()
+    {
+        // validate
+        $this->filter->setRule('foo', 'Foo should be alpha only', function ($value) {
+            return ctype_alpha($value);
+        });
+        
+        // sanitize
+        $this->filter->setRule('bar', 'Remove non-alpha from bar', function (&$value) {
+            $value = preg_replace('/[^a-z]/i', '!', $value);
+            return true;
+        });
+        
+        // initial data
+        $values = [
+            'foo' => 'foo_value',
+            'bar' => 'bar_value',
+        ];
+        
+        // do the values pass all filters?
+        $passed = $this->filter->values($values);
+        
+        // 'foo' is invalid
+        $this->assertFalse($passed);
+        
+        // get just 'foo' messages
+        $actual = $this->filter->getMessages('foo');
+        $expect = [
+            'Foo should be alpha only',
+        ];
+        $this->assertSame($expect, $actual);
+        
+        // should have changed the values on 'bar'
+        $expect = [
+            'foo' => 'foo_value',
+            'bar' => 'bar!value',
+        ];
+        $this->assertSame($expect, $values);
+        
+        // let's make it valid
+        $data['foo'] = 'foovalue';
+        $passed = $this->filter->values($data);
+        $this->assertTrue($passed);
+    }
 }
