@@ -75,4 +75,53 @@ class Translator implements TranslatorInterface
         // done!
         return $message;
     }
+    
+    /**
+     * 
+     * Add message, a fluent method
+     * 
+     * @param string $key   The message key.
+     * 
+     * @param string $value The message placeholder tokens
+     * 
+     * @return Translator Fluent
+     * 
+     */
+    public function addMessage($key, $value)
+    {
+        if (! isset($this->messages[$key])) {
+            $this->messages[$key] = $value;
+        }
+        return $this;
+    }
+    
+    /**
+     * 
+     * Replace a message if already exists, else add one
+     * 
+     * @param string $key   The message key.
+     * 
+     * @param string $value The message placeholder tokens
+     * 
+     * @return Translator Fluent
+     * 
+     */
+    public function setMessage($key, $value)
+    {
+        $this->messages[$key] = $value;        
+        return $this;
+    }
+    
+    /**
+     * 
+     * Reset all messages. Useful when we need to use only the message Key
+     * 
+     * @return Translator Fluent
+     * 
+     */
+    public function resetMessage()
+    {
+        $this->messages = [];
+        return $this;
+    }
 }
