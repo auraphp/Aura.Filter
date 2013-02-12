@@ -343,4 +343,29 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $passed = $this->filter->values($data);
         $this->assertTrue($passed);
     }
+
+    public function testInstanceScript()
+    {
+        // Get instance
+        $instance = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        // Get the Rule Registry
+        $reqistry = require dirname(dirname(dirname(__DIR__))) . '/scripts/registry.php';
+
+        // Check if the instance is a RuleCollection Object
+        $expect = 'Aura\Filter\RuleCollection';
+        $actual = $instance;
+        $this->assertInstanceOf($expect, $actual);
+
+        // Test if all normal Rules are present
+        foreach ($reqistry as $name => $rule) {
+            $expect = get_class($rule());
+            $actual = $instance->getRuleLocator()->get($name);
+            $this->assertInstanceOf($expect, $actual);
+        }
+
+        // Check if the Any Rule is present
+        $expect = 'Aura\Filter\Rule\Any';
+        $actual = $instance->getRuleLocator()->get('any');
+        $this->assertInstanceOf($expect, $actual);
+    }
 }
