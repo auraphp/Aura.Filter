@@ -30,6 +30,7 @@ $di->params['Aura\Filter\RuleLocator']['registry'] = [
     'between'               =>  $di->lazyNew('Aura\Filter\Rule\Between'),
     'blank'                 =>  $di->lazyNew('Aura\Filter\Rule\Blank'),
     'bool'                  =>  $di->lazyNew('Aura\Filter\Rule\Bool'),
+    'closure'               =>  $di->lazyNew('Aura\Filter\Rule\Closure'),
     'creditCard'            =>  $di->lazyNew('Aura\Filter\Rule\CreditCard'),
     'dateTime'              =>  $di->lazyNew('Aura\Filter\Rule\DateTime'),
     'email'                 =>  $di->lazyNew('Aura\Filter\Rule\Email'),
