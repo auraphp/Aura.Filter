@@ -2,9 +2,8 @@
     "name": "aura/filter",
     "type": "aura-package",
     "description": "The Aura Filter package provider validators and sanitizers for user data.",
-    "keywords": [ "filter", "validate", "sanitize" ],
+    "keywords": [ "filter", "validate", "sanitize", "validator", "validation" ],
     "homepage": "http://auraphp.github.com/Aura.Filter",
-    "version": "1.0.0-dev",
     "license": "BSD-2-Clause",
     "authors": [
         {
