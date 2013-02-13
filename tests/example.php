@@ -1,27 +1,25 @@
 <?php
-use Aura\Filter\Value;
-
-$filter_chain = require_once dirname(__DIR__). '/scripts/instance.php';
+$filter = require_once dirname(__DIR__). '/scripts/instance.php';
 
 // set up the filter chain.
-// $filter_chain->addHardRule($field, $method, $name, $param1, $param2, $paramN);
+// $filter->addHardRule($field, $method, $name, $param1, $param2, $paramN);
 
-$filter_chain->addHardRule('username', Filter::IS, 'alnum');
-$filter_chain->addHardRule('username', Filter::IS, 'strlenBetween', 6, 12);
-$filter_chain->addHardRule('username', Filter::FIX, 'alnum');
+$filter->addHardRule('username', $filter::IS, 'alnum');
+$filter->addHardRule('username', $filter::IS, 'strlenBetween', 6, 12);
+$filter->addHardRule('username', $filter::FIX, 'alnum');
 
-$filter_chain->addHardRule('birthday', Filter::IS, 'dateTime');
-$filter_chain->addHardRule('birthday', Filter::FIX, 'dateTime', 'Y-m-d');
-$filter_chain->addHardRule('birthday', Filter::IS, 'min', '1970-08-08'); // at least 42 on Aug 8
+$filter->addHardRule('birthday', $filter::IS, 'dateTime');
+$filter->addHardRule('birthday', $filter::FIX, 'dateTime', 'Y-m-d');
+$filter->addHardRule('birthday', $filter::IS, 'min', '1970-08-08'); // at least 42 on Aug 8
 
-$filter_chain->addHardRule('nickname', Filter::IS_BLANK_OR, 'string');
-$filter_chain->addHardRule('nickname', Filter::FIX_BLANK_OR, 'string');
+$filter->addHardRule('nickname', $filter::IS_BLANK_OR, 'string');
+$filter->addHardRule('nickname', $filter::FIX_BLANK_OR, 'string');
 
-$filter_chain->addHardRule('accept_terms', Filter::IS, 'bool', true);
-$filter_chain->addHardRule('accept_terms', Filter::FIX, 'bool');
+$filter->addHardRule('accept_terms', $filter::IS, 'bool', true);
+$filter->addHardRule('accept_terms', $filter::FIX, 'bool');
 
-$filter_chain->addHardRule('password_plaintext', Filter::IS, 'strlenMin', 6);
-$filter_chain->addHardRule('password_confirmed', Filter::IS, 'equalToField', 'password_plaintext');
+$filter->addHardRule('password_plaintext', $filter::IS, 'strlenMin', 6);
+$filter->addHardRule('password_confirmed', $filter::IS, 'equalToField', 'password_plaintext');
 
 $data = (object) [
     'username' => 'username',
@@ -30,13 +28,13 @@ $data = (object) [
     'something' => 'Hello World',
     'accept_terms' => true,
     'password_plaintext' => 'passwd',
-    'password_confirmed' => 'passwd'
+    'password_confirmed' => 'passed'
 ];
 
 // execute the chain on a data object or array
-$success = $filter_chain->values($data);
+$success = $filter->values($data);
 if (! $success) {
     // an array of failure messages, with info about the failures
-    $failure = $filter_chain->getMessages();
+    $failure = $filter->getMessages();
     var_export($failure);
 }
