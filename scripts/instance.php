@@ -1,8 +1,15 @@
 <?php
 namespace Aura\Filter;
 require_once dirname(__DIR__) . '/src.php';
-$rulelocator = require __DIR__ . '/rulelocator.php';
+
+$ruleRegistry = require __DIR__ . '/registry.php';
+$ruleRegistry['any'] = function() use ($ruleRegistry) {
+    $rule = new \Aura\Filter\Rule\Any;
+    $rule->setRuleLocator(new \Aura\Filter\RuleLocator($ruleRegistry));
+    return $rule;
+};
+
 return new RuleCollection(
-    $rulelocator,
+    new RuleLocator($ruleRegistry),
     new Translator(require dirname(__DIR__) . '/intl/en_US.php')
 );
