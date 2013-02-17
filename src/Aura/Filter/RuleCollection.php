@@ -276,6 +276,16 @@ class RuleCollection
      */
     protected function addRule($field, $method, $name, $params, $type)
     {
+        if ($name == 'all') {
+            $list = array_shift($params);
+            foreach ($list as $args) {
+                // take the name off the top of the arguments
+                $rule = array_shift($args);
+                $this->addRule($field, $method, $rule, $args, $type);
+            }
+            // We don't need to add the all rule
+            return;
+        }
         $this->rules[] = [
             'field'     => $field,
             'method'    => $method,

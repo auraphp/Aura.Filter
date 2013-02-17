@@ -323,11 +323,28 @@ not found returns false. The value cannot be sanitized. Usage:
         $filter->addSoftRule('field', $filter::IS, 'word');
 
 - `any`: Validate the value passes at-least one of the rules. These rules
-are the ones
+are the ones added in rule locator.
         
-        $filter->addSoftRule('username', $filter::IS, 'any', [
+        $filter->addSoftRule('field', $filter::IS, 'any', [
                 ['alnum'],
                 ['email'],
+                // more rules
+            ]
+        );
+        
+- `all`: Validate the value against a set of rules. These rules
+are should be added in rule locator.
+        
+        $filter->addSoftRule('field', $filter::IS, 'all', [
+                // rules
+            ]
+        );
+        
+The above example can be changed to 
+                
+        $filter->addSoftRule('username', $filter::IS, 'all', [
+                ['alnum'],
+                ['strlenBetween', 6, 12],
             ]
         );
         
