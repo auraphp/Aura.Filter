@@ -166,7 +166,7 @@ Available Rules
 
 - `alpha`: Validate the value as alphabetic only. Sanitize to leave only
   alphabetic characters. Usage:
-        
+  
         $filter->addSoftRule('field', $filter::IS, 'alpha');
 
 - `between`: Validate the value as being within or equal to a minimum and
@@ -322,6 +322,66 @@ not found returns false. The value cannot be sanitized. Usage:
         
         $filter->addSoftRule('field', $filter::IS, 'word');
 
+- `any`: Validate the value passes at-least one of the rules. These rules
+are the ones
+        
+        $filter->addSoftRule('username', $filter::IS, 'any', [
+                ['alnum'],
+                ['email'],
+            ]
+        );
+        
+Custom Messages
+===============
+
+By default when a rule fails, the messages you will be getting are from the 
+`intl/en_US.php`. But you can also provide a single custom message for 
+all the failures.
+
+```php
+$filter->useFieldMessage('field', 'Custom Message');
+```
+
+Example:
+
+```php
+$filter->addSoftRule('username', $filter::IS, 'alnum');
+$filter->addSoftRule('username', $filter::IS, 'strlenBetween', 6, 12);
+$data = (object) [
+    'username' => ' sds',
+];
+
+$filter->useFieldMessage('username', 'User name already exists');
+// filter the object and see if there were failures
+$success = $filter->values($data);
+if (! $success) {
+    $messages = $filter->getMessages();
+    var_export($messages);
+}
+```
+
+As you have used `useFieldMessage` you will see 
+
+```php
+array (
+  'username' => 
+  array (
+    0 => 'User name already exists',
+  ),
+)
+```
+
+instead of 
+
+```php
+array (
+  'username' => 
+  array (
+    0 => 'Please use only alphanumeric characters.',
+    1 => 'Please use between 6 and 12 characters.',
+  ),
+)
+```
 
 Applying Rules to Individual Values
 ===================================
