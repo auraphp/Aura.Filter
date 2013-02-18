@@ -60,8 +60,7 @@ class AllTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
-            [""],
-            [' '],
+            ['1234abcd'],
             ["Seven 8 nine"],
             ["non:alpha-numeric's"],
             [[]],
