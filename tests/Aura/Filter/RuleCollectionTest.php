@@ -368,4 +368,21 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $actual = $instance->getRuleLocator()->get('any');
         $this->assertInstanceOf($expect, $actual);
     }
+    
+    public function testAllRules()
+    {
+        $this->filter->addHardRule('field', Filter::IS, 'all', 
+            [
+                ['alnum'],
+                ['strlenMin', 6]
+            ]
+        );
+        $data = (object) ['field' => 'as foo'];
+        $result = $this->filter->values($data);
+        $this->assertFalse($result);
+        
+        $data = (object) ['field' => 'abcdef'];
+        $result = $this->filter->values($data);
+        $this->assertTrue($result);
+    }
 }
