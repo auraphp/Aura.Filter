@@ -7,13 +7,6 @@ class ClosureTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_CLOSURE';
     
-    protected $list = [
-        // alphanumeric
-        ['alnum'],
-        // only @ signs
-        ['regex', '/^[@]+$/']
-    ];
-    
     protected function setUp()
     {
         parent::setUp();
