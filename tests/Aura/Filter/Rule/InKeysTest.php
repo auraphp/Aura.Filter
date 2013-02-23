@@ -54,6 +54,10 @@ class InKeysTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [null],
+            [false],
+            [''],
+            [1.2],
             [3],
             [4],
             ['a'],
