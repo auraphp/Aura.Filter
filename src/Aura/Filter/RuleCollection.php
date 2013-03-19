@@ -136,7 +136,7 @@ class RuleCollection
 
     /**
      * 
-     * This is to help when implementing Aura.Input FilterInterface.
+     * Sets a single rule, encapsulated by a closure, for the rule.
      * 
      * @param string $field The field for the rule.
      * 
