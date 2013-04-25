@@ -368,4 +368,14 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $actual = $instance->getRuleLocator()->get('any');
         $this->assertInstanceOf($expect, $actual);
     }
+    
+    public function testInputFieldsetObject()
+    {
+        $fieldset = new \Aura\Filter\Mock\Fieldset();
+        $this->filter->addHardRule('name', Filter::IS, 'strlenMin', 6);
+        $this->filter->addHardRule('password', Filter::IS, 'alnum');
+        $passed = $this->filter->values($fieldset);        
+        $this->assertSame(array(), $this->filter->getMessages());
+        $this->assertTrue(true);
+    }
 }
