@@ -2,14 +2,22 @@
 namespace Aura\Filter;
 
 use Aura\Filter\RuleCollection as Filter;
+use Aura\Filter\Mock\ContactForm;
+use Aura\Filter\Mock\Filter as InputFilter;
+use Aura\Input\Form;
+use Aura\Input\Builder;
 
 class RuleCollectionTest extends \PHPUnit_Framework_TestCase
 {
     protected $filter;
     
+    protected $rule_locator;
+    
+    protected $translator;
+    
     protected function setUp()
     {
-        $rule_locator = new RuleLocator([
+        $this->rule_locator = new RuleLocator([
             'alnum'     => function() { return new Rule\Alnum; },
             'alpha'     => function() { return new Rule\Alpha; },
             'between'   => function() { return new Rule\Between; },
@@ -28,9 +36,9 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
               . DIRECTORY_SEPARATOR . 'intl'
               . DIRECTORY_SEPARATOR . 'en_US.php';
         
-        $translator = new Translator($intl);
+        $this->translator = new Translator($intl);
         
-        $this->filter = new Filter($rule_locator, $translator);
+        $this->filter = new Filter($this->rule_locator, $this->translator);        
     }
     
     public function testValue()
@@ -367,5 +375,18 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $expect = 'Aura\Filter\Rule\Any';
         $actual = $instance->getRuleLocator()->get('any');
         $this->assertInstanceOf($expect, $actual);
+    }
+    
+    public function testFieldsetFilter()
+    {
+        $inputFilter = new InputFilter($this->rule_locator, $this->translator);
+        $form = new ContactForm(new Builder, $inputFilter);
+        $data = array(
+            'name' => 'Hari',
+            'password' => 'abcd123',
+        );
+        $form->fill($data);
+        $this->assertTrue($form->filter());
+        $this->assertSame(array(), $form->getMessages());
     }
 }

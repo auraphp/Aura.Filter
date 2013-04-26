@@ -2,5 +2,6 @@ language: php
 php:
   - 5.4
 before_script:
+  - composer install --dev
   - cd tests
 script: phpunit
