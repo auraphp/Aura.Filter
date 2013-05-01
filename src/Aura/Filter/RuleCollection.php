@@ -350,7 +350,7 @@ class RuleCollection
                 // from setRule()
                 $rule = null;
                 $closure = $info['name'];
-                $passed = $closure($data->$field);
+                $passed = $closure($data->$field, $data);
             } else {
                 // from add*Rule()
                 $rule = $this->rule_locator->get($info['name']);
