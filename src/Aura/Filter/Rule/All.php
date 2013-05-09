@@ -53,7 +53,7 @@ class All extends AbstractRule
      * Sets the rule locator; this should be an new instance, not a shared
      * service.
      * 
-     * @param Aura\Filter\RuleLocator $rule_locator The rule locator.
+     * @param RuleLocator $rule_locator The rule locator.
      * 
      * @return void
      * 
