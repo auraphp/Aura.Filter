@@ -52,8 +52,23 @@ abstract class AbstractRule implements RuleInterface
         'failure_fix_blank_or'  => '',
     ];
 
+    /**
+     * 
+     * The message key to use.
+     * 
+     * @var string
+     * 
+     */
     protected $message_key = 'failure_is';
     
+    /**
+     * 
+     * Params passed into the filter for validate/sanitize; generally used by
+     * the message.
+     * 
+     * @var array
+     * 
+     */
     protected $params = [];
     
     /**
@@ -86,16 +101,41 @@ abstract class AbstractRule implements RuleInterface
         return $this->message_map[$this->message_key];
     }
 
+    /**
+     * 
+     * Gets the params passed into the filter.
+     * 
+     * @return array
+     * 
+     */
     public function getParams()
     {
         return $this->params;
     }
     
+    /**
+     * 
+     * Sets the params passed into the filter.
+     * 
+     * @param array $params The params passed into the filter.
+     * 
+     * @return void
+     * 
+     */
     protected function setParams(array $params)
     {
         $this->params = $params;
     }
     
+    /**
+     * 
+     * Sets the message key to be used.
+     * 
+     * @param string $message_key The message key to be used.
+     * 
+     * @return void
+     * 
+     */
     protected function setMessageKey($message_key)
     {
         $this->message_key = $message_key;

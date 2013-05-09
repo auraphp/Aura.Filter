@@ -42,6 +42,13 @@ interface RuleInterface
      */
     public function getMessage();
 
+    /**
+     * 
+     * Gets the params passed into the filter.
+     * 
+     * @return array
+     * 
+     */
     public function getParams();
     
     /**

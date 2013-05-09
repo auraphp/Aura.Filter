@@ -15,7 +15,7 @@ use \Closure as PhpClosure;
 
 /**
  * 
- * Rule to apply a callable user function to the data.
+ * Rule to apply a closure to the data.
  * 
  * @package Aura.Filter
  * 
@@ -43,6 +43,8 @@ class Closure extends AbstractRule
      * 
      * Validates the value against a closure.
      * 
+     * @param \Closure $closure A PHP closure.
+     * 
      * @return bool True if valid, false if not.
      * 
      */
@@ -55,6 +57,8 @@ class Closure extends AbstractRule
     /**
      * 
      * Sanitizes a value using a closure.
+     * 
+     * @param \Closure $closure A PHP closure.
      * 
      * @return bool True if the value was fixed, false if not.
      * 

@@ -14,7 +14,8 @@ use Aura\Filter\AbstractRule;
 
 /**
  * 
- * Rule to call a method on the value object.
+ * Rule to call a method on the value object; the method should return a
+ * boolean to indicate if the filter passed or failed.
  * 
  * @package Aura.Filter
  * 
@@ -40,7 +41,10 @@ class Method extends AbstractRule
 
     /**
      * 
-     * Calls a method on the value object to validate itself.
+     * Calls a method on the value object to validate itself; the method 
+     * should return a boolean to indicate if the filter passed or failed.
+     * 
+     * @param string $method The method to call on the value object.
      * 
      * @return bool True if valid, false if not.
      * 
@@ -53,7 +57,8 @@ class Method extends AbstractRule
 
     /**
      * 
-     * Calls a method on the value object to sanitize itself.
+     * Calls a method on the value object to sanitize itself; the method 
+     * should return a boolean to indicate if the filter passed or failed.
      * 
      * @return bool True if the value was fixed, false if not.
      * 
@@ -67,6 +72,9 @@ class Method extends AbstractRule
     /**
      * 
      * Calls a method on the value object.
+     * 
+     * @param array $args The arguments to pass to the method call (the first
+     * is the method name itself).
      * 
      * @return mixed
      * 
