@@ -26,11 +26,18 @@ class Blank extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_BLANK';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_BLANK',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_BLANK',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_BLANK',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_BLANK',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_BLANK',
+    ];
 
     /**
      * 
@@ -44,7 +51,7 @@ class Blank extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         return $this->isBlank();
     }
@@ -55,7 +62,7 @@ class Blank extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize()
+    public function sanitize()
     {
         $this->setValue(null);
         return true;

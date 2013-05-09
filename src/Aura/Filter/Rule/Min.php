@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Min extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_MIN';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_MIN',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_MIN',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_MIN',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_MIN',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_MIN',
+    ];
 
     /**
      * 
@@ -40,8 +47,9 @@ class Min extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min)
+    public function validate($min)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -57,8 +65,9 @@ class Min extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($min)
+    public function sanitize($min)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

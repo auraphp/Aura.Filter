@@ -25,11 +25,18 @@ class Between extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_BETWEEN';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_BETWEEN',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_BETWEEN',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_BETWEEN',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_BETWEEN',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_BETWEEN',
+    ];
 
     /**
      * 
@@ -42,12 +49,16 @@ class Between extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min, $max)
+    public function validate($min, $max)
     {
+        $this->setParams(get_defined_vars());
+        
         $value = $this->getValue();
+        
         if (! is_scalar($value)) {
             return false;
         }
+        
         return ($value >= $min && $value <= $max);
     }
 
@@ -63,17 +74,22 @@ class Between extends AbstractRule
      * @return bool
      * 
      */
-    protected function sanitize($min, $max)
+    public function sanitize($min, $max)
     {
+        $this->setParams(get_defined_vars());
+        
         $value = $this->getValue();
+        
         if (! is_scalar($value)) {
             return false;
         }
+        
         if ($value < $min) {
             $this->setValue($min);
         } elseif ($value > $max) {
             $this->setValue($max);
         }
+        
         return true;
     }
 }

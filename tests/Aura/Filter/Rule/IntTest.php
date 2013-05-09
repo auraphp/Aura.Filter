@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class IntTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_INT';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_INT';
     
     public function providerIs()
     {

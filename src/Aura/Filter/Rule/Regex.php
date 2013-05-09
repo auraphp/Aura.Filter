@@ -14,7 +14,8 @@ use Aura\Filter\AbstractRule;
 
 /**
  * 
- * Sanitizes a value to a string using preg_replace().
+ * Validates a value using preg_match(), and sanitizes a value to a string
+ * using preg_replace().
  * 
  * @package Aura.Filter
  * 
@@ -24,27 +25,35 @@ use Aura\Filter\AbstractRule;
 class Regex extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_REGEX';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_REGEX',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_REGEX',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_REGEX',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_REGEX',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_REGEX',
+    ];
 
     /**
      * 
      * Validates the value against a regular expression.
      * 
      * Uses [[php::preg_match() | ]] to compare the value against the given
-     * regular epxression.
+     * regular expression.
      * 
      * @param string $expr The regular expression to validate against.
      * 
      * @return bool True if the value matches the expression, false if not.
      * 
      */
-    protected function validate($expr)
+    public function validate($expr)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -63,8 +72,9 @@ class Regex extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize($expr, $replace)
+    public function sanitize($expr, $replace)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

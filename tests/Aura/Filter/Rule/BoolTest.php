@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class BoolTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_BOOL';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_BOOL';
     
     public function providerIs()
     {

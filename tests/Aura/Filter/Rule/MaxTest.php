@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class MaxTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_MAX';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_MAX';
     
     protected $max = 3;
     

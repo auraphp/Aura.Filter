@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter;
 
-use StdClass;
-
 /**
  * 
  * Abstract Rule
@@ -41,25 +39,50 @@ abstract class AbstractRule implements RuleInterface
 
     /**
      * 
-     * The message to use validate or sanitize fails.
+     * Messages to use when validate or sanitize fails.
      *
+     * @var array
+     * 
+     */
+    protected $message_map = [
+        'failure_is'            => '',
+        'failure_is_not'        => '',
+        'failure_is_blank_or'   => '',
+        'failure_fix'           => '',
+        'failure_fix_blank_or'  => '',
+    ];
+
+    /**
+     * 
+     * The message key to use.
+     * 
      * @var string
      * 
      */
-    protected $message;
-
+    protected $message_key = 'failure_is';
+    
+    /**
+     * 
+     * Params passed into the filter for validate/sanitize; generally used by
+     * the message.
+     * 
+     * @var array
+     * 
+     */
+    protected $params = [];
+    
     /**
      * 
      * Prepare the rule for reuse.
      * 
-     * @param StdClass $data The full set of data to be filtered.
+     * @param object $data The full set of data to be filtered.
      * 
      * @param string $field The field to be filtered within the data.
      * 
      * @return void
      * 
      */
-    public function prep(StdClass $data, $field)
+    public function prep($data, $field)
     {
         $this->data = $data;
         $this->field = $field;
@@ -75,9 +98,49 @@ abstract class AbstractRule implements RuleInterface
      */
     public function getMessage()
     {
-        return $this->message;
+        return $this->message_map[$this->message_key];
     }
 
+    /**
+     * 
+     * Gets the params passed into the filter.
+     * 
+     * @return array
+     * 
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
+    
+    /**
+     * 
+     * Sets the params passed into the filter.
+     * 
+     * @param array $params The params passed into the filter.
+     * 
+     * @return void
+     * 
+     */
+    protected function setParams(array $params)
+    {
+        $this->params = $params;
+    }
+    
+    /**
+     * 
+     * Sets the message key to be used.
+     * 
+     * @param string $message_key The message key to be used.
+     * 
+     * @return void
+     * 
+     */
+    protected function setMessageKey($message_key)
+    {
+        $this->message_key = $message_key;
+    }
+    
     /**
      * 
      * Get the value of the field being filtered, or null if the field is
@@ -120,6 +183,7 @@ abstract class AbstractRule implements RuleInterface
      */
     public function is()
     {
+        $this->setMessageKey('failure_is');
         return call_user_func_array([$this, 'validate'], func_get_args());
     }
 
@@ -132,6 +196,7 @@ abstract class AbstractRule implements RuleInterface
      */
     public function isNot()
     {
+        $this->setMessageKey('failure_is_not');
         return ! call_user_func_array([$this, 'validate'], func_get_args());
     }
 
@@ -144,6 +209,7 @@ abstract class AbstractRule implements RuleInterface
      */
     public function isBlankOr()
     {
+        $this->setMessageKey('failure_is_blank_or');
         if ($this->isBlank()) {
             return true;
         } else {
@@ -160,6 +226,7 @@ abstract class AbstractRule implements RuleInterface
      */
     public function fix()
     {
+        $this->setMessageKey('failure_fix');
         return call_user_func_array([$this, 'sanitize'], func_get_args());
     }
 
@@ -174,6 +241,8 @@ abstract class AbstractRule implements RuleInterface
      */
     public function fixBlankOr()
     {
+        $this->setMessageKey('failure_fix_blank_or');
+        
         if ($this->isBlank()) {
             $this->setValue(null);
             return true;

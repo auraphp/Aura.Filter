@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class UploadTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_UPLOAD';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_UPLOAD';
     
     protected $good_upload = [
         'error'     => UPLOAD_ERR_OK,

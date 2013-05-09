@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class AlphaTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_ALPHA';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_ALPHA';
     
     public function providerIs()
     {

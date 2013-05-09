@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Ipv4 extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_IPV4';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_IPV4',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_IPV4',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_IPV4',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_IPV4',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_IPV4',
+    ];
 
     /**
      * 
@@ -38,7 +45,7 @@ class Ipv4 extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
 
@@ -60,7 +67,7 @@ class Ipv4 extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false; // can't fix IP addresses
     }

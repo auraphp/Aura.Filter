@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter;
 
-use StdClass;
-
 /**
  * 
  * Rule Interface
@@ -25,14 +23,14 @@ interface RuleInterface
      * 
      * Prepare the rule for reuse.
      * 
-     * @param StdClass $data The full set of data to be filtered.
+     * @param object $data The full set of data to be filtered.
      * 
      * @param string $field The field to be filtered within the data.
      * 
      * @return void
      * 
      */
-    public function prep(StdClass $data, $field);
+    public function prep($data, $field);
 
     /**
      * 
@@ -44,6 +42,15 @@ interface RuleInterface
      */
     public function getMessage();
 
+    /**
+     * 
+     * Gets the params passed into the filter.
+     * 
+     * @return array
+     * 
+     */
+    public function getParams();
+    
     /**
      * 
      * Get the value of the field being filtered, or null if the field is

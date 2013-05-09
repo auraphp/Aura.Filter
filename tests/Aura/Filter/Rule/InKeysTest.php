@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class InKeysTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_IN_KEYS';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_IN_KEYS';
     
     protected $opts = [
         0      => 'val0',
@@ -54,6 +54,10 @@ class InKeysTest extends AbstractRuleTest
     public function providerIsNot()
     {
         return [
+            [null],
+            [false],
+            [''],
+            [1.2],
             [3],
             [4],
             ['a'],

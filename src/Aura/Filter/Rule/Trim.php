@@ -24,18 +24,26 @@ use Aura\Filter\AbstractRule;
 class Trim extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_TRIM';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_TRIM',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_TRIM',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_TRIM',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_TRIM',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_TRIM',
+    ];
 
     /**
      * 
-     * same as PHP trim()
+     * Same as PHP trim().
      *
      * @var string
+     * 
      */
     protected $chars = " \t\n\r\0\x0B";
 
@@ -48,8 +56,9 @@ class Trim extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($chars = null)
+    public function validate($chars = null)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -71,6 +80,7 @@ class Trim extends AbstractRule
      */
     public function sanitize($chars = null)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

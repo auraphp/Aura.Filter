@@ -25,11 +25,18 @@ class Max extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_MAX';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_MAX',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_MAX',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_MAX',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_MAX',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_MAX',
+    ];
 
     /**
      * 
@@ -40,8 +47,9 @@ class Max extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($max)
+    public function validate($max)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -57,8 +65,9 @@ class Max extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($max)
+    public function sanitize($max)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

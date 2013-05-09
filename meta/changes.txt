@@ -1,1 +1,42 @@
-Initial release.
+There are some BC breaks in this release, but it's a "Google" beta, so ...
+
+- [NEW] Rule\All: the value must pass all of the specified sub-rules.
+
+- [NEW] Rule\Any: the value must pass any one of a series of sub-rules.
+
+- [NEW] Rule\Closure: pass a closure to filter the value.
+
+- [NEW] Rule\Locale: the value must be a locale code.
+
+- [NEW] Rule\Method: call a method on the value object being filtered so that
+  it may filter itself.
+
+- [CHG] Various typo fixes from pborrelli.
+
+- [CHG] In all rules, make validate()/sanitize() public so they can be called
+  directly from custom rules.
+  
+- [NEW] Add translation facility and internationalization messages.
+
+- [REF] Remove StdClass typehints (objects don't descend from StdClass)
+
+- [BRK] Remove property $message; replace with $message_map and $message_key.
+
+- [ADD] Property $params to retain params passed to validate() and sanitize().
+
+- [ADD] Methods setParams(), setMessageKey(), and getParams().
+
+- [CHG] Method is(), isNot(), et. al. set the appropriate message key.
+
+- [ADD] Method RuleCollection::useFieldMessage() to specify a single message
+  to be used when a field fials one or more of its filter rules
+
+- [BRK] Registry entries *must* be wrapped in a callable from now on
+
+- [FIX] In Rule\DateTime, improve checking for valid dates
+
+- [ADD] Method RuleCollection::setRule() so we can implement Aura.Input FilterInterface
+
+- [CHG] For standalone scripts/instance.php usage, moved all rules to a rule
+  registry located in scripts/registry.php
+

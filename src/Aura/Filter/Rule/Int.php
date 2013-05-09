@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Int extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_INT';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_INT',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_INT',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_INT',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_INT',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_INT',
+    ];
 
     /**
      * 
@@ -38,7 +45,7 @@ class Int extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
 
@@ -61,7 +68,7 @@ class Int extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         $value = $this->getValue();
 

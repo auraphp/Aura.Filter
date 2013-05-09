@@ -25,11 +25,18 @@ class StrlenBetween extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_STRLEN_BETWEEN';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRLEN_BETWEEN',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_STRLEN_BETWEEN',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_BETWEEN',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_STRLEN_BETWEEN',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_STRLEN_BETWEEN',
+    ];
 
     /**
      * 
@@ -42,8 +49,9 @@ class StrlenBetween extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($min, $max)
+    public function validate($min, $max)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;
@@ -66,8 +74,9 @@ class StrlenBetween extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
         if (! is_scalar($value)) {
             return false;

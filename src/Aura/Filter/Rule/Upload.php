@@ -12,8 +12,6 @@ namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
-use StdClass;
-
 /**
  * 
  * Sanitizes a file-upload information array.
@@ -27,42 +25,28 @@ class Upload extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
-     */
-    protected $message = 'FILTER_UPLOAD';
-
-    /**
-     * 
-     * Upload error codes matched with locale string keys.
-     * 
      * @var array
      * 
      */
-    protected $error_message = [
-        UPLOAD_ERR_INI_SIZE   => 'FILTER_UPLOAD_ERR_INI_SIZE',
-        UPLOAD_ERR_FORM_SIZE  => 'FILTER_UPLOAD_ERR_FORM_SIZE',
-        UPLOAD_ERR_PARTIAL    => 'FILTER_UPLOAD_ERR_PARTIAL',
-        UPLOAD_ERR_NO_FILE    => 'FILTER_UPLOAD_ERR_NO_FILE',
-        UPLOAD_ERR_NO_TMP_DIR => 'FILTER_UPLOAD_ERR_NO_TMP_DIR',
-        UPLOAD_ERR_CANT_WRITE => 'FILTER_UPLOAD_ERR_CANT_WRITE',
-        UPLOAD_ERR_EXTENSION  => 'FILTER_UPLOAD_ERR_EXTENSION', // **php** extension
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_UPLOAD',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_UPLOAD',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_UPLOAD',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_UPLOAD',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_UPLOAD',
+        UPLOAD_ERR_INI_SIZE     => 'FILTER_RULE_ERR_UPLOAD_INI_SIZE',
+        UPLOAD_ERR_FORM_SIZE    => 'FILTER_RULE_ERR_UPLOAD_FORM_SIZE',
+        UPLOAD_ERR_PARTIAL      => 'FILTER_RULE_ERR_UPLOAD_PARTIAL',
+        UPLOAD_ERR_NO_FILE      => 'FILTER_RULE_ERR_UPLOAD_NO_FILE',
+        UPLOAD_ERR_NO_TMP_DIR   => 'FILTER_RULE_ERR_UPLOAD_NO_TMP_DIR',
+        UPLOAD_ERR_CANT_WRITE   => 'FILTER_RULE_ERR_UPLOAD_CANT_WRITE',
+        UPLOAD_ERR_EXTENSION    => 'FILTER_RULE_ERR_UPLOAD_EXTENSION', // **php** extension
+        'err_unknown'           => 'FILTER_RULE_ERR_UPLOAD_UNKNOWN',
+        'err_is_uploaded_file'  => 'FILTER_RULE_ERR_UPLOAD_IS_UPLOADED_FILE',
+        'err_array_keys'        => 'FILTER_RULE_ERR_UPLOAD_ARRAY_KEYS',
     ];
-
-    /**
-     * 
-     * prepare the rule for reuse
-     * 
-     * @param StdClass $data
-     * 
-     * @param string $field
-     */
-    public function prep(StdClass $data, $field)
-    {
-        parent::prep($data, $field);
-        $this->message = 'FILTER_UPLOAD';
-    }
 
     /**
      * 
@@ -75,7 +59,7 @@ class Upload extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
 
@@ -85,25 +69,20 @@ class Upload extends AbstractRule
         }
 
         // was the upload explicitly ok?
-        if ($value['error'] != UPLOAD_ERR_OK) {
-
-            // not explicitly ok, so find what the error was
-            foreach ($this->error_message as $error => $message) {
-                if ($value['error'] == $error) {
-                    $this->message = $message;
-                    return false;
-                }
+        $err = $value['error'];
+        if ($err != UPLOAD_ERR_OK) {
+            if (isset($this->message_map[$err])) {
+                $this->setMessageKey($err);
+            } else {
+                $this->setMessageKey('err_unknown');
             }
-
-            // some other error
-            $this->message = 'FILTER_UPLOAD_ERR_UNKNOWN';
             return false;
         }
 
         // is it actually an uploaded file?
         if (! $this->isUploadedFile($value['tmp_name'])) {
             // nefarious happenings are afoot.
-            $this->message = 'FILTER_UPLOAD_ERR_IS_UPLOADED_FILE';
+            $this->setMessageKey('err_is_uploaded_file');
             return false;
         }
 
@@ -119,7 +98,7 @@ class Upload extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         $value = $this->getValue();
 
@@ -166,7 +145,7 @@ class Upload extends AbstractRule
 
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
-            $this->message = 'FILTER_UPLOAD_ERR_ARRAY_KEYS';
+            $this->setMessageKey('err_array_keys');
             return false;
         }
 

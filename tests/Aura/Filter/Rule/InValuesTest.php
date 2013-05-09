@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class InValuesTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_IN_VALUES';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_IN_VALUES';
     
     protected $opts = [
         0      => 'val0',

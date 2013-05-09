@@ -25,11 +25,18 @@ class Alnum extends AbstractRule
 {
     /**
      * 
-     * Error message
+     * Messages to use when validate or sanitize fails.
      *
-     * @var string
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_ALNUM';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_ALNUM',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_ALNUM',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_ALNUM',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_ALNUM',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_ALNUM',
+    ];
 
     /**
      * 
@@ -38,7 +45,7 @@ class Alnum extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
         if (! is_scalar($value)) {
@@ -54,7 +61,7 @@ class Alnum extends AbstractRule
      * @return bool True if the value was fixed, false if not.
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         $this->setValue(preg_replace('/[^a-z0-9]/i', '', $this->getValue()));
         return true;

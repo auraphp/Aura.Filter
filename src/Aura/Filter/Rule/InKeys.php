@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class InKeys extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_IN_KEYS';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_IN_KEYS',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_IN_KEYS',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_IN_KEYS',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_IN_KEYS',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_IN_KEYS',
+    ];
 
     /**
      * 
@@ -44,18 +51,27 @@ class InKeys extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate($array)
+    public function validate(array $array)
     {
-        return array_key_exists($this->getValue(), (array) $array);
+        $this->setParams(['keys' => $array]);
+        $value = $this->getValue();
+        if (! is_string($value) && ! is_int($value)) {
+            // array_key_exists errors on non-string non-int keys.
+            return false;
+        }
+        // using array_keys() converts string numeric keys to integers, which
+        // is *not* the behavior we want.
+        return array_key_exists($this->getValue(), $array);
     }
 
     /**
      * 
-     * cannot fix the value
+     * Cannot fix the value.
      * 
      * @return boolean
+     * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

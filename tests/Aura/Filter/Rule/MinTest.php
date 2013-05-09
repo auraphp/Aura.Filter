@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class MinTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_MIN';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_MIN';
     
     protected $min = 4;
     

@@ -14,7 +14,7 @@ use Aura\Filter\AbstractRule;
 
 /**
  * 
- * Rule for alphanumeric characters.
+ * Validates the value as a credit card number.
  * 
  * @package Aura.Filter
  * 
@@ -24,21 +24,28 @@ use Aura\Filter\AbstractRule;
 class CreditCard extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_CREDIT_CARD';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_CREDIT_CARD',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_CREDIT_CARD',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_CREDIT_CARD',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_CREDIT_CARD',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_CREDIT_CARD',
+    ];
 
     /**
      * 
-     * Validates that the value is only letters (upper/lower case) and digits.
+     * Validates the value as a credit card number.
      * 
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         // get the value; remove spaces, dashes, and dots
         $value = str_replace([' ', '-', '.'], '', (string) $this->getValue());
@@ -70,7 +77,7 @@ class CreditCard extends AbstractRule
      * @return false
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         return false;
     }

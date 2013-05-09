@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class BetweenTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_BETWEEN';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_BETWEEN';
     
     protected $min = 4;
     

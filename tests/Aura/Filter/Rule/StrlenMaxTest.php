@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class StrlenMaxTest extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_STRLEN_MAX';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRLEN_MAX';
     
     protected $max = 3;
     

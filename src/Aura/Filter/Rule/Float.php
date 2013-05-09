@@ -24,12 +24,19 @@ use Aura\Filter\AbstractRule;
 class Float extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
+     * 
      */
-    protected $message = 'FILTER_FLOAT';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_FLOAT',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_FLOAT',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_FLOAT',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_FLOAT',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_FLOAT',
+    ];
 
     /**
      * 
@@ -38,7 +45,7 @@ class Float extends AbstractRule
      * @return bool True if valid, false if not.
      * 
      */
-    protected function validate()
+    public function validate()
     {
         $value = $this->getValue();
 
@@ -63,7 +70,7 @@ class Float extends AbstractRule
      * @todo Extract scientific notation from weird strings?
      * 
      */
-    protected function sanitize()
+    public function sanitize()
     {
         $value = $this->getValue();
 

@@ -5,7 +5,7 @@ use Aura\Filter\AbstractRuleTest;
 
 class Ipv4Test extends AbstractRuleTest
 {
-    protected $expect_message = 'FILTER_IPV4';
+    protected $expect_message = 'FILTER_RULE_FAILURE_IS_IPV4';
     
     public function providerIs()
     {

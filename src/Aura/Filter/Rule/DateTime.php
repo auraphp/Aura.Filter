@@ -11,7 +11,6 @@
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
-
 use DateTime as PhpDateTime;
 
 /**
@@ -26,13 +25,19 @@ use DateTime as PhpDateTime;
 class DateTime extends AbstractRule
 {
     /**
-     *
-     * Error message
      * 
-     * @var string 
+     * Messages to use when validate or sanitize fails.
+     *
+     * @var array
      * 
      */
-    protected $message = 'FILTER_DATETIME';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_DATE_TIME',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_DATE_TIME',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_DATE_TIME',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_DATE_TIME',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_DATE_TIME',
+    ];
 
     /**
      * 
@@ -43,23 +48,12 @@ class DateTime extends AbstractRule
      * @return boolean
      * 
      */
-    protected function validate($format = 'Y-m-d H:i:s')
+    public function validate($format = 'Y-m-d H:i:s')
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
-
-        if ($value instanceof PhpDateTime) {
-            return true;
-        }
-
-        if (! is_scalar($value)) {
-            return false;
-        }
-
-        if (trim($value) === '') {
-            return false;
-        }
-
-        return (bool) date_create($value);
+        $datetime = $this->newDateTime($value);
+        return (bool) $datetime;
     }
 
     /**
@@ -69,23 +63,57 @@ class DateTime extends AbstractRule
      * 
      * @return boolean
      */
-    protected function sanitize($format = 'Y-m-d H:i:s')
+    public function sanitize($format = 'Y-m-d H:i:s')
     {
+        $this->setParams(get_defined_vars());
         $value = $this->getValue();
-
-        if ($value instanceof PhpDateTime) {
-            $datetime = $value;
-        } elseif (! is_scalar($value)) {
-            return false;
-        } else {
-            $datetime = date_create($value);
-        }
-
+        $datetime = $this->newDateTime($value);
         if (! $datetime) {
             return false;
         }
-
         $this->setValue($datetime->format($format));
         return true;
+    }
+    
+    /**
+     * 
+     * Returns a new DateTime object.
+     * 
+     * @param mixed $value The incomine date/time value.
+     * 
+     * @return mixed If the value is alerady a DateTime then it is returned
+     * as-is; if the value is invalid as a date/time then `false` is returned;
+     * otherwise, a new DateTime is constructed from the value and returned.
+     * 
+     */
+    protected function newDateTime($value)
+    {
+        if ($value instanceof PhpDateTime) {
+            return $value;
+        }
+        
+        if (! is_scalar($value)) {
+            return false;
+        }
+
+        if (trim($value) === '') {
+            return false;
+        }
+
+        $datetime = date_create($value);
+        
+        // generic failure
+        if (! $datetime) {
+            return false;
+        }
+        
+        // invalid dates (like 1979-02-29) show up as warnings.
+        $errors = PhpDateTime::getLastErrors();
+        if ($errors['warnings']) {
+            return false;
+        }
+        
+        // looks OK
+        return $datetime;
     }
 }

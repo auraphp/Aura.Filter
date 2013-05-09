@@ -11,7 +11,6 @@
 namespace Aura\Filter;
 
 use InvalidArgumentException;
-use StdClass;
 
 /**
  * 
@@ -75,7 +74,7 @@ class RuleCollection
 
     /**
      * 
-     * Error messages from failed rules.
+     * Messages from failed rules.
      *
      * @var array
      * 
@@ -84,7 +83,7 @@ class RuleCollection
 
     /**
      * 
-     * Fields that have errored on a hard rule.
+     * Fields that have failed on a hard rule.
      *
      * @var array
      * 
@@ -92,25 +91,68 @@ class RuleCollection
     protected $hardrule = [];
 
     /**
+     * 
+     * Alternative messages to use when a field fails its filters.
+     * 
+     * @var array
+     * 
+     */
+    protected $field_messages = [];
+    
+    /**
      *
      * A RuleLocator object.
      * 
      * @var RuleLocator
+     * 
      */
     protected $rule_locator;
+
+    /**
+     *
+     * A Translator object.
+     * 
+     * @var TranslatorInterface
+     * 
+     */
+    protected $translator;
 
     /**
      * 
      * Constructor.
      * 
-     * @param RuleLocator $rule_locator
+     * @param RuleLocator $rule_locator The rule locator.
+     * 
+     * @param TranslatorInterface $translator The message translator.
      * 
      */
-    public function __construct(RuleLocator $rule_locator)
-    {
+    public function __construct(
+        RuleLocator         $rule_locator,
+        TranslatorInterface $translator
+    ) {
         $this->rule_locator = $rule_locator;
+        $this->translator   = $translator;
     }
 
+    /**
+     * 
+     * Sets a single rule, encapsulated by a closure, for the rule.
+     * 
+     * @param string $field The field for the rule.
+     * 
+     * @param string $message The message when the rule fails.
+     * 
+     * @param \Closure $closure The closure to use for the rule.
+     * 
+     */
+    public function setRule($field, $message, \Closure $closure)
+    {
+        // add a single hard rule for this field with a special method name
+        $this->addHardRule($field, '__closure__', $closure);
+        // add the message for this field
+        $this->useFieldMessage($field, $message);
+    }
+    
     /**
      * 
      * Add a rule; keep applying all other rules even if it fails.
@@ -193,7 +235,8 @@ class RuleCollection
     }
 
     /**
-     * Return RuleLocator object
+     * 
+     * Returns the rule locator.
      * 
      * @return RuleLocator
      * 
@@ -205,15 +248,28 @@ class RuleCollection
 
     /**
      * 
+     * Returns the translator.
+     * 
+     * @return TranslatorInterface
+     * 
+     */
+    public function getTranslator()
+    {
+        return $this->translator;
+    }
+
+    /**
+     * 
      * Add a rule.
      * 
-     * @param string $field
+     * @param string $field The field name.
      * 
-     * @param string $method
+     * @param string $method The rule method to use (is, isNot, isBlankOr,
+     * etc).
      * 
-     * @param string $name
+     * @param string $name The name of the rule to apply.
      * 
-     * @param string $params
+     * @param string $params Params for the rule.
      * 
      * @param string $type The rule type: soft, hard, stop.
      * 
@@ -226,10 +282,27 @@ class RuleCollection
             'name'      => $name,
             'params'    => $params,
             'type'      => $type,
-            'applied'   => false,
         ];
     }
 
+    /**
+     * 
+     * Use a custom message for a field when it fails any of its rules; this
+     * single message will replace all the various rule messages.
+     * 
+     * @param string $field The field name.
+     * 
+     * @param string $message The message to use when the field fails any of
+     * its rules.
+     * 
+     * @return void
+     * 
+     */
+    public function useFieldMessage($field, $message)
+    {
+        $this->field_messages[$field] = $message;
+    }
+    
     /**
      * 
      * Applies the rules to the field values of a data object or array; note 
@@ -260,10 +333,10 @@ class RuleCollection
         $this->messages = [];
         $this->hardrule = [];
 
-        foreach ($this->rules as $i => &$rule) {
+        foreach ($this->rules as $i => &$info) {
 
             // the field name
-            $field = $rule['field'];
+            $field = $info['field'];
 
             // if we've hit a hard rule for this field, then don't apply
             // further rules on this field.
@@ -271,33 +344,33 @@ class RuleCollection
                 continue;
             }
 
-            $object = $this->rule_locator->get($rule['name']);
-            $object->prep($data, $field);
-
-            $method = $rule['method'];
-            $params = $rule['params'];
-            $passed = call_user_func_array([$object, $method], $params);
-            $rule['applied'] = true;
+            // apply the rule
+            $method = $info['method'];
+            if ($method == '__closure__') {
+                // from setRule()
+                $rule = null;
+                $closure = $info['name'];
+                $passed = $closure($data->$field, $data);
+            } else {
+                // from add*Rule()
+                $rule = $this->rule_locator->get($info['name']);
+                $rule->prep($data, $field);
+                $params = $info['params'];
+                $passed = call_user_func_array([$rule, $method], $params);
+            }
 
             if (! $passed) {
 
                 // failed. keep the failure message.
-                $this->messages[$field][] = [
-                    'field'   => $field,
-                    'method'  => $rule['method'],
-                    'name'    => $rule['name'],
-                    'params'  => $rule['params'],
-                    'message' => $object->getMessage(),
-                    'type'    => $rule['type'],
-                ];
+                $this->addMessage($field, $rule);
 
                 // should we stop filtering this field?
-                if ($rule['type'] == static::HARD_RULE) {
+                if ($info['type'] == static::HARD_RULE) {
                     $this->hardrule[] = $field;
                 }
 
                 // should we stop filtering entirely?
-                if ($rule['type'] == static::STOP_RULE) {
+                if ($info['type'] == static::STOP_RULE) {
                     return false;
                 }
             }
@@ -309,14 +382,63 @@ class RuleCollection
 
     /**
      * 
+     * Adds a failure message for a field.
+     * 
+     * @param string $field The field that failed.
+     * 
+     * @param RuleInterface $rule The rule that the field failed to apss.
+     * 
+     * @return void
+     * 
+     */
+    protected function addMessage($field, RuleInterface $rule = null)
+    {
+        // should we use a field-specific message?
+        $message = isset($this->field_messages[$field])
+                 ? $this->field_messages[$field]
+                 : null;
+        
+        // is a field-specific message already set?
+        if ($message && isset($this->messages[$field])) {
+            // no need to set it again
+            return;
+        }
+        
+        // do we have a field-specific message at this point?
+        if ($message) {
+            // yes; note that we set this as the only element in an array.
+            $this->messages[$field] = [$this->translator->translate($message)];
+            return;
+        }
+        
+        // add the rule-specific message the the array of messages, and done.
+        $this->messages[$field][] = $this->translator->translate(
+            $rule->getMessage(),
+            $rule->getParams()
+        );
+    }
+    
+    /**
+     * 
      * Returns the array of failure messages.
+     * 
+     * @param string $field Return messages just for this field; if empty,
+     * return messages for all fields.
      * 
      * @return array
      * 
      */
-    public function getMessages()
+    public function getMessages($field = null)
     {
-        return $this->messages;
+        if (! $field) {
+            return $this->messages;
+        }
+        
+        if (isset($this->messages[$field])) {
+            return $this->messages[$field];
+        }
+        
+        return [];
     }
     
     /**

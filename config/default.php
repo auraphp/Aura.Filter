@@ -1,40 +1,66 @@
 <?php
 /**
- * Package prefix for autoloader.
+ * Loader
  */
 $loader->add('Aura\Filter\\', dirname(__DIR__) . DIRECTORY_SEPARATOR . 'src');
 
 /**
- * Load rules
+ * Aura\Filter\Rule\Any
+ */
+$di->setter['Aura\Filter\Rule\Any']['setRuleLocator'] = $di->lazyNew('Aura\Filter\RuleLocator');
+
+/**
+ * Aura\Filter\RuleCollection
+ */
+$di->params['Aura\Filter\RuleCollection'] = [
+    'rule_locator' => $di->lazyNew('Aura\Filter\RuleLocator'),
+    'translator' => $di->lazyCall(
+        [$di->lazyGet('intl_translator_locator'), 'get'],
+        'Aura.Filter'
+    ),
+];
+
+/**
+ * Aura\Filter\RuleLocator
  */
 $di->params['Aura\Filter\RuleLocator']['registry'] = [
-    'alnum'                 => function() { return new \Aura\Filter\Rule\Alnum; },
-    'alpha'                 => function() { return new \Aura\Filter\Rule\Alpha; },
-    'between'               => function() { return new \Aura\Filter\Rule\Between; },
-    'blank'                 => function() { return new \Aura\Filter\Rule\Blank; },
-    'bool'                  => function() { return new \Aura\Filter\Rule\Bool; },
-    'creditCard'            => function() { return new \Aura\Filter\Rule\CreditCard; },
-    'dateTime'              => function() { return new \Aura\Filter\Rule\DateTime; },
-    'email'                 => function() { return new \Aura\Filter\Rule\Email; },
-    'equalToField'          => function() { return new \Aura\Filter\Rule\EqualToField; },
-    'equalToValue'          => function() { return new \Aura\Filter\Rule\EqualToValue; },
-    'float'                 => function() { return new \Aura\Filter\Rule\Float; },
-    'inKeys'                => function() { return new \Aura\Filter\Rule\InKeys; },
-    'int'                   => function() { return new \Aura\Filter\Rule\Int; },
-    'inValues'              => function() { return new \Aura\Filter\Rule\InValues; },
-    'ipv4'                  => function() { return new \Aura\Filter\Rule\Ipv4; },
-    'max'                   => function() { return new \Aura\Filter\Rule\Max; },
-    'min'                   => function() { return new \Aura\Filter\Rule\Min; },
-    'regex'                 => function() { return new \Aura\Filter\Rule\Regex; },
-    'strictEqualToField'    => function() { return new \Aura\Filter\Rule\StrictEqualToField; },
-    'strictEqualToValue'    => function() { return new \Aura\Filter\Rule\StrictEqualToValue; },
-    'string'                => function() { return new \Aura\Filter\Rule\String; },
-    'strlenBetween'         => function() { return new \Aura\Filter\Rule\StrlenBetween; },
-    'strlenMax'             => function() { return new \Aura\Filter\Rule\StrlenMax; },
-    'strlenMin'             => function() { return new \Aura\Filter\Rule\StrlenMin; },
-    'strlen'                => function() { return new \Aura\Filter\Rule\Strlen; },
-    'trim'                  => function() { return new \Aura\Filter\Rule\Trim; },
-    'upload'                => function() { return new \Aura\Filter\Rule\Upload; },
-    'url'                   => function() { return new \Aura\Filter\Rule\Url; },
-    'word'                  => function() { return new \Aura\Filter\Rule\Word; },
+    'alnum'                 =>  $di->lazyNew('Aura\Filter\Rule\Alnum'),
+    'alpha'                 =>  $di->lazyNew('Aura\Filter\Rule\Alpha'),
+    'any'                   =>  $di->lazyNew('Aura\Filter\Rule\Any'),
+    'between'               =>  $di->lazyNew('Aura\Filter\Rule\Between'),
+    'blank'                 =>  $di->lazyNew('Aura\Filter\Rule\Blank'),
+    'bool'                  =>  $di->lazyNew('Aura\Filter\Rule\Bool'),
+    'closure'               =>  $di->lazyNew('Aura\Filter\Rule\Closure'),
+    'creditCard'            =>  $di->lazyNew('Aura\Filter\Rule\CreditCard'),
+    'dateTime'              =>  $di->lazyNew('Aura\Filter\Rule\DateTime'),
+    'email'                 =>  $di->lazyNew('Aura\Filter\Rule\Email'),
+    'equalToField'          =>  $di->lazyNew('Aura\Filter\Rule\EqualToField'),
+    'equalToValue'          =>  $di->lazyNew('Aura\Filter\Rule\EqualToValue'),
+    'float'                 =>  $di->lazyNew('Aura\Filter\Rule\Float'),
+    'inKeys'                =>  $di->lazyNew('Aura\Filter\Rule\InKeys'),
+    'inValues'              =>  $di->lazyNew('Aura\Filter\Rule\InValues'),
+    'int'                   =>  $di->lazyNew('Aura\Filter\Rule\Int'),
+    'ipv4'                  =>  $di->lazyNew('Aura\Filter\Rule\Ipv4'),
+    'max'                   =>  $di->lazyNew('Aura\Filter\Rule\Max'),
+    'min'                   =>  $di->lazyNew('Aura\Filter\Rule\Min'),
+    'regex'                 =>  $di->lazyNew('Aura\Filter\Rule\Regex'),
+    'strictEqualToField'    =>  $di->lazyNew('Aura\Filter\Rule\StrictEqualToField'),
+    'strictEqualToValue'    =>  $di->lazyNew('Aura\Filter\Rule\StrictEqualToValue'),
+    'string'                =>  $di->lazyNew('Aura\Filter\Rule\String'),
+    'strlen'                =>  $di->lazyNew('Aura\Filter\Rule\Strlen'),
+    'strlenBetween'         =>  $di->lazyNew('Aura\Filter\Rule\StrlenBetween'),
+    'strlenMax'             =>  $di->lazyNew('Aura\Filter\Rule\StrlenMax'),
+    'strlenMin'             =>  $di->lazyNew('Aura\Filter\Rule\StrlenMin'),
+    'trim'                  =>  $di->lazyNew('Aura\Filter\Rule\Trim'),
+    'upload'                =>  $di->lazyNew('Aura\Filter\Rule\Upload'),
+    'url'                   =>  $di->lazyNew('Aura\Filter\Rule\Url'),
+    'word'                  =>  $di->lazyNew('Aura\Filter\Rule\Word'),
 ];
+
+/**
+ * Aura\Intl\PackageLocator
+ */
+$di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter']['en_US'] = $di->lazyCall(
+    [$di->lazyGet('intl_package_factory'), 'newInstance'],
+    $di->lazyRequire("$system/package/Aura.Filter/intl/en_US.php")
+);
