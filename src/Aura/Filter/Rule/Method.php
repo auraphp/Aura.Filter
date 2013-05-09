@@ -60,6 +60,8 @@ class Method extends AbstractRule
      * Calls a method on the value object to sanitize itself; the method 
      * should return a boolean to indicate if the filter passed or failed.
      * 
+     * @param string $method The method to call on the value object.
+     * 
      * @return bool True if the value was fixed, false if not.
      * 
      */
