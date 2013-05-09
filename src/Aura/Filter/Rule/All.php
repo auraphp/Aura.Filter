@@ -28,7 +28,7 @@ class All extends AbstractRule
      * 
      * A rule locator for rules used by this rule.
      * 
-     * @param Aura\Filter\RuleLocator
+     * @param RuleLocator
      * 
      */
     protected $rule_locator;
