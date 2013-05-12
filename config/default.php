@@ -55,6 +55,7 @@ $di->params['Aura\Filter\RuleLocator']['registry'] = [
     'upload'                =>  $di->lazyNew('Aura\Filter\Rule\Upload'),
     'url'                   =>  $di->lazyNew('Aura\Filter\Rule\Url'),
     'word'                  =>  $di->lazyNew('Aura\Filter\Rule\Word'),
+    'isbn'                  =>  $di->lazyNew('Aura\Filter\Rule\Isbn'),
 ];
 
 /**

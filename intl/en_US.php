@@ -162,7 +162,7 @@ return array(
 
         "FILTER_RULE_FAILURE_IS_STRLEN_MIN" => "Please use at least {min} character(s).",
         "FILTER_RULE_FAILURE_IS_NOT_STRLEN_MIN" => "Please use no more than {min} character(s).",
-        "FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_MIN" => "Please use at least {min} character(s).",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_MIN" => "Please leave blank or use at least {min} character(s).",
         "FILTER_RULE_FAILURE_FIX_STRLEN_MIN" => "Could not sanitize to at least {min} character(s).",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_STRLEN_MIN" => "Could not sanitize to blank or at least {min} character(s).",
 
@@ -199,5 +199,11 @@ return array(
         "FILTER_RULE_FAILURE_IS_BLANK_OR_WORD" => "Please leave blank or use only word characters.",
         "FILTER_RULE_FAILURE_FIX_WORD" => "Could not sanitize to only word characters.",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_WORD" => "Could not sanitize to blank or only word characters.",
+
+        "FILTER_RULE_FAILURE_IS_ISBN" => "Please use valid ISBN.",
+        "FILTER_RULE_FAILURE_IS_NOT_ISBN" => "Please do not use ISBN.",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_ISBN" => "Please leave blank or use valid ISBN.",
+        "FILTER_RULE_FAILURE_FIX_ISBN" => "Could not sanitize to valid ISBN.",
+        "FILTER_RULE_FAILURE_FIX_BLANK_OR_ISBN" => "Could not sanitize to blank or valid ISBN.",
     ],
 );
