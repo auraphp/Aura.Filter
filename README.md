@@ -322,6 +322,10 @@ not found returns false. The value cannot be sanitized. Usage:
         
         $filter->addSoftRule('field', $filter::IS, 'word');
 
+- `isbn`: Validate the value is a correct ISBN (International Standard Book Number). Usage:
+
+        $filter->addSoftRule('field', $filter::IS, 'isbn');
+
 - `any`: Validate the value passes at-least one of the rules. These rules
 are the ones added in rule locator.
         
