@@ -386,7 +386,7 @@ class RuleCollection
      * 
      * @param string $field The field that failed.
      * 
-     * @param RuleInterface $rule The rule that the field failed to apss.
+     * @param RuleInterface $rule The rule that the field failed to pass.
      * 
      * @return void
      * 
@@ -440,7 +440,29 @@ class RuleCollection
         
         return [];
     }
-    
+
+    /**
+     * 
+     * Set the array of failure messages.
+     * 
+     * @param string $field set the messages just for this field; if empty,
+     * set messages for all fields.
+     * 
+     * @return RuleCollection
+     * 
+     */
+    public function setMessages($messages, $field = null)
+    {
+        if (! $field) {
+            $this->messages = $messages;
+        }
+
+        if (isset($this->messages[$field])) {
+            $this->messages[$field] = $messages;
+        }
+        return $this;
+    }
+
     /**
      * 
      * Convenience method to apply a rule directly to an individual value.
