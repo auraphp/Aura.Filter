@@ -74,7 +74,7 @@ class CreditCard extends AbstractRule
      * 
      * Can't fix credit card numbers.
      * 
-     * @return false
+     * @return bool Always false.
      * 
      */
     public function sanitize()

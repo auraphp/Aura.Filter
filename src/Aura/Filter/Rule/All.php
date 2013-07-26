@@ -97,7 +97,7 @@ class All extends AbstractRule
      * 
      * Cannot sanitize to "all" meta-rules.
      * 
-     * @return false
+     * @return bool Always false.
      * 
      */
     public function sanitize()

@@ -69,7 +69,7 @@ class Regex extends AbstractRule
      * 
      * @param string $replace Replace the found pattern with this string.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize($expr, $replace)

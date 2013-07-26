@@ -66,7 +66,7 @@ class Isbn extends AbstractRule
      *
      * Removes all non numeric values to test if it is a valid ISBN.
      *
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
     public function sanitize()
@@ -83,10 +83,13 @@ class Isbn extends AbstractRule
     }
 
     /**
+     * 
      * Tests if a 13 digit ISBN is correct.
      *
      * @param $isbn
+     * 
      * @return bool
+     * 
      */
     private function thirteen($isbn)
     {
@@ -101,10 +104,13 @@ class Isbn extends AbstractRule
     }
 
     /**
+     * 
      * Tests if a 10 digit ISBN is correct.
      *
      * @param $isbn
+     * 
      * @return bool
+     * 
      */
     private function ten($isbn)
     {

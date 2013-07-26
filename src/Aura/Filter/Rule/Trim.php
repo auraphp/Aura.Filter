@@ -40,7 +40,7 @@ class Trim extends AbstractRule
 
     /**
      * 
-     * Same as PHP trim().
+     * The characters to strip; same as PHP trim().
      *
      * @var string
      * 
@@ -51,7 +51,7 @@ class Trim extends AbstractRule
      * 
      * Is the value already trimmed?
      * 
-     * @param string $chars
+     * @param string $chars The characters to strip.
      * 
      * @return bool True if valid, false if not.
      * 
@@ -73,9 +73,9 @@ class Trim extends AbstractRule
      * 
      * Trims characters from the beginning and end of the value.
      * 
-     * @param string $chars
+     * @param string $chars The characters to strip.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize($chars = null)

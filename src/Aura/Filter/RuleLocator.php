@@ -92,6 +92,8 @@ class RuleLocator
      * 
      * @return AbstractRule A rule object.
      * 
+     * @throws Exception\RuleNotMapped
+     * 
      */
     public function get($name)
     {

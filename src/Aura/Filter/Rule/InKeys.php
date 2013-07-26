@@ -68,7 +68,7 @@ class InKeys extends AbstractRule
      * 
      * Cannot fix the value.
      * 
-     * @return boolean
+     * @return bool Always false.
      * 
      */
     public function sanitize()

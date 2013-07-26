@@ -92,7 +92,7 @@ class Bool extends AbstractRule
      * 
      * Note that this recognizes $this->true and $this->false values.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool Always true.
      * 
      */
     public function sanitize()
