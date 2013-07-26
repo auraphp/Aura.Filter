@@ -64,7 +64,8 @@ class StrlenMax extends AbstractRule
      * 
      * @param int $max
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($max)
     {

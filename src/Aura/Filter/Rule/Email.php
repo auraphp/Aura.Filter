@@ -98,9 +98,10 @@ class Email extends AbstractRule
 
     /**
      * 
-     * can't fix emails
+     * Can't fix emails
      * 
-     * @return boolean
+     * @return bool Always false.
+     * 
      */
     public function sanitize()
     {
