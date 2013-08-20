@@ -67,7 +67,8 @@ class Strlen extends AbstractRule
      * 
      * @param constant $pad_type
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {

@@ -60,7 +60,7 @@ class StrlenMin extends AbstractRule
 
     /**
      * 
-     * fix to min length
+     * Fix to min length
      * 
      * @param int $min
      * 
@@ -68,7 +68,8 @@ class StrlenMin extends AbstractRule
      * 
      * @param constant $pad_type
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {

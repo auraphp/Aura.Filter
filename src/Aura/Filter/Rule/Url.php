@@ -82,9 +82,10 @@ class Url extends AbstractRule
 
     /**
      * 
-     * cannot fix URLs
+     * Cannot fix URLs
      * 
-     * @return boolean
+     * @return bool Always false.
+     * 
      */
     public function sanitize()
     {
