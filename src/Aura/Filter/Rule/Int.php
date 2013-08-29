@@ -65,7 +65,7 @@ class Int extends AbstractRule
      * algorithm somewhat less naive that "remove all characters that are not
      * '0-9+-'".  The result may not be expected, but it will be a integer.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize()

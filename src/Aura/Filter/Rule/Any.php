@@ -98,7 +98,7 @@ class Any extends AbstractRule
      * 
      * Cannot sanitize to "any" meta-rules.
      * 
-     * @return false
+     * @return bool Always false.
      * 
      */
     public function sanitize()

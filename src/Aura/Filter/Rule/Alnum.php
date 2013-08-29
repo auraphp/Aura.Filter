@@ -58,7 +58,7 @@ class Alnum extends AbstractRule
      * 
      * Strips non-alphanumeric characters from the value.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool Always true.
      * 
      */
     public function sanitize()

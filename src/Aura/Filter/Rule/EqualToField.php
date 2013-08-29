@@ -52,8 +52,6 @@ class EqualToField extends AbstractRule
      * 
      * @return bool True if the values are equal, false if not equal.
      * 
-     * @return bool True if the values are equal, false if not equal.
-     * 
      */
     public function validate($other_field)
     {
@@ -69,10 +67,12 @@ class EqualToField extends AbstractRule
 
     /**
      * 
-     * force the field to the value of the other field
+     * Force the field to the value of the other field
      * 
      * @param string $other_field
-     * @return boolean
+     * 
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($other_field)
     {

@@ -41,11 +41,12 @@ class StrictEqualToValue extends AbstractRule
 
     /**
      * 
-     * check the values strictly on type and value
+     * Check the values strictly on type and value
      * 
      * @param string $other_value
      * 
-     * @return boolean
+     * @return bool True if the values are equal, false if not equal.
+     * 
      */
     public function validate($other_value)
     {
@@ -55,11 +56,12 @@ class StrictEqualToValue extends AbstractRule
 
     /**
      * 
-     * force the field to the value of the other field
+     * Force the field to the value of the other field
      * 
      * @param string $other_value
      * 
-     * @return boolean
+     * @return bool Always true.
+     * 
      */
     public function sanitize($other_value)
     {

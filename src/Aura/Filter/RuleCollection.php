@@ -310,8 +310,10 @@ class RuleCollection
      * 
      * @param object|array &$data The data object or array to be filtered.
      * 
-     * @return boolean True if all rules were applied without error; false if
+     * @return bool True if all rules were applied without error; false if
      * there was at least one error.
+     * 
+     * @throws \InvalidArgumentException
      * 
      */
     public function values(&$data)
@@ -386,7 +388,7 @@ class RuleCollection
      * 
      * @param string $field The field that failed.
      * 
-     * @param RuleInterface $rule The rule that the field failed to apss.
+     * @param RuleInterface $rule The rule that the field failed to pass.
      * 
      * @return void
      * 

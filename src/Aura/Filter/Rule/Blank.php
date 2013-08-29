@@ -58,9 +58,10 @@ class Blank extends AbstractRule
 
     /**
      * 
-     * set value to null
+     * Set value to null
      * 
-     * @return boolean
+     * @return bool Always true.
+     * 
      */
     public function sanitize()
     {

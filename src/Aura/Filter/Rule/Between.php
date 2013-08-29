@@ -71,7 +71,7 @@ class Between extends AbstractRule
      * 
      * @param mixed $max The maximum valid value.
      * 
-     * @return bool
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize($min, $max)
