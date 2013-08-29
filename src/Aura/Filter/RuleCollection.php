@@ -362,7 +362,7 @@ class RuleCollection
             if (! $passed) {
 
                 // failed. keep the failure message.
-                $this->addMessage($field, $rule);
+                $this->addMessageFromRule($field, $rule);
 
                 // should we stop filtering this field?
                 if ($info['type'] == static::HARD_RULE) {
@@ -391,7 +391,7 @@ class RuleCollection
      * @return void
      * 
      */
-    protected function addMessage($field, RuleInterface $rule = null)
+    protected function addMessageFromRule($field, RuleInterface $rule = null)
     {
         // should we use a field-specific message?
         $message = isset($this->field_messages[$field])
@@ -439,6 +439,29 @@ class RuleCollection
         }
         
         return [];
+    }
+    
+    /**
+     * 
+     * Manually add messages to a particular field.
+     * 
+     * @param string $field Add to this field.
+     * 
+     * @param string|array $messages Add these messages to the field.
+     * 
+     * @return void
+     * 
+     */
+    public function addMessages($field, $messages)
+    {
+        if (! $this->messages[$field]) {
+            $this->messages[$field] = [];
+        }
+        
+        $this->messages[$field] = array_merge(
+            $this->messages[$field],
+            $messages
+        );
     }
     
     /**
