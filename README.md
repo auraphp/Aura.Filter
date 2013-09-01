@@ -174,7 +174,7 @@ Available Rules
   to the minimum; values higher than the range are forced down to the maximum.
   Usage:
         
-        $filter->addSoftRule('field', $filter::IS, 'between', $max, $min);
+        $filter->addSoftRule('field', $filter::IS, 'between', $min, $max);
 
 - `blank`: Validate the value as being blank. Sanitize to `null`. Usage:
         
