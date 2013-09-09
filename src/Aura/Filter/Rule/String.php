@@ -63,7 +63,8 @@ class String extends AbstractRule
      * 
      * @param string $replace
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($find = null, $replace = null)
     {

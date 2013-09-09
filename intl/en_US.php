@@ -76,11 +76,11 @@ return array(
         "FILTER_RULE_FAILURE_FIX_FLOAT" => "Could not sanitize to a decimal number.",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_FLOAT" => "Could not sanitize to blank or a decimal number.",
 
-        "FILTER_RULE_FAILURE_IS_IN_KEYS" => "Please use a listed key.",
-        "FILTER_RULE_FAILURE_IS_NOT_IN_KEYS" => "Please do not use a listed key.",
-        "FILTER_RULE_FAILURE_IS_BLANK_OR_IN_KEYS" => "Please leave blank or use a listed key.",
-        "FILTER_RULE_FAILURE_FIX_IN_KEYS" => "Could not sanitize to a listed key.",
-        "FILTER_RULE_FAILURE_FIX_BLANK_OR_IN_KEYS" => "Could not sanitize to blank or a listed key.",
+        "FILTER_RULE_FAILURE_IS_IN_KEYS" => "Please use one of the following: {keys}",
+        "FILTER_RULE_FAILURE_IS_NOT_IN_KEYS" => "Please do not use the following: {keys}",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_IN_KEYS" => "Please leave blank or use one of the following: {keys}",
+        "FILTER_RULE_FAILURE_FIX_IN_KEYS" => "Could not sanitize to an acceptable key.",
+        "FILTER_RULE_FAILURE_FIX_BLANK_OR_IN_KEYS" => "Could not sanitize to blank or an acceptable key.",
 
         "FILTER_RULE_FAILURE_IS_INT" => "Please use a whole number.",
         "FILTER_RULE_FAILURE_IS_NOT_INT" => "Please do not use a whole number.",
@@ -88,11 +88,11 @@ return array(
         "FILTER_RULE_FAILURE_FIX_INT" => "Could not sanitize to a whole number.",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_INT" => "Could not sanitize to blank or a whole number.",
 
-        "FILTER_RULE_FAILURE_IS_IN_VALUES" => "Please use a listed value.",
-        "FILTER_RULE_FAILURE_IS_NOT_IN_VALUES" => "Please do not use a listed value.",
-        "FILTER_RULE_FAILURE_IS_BLANK_OR_IN_VALUES" => "Please leave blank or use a listed value.",
-        "FILTER_RULE_FAILURE_FIX_IN_VALUES" => "Could not sanitize to a listed value.",
-        "FILTER_RULE_FAILURE_FIX_BLANK_OR_IN_VALUES" => "Could not sanitize to blank or a listed value.",
+        "FILTER_RULE_FAILURE_IS_IN_VALUES" => "Please use one of the following: {values}",
+        "FILTER_RULE_FAILURE_IS_NOT_IN_VALUES" => "Please do not use the following: {values}",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_IN_VALUES" => "Please leave blank or use one of the following: {values}",
+        "FILTER_RULE_FAILURE_FIX_IN_VALUES" => "Could not sanitize to an acceptable value.",
+        "FILTER_RULE_FAILURE_FIX_BLANK_OR_IN_VALUES" => "Could not sanitize to blank or an acceptable value.",
 
         "FILTER_RULE_FAILURE_IS_IPV4" => "Please use a valid IPv4 address.",
         "FILTER_RULE_FAILURE_IS_NOT_IPV4" => "Please do not use a valid IPv4 address.",
@@ -162,7 +162,7 @@ return array(
 
         "FILTER_RULE_FAILURE_IS_STRLEN_MIN" => "Please use at least {min} character(s).",
         "FILTER_RULE_FAILURE_IS_NOT_STRLEN_MIN" => "Please use no more than {min} character(s).",
-        "FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_MIN" => "Please use at least {min} character(s).",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_STRLEN_MIN" => "Please leave blank or use at least {min} character(s).",
         "FILTER_RULE_FAILURE_FIX_STRLEN_MIN" => "Could not sanitize to at least {min} character(s).",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_STRLEN_MIN" => "Could not sanitize to blank or at least {min} character(s).",
 
@@ -199,5 +199,11 @@ return array(
         "FILTER_RULE_FAILURE_IS_BLANK_OR_WORD" => "Please leave blank or use only word characters.",
         "FILTER_RULE_FAILURE_FIX_WORD" => "Could not sanitize to only word characters.",
         "FILTER_RULE_FAILURE_FIX_BLANK_OR_WORD" => "Could not sanitize to blank or only word characters.",
+
+        "FILTER_RULE_FAILURE_IS_ISBN" => "Please use valid ISBN.",
+        "FILTER_RULE_FAILURE_IS_NOT_ISBN" => "Please do not use ISBN.",
+        "FILTER_RULE_FAILURE_IS_BLANK_OR_ISBN" => "Please leave blank or use valid ISBN.",
+        "FILTER_RULE_FAILURE_FIX_ISBN" => "Could not sanitize to valid ISBN.",
+        "FILTER_RULE_FAILURE_FIX_BLANK_OR_ISBN" => "Could not sanitize to blank or valid ISBN.",
     ],
 );

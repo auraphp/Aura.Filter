@@ -63,7 +63,8 @@ class Max extends AbstractRule
      * 
      * @param mixed $max The maximum valid value.
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($max)
     {

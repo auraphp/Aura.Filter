@@ -62,7 +62,7 @@ class Word extends AbstractRule
      * 
      * Strips non-word characters within the value.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize()

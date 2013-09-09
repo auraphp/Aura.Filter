@@ -41,11 +41,12 @@ class EqualToValue extends AbstractRule
 
     /**
      * 
-     * check whether the value is equal
+     * Check whether the value is equal
      * 
      * @param mixed $other_value
      * 
-     * @return boolean
+     * @return bool True if the values are equal, false if not equal.
+     * 
      */
     public function validate($other_value)
     {
@@ -55,11 +56,12 @@ class EqualToValue extends AbstractRule
 
     /**
      * 
-     * force the field to the value of the other field
+     * Force the field to the value of the other field
      * 
      * @param mixed $other_value
      * 
-     * @return boolean
+     * @return bool Always true.
+     * 
      */
     public function sanitize($other_value)
     {

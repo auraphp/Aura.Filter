@@ -1,6 +1,8 @@
 Aura Filter
 ===========
 
+[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png)](https://travis-ci.org/auraphp/Aura.Filter)
+
 The Aura Filter package provides validation and sanitizing for data objects
 and arrays.
 
@@ -174,7 +176,7 @@ Available Rules
   to the minimum; values higher than the range are forced down to the maximum.
   Usage:
         
-        $filter->addSoftRule('field', $filter::IS, 'between', $max, $min);
+        $filter->addSoftRule('field', $filter::IS, 'between', $min, $max);
 
 - `blank`: Validate the value as being blank. Sanitize to `null`. Usage:
         
@@ -321,6 +323,10 @@ not found returns false. The value cannot be sanitized. Usage:
  Sanitize the value to remove non-word characters. Usage:
         
         $filter->addSoftRule('field', $filter::IS, 'word');
+
+- `isbn`: Validate the value is a correct ISBN (International Standard Book Number). Usage:
+
+        $filter->addSoftRule('field', $filter::IS, 'isbn');
 
 - `any`: Validate the value passes at-least one of the rules. These rules
 are the ones added in rule locator.

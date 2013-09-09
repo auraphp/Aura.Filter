@@ -64,7 +64,7 @@ class Ipv4 extends AbstractRule
      * 
      * Forces the value to an IPv4 address.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool Always false.
      * 
      */
     public function sanitize()

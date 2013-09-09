@@ -16,6 +16,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
             'blank'     => function() { return new Rule\Blank; },
             'closure'   => function() { return new Rule\Closure; },
             'int'       => function() { return new Rule\Int; },
+            'inKeys'    => function() { return new Rule\InKeys; },
+            'inValues'  => function() { return new Rule\InValues; },
             'max'       => function() { return new Rule\Max; },
             'min'       => function() { return new Rule\Min; },
             'regex'     => function() { return new Rule\Regex; },
@@ -248,6 +250,31 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
+    }
+    
+    public function testTranslatedArrayValue()
+    {
+        $this->filter->addSoftRule('field1', Filter::IS, 'inValues', ['foo', 'bar', 'baz']);
+        $this->filter->addSoftRule('field2', Filter::IS, 'inKeys', ['foo', 'bar', 'baz']);
+        
+        $data = (object) [
+            'field1' => 'zim',
+            'field2' => 9,
+        ];
+        
+        $result = $this->filter->values($data);
+        $this->assertFalse($result);
+        
+        $expect = [
+            'field1' => [
+                'Please use one of the following: "foo", "bar", "baz"',
+            ],
+            'field2' => [
+                'Please use one of the following: "0", "1", "2"',
+            ],
+        ];
         $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
     }

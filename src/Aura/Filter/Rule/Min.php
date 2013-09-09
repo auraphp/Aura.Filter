@@ -59,11 +59,12 @@ class Min extends AbstractRule
 
     /**
      * 
-     * check whether the value is less than min, if so set to min
+     * Check whether the value is less than min, if so set to min
      * 
      * @param int $min
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($min)
     {
