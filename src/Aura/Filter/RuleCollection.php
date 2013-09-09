@@ -308,7 +308,8 @@ class RuleCollection
      * Applies the rules to the field values of a data object or array; note 
      * that sanitizing filters may modify the values in place.
      * 
-     * @param object|array &$data The data object or array to be filtered.
+     * @param object|array $data The data object or array to be filtered;
+     * note that this is passed by reference.
      * 
      * @return bool True if all rules were applied without error; false if
      * there was at least one error.
@@ -470,8 +471,8 @@ class RuleCollection
      * 
      * Convenience method to apply a rule directly to an individual value.
      * 
-     * @param mixed &$value Apply the rule to this value; the rule may modify
-     * the value in place.
+     * @param mixed $value Apply the rule to this value; note that this is
+     * passed by reference, so the rule may modify the value in place.
      * 
      * @param string $method The rule method to use; e.g., Filter::IS.
      * 
