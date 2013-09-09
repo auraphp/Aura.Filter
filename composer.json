@@ -1,6 +1,6 @@
 {
     "name": "aura/filter",
-    "version": "1.0.0-beta2",
+    "version": "1.0.0",
     "type": "aura-package",
     "description": "The Aura Filter package provides tools to validate and sanitize data objects and arrays.",
     "keywords": [
@@ -8,8 +8,8 @@
         "validate",
         "sanitize"
     ],
-    "homepage": "http://auraphp.github.com/Aura.Filter",
-    "time": "2013-05-09",
+    "homepage": "http://auraphp.com/Aura.Filter",
+    "time": "2013-09-09",
     "license": "BSD-2-Clause",
     "authors": [
         {
@@ -34,6 +34,21 @@
         {
             "name": "Mapthegod",
             "email": "nakymaton.hdc@gmail.com",
+            "homepage": ""
+        },
+        {
+            "name": "Benjamin Geissler",
+            "email": "benjamin.geissler@gmail.com",
+            "homepage": ""
+        },
+        {
+            "name": "Daniel Haaker",
+            "email": "d.haaker@gmail.com",
+            "homepage": ""
+        },
+        {
+            "name": "chrissound",
+            "email": "chris@soundshare.co.uk",
             "homepage": ""
         }
     ],
