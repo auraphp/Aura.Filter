@@ -95,7 +95,7 @@ class Upload extends AbstractRule
      * Sanitizes a file-upload information array.  If no file has been 
      * uploaded, the information will be returned as null.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize()
@@ -115,11 +115,11 @@ class Upload extends AbstractRule
 
     /**
      * 
-     * check before the file is uploaded
+     * Check before the file is uploaded
      * 
      * @param string $value
      * 
-     * @return boolean
+     * @return bool
      * 
      */
     protected function preCheck(&$value)
@@ -154,11 +154,12 @@ class Upload extends AbstractRule
     }
 
     /**
-     * check whether the file was uploaded via HTTP POST
+     * 
+     * Check whether the file was uploaded via HTTP POST
      * 
      * @param string $file
      * 
-     * @return type
+     * @return bool True if the file was uploaded via HTTP POST, false if not.
      * 
      */
     protected function isUploadedFile($file)

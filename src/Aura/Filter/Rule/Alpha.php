@@ -58,7 +58,7 @@ class Alpha extends AbstractRule
      * 
      * Strips non-alphabetic characters from the value.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool Always true.
      * 
      */
     public function sanitize()

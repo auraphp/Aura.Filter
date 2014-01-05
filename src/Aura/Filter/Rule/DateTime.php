@@ -45,7 +45,7 @@ class DateTime extends AbstractRule
      * 
      * @param string $format
      * 
-     * @return boolean
+     * @return bool
      * 
      */
     public function validate($format = 'Y-m-d H:i:s')
@@ -57,11 +57,13 @@ class DateTime extends AbstractRule
     }
 
     /**
-     * sanitize datetime to default format Y-m-d H:i:s
+     * 
+     * Sanitize datetime to default format Y-m-d H:i:s
      * 
      * @param string $format
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
+     * 
      */
     public function sanitize($format = 'Y-m-d H:i:s')
     {
@@ -79,9 +81,9 @@ class DateTime extends AbstractRule
      * 
      * Returns a new DateTime object.
      * 
-     * @param mixed $value The incomine date/time value.
+     * @param mixed $value The incoming date/time value.
      * 
-     * @return mixed If the value is alerady a DateTime then it is returned
+     * @return mixed If the value is already a DateTime then it is returned
      * as-is; if the value is invalid as a date/time then `false` is returned;
      * otherwise, a new DateTime is constructed from the value and returned.
      * 

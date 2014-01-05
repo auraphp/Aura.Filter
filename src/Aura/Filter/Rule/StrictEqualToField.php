@@ -71,7 +71,7 @@ class StrictEqualToField extends AbstractRule
      * 
      * @param string $other_field
      * 
-     * @return boolean
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize($other_field)

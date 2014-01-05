@@ -62,7 +62,7 @@ class Method extends AbstractRule
      * 
      * @param string $method The method to call on the value object.
      * 
-     * @return bool True if the value was fixed, false if not.
+     * @return bool True if the value was sanitized, false if not.
      * 
      */
     public function sanitize($method)

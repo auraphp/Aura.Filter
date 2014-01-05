@@ -69,6 +69,10 @@ class Translator implements TranslatorInterface
 
         // do string replacements
         foreach ($tokens_values as $token => $value) {
+            // convert an array to a CSV string
+            if (is_array($value)) {
+                $value = '"' . implode('", "', $value) . '"';
+            }
             $message = str_replace('{' . $token . '}', $value, $message);
         }
         

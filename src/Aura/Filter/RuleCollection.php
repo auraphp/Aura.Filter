@@ -134,6 +134,16 @@ class RuleCollection
         $this->translator   = $translator;
     }
 
+    /*
+     * Sets the translator object.
+     *
+     * @param TranslatorInterface $translator the message translator
+     */
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * 
      * Sets a single rule, encapsulated by a closure, for the rule.
@@ -308,10 +318,13 @@ class RuleCollection
      * Applies the rules to the field values of a data object or array; note 
      * that sanitizing filters may modify the values in place.
      * 
-     * @param object|array &$data The data object or array to be filtered.
+     * @param object|array $data The data object or array to be filtered;
+     * note that this is passed by reference.
      * 
-     * @return boolean True if all rules were applied without error; false if
+     * @return bool True if all rules were applied without error; false if
      * there was at least one error.
+     * 
+     * @throws \InvalidArgumentException
      * 
      */
     public function values(&$data)
@@ -362,7 +375,7 @@ class RuleCollection
             if (! $passed) {
 
                 // failed. keep the failure message.
-                $this->addMessage($field, $rule);
+                $this->addMessageFromRule($field, $rule);
 
                 // should we stop filtering this field?
                 if ($info['type'] == static::HARD_RULE) {
@@ -386,12 +399,12 @@ class RuleCollection
      * 
      * @param string $field The field that failed.
      * 
-     * @param RuleInterface $rule The rule that the field failed to apss.
+     * @param RuleInterface $rule The rule that the field failed to pass.
      * 
      * @return void
      * 
      */
-    protected function addMessage($field, RuleInterface $rule = null)
+    protected function addMessageFromRule($field, RuleInterface $rule = null)
     {
         // should we use a field-specific message?
         $message = isset($this->field_messages[$field])
@@ -443,10 +456,33 @@ class RuleCollection
     
     /**
      * 
+     * Manually add messages to a particular field.
+     * 
+     * @param string $field Add to this field.
+     * 
+     * @param string|array $messages Add these messages to the field.
+     * 
+     * @return void
+     * 
+     */
+    public function addMessages($field, $messages)
+    {
+        if (! $this->messages[$field]) {
+            $this->messages[$field] = [];
+        }
+        
+        $this->messages[$field] = array_merge(
+            $this->messages[$field],
+            $messages
+        );
+    }
+    
+    /**
+     * 
      * Convenience method to apply a rule directly to an individual value.
      * 
-     * @param mixed &$value Apply the rule to this value; the rule may modify
-     * the value in place.
+     * @param mixed $value Apply the rule to this value; note that this is
+     * passed by reference, so the rule may modify the value in place.
      * 
      * @param string $method The rule method to use; e.g., Filter::IS.
      * 

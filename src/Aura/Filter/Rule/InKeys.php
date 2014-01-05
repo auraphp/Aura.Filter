@@ -53,7 +53,11 @@ class InKeys extends AbstractRule
      */
     public function validate(array $array)
     {
-        $this->setParams(['keys' => $array]);
+        $this->setParams([
+            'array' => $array,
+            'keys' => array_keys($array)
+        ]);
+        
         $value = $this->getValue();
         if (! is_string($value) && ! is_int($value)) {
             // array_key_exists errors on non-string non-int keys.
@@ -68,7 +72,7 @@ class InKeys extends AbstractRule
      * 
      * Cannot fix the value.
      * 
-     * @return boolean
+     * @return bool Always false.
      * 
      */
     public function sanitize()

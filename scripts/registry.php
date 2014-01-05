@@ -29,4 +29,5 @@ return [
     'upload'                => function() { return new \Aura\Filter\Rule\Upload; },
     'url'                   => function() { return new \Aura\Filter\Rule\Url; },
     'word'                  => function() { return new \Aura\Filter\Rule\Word; },
+    'isbn'                  => function() { return new \Aura\Filter\Rule\Isbn; },
 ];
