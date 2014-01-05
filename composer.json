@@ -1,19 +1,45 @@
 {
     "name": "aura/filter",
+    "version": "1.0.0-beta2",
     "type": "aura-package",
-    "description": "The Aura Filter package provider validators and sanitizers for user data.",
-    "keywords": [ "filter", "validate", "sanitize", "validator", "validation" ],
+    "description": "The Aura Filter package provides tools to validate and sanitize data objects and arrays.",
+    "keywords": [
+        "filter",
+        "validate",
+        "sanitize"
+    ],
     "homepage": "http://auraphp.github.com/Aura.Filter",
+    "time": "2013-05-09",
     "license": "BSD-2-Clause",
     "authors": [
         {
-            "name": "Aura Contributors",
+            "name": "Aura.Filter Contributors",
             "homepage": "https://github.com/auraphp/Aura.Filter/contributors"
+        },
+        {
+            "name": "Paul M. Jones",
+            "email": "pmjones88@gmail.com",
+            "homepage": "http://paul-m-jones.com"
+        },
+        {
+            "name": "Hari KT",
+            "email": "kthari85@gmail.com",
+            "homepage": "http://harikt.com"
+        },
+        {
+            "name": "Pascal Borreli",
+            "email": "pascal@borreli.com",
+            "homepage": ""
+        },
+        {
+            "name": "Mapthegod",
+            "email": "nakymaton.hdc@gmail.com",
+            "homepage": ""
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/installer-default": "1.0.0"
+        "aura/installer-default": ">=1.0.0"
     },
     "autoload": {
         "psr-0": {

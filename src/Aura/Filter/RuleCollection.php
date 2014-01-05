@@ -134,6 +134,16 @@ class RuleCollection
         $this->translator   = $translator;
     }
 
+    /*
+     * Sets the translator object.
+     *
+     * @param TranslatorInterface $translator the message translator
+     */
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     /**
      * 
      * Sets a single rule, encapsulated by a closure, for the rule.
