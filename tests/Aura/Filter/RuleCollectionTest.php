@@ -395,4 +395,21 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $actual = $instance->getRuleLocator()->get('any');
         $this->assertInstanceOf($expect, $actual);
     }
+    
+    public function testNewRuleInAny()
+    {
+        $instance = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $any = $instance->getRuleLocator()->get('any');
+        $any->getRuleLocator()->set('hex', function () {
+            return new \Aura\Filter\Rule\Hex;
+        });
+        $instance->addSoftRule('hexval', $instance::IS, 'any', [
+                ['hex']
+            ]
+        );
+        $data = (object) [
+            'hexval' => 'abcdef',
+        ];
+        $this->assertTrue($instance->values($data));
+    }
 }

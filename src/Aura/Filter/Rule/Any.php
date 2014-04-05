@@ -66,6 +66,18 @@ class Any extends AbstractRule
     
     /**
      * 
+     * Returns the rule locator.
+     * 
+     * @return RuleLocator
+     * 
+     */
+    public function getRuleLocator()
+    {
+        return $this->rule_locator;
+    }
+    
+    /**
+     * 
      * Validates that the value passes at least one the rules in a list.
      * 
      * @param array $list The list of rules that the value must pass.
