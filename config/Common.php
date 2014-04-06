@@ -18,7 +18,7 @@ class Common extends Config
          */
         $di->params['Aura\Filter\RuleCollection'] = [
             'rule_locator' => $di->lazyNew('Aura\Filter\RuleLocator'),
-            'translator' => $di->lazyCall(
+            'translator' => $di->lazy(
                 [$di->lazyGet('intl_translator_locator'), 'get'],
                 'Aura.Filter'
             ),
@@ -65,9 +65,9 @@ class Common extends Config
         /**
          * Aura\Intl\PackageLocator
          */
-        $di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter']['en_US'] = $di->lazyCall(
+        $di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter']['en_US'] = $di->lazy(
             [$di->lazyGet('intl_package_factory'), 'newInstance'],
-            $di->lazyRequire("$system/package/Aura.Filter/intl/en_US.php")
+            $di->lazyRequire(dirname(__DIR__) . "/intl/en_US.php")
         );
     }
     
