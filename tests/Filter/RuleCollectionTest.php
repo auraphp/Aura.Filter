@@ -26,13 +26,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
             'strlenMin' => function() { return new Rule\StrlenMin; },
         ]);
         
-        $intl = require dirname(dirname(dirname(__DIR__)))
-              . DIRECTORY_SEPARATOR . 'intl'
-              . DIRECTORY_SEPARATOR . 'en_US.php';
-        
-        $translator = new Translator($intl);
-        
-        $this->filter = new Filter($rule_locator, $translator);
+        $this->filter = new Filter($rule_locator);
     }
     
     public function testValue()
@@ -45,13 +39,6 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $expect = 123;
         $this->assertTrue($this->filter->value($actual, Filter::FIX, 'int'));
         $this->assertSame(123, $actual);
-    }
-    
-    public function testGetTranslator()
-    {
-        $actual = $this->filter->getTranslator();
-        $expect = 'Aura\Filter\Translator';
-        $this->assertInstanceOf($expect, $actual);
     }
     
     public function testGetRuleLocator()
@@ -254,7 +241,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
     
-    public function testTranslatedArrayValue()
+    public function testFilteredArrayValue()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'inValues', ['foo', 'bar', 'baz']);
         $this->filter->addSoftRule('field2', Filter::IS, 'inKeys', ['foo', 'bar', 'baz']);
