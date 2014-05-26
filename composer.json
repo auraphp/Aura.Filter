@@ -12,15 +12,17 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
-        "aura/installer-default": "1.0.0"
+        "php": ">=5.4.0"
     },
     "autoload": {
-        "psr-0": {
-            "Aura\\Filter": "src/"
-        },        
         "psr-4": {
-            "Aura\\Filter\\_Config\\": "config/"
+            "Aura\\Filter\\_Config\\": "config/",
+            "Aura\\Filter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\Filter\\": "tests"
         }
     },
     "extra": {
