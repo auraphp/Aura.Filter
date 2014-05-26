@@ -9,5 +9,10 @@ matrix:
     - php: hhvm
 
 before_script:
-  - cd tests
-script: phpunit
+  - curl -sS http://bldr.io/installer | php
+
+script:
+  - ./bldr.phar build -p travis
+
+notifications:
+  irc: "irc.freenode.org#auraphp"
