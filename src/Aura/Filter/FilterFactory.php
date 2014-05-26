@@ -1,0 +1,1 @@
+https://github.com/auraphp/Aura.View/blob/develop-2/src/ViewFactory.php
