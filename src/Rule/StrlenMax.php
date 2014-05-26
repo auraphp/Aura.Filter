@@ -55,6 +55,7 @@ class StrlenMax extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return strlen($value) <= $max;
     }
 
@@ -77,6 +78,7 @@ class StrlenMax extends AbstractRule
         if (strlen($value) > $max) {
             $this->setValue(substr($value, 0, $max));
         }
+
         return true;
     }
 }

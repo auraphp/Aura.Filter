@@ -51,6 +51,7 @@ class EqualToValue extends AbstractRule
     public function validate($other_value)
     {
         $this->setParams(get_defined_vars());
+
         return $this->getValue() == $other_value;
     }
 
@@ -67,6 +68,7 @@ class EqualToValue extends AbstractRule
     {
         $this->setParams(get_defined_vars());
         $this->setValue($other_value);
+
         return true;
     }
 }

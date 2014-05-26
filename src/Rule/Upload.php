@@ -76,6 +76,7 @@ class Upload extends AbstractRule
             } else {
                 $this->setMessageKey('err_unknown');
             }
+
             return false;
         }
 
@@ -110,6 +111,7 @@ class Upload extends AbstractRule
 
         // everything looks ok; some keys may have been removed.
         $this->setValue($value);
+
         return true;
     }
 

@@ -55,6 +55,7 @@ class Word extends AbstractRule
             return false;
         }
         $expr = '/^\w+$/D';
+
         return (bool) preg_match($expr, $value);
     }
 
@@ -72,6 +73,7 @@ class Word extends AbstractRule
             return false;
         }
         $this->setValue(preg_replace('/\W/', '', $value));
+
         return true;
     }
 }

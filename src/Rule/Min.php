@@ -54,6 +54,7 @@ class Min extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return $value >= $min;
     }
 
@@ -76,6 +77,7 @@ class Min extends AbstractRule
         if ($value < $min) {
             $this->setValue($min);
         }
+
         return true;
     }
 }

@@ -154,9 +154,9 @@ abstract class AbstractRule implements RuleInterface
         $field = $this->field;
         if (isset($this->data->$field)) {
             return $this->data->$field;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class AbstractRule implements RuleInterface
      * @param string $value The new value of the field.
      * 
      * @return void
-     * 
+     *
      */
     public function setValue($value)
     {
@@ -184,6 +184,7 @@ abstract class AbstractRule implements RuleInterface
     public function is()
     {
         $this->setMessageKey('failure_is');
+
         return call_user_func_array([$this, 'validate'], func_get_args());
     }
 
@@ -197,6 +198,7 @@ abstract class AbstractRule implements RuleInterface
     public function isNot()
     {
         $this->setMessageKey('failure_is_not');
+
         return ! call_user_func_array([$this, 'validate'], func_get_args());
     }
 
@@ -212,9 +214,9 @@ abstract class AbstractRule implements RuleInterface
         $this->setMessageKey('failure_is_blank_or');
         if ($this->isBlank()) {
             return true;
-        } else {
-            return call_user_func_array([$this, 'validate'], func_get_args());
         }
+
+        return call_user_func_array([$this, 'validate'], func_get_args());
     }
 
     /**
@@ -227,6 +229,7 @@ abstract class AbstractRule implements RuleInterface
     public function fix()
     {
         $this->setMessageKey('failure_fix');
+
         return call_user_func_array([$this, 'sanitize'], func_get_args());
     }
 

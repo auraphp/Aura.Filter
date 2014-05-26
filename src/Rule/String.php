@@ -74,6 +74,7 @@ class String extends AbstractRule
             $value = str_replace($find, $replace, $value);
         }
         $this->setValue($value);
+
         return true;
     }
 }

@@ -78,6 +78,7 @@ class Int extends AbstractRule
             // (int) 1E5 == 15, but (int) (float) 1E5 == 100000
             $value = (float) $value;
             $this->setValue((int) $value);
+
             return true;
         }
 
@@ -107,6 +108,7 @@ class Int extends AbstractRule
 
         // looks like we're done
         $this->setValue((int) $value);
+
         return true;
     }
 }

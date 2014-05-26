@@ -66,6 +66,7 @@ class Locale extends AbstractRule
     public function validate()
     {
         $value = $this->getValue();
+
         return in_array($value, $this->codes);
     }
 

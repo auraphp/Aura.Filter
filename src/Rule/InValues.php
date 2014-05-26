@@ -54,6 +54,7 @@ class InValues extends AbstractRule
     public function validate(array $array)
     {
         $this->setParams(['values' => array_values($array)]);
+
         return in_array($this->getValue(), $array, true);
     }
 

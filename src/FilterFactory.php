@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Rule\Any;
+
 /**
  *
  * Factory to create Filter objects.
@@ -29,16 +31,16 @@ class FilterFactory
     public function newInstance()
     {
         return new RuleCollection(
-            new RuleLocator(array_merge(
-                require __DIR__ . '/registry.php',
+            new RuleLocator(
                 ['any' => function () {
-                    $rule = new \Aura\Filter\Rule\Any;
-                    $rule->setRuleLocator(new \Aura\Filter\RuleLocator(
-                        require __DIR__ . '/registry.php'
+                    $rule = new Any;
+                    $rule->setRuleLocator(new RuleLocator(
+                        // plug here the stuff @todo
                     ));
+
                     return $rule;
                 }]
-            ))
+            )
         );
     }
 }

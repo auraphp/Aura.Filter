@@ -58,6 +58,7 @@ class Regex extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return (bool) preg_match($expr, $value);
     }
 
@@ -80,6 +81,7 @@ class Regex extends AbstractRule
             return false;
         }
         $this->setValue(preg_replace($expr, $replace, $value));
+
         return true;
     }
 }

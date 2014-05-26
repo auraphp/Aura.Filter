@@ -54,6 +54,7 @@ class Strlen extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return strlen($value) == $len;
     }
 
@@ -63,9 +64,9 @@ class Strlen extends AbstractRule
      * 
      * @param int $len
      * 
-     * @param int $pad_string
+     * @param string $pad_string
      * 
-     * @param constant $pad_type
+     * @param int $pad_type
      * 
      * @return bool True if the value was sanitized, false if not.
      * 
@@ -83,6 +84,7 @@ class Strlen extends AbstractRule
         if (strlen($value) > $len) {
             $this->setValue(substr($value, 0, $len));
         }
+
         return true;
     }
 }

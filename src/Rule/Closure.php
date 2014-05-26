@@ -51,6 +51,7 @@ class Closure extends AbstractRule
     public function validate(PhpClosure $closure)
     {
         $closure = $closure->bindTo($this, get_class($this));
+
         return $closure();
     }
 
@@ -66,6 +67,7 @@ class Closure extends AbstractRule
     public function sanitize(PhpClosure $closure)
     {
         $closure = $closure->bindTo($this, get_class($this));
+
         return $closure();
     }
 }

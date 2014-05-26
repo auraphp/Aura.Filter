@@ -66,6 +66,7 @@ class Trim extends AbstractRule
         if (! $chars) {
             $chars = $this->chars;
         }
+
         return trim($value, $chars) == $value;
     }
 
@@ -89,6 +90,7 @@ class Trim extends AbstractRule
             $chars = $this->chars;
         }
         $this->setValue(trim($value, $chars));
+
         return true;
     }
 }

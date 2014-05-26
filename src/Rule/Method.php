@@ -52,6 +52,7 @@ class Method extends AbstractRule
     public function validate($method)
     {
         $this->setParams(get_defined_vars());
+
         return (bool) $this->call(func_get_args());
     }
 
@@ -68,6 +69,7 @@ class Method extends AbstractRule
     public function sanitize($method)
     {
         $this->setParams(get_defined_vars());
+
         return (bool) $this->call(func_get_args());
     }
     
@@ -85,6 +87,7 @@ class Method extends AbstractRule
     {
         $object = $this->getValue();
         $method = array_shift($args);
+
         return is_object($object)
             && is_callable([$object, $method])
             && call_user_func_array([$object, $method], $args);

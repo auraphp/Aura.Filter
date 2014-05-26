@@ -55,6 +55,7 @@ class StrlenMin extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return strlen($value) >= $min;
     }
 
@@ -66,7 +67,7 @@ class StrlenMin extends AbstractRule
      * 
      * @param string $pad_string
      * 
-     * @param constant $pad_type
+     * @param int $pad_type
      * 
      * @return bool True if the value was sanitized, false if not.
      * 
@@ -81,6 +82,7 @@ class StrlenMin extends AbstractRule
         if (strlen($value) < $min) {
             $this->setValue(str_pad($value, $min, $pad_string, $pad_type));
         }
+
         return true;
     }
 }

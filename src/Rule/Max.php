@@ -54,6 +54,7 @@ class Max extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return $value <= $max;
     }
 
@@ -76,6 +77,7 @@ class Max extends AbstractRule
         if ($value > $max) {
             $this->setValue($max);
         }
+
         return true;
     }
 }

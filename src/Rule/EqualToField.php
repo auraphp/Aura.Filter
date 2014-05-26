@@ -84,6 +84,7 @@ class EqualToField extends AbstractRule
         }
 
         $this->setValue($this->data->$other_field);
+
         return true;
     }
 }

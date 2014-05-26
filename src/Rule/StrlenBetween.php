@@ -57,6 +57,7 @@ class StrlenBetween extends AbstractRule
             return false;
         }
         $len = strlen($value);
+
         return ($len >= $min && $len <= $max);
     }
 
@@ -70,7 +71,7 @@ class StrlenBetween extends AbstractRule
      * 
      * @param string $pad_string
      * 
-     * @param constant $pad_type
+     * @param int $pad_type
      * 
      * @return bool True if the value was sanitized, false if not.
      * 
@@ -88,6 +89,7 @@ class StrlenBetween extends AbstractRule
         if (strlen($value) > $max) {
             $this->setValue(substr($value, 0, $max));
         }
+
         return true;
     }
 }

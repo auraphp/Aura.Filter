@@ -74,6 +74,7 @@ class DateTime extends AbstractRule
             return false;
         }
         $this->setValue($datetime->format($format));
+
         return true;
     }
     

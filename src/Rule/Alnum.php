@@ -51,6 +51,7 @@ class Alnum extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return ctype_alnum((string) $value);
     }
 
@@ -64,6 +65,7 @@ class Alnum extends AbstractRule
     public function sanitize()
     {
         $this->setValue(preg_replace('/[^a-z0-9]/i', '', $this->getValue()));
+
         return true;
     }
 }

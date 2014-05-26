@@ -51,6 +51,7 @@ class Alpha extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
+
         return ctype_alpha($value);
     }
 
@@ -64,6 +65,7 @@ class Alpha extends AbstractRule
     public function sanitize()
     {
         $this->setValue(preg_replace('/[^a-z]/i', '', $this->getValue()));
+
         return true;
     }
 }

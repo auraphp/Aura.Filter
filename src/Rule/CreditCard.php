@@ -67,6 +67,7 @@ class CreditCard extends AbstractRule
         for ($i = strlen($value) - 1; $i >= 0; $i--) {
             $sum += $sumTable[$flip++ & 0x1][$value[$i]];
         }
+
         return $sum % 10 === 0;
     }
 

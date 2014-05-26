@@ -66,6 +66,7 @@ class Blank extends AbstractRule
     public function sanitize()
     {
         $this->setValue(null);
+
         return true;
     }
 }

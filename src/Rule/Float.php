@@ -82,6 +82,7 @@ class Float extends AbstractRule
         if (is_numeric($value)) {
             // numeric string, cast to a float
             $this->setValue((float) $value);
+
             return true;
         }
 
@@ -127,6 +128,7 @@ class Float extends AbstractRule
 
         // done
         $this->setValue((float) $value);
+
         return true;
     }
 }
