@@ -23,22 +23,23 @@ class FilterFactory
      *
      * Returns a new Filter instance.
      *
-     * @param object $helpers An arbitrary helper manager for the Filter; if not
-     * specified, uses the HelperRegistry from this package.
-     *
-     * @return Filter
+     * @return RuleCollection
      *
      */
-    public function newInstance($helpers = null)
+    public function newInstance()
     {
-        if (! $helpers) {
-            $helpers = new HelperRegistry;
-        }
-
-        return new Filter(
-            new TemplateRegistry,
-            new TemplateRegistry,
-            $helpers
+        return new RuleCollection(
+            new RuleLocator(array_merge(
+                require __DIR__ . '/registry.php',
+                ['any' => function () {
+                    $rule = new \Aura\Filter\Rule\Any;
+                    $rule->setRuleLocator(new \Aura\Filter\RuleLocator(
+                        require __DIR__ . '/registry.php'
+                    ));
+                    return $rule;
+                }]
+            )),
+            new Translator(require dirname(__DIR__) . '/intl/en_US.php')
         );
     }
 }
