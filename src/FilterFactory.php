@@ -29,7 +29,8 @@ class FilterFactory
     public function newInstance()
     {
         return new RuleCollection(
-            new RuleLocator(
+            new RuleLocator(array_merge(
+                self::registry(),
                 ['any' => function () {
                     $rule = new Rule\Any;
                     $rule->setRuleLocator(new RuleLocator(
@@ -38,7 +39,7 @@ class FilterFactory
 
                     return $rule;
                 }]
-            )
+            ))
         );
     }
 
