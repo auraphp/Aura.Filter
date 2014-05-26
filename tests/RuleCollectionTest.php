@@ -360,12 +360,10 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testInstanceScript()
     {
-        $this->markTestSkipped('need to build the stuff her');
-
         // Get instance
-        $instance = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $instance = (new FilterFactory())->newInstance();
         // Get the Rule Registry
-        $reqistry = require dirname(dirname(dirname(__DIR__))) . '/scripts/registry.php';
+        $registry = (new FilterFactory())->registry();
 
         // Check if the instance is a RuleCollection Object
         $expect = 'Aura\Filter\RuleCollection';
@@ -373,7 +371,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expect, $actual);
 
         // Test if all normal Rules are present
-        foreach ($reqistry as $name => $rule) {
+        foreach ($registry as $name => $rule) {
             $expect = get_class($rule());
             $actual = $instance->getRuleLocator()->get($name);
             $this->assertInstanceOf($expect, $actual);
@@ -387,8 +385,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
     
     public function testNewRuleInAny()
     {
-        $this->markTestSkipped('need to build the stuff her');
-        $instance = require dirname(dirname(dirname(__DIR__))) . '/scripts/instance.php';
+        $instance = (new FilterFactory())->newInstance();
         $any = $instance->getRuleLocator()->get('any');
         $any->getRuleLocator()->set('hex', function () {
             return new \Aura\Filter\Rule\Hex;
