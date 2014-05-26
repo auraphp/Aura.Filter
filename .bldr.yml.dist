@@ -78,7 +78,7 @@ bldr:
                     failOnError: true
                     executable: php
                     arguments:
-                        - bin/phpunit
+                        - vendor/bin/phpunit
                         - --coverage-html=build/coverage
                         - --coverage-text=php://stdout
         testLocal:
