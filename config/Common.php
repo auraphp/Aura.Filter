@@ -18,10 +18,6 @@ class Common extends Config
          */
         $di->params['Aura\Filter\RuleCollection'] = [
             'rule_locator' => $di->lazyNew('Aura\Filter\RuleLocator'),
-            'translator' => $di->lazy(
-                [$di->lazyGet('intl_translator_locator'), 'get'],
-                'Aura.Filter'
-            ),
         ];
 
         /**
@@ -61,14 +57,6 @@ class Common extends Config
             'word'                  =>  $di->lazyNew('Aura\Filter\Rule\Word'),
             'isbn'                  =>  $di->lazyNew('Aura\Filter\Rule\Isbn'),
         ];
-
-        /**
-         * Aura\Intl\PackageLocator
-         */
-        $di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter']['en_US'] = $di->lazy(
-            [$di->lazyGet('intl_package_factory'), 'newInstance'],
-            $di->lazyRequire(dirname(__DIR__) . "/intl/en_US.php")
-        );
     }
     
     public function modify(Container $di)
