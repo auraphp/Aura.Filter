@@ -121,7 +121,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field' => [
-                'Please use only alphanumeric characters.',
+                'FILTER_RULE_FAILURE_IS_ALNUM',
             ],
         ];
 
@@ -130,7 +130,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $actual = $this->filter->getMessages('field');
         $expect = [
-            'Please use only alphanumeric characters.',
+            'FILTER_RULE_FAILURE_IS_ALNUM',
         ];
         $this->assertSame($expect, $actual);
         
@@ -157,8 +157,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field1' => [
-                'Please use only alphanumeric characters.',
-                'Please use at least 6 character(s).',
+                'FILTER_RULE_FAILURE_IS_ALNUM',
+                'FILTER_RULE_FAILURE_IS_STRLEN_MIN',
             ],
         ];
 
@@ -178,8 +178,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field1' => [
-                'Please use only alphanumeric characters.',
-                'Please use at least 6 character(s).',
+                'FILTER_RULE_FAILURE_IS_ALNUM',
+                'FILTER_RULE_FAILURE_IS_STRLEN_MIN',
             ],
         ];
 
@@ -256,10 +256,10 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         
         $expect = [
             'field1' => [
-                'Please use one of the following: "foo", "bar", "baz"',
+                'FILTER_RULE_FAILURE_IS_IN_VALUES',
             ],
             'field2' => [
-                'Please use one of the following: "0", "1", "2"',
+                'FILTER_RULE_FAILURE_IS_IN_KEYS',
             ],
         ];
         $actual = $this->filter->getMessages();
