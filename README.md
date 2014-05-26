@@ -404,7 +404,7 @@ can apply a filter rule to an individual value:
 ```php
 <?php
 // get a new filter
-$filter = require "/path/to/Aura.Filter/scripts/instance.php";
+$filter = new Filter(new RuleLocator);
 
 // an individual value
 $username = 'new_username';
