@@ -1,28 +1,28 @@
 Aura Filter
 ===========
 
-[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop)](https://travis-ci.org/auraphp/Aura.Filter)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Filter)
 
 The Aura Filter package provides validation and sanitizing for data objects
 and arrays.
 
-This package is compliant with [PSR-0][], [PSR-1][], and [PSR-2][]. If you
+This package is compliant with [PSR-0][], [PSR-1][], [PSR-2][], [PSR-4][]. If you
 notice compliance oversights, please send a patch via pull request.
 
 [PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
-
+[PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
 
 Getting Started
 ===============
 
 The easiest way to instantiate a new filter (i.e., a new `RuleCollection`)
-with all the available rules is to include the `instance.php` script:
+with all the available rules is to use the FactoryFilter class:
 
 ```php
 <?php
-$filter = require "/path/to/Aura.Filter/scripts/instance.php";
+$filter = (new FactoryFilter())->newInstance();
 ```
 
 Alternatively, we can add the `Aura.Filter` package to an autoloader, and
@@ -32,12 +32,8 @@ instantiate manually:
 <?php
 use Aura\Filter\RuleCollection as Filter;
 use Aura\Filter\RuleLocator;
-use Aura\Filter\Translator;
 
-$filter = new Filter(
-    new RuleLocator, 
-    new Translator(require 'path/to/Aura.Filter/intl/en_US.php')
-);
+$filter = new Filter(new RuleLocator);
 ```
 
 (Note that if we instantiate manually, we will need to configure the
@@ -50,7 +46,7 @@ object.
 ```php
 <?php
 // get a new filter
-$filter = require "/path/to/Aura.Filter/scripts/instance.php";
+$filter = new Filter(new RuleLocator);
 
 // the username must be alphanumeric, between 6 and 12 characters long,
 // and cast to a string
