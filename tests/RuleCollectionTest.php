@@ -374,7 +374,7 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         foreach ($registry as $name => $rule) {
             $expect = get_class($rule());
             $actual = $instance->getRuleLocator()->get($name);
-//            $this->assertInstanceOf($expect, $actual);
+            $this->assertInstanceOf($expect, $actual);
         }
 
         // Check if the Any Rule is present
