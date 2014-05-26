@@ -38,8 +38,7 @@ class FilterFactory
                     ));
                     return $rule;
                 }]
-            )),
-            new Translator(require dirname(__DIR__) . '/intl/en_US.php')
+            ))
         );
     }
 }

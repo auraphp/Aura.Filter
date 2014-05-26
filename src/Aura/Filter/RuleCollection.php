@@ -109,29 +109,16 @@ class RuleCollection
     protected $rule_locator;
 
     /**
-     *
-     * A Translator object.
-     * 
-     * @var TranslatorInterface
-     * 
-     */
-    protected $translator;
-
-    /**
      * 
      * Constructor.
      * 
      * @param RuleLocator $rule_locator The rule locator.
      * 
-     * @param TranslatorInterface $translator The message translator.
-     * 
      */
     public function __construct(
-        RuleLocator         $rule_locator,
-        TranslatorInterface $translator
+        RuleLocator         $rule_locator
     ) {
         $this->rule_locator = $rule_locator;
-        $this->translator   = $translator;
     }
 
     /**
@@ -244,18 +231,6 @@ class RuleCollection
     public function getRuleLocator()
     {
         return $this->rule_locator;
-    }
-
-    /**
-     * 
-     * Returns the translator.
-     * 
-     * @return TranslatorInterface
-     * 
-     */
-    public function getTranslator()
-    {
-        return $this->translator;
     }
 
     /**
@@ -410,15 +385,12 @@ class RuleCollection
         // do we have a field-specific message at this point?
         if ($message) {
             // yes; note that we set this as the only element in an array.
-            $this->messages[$field] = [$this->translator->translate($message)];
+            $this->messages[$field] = [$message];
             return;
         }
         
         // add the rule-specific message the the array of messages, and done.
-        $this->messages[$field][] = $this->translator->translate(
-            $rule->getMessage(),
-            $rule->getParams()
-        );
+        $this->messages[$field][] = $rule->getMessage();
     }
     
     /**
