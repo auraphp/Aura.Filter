@@ -1,7 +1,0 @@
-<phpunit bootstrap="./bootstrap.php">
-    <testsuites>
-        <testsuite>
-            <directory>./Aura/Filter</directory>
-        </testsuite>
-    </testsuites>
-</phpunit>
