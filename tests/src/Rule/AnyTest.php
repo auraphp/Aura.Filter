@@ -12,7 +12,7 @@ class AnyTest extends AbstractRuleTest
         // alphanumeric
         ['alnum'],
         // only @ signs
-        ['regex', '/^[@]+$/']
+        ['regex', '/^[@]+$/'],
     ];
     
     protected function newRule($data, $field)
@@ -22,6 +22,7 @@ class AnyTest extends AbstractRuleTest
             'alnum' => function () { return new \Aura\Filter\Rule\Alnum; },
             'regex' => function () { return new \Aura\Filter\Rule\Regex; },
         ]));
+
         return $rule;
     }
     

@@ -10,7 +10,7 @@ class AllTest extends AbstractRuleTest
     
     protected $list = [
         ['alnum'],
-        ['strlen', 4]
+        ['strlen', 4],
     ];
     
     protected function newRule($data, $field)

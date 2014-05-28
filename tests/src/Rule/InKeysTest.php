@@ -12,7 +12,7 @@ class InKeysTest extends AbstractRuleTest
         1      => 'val1',
         'key0' => 'val3',
         'key1' => 'val4',
-        'key2' => 'val5'
+        'key2' => 'val5',
     ];
     
     public function ruleIs($rule)

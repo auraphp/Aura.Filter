@@ -472,6 +472,7 @@ class RuleCollection
         
         // retain the value and return the pass/fail result
         $value = $rule->getValue();
+
         return $passed;
     }
 }

@@ -1,8 +1,6 @@
 <?php
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRuleTest;
-
 class MockUpload extends Upload
 {
     public $is_uploaded_file = true;
