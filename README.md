@@ -6,10 +6,9 @@ Aura Filter
 The Aura Filter package provides validation and sanitizing for data objects
 and arrays.
 
-This package is compliant with [PSR-0][], [PSR-1][], [PSR-2][], [PSR-4][]. If you
+This package is compliant with [PSR-1][], [PSR-2][], [PSR-4][]. If you
 notice compliance oversights, please send a patch via pull request.
 
-[PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 [PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
