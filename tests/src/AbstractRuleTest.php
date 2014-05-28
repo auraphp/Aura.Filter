@@ -1,8 +1,6 @@
 <?php
 namespace Aura\Filter;
 
-use Aura\Filter\AbstractRule;
-
 abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
 {
     protected $expect_message;
@@ -153,21 +151,27 @@ abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
     
     public function providerIsBlankOr()
     {
-        return array_merge($this->providerIs(), [
-            [null],
-            [''],
-            ["\r \t \n"],
-        ]);
+        return array_merge(
+            $this->providerIs(),
+            [
+                [null],
+                [''],
+                ["\r \t \n"],
+            ]
+        );
     }
     
     abstract public function providerFix();
     
     public function providerFixBlankOr()
     {
-        return array_merge($this->providerFix(), [
-            [null, true, null],
-            ['', true, null],
-            ["\r \t \n", true, null],
-        ]);
+        return array_merge(
+            $this->providerFix(),
+            [
+                [null, true, null],
+                ['', true, null],
+                ["\r \t \n", true, null],
+            ]
+        );
     }
 }

@@ -390,7 +390,11 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         $any->getRuleLocator()->set('hex', function () {
             return new \Aura\Filter\Rule\Hex;
         });
-        $instance->addSoftRule('hexval', $instance::IS, 'any', [
+        $instance->addSoftRule(
+            'hexval',
+            $instance::IS,
+            'any',
+            [
                 ['hex']
             ]
         );
