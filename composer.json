@@ -1,6 +1,6 @@
 {
     "name": "aura/filter",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "aura-package",
     "description": "The Aura Filter package provides tools to validate and sanitize data objects and arrays.",
     "keywords": [
@@ -9,7 +9,7 @@
         "sanitize"
     ],
     "homepage": "http://auraphp.com/Aura.Filter",
-    "time": "2013-09-09",
+    "time": "2014-05-31",
     "license": "BSD-2-Clause",
     "authors": [
         {
@@ -28,33 +28,28 @@
         },
         {
             "name": "Pascal Borreli",
-            "email": "pascal@borreli.com",
-            "homepage": ""
+            "email": "pascal@borreli.com"
         },
         {
             "name": "Mapthegod",
-            "email": "nakymaton.hdc@gmail.com",
-            "homepage": ""
+            "email": "nakymaton.hdc@gmail.com"
         },
         {
             "name": "Benjamin Geissler",
-            "email": "benjamin.geissler@gmail.com",
-            "homepage": ""
+            "email": "benjamin.geissler@gmail.com"
         },
         {
             "name": "Daniel Haaker",
-            "email": "d.haaker@gmail.com",
-            "homepage": ""
+            "email": "d.haaker@gmail.com"
         },
         {
             "name": "chrissound",
-            "email": "chris@soundshare.co.uk",
-            "homepage": ""
+            "email": "chris@soundshare.co.uk"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "aura/installer-default": ">=1.0.0"
+        "aura/installer-default": "1.0.*"
     },
     "autoload": {
         "psr-0": {
