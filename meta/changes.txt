@@ -1,15 +1,1 @@
-- [ADD] German translations; thanks @geissler
-
-- [ADD] Rule\Isbn from @geissler
-
-- [DOC] Docblock cleanup (mostly style, some typo fixes and return type
-  additions)
-
-- [ADD] RuleCollection::addMessages(), to complement Aura.Input
-  Filter::addMessages(), per @harikt
-
-- [CHG] Translator::translate() to deal with array values.
-
-- [CHG] Rule\InKeys to add a 'keys' pseudo-param, for message translations
-
-- [DOC] Fixed wrong parameter order in readme; thanks @chrissound
+Hygeine release: point travis status badge to develop branch.
