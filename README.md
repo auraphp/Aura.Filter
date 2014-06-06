@@ -1,23 +1,46 @@
-Aura Filter
-===========
-
-[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Filter)
+# Aura Filter
 
 The Aura Filter package provides validation and sanitizing for data objects
 and arrays.
 
-This package is compliant with [PSR-1][], [PSR-2][], [PSR-4][]. If you
-notice compliance oversights, please send a patch via pull request.
+## Foreword
 
+### Installation
+
+This library requires PHP 5.4 or later, and has no userland dependencies.
+
+It is installable and autoloadable via Composer as [aura/filter](https://packagist.org/packages/aura/filter).
+
+Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/releases) 
+or clone this repository, then require or include its _autoload.php_ file.
+
+### Quality
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/quality-score.png?s=1c48d6875376b3c07dacf201b30fe997adeb6d15)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/coverage.png?s=7ab1aace65d9b423b8e65dfe43ecea69b1f092dc)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Filter)
+
+To run the [PHPUnit][] tests at the command line, go to the _tests_ directory and issue `phpunit`.
+
+This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
+you notice compliance oversights, please send a patch via pull request.
+
+[PHPUnit]: http://phpunit.de/manual/
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
 [PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
 
-Getting Started
-===============
+### Community
+
+To ask questions, provide feedback, or otherwise communicate with the Aura 
+community, please join our [Google Group](http://groups.google.com/group/auraphp), 
+follow [@auraphp on Twitter](http://twitter.com/auraphp), or chat with us on #auraphp on Freenode.
+
+
+## Getting Started
 
 The easiest way to instantiate a new filter (i.e., a new `RuleCollection`)
-with all the available rules is to use the FactoryFilter class:
+with all the available rules is to use the `FactoryFilter` class:
 
 ```php
 <?php
