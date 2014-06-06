@@ -40,11 +40,11 @@ follow [@auraphp on Twitter](http://twitter.com/auraphp), or chat with us on #au
 ## Getting Started
 
 The easiest way to instantiate a new filter (i.e., a new `RuleCollection`)
-with all the available rules is to use the `FactoryFilter` class:
+with all the available rules is to use the `FilterFactory` class:
 
 ```php
 <?php
-$filter = (new FactoryFilter())->newInstance();
+$filter = (new FilterFactory())->newInstance();
 ```
 
 Alternatively, we can add the `Aura.Filter` package to an autoloader, and
