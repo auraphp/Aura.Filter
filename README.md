@@ -450,8 +450,13 @@ Writing a rule class is straightforward:
 - Use `getValue()` to get the value being validated, and `setValue()` to change
   the value being sanitized.
 
-- Add a property `$message` to indicate a string that should be translated
-  as a message when validation or sanitizing fails.
+- Add a property `$message_map` as array with the below keys of which values indicate a message key that should be translated
+  as a message.
+    * failure_is
+    * failure_is_not
+    * failure_is_blank_or
+    * failure_fix
+    * failure_fix_blank_or
 
 Here is an example of a hexadecimal rule:
 
@@ -463,7 +468,14 @@ use Aura\Filter\AbstractRule;
 
 class Hex extends AbstractRule
 {
-    protected $message = 'FILTER_HEX';
+    protected $message_map = [
+        'failure_is'            => 'FILTER_RULE_FAILURE_IS_HEX',
+        'failure_is_not'        => 'FILTER_RULE_FAILURE_IS_NOT_HEX',
+        'failure_is_blank_or'   => 'FILTER_RULE_FAILURE_IS_BLANK_OR_HEX',
+        'failure_fix'           => 'FILTER_RULE_FAILURE_FIX_HEX',
+        'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_HEX',
+    ];
+
     
     public function validate($max = null)
     {
@@ -527,6 +539,21 @@ $locator = $filter->getRuleLocator();
 $locator->set('hex', function () {
     return new Vendor\Package\Filter\Rule\Hex;
 });
+```
+
+Set Custom Messages 
+--------------------------
+
+Now we set the custom messages into the `Translator`.
+
+```php
+<?php
+$translator= $filter->getTranslator();
+$translator->set('FILTER_RULE_FAILURE_IS_HEX',              'Please use only hex characters.');
+$translator->set('FILTER_RULE_FAILURE_IS_NOT_HEX',          'Please do not use only hex characters.');
+$translator->set('FILTER_RULE_FAILURE_IS_BLANK_OR_HEX',     'Please leave blank, or use only hex characters.');
+$translator->set('FILTER_RULE_FAILURE_FIX_HEX',             'Could not sanitize to only hex characters.');
+$translator->set('FILTER_RULE_FAILURE_FIX_BLANK_OR_HEX',    'Could not sanitize to a blank or only hex characters.');
 ```
 
 Apply The New Rule
