@@ -163,7 +163,7 @@ abstract class AbstractRule implements RuleInterface
      *
      * Set value of field, creating it in the data if needed.
      *
-     * @param string $value The new value of the field.
+     * @param string|bool $value The new value of the field.
      *
      * @return void
      *
