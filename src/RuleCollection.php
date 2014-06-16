@@ -393,6 +393,10 @@ class RuleCollection
             return;
         }
 
+        if (null == $rule) {
+            throw new \RuntimeException('Needs to specify a rule object');
+        }
+
         // add the rule-specific message the the array of messages, and done.
         $this->messages[$field][] = $rule->getMessage();
     }
