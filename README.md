@@ -369,8 +369,8 @@ messages for the rules it failed.
 Custom Messages
 ===============
 
-By default when a rule fails, the messages you will be getting are from the 
-`intl/en_US.php`. But you can also provide a single custom message for 
+By default when a rule fails, the messages you will be getting are predefined strings.
+These can be translated accordingly with any translator. But you can also provide a single custom message for
 all the failures.
 
 ```php
