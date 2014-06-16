@@ -13,6 +13,7 @@ It is installable and autoloadable via Composer as [aura/filter](https://packagi
 
 Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/releases) 
 or clone this repository, then require or include its _autoload.php_ file.
+You don't need to run composer install in order to run the test suite.
 
 ### Quality
 
