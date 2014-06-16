@@ -48,11 +48,11 @@ class Email extends AbstractRule
     protected $expr;
 
     /**
-     * 
+     *
      * Post-construction tasks to complete object construction.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function __construct()
     {
