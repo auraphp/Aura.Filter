@@ -246,7 +246,7 @@ class RuleCollection
      *
      * @param string $name The name of the rule to apply.
      *
-     * @param string $params Params for the rule.
+     * @param array $params Params for the rule.
      *
      * @param string $type The rule type: soft, hard, stop.
      *
