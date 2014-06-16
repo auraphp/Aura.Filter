@@ -412,8 +412,8 @@ instead of
 array (
   'username' => 
   array (
-    0 => 'Please use only alphanumeric characters.',
-    1 => 'Please use between 6 and 12 characters.',
+    0 => 'FILTER_RULE_FAILURE_IS_ALNUM',
+    1 => 'FILTER_RULE_FAILURE_IS_BETWEEN',
   ),
 )
 ```
@@ -469,7 +469,7 @@ Writing a rule class is straightforward:
 - Use `getValue()` to get the value being validated, and `setValue()` to change
   the value being sanitized.
 
-- Add a property `$message` to indicate a string that should be translated
+- Add a property `$message` to indicate a string that should be returned
   as a message when validation or sanitizing fails.
 
 Here is an example of a hexadecimal rule:
