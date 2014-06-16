@@ -13,13 +13,13 @@ namespace Aura\Filter;
 use InvalidArgumentException;
 
 /**
- * 
+ *
  * A collection of rules to be applied to a data object.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class RuleCollection
 {
@@ -115,9 +115,8 @@ class RuleCollection
      * @param RuleLocator $rule_locator The rule locator.
      * 
      */
-    public function __construct(
-        RuleLocator         $rule_locator
-    ) {
+    public function __construct(RuleLocator $rule_locator)
+    {
         $this->rule_locator = $rule_locator;
     }
 
@@ -160,6 +159,7 @@ class RuleCollection
         array_shift($params); // $method
         array_shift($params); // $name
         $this->addRule($field, $method, $name, $params, self::SOFT_RULE);
+
         return $this;
     }
 
@@ -183,6 +183,7 @@ class RuleCollection
         array_shift($params); // $method
         array_shift($params); // $name
         $this->addRule($field, $method, $name, $params, self::HARD_RULE);
+
         return $this;
     }
 
@@ -206,6 +207,7 @@ class RuleCollection
         array_shift($params); // $method
         array_shift($params); // $name
         $this->addRule($field, $method, $name, $params, self::STOP_RULE);
+
         return $this;
     }
 
@@ -299,6 +301,7 @@ class RuleCollection
             $object = (object) $data;
             $result = $this->values($object);
             $data = (array) $object;
+
             return $result;
         }
         
@@ -386,6 +389,7 @@ class RuleCollection
         if ($message) {
             // yes; note that we set this as the only element in an array.
             $this->messages[$field] = [$message];
+
             return;
         }
         
