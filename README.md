@@ -69,7 +69,7 @@ object.
 ```php
 <?php
 // get a new filter
-$filter = new Filter(new RuleLocator);
+$filter = (new FilterFactory())->newInstance();
 
 // the username must be alphanumeric, between 6 and 12 characters long,
 // and cast to a string
@@ -427,7 +427,7 @@ can apply a filter rule to an individual value:
 ```php
 <?php
 // get a new filter
-$filter = new Filter(new RuleLocator);
+$filter = (new FilterFactory())->newInstance();
 
 // an individual value
 $username = 'new_username';
