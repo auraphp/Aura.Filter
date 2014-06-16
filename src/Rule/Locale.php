@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Rule for locale (language and country) codes.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Locale extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_LOCALE',
@@ -39,11 +39,11 @@ class Locale extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Valid locale codes; generated via `locale -a` on Mac OS X 10.7.5.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $codes = [
         'af_ZA', 'am_ET', 'be_BY', 'bg_BG', 'ca_ES', 'cs_CZ', 'da_DK',
@@ -57,11 +57,11 @@ class Locale extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value is in the list of allowed locale codes.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -71,11 +71,11 @@ class Locale extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Can't fix locale codes.
-     * 
+     *
      * @return bool Always false.
-     * 
+     *
      */
     public function sanitize()
     {

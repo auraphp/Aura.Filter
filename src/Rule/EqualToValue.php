@@ -1,35 +1,35 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
- * Validates that this value is equal to some other element in the filter 
+ *
+ * Validates that this value is equal to some other element in the filter
  * chain (note that equality is not strict, so type does not matter).
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class EqualToValue extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_EQUAL_TO_VALUE',
@@ -40,13 +40,13 @@ class EqualToValue extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Check whether the value is equal
-     * 
+     *
      * @param mixed $other_value
-     * 
+     *
      * @return bool True if the values are equal, false if not equal.
-     * 
+     *
      */
     public function validate($other_value)
     {
@@ -56,13 +56,13 @@ class EqualToValue extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Force the field to the value of the other field
-     * 
+     *
      * @param mixed $other_value
-     * 
+     *
      * @return bool Always true.
-     * 
+     *
      */
     public function sanitize($other_value)
     {

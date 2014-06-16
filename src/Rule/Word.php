@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Sanitizes a value to a string with only word characters.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Word extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_WORD',
@@ -39,14 +39,14 @@ class Word extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value is composed only of word characters.
-     * 
-     * These include a-z, A-Z, 0-9, and underscore, indicated by a 
+     *
+     * These include a-z, A-Z, 0-9, and underscore, indicated by a
      * regular expression "\w".
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -60,11 +60,11 @@ class Word extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Strips non-word characters within the value.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function sanitize()
     {

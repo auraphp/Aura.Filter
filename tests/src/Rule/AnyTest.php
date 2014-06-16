@@ -7,14 +7,14 @@ use Aura\Filter\RuleLocator;
 class AnyTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_ANY';
-    
+
     protected $list = [
         // alphanumeric
         ['alnum'],
         // only @ signs
         ['regex', '/^[@]+$/'],
     ];
-    
+
     protected function newRule($data, $field)
     {
         $rule = parent::newRule($data, $field);
@@ -25,32 +25,32 @@ class AnyTest extends AbstractRuleTest
 
         return $rule;
     }
-    
+
     public function ruleIs($rule)
     {
         return $rule->is($this->list);
     }
-    
+
     public function ruleIsNot($rule)
     {
         return $rule->isNot($this->list);
     }
-    
+
     public function ruleIsBlankOr($rule)
     {
         return $rule->isBlankOr($this->list);
     }
-    
+
     public function ruleFix($rule)
     {
         return $rule->fix($this->list);
     }
-    
+
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr($this->list);
     }
-    
+
     public function providerIs()
     {
         return [
@@ -68,7 +68,7 @@ class AnyTest extends AbstractRuleTest
             ["@@@@@"],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -85,7 +85,7 @@ class AnyTest extends AbstractRuleTest
             [" "],
         ];
     }
-    
+
     public function providerFix()
     {
         // can't fix on "any" rule combinations

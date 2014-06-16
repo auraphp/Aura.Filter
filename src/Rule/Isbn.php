@@ -76,6 +76,7 @@ class Isbn extends AbstractRule
 
         if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value) == 1) {
             $this->setValue($value);
+
             return true;
         }
 
@@ -83,13 +84,13 @@ class Isbn extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Tests if a 13 digit ISBN is correct.
      *
      * @param $isbn
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     private function thirteen($isbn)
     {
@@ -104,13 +105,13 @@ class Isbn extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Tests if a 10 digit ISBN is correct.
      *
      * @param $isbn
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     private function ten($isbn)
     {

@@ -6,14 +6,14 @@ use Aura\Filter\AbstractRuleTest;
 class TrimTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_TRIM';
-    
+
     public function providerIs()
     {
         return [
             ['abc'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -21,7 +21,7 @@ class TrimTest extends AbstractRuleTest
             [' abc '],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

@@ -6,17 +6,17 @@ use Aura\Filter\AbstractRuleTest;
 class StringTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRING';
-    
+
     public function ruleFix($rule)
     {
         return $rule->fix(' ', '@');
     }
-    
+
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr(' ', '@');
     }
-    
+
     public function providerIs()
     {
         return [
@@ -27,7 +27,7 @@ class StringTest extends AbstractRuleTest
             ['string'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -35,7 +35,7 @@ class StringTest extends AbstractRuleTest
             [new \StdClass],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

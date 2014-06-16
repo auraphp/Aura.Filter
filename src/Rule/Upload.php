@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Sanitizes a file-upload information array.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Upload extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_UPLOAD',
@@ -49,15 +49,15 @@ class Upload extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value is an array of file-upload information, and
      * if a file is referred to, that is actually an uploaded file.
-     * 
+     *
      * The required keys are 'error', 'name', 'size', 'tmp_name', 'type'. More
      * or fewer or different keys than this will return a "malformed" error.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -84,6 +84,7 @@ class Upload extends AbstractRule
         if (! $this->isUploadedFile($value['tmp_name'])) {
             // nefarious happenings are afoot.
             $this->setMessageKey('err_is_uploaded_file');
+
             return false;
         }
 
@@ -92,12 +93,12 @@ class Upload extends AbstractRule
     }
 
     /**
-     * 
-     * Sanitizes a file-upload information array.  If no file has been 
+     *
+     * Sanitizes a file-upload information array.  If no file has been
      * uploaded, the information will be returned as null.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function sanitize()
     {
@@ -116,13 +117,13 @@ class Upload extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Check before the file is uploaded
-     * 
+     *
      * @param string $value
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     protected function preCheck(&$value)
     {
@@ -148,6 +149,7 @@ class Upload extends AbstractRule
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
             $this->setMessageKey('err_array_keys');
+
             return false;
         }
 
@@ -156,13 +158,13 @@ class Upload extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Check whether the file was uploaded via HTTP POST
-     * 
+     *
      * @param string $file
-     * 
+     *
      * @return bool True if the file was uploaded via HTTP POST, false if not.
-     * 
+     *
      */
     protected function isUploadedFile($file)
     {

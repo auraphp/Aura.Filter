@@ -7,7 +7,7 @@ class MockValue
     {
         return $return;
     }
-    
+
     public function sanitize($return)
     {
         return $return;

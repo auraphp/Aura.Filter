@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Rule for alphabetic characters.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Alpha extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_ALPHA',
@@ -39,11 +39,11 @@ class Alpha extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value is letters only (upper or lower case).
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -56,11 +56,11 @@ class Alpha extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Strips non-alphabetic characters from the value.
-     * 
+     *
      * @return bool Always true.
-     * 
+     *
      */
     public function sanitize()
     {

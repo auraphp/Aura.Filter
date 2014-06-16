@@ -58,7 +58,7 @@ class Common extends Config
             'isbn'                  =>  $di->lazyNew('Aura\Filter\Rule\Isbn'),
         ];
     }
-    
+
     public function modify(Container $di)
     {
     }

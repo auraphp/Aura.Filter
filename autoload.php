@@ -25,6 +25,7 @@ spl_autoload_register(function ($class) {
         $file = $dir . DIRECTORY_SEPARATOR . $part;
         if (is_readable($file)) {
             require $file;
+
             return;
         }
     }

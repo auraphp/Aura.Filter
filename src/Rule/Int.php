@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Sanitizes a value to an integer.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Int extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_INT',
@@ -39,11 +39,11 @@ class Int extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value represents an integer.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -58,15 +58,15 @@ class Int extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Forces the value to an integer.
-     * 
+     *
      * Attempts to extract a valid integer from the given value, using an
      * algorithm somewhat less naive that "remove all characters that are not
      * '0-9+-'".  The result may not be expected, but it will be a integer.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function sanitize()
     {

@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Validates that a value's length is within a given range.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class StrlenBetween extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_STRLEN_BETWEEN',
@@ -39,15 +39,15 @@ class StrlenBetween extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the length of the value is within a given range.
-     * 
+     *
      * @param mixed $min The minimum valid length.
-     * 
+     *
      * @param mixed $max The maximum valid length.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate($min, $max)
     {
@@ -62,19 +62,19 @@ class StrlenBetween extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Sanitize
-     * 
+     *
      * @param int $min
-     * 
+     *
      * @param int $max
-     * 
+     *
      * @param string $pad_string
-     * 
+     *
      * @param int $pad_type
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
