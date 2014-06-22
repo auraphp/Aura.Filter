@@ -42,3 +42,4 @@ require_once __DIR__ . '/src/Aura/Filter/Rule/Word.php';
 require_once __DIR__ . '/src/Aura/Filter/Rule/Isbn.php';
 require_once __DIR__ . '/src/Aura/Filter/TranslatorInterface.php';
 require_once __DIR__ . '/src/Aura/Filter/Translator.php';
+require_once __DIR__ . '/src/Aura/Filter/FilterFactory.php';
