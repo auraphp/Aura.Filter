@@ -1,1 +1,4 @@
-tests/tmp
+/tests/tmp
+/vendor
+/build
+/composer.lock

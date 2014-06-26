@@ -1,1 +1,0 @@
-Validate and sanitize data objects and arrays.

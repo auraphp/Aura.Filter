@@ -1,1 +1,0 @@
-The Aura Filter package provides tools to validate and sanitize data objects and arrays.

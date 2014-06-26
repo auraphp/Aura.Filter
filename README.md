@@ -1,46 +1,65 @@
-Aura Filter
-===========
-
-[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop)](https://travis-ci.org/auraphp/Aura.Filter)
+# Aura Filter
 
 The Aura Filter package provides validation and sanitizing for data objects
 and arrays.
 
-This package is compliant with [PSR-0][], [PSR-1][], and [PSR-2][]. If you
-notice compliance oversights, please send a patch via pull request.
+## Foreword
 
-[PSR-0]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
+### Installation
+
+This library requires PHP 5.4 or later, and has no userland dependencies.
+
+It is installable and autoloadable via Composer as [aura/filter](https://packagist.org/packages/aura/filter).
+
+Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/releases) 
+or clone this repository, then require or include its _autoload.php_ file.
+You don't need to run composer install in order to run the test suite.
+
+### Quality
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/quality-score.png?s=1c48d6875376b3c07dacf201b30fe997adeb6d15)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/coverage.png?s=7ab1aace65d9b423b8e65dfe43ecea69b1f092dc)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Filter)
+
+To run the [PHPUnit][] tests at the command line, go to the _tests_ directory and issue `phpunit`.
+
+This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
+you notice compliance oversights, please send a patch via pull request.
+
+[PHPUnit]: http://phpunit.de/manual/
 [PSR-1]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md
 [PSR-2]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md
+[PSR-4]: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md
+
+### Community
+
+To ask questions, provide feedback, or otherwise communicate with the Aura 
+community, please join our [Google Group](http://groups.google.com/group/auraphp), 
+follow [@auraphp on Twitter](http://twitter.com/auraphp), or chat with us on #auraphp on Freenode.
 
 
-Getting Started
-===============
+## Getting Started
 
 The easiest way to instantiate a new filter (i.e., a new `RuleCollection`)
-with all the available rules is to include the `instance.php` script:
+with all the available rules is to use the `FilterFactory` class:
 
 ```php
 <?php
-$filter = require "/path/to/Aura.Filter/scripts/instance.php";
+$filter = (new FilterFactory())->newInstance();
 ```
 
 Alternatively, we can add the `Aura.Filter` package to an autoloader, and
-instantiate manually:
+instantiate it manually:
 
 ```php
 <?php
 use Aura\Filter\RuleCollection as Filter;
 use Aura\Filter\RuleLocator;
-use Aura\Filter\Translator;
 
-$filter = new Filter(
-    new RuleLocator, 
-    new Translator(require 'path/to/Aura.Filter/intl/en_US.php')
-);
+$filter = new Filter(new RuleLocator);
 ```
 
-(Note that if we instantiate manually, we will need to configure the
+(Note that if we instantiate it manually, we will need to configure the
 `RuleLocator` manually to add rule services. See the "Advanced Usage" section
 near the end of this page for more information.)
 
@@ -50,7 +69,7 @@ object.
 ```php
 <?php
 // get a new filter
-$filter = require "/path/to/Aura.Filter/scripts/instance.php";
+$filter = (new FilterFactory())->newInstance();
 
 // the username must be alphanumeric, between 6 and 12 characters long,
 // and cast to a string
@@ -161,197 +180,263 @@ $not_blank = [
 Available Rules
 ---------------
 
-- `alnum`: Validate the value as alphanumeric only. Sanitize to leave only
+- `alnum`: Validates the value as alphanumeric only. Sanitizes to leave only
   alphanumeric characters. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'alnum');
 
-- `alpha`: Validate the value as alphabetic only. Sanitize to leave only
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'alnum');
+     ```
+
+- `alpha`: Validates the value as alphabetic only. Sanitizes to leave only
   alphabetic characters. Usage:
-  
-        $filter->addSoftRule('field', $filter::IS, 'alpha');
 
-- `between`: Validate the value as being within or equal to a minimum and
-  maximum value. Sanitize so that values lower than the range are forced up
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'alpha');
+     ```
+
+- `between`: Validates the value as being within or equal to a minimum and
+  maximum value. Sanitizes so that values lower than the range are forced up
   to the minimum; values higher than the range are forced down to the maximum.
   Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'between', $min, $max);
 
-- `blank`: Validate the value as being blank. Sanitize to `null`. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'blank');
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'between', $min, $max);
+     ```
 
-- `bool`: Validate the value as being a boolean, or a pseudo-boolean.
+- `blank`: Validates the value as being blank. Sanitizes to `null`. Usage:
+
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'blank');
+     ```
+
+- `bool`: Validates the value as being a boolean, or a pseudo-boolean.
   Pseudo-true values include the strings '1', 'y', 'yes', and 'true';
   pseudo-false values include the strings '0', 'n', 'no', and 'false'.
-  Sanitize to a strict PHP boolean. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'bool');
+  Sanitizes to a strict PHP boolean. Usage:
 
-- `creditCard`: Validate the value as being a credit card number. The value
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'bool');
+     ```
+
+- `creditCard`: Validates the value as being a credit card number. The value
   cannot be sanitized. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'creditCard');
 
-- `dateTime`: Validate the value as representing a date and/or time. Sanitize
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'creditCard');
+     ```
+
+- `dateTime`: Validates the value as representing a date and/or time. Sanitizes
   the value to a specified format, default `'Y-m-d H:i:s'`. Usage (note that
   this is to sanitize, not validate):
-        
-        $filter->addSoftRule('field', $filter::FIX, 'dateTime', $format);
 
-- `email`: Validate the value as being a properly-formed email address. The
+     ```php
+     $filter->addSoftRule('field', $filter::FIX, 'dateTime', $format);
+     ```
+
+- `email`: Validates the value as being a properly-formed email address. The
   value cannot be sanitized. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'email');
 
-- `equalToField`: Validate the value as loosely equal to the value of another
-  field in the data object. Sanitize to the value of that other field.
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'email');
+     ```
+
+- `equalToField`: Validates the value as loosely equal to the value of another
+  field in the data object. Sanitizes to the value of that other field.
   Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'equalToField', 'other_field_name');
 
-- `equalToValue`: Validate the value as loosely equal to a specified value.
-  Sanitize to the specified value. Usage:
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'equalToField', 'other_field_name');
+     ```
 
-        $filter->addSoftRule('field', $filter::IS, 'equalToValue', $other_value);
+- `equalToValue`: Validates the value as loosely equal to a specified value.
+  Sanitizes to the specified value. Usage:
 
-- `float`: Validate the value as representing a float. Sanitize the value to
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'equalToValue', $other_value);
+     ```
+
+- `float`: Validates the value as representing a float. Sanitizes the value to
   transform it into a float; for weird strings, this may not be what you
   expect. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'float');
 
-- `inKeys`: Validate that the value is loosely equal to a key in a given
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'float');
+     ```
+
+- `inKeys`: Validates that the value is loosely equal to a key in a given
   array. The value cannot be sanitized. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'inKeys', $array);
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'inKeys', $array);
+     ```
 
-- `inValues`: Validate that the value is strictly equal to at least one value
+- `inValues`: Validates that the value is strictly equal to at least one value
   in a given array. The value cannot be sanitized. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'inValues', $array);
-        
-- `int`: Validate the value as representing an integer Sanitize the value to
-  transform it into an integer; for weird strings, this may not be what you
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'inValues', $array);
+     ```
+
+- `int`: Validates the value as representing an integer. Sanitizes the value by
+  transforming it into an integer; for weird strings, this may not be what you
   expect. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'int');
 
-- `ipv4`: Validate the value as an IPv4 address. The value cannot be
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'int');
+     ```
+
+- `ipv4`: Validates the value as an IPv4 address. The value cannot be
   sanitized. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'ipv4');
-        
-- `locale`: Validate the given value against a list of locale strings. If it's 
-not found returns false. The value cannot be sanitized. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'locale');
 
-- `max`: Validate the value as being less than or equal to a maximum. Sanitize
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'ipv4');
+     ```
+
+- `locale`: Validates the given value against a list of locale strings. Returns false if it is
+not found. The value cannot be sanitized. Usage:
+
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'locale');
+     ```
+
+- `max`: Validates the value as being less than or equal to a maximum. Sanitizes
   so that values higher than the maximum are forced down to the maximum.
   Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'max', $max);
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'max', $max);
+     ```
 
-- `min`: Validate the value as being greater than or equal to a minimum.
-  Sanitize so that values lower than the minimum are forced up to the
+- `min`: Validates the value as being greater than or equal to a minimum.
+  Sanitizes so that values lower than the minimum are forced up to the
   minimum. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'min', $min);
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'min', $min);
+     ```
 
-- `regex`: Validate the value using `preg_match()`. Sanitize the value using
+- `regex`: Validates the value using `preg_match()`. Sanitizes the value using
   `preg_replace()`.
 
-        $filter->addSoftRule('field', $filter::IS, 'regex', $expr);
-        
-- `strictEqualToField`: Validate the value as strictly equal to the value of
-  another field in the data object. Sanitize to the value of that other field.
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'regex', $expr);
+     ```
+
+- `strictEqualToField`: Validates the value as strictly equal to the value of
+  another field in the data object. Sanitizes to the value of that other field.
   Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'strictEqualToField', 'other_field_name');
 
-- `strictEqualToValue`: Validate the value as strictly equal to a specified
-  value. Sanitize to the specified value. Usage:
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'strictEqualToField', 'other_field_name');
+     ```
 
-        $filter->addSoftRule('field', $filter::IS, 'strictEqualToValue', $other_value);
+- `strictEqualToValue`: Validates the value as strictly equal to a specified
+  value. Sanitizes to the specified value. Usage:
 
-- `string`: Validate the value can be represented by a string. Sanitize the
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'strictEqualToValue', $other_value);
+     ```
+
+- `string`: Validates the value can be represented by a string. Sanitizes the
   value by casting to a string and optionally using `str_replace().` Usage
   (note that this is to sanitize, not validate):
 
-        $filter->addSoftRule('field', $filter::FIX, 'string', $find, $replace);
-    
-- `strlen`: Validate the value has a specified length. Sanitize the value
+     ```php
+     $filter->addSoftRule('field', $filter::FIX, 'string', $find, $replace);
+     ```
+
+- `strlen`: Validates the value has a specified length. Sanitizes the value
   to cut off longer values at the right, and `str_pad()` shorter ones. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'strlen', $len);
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'strlen', $len);
+     ```
 
-- `strlenBetween`: Validate the value length as being within or equal to a
-  minimum and maximum value. Sanitize the value to cut off values longer than
+- `strlenBetween`: Validates the value length as being within or equal to a
+  minimum and maximum value. Sanitizes the value to cut off values longer than
   the maximum, longer values at the right, and `str_pad()` shorter ones.
   Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'strlenBetween', $min, $max);
-        
-- `strlenMax`: Validate the value length as being no longer than a maximum.
-  Sanitize the value to cut off values longer than the maximum. Usage:
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'strlenBetween', $min, $max);
+     ```
 
-        $filter->addSoftRule('field', $filter::IS, 'strlenMax', $max);
-        
-- `strlenMin`: Validate the value length as being no shorter than a minimum.
-  Sanitize the value to `str_pad()` values shorter than the minimum. Usage:
+- `strlenMax`: Validates the value length as being no longer than a maximum.
+  Sanitizes the value to cut off values longer than the maximum. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'strlenMin', $min);
-        
-- `trim`: Validate the value is `trim()`med. Sanitize the value to `trim()` it.
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'strlenMax', $max);
+     ```
+
+- `strlenMin`: Validates the value length as being no shorter than a minimum.
+  Sanitizes the value to `str_pad()` values shorter than the minimum. Usage:
+
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'strlenMin', $min);
+     ```
+
+- `trim`: Validates the value is `trim()`med. Sanitizes the value to `trim()` it.
   Optionally specify characters to trim. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'trim', $chars);
-        
-- `upload`: Validate the value represents a PHP upload information array, and
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'trim', $chars);
+     ```
+
+- `upload`: Validates the value represents a PHP upload information array, and
   that the file is an uploaded file. The value cannot be sanitized. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'upload');
 
-- `url`: Validate the value is a well-formed URL. The value cannot be
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'upload');
+     ```
+
+- `url`: Validates the value is a well-formed URL. The value cannot be
   sanitized. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'url');
 
-- `word`: Validate the value as being composed only of word characters.
- Sanitize the value to remove non-word characters. Usage:
-        
-        $filter->addSoftRule('field', $filter::IS, 'word');
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'url');
+     ```
 
-- `isbn`: Validate the value is a correct ISBN (International Standard Book Number). Usage:
+- `word`: Validates the value as being composed only of word characters.
+  Sanitizes the value to remove non-word characters. Usage:
 
-        $filter->addSoftRule('field', $filter::IS, 'isbn');
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'word');
+     ```
 
-- `any`: Validate the value passes at-least one of the rules. These rules
-are the ones added in rule locator.
-        
-        $filter->addSoftRule('field', $filter::IS, 'any', [
-                ['alnum'],
-                ['email'],
-                // more rules
-            ]
-        );
-        
-- `all`: Validate the value against a set of rules. These rules
-are should be added in rule locator. You will not get seprate error 
-messages for which all rules it failed.
-        
-        $filter->addSoftRule('field', $filter::IS, 'all', [
-                // rules
-            ]
-        );
-        
+- `isbn`: Validates the value is a correct ISBN (International Standard Book Number). Usage:
+
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'isbn');
+     ```
+
+- `any`: Validates the value passes at least one of the rules. These rules
+are the ones added in the rule locator.
+
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'any', [
+             ['alnum'],
+             ['email'],
+             // more rules
+         ]
+     );
+     ```
+
+- `all`: Validates the value against a set of rules. These rules
+should be added in the rule locator. You will not get separate error
+messages for the rules it failed.
+
+     ```php
+     $filter->addSoftRule('field', $filter::IS, 'all', [
+             // rules
+         ]
+     );
+     ```
+
 Custom Messages
 ===============
 
-By default when a rule fails, the messages you will be getting are from the 
-`intl/en_US.php`. But you can also provide a single custom message for 
+By default when a rule fails, the messages you will be getting are predefined strings.
+These can be translated accordingly with any translator. But you can also provide a single custom message for
 all the failures.
 
 ```php
@@ -393,8 +478,8 @@ instead of
 array (
   'username' => 
   array (
-    0 => 'Please use only alphanumeric characters.',
-    1 => 'Please use between 6 and 12 characters.',
+    0 => 'FILTER_RULE_FAILURE_IS_ALNUM',
+    1 => 'FILTER_RULE_FAILURE_IS_BETWEEN',
   ),
 )
 ```
@@ -408,7 +493,7 @@ can apply a filter rule to an individual value:
 ```php
 <?php
 // get a new filter
-$filter = require "/path/to/Aura.Filter/scripts/instance.php";
+$filter = (new FilterFactory())->newInstance();
 
 // an individual value
 $username = 'new_username';
@@ -450,7 +535,7 @@ Writing a rule class is straightforward:
 - Use `getValue()` to get the value being validated, and `setValue()` to change
   the value being sanitized.
 
-- Add a property `$message` to indicate a string that should be translated
+- Add a property `$message` to indicate a string that should be returned
   as a message when validation or sanitizing fails.
 
 Here is an example of a hexadecimal rule:
