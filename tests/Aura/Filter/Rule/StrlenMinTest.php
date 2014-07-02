@@ -6,34 +6,34 @@ use Aura\Filter\AbstractRuleTest;
 class StrlenMinTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_STRLEN_MIN';
-    
+
     protected $min = 4;
-    
+
     public function ruleIs($rule)
     {
         return $rule->is($this->min);
     }
-    
+
     public function ruleIsNot($rule)
     {
         return $rule->isNot($this->min);
     }
-    
+
     public function ruleIsBlankOr($rule)
     {
         return $rule->isBlankOr($this->min);
     }
-    
+
     public function ruleFix($rule)
     {
         return $rule->fix($this->min);
     }
-    
+
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr($this->min);
     }
-    
+
     public function providerIs()
     {
         return [
@@ -41,7 +41,7 @@ class StrlenMinTest extends AbstractRuleTest
             ['efghijkl'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -51,7 +51,7 @@ class StrlenMinTest extends AbstractRuleTest
             ['abc'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

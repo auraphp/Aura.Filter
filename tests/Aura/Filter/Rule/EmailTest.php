@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class EmailTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_EMAIL';
-    
+
     public function providerIs()
     {
         return [
@@ -18,7 +18,7 @@ class EmailTest extends AbstractRuleTest
             ["something+else@example.com"],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -30,7 +30,7 @@ class EmailTest extends AbstractRuleTest
             [" "],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

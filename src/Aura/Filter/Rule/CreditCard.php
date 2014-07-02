@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Validates the value as a credit card number.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class CreditCard extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_CREDIT_CARD',
@@ -39,11 +39,11 @@ class CreditCard extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates the value as a credit card number.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -71,11 +71,11 @@ class CreditCard extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Can't fix credit card numbers.
-     * 
+     *
      * @return bool Always false.
-     * 
+     *
      */
     public function sanitize()
     {

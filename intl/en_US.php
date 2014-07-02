@@ -3,7 +3,7 @@ return array(
     "fallback" => null,
     "formatter" => "basic",
     "messages" => [
-    
+
         "FILTER_RULE_FAILURE_IS_ALNUM" => "Please use only alphanumeric characters.",
         "FILTER_RULE_FAILURE_IS_NOT_ALNUM" => "Please do not use only alphanumeric characters.",
         "FILTER_RULE_FAILURE_IS_BLANK_OR_ALNUM" => "Please leave blank, or use only alphanumeric characters.",

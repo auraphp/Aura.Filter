@@ -6,34 +6,34 @@ use Aura\Filter\AbstractRuleTest;
 class MinTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_MIN';
-    
+
     protected $min = 4;
-    
+
     public function ruleIs($rule)
     {
         return $rule->is($this->min);
     }
-    
+
     public function ruleIsNot($rule)
     {
         return $rule->isNot($this->min);
     }
-    
+
     public function ruleIsBlankOr($rule)
     {
         return $rule->isBlankOr($this->min);
     }
-    
+
     public function ruleFix($rule)
     {
         return $rule->fix($this->min);
     }
-    
+
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr($this->min);
     }
-    
+
     public function providerIs()
     {
         return [
@@ -42,7 +42,7 @@ class MinTest extends AbstractRuleTest
             [6],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -52,7 +52,7 @@ class MinTest extends AbstractRuleTest
             [3],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

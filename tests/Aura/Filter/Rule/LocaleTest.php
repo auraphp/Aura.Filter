@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class LocaleTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_LOCALE';
-    
+
     public function providerIs()
     {
         return [
@@ -15,7 +15,7 @@ class LocaleTest extends AbstractRuleTest
             ['af_ZA'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -27,7 +27,7 @@ class LocaleTest extends AbstractRuleTest
             [[]],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

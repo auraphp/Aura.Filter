@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class InValuesTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_IN_VALUES';
-    
+
     protected $opts = [
         0      => 'val0',
         1      => 'val1',
@@ -14,32 +14,32 @@ class InValuesTest extends AbstractRuleTest
         'key1' => 'val4',
         'key2' => 'val5'
     ];
-    
+
     public function ruleIs($rule)
     {
         return $rule->is($this->opts);
     }
-    
+
     public function ruleIsNot($rule)
     {
         return $rule->isNot($this->opts);
     }
-    
+
     public function ruleIsBlankOr($rule)
     {
         return $rule->isBlankOr($this->opts);
     }
-    
+
     public function ruleFix($rule)
     {
         return $rule->fix($this->opts);
     }
-    
+
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr($this->opts);
     }
-    
+
     public function providerIs()
     {
         return [
@@ -50,7 +50,7 @@ class InValuesTest extends AbstractRuleTest
             ['val5'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -61,7 +61,7 @@ class InValuesTest extends AbstractRuleTest
             ['c'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

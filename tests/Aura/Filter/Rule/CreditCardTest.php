@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class CreditCardTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_CREDIT_CARD';
-    
+
     public function providerIs()
     {
         // stolen from Respect Validate testing
@@ -18,7 +18,7 @@ class CreditCardTest extends AbstractRuleTest
             ['30351042633884'], // Dinners
         ];
     }
-    
+
     public function providerIsNot()
     {
         // stolen from Respect Validate testing
@@ -31,7 +31,7 @@ class CreditCardTest extends AbstractRuleTest
             ['1234.1234.1234.1234'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

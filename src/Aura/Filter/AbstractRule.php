@@ -1,48 +1,48 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter;
 
 /**
- * 
+ *
  * Abstract Rule
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  */
 abstract class AbstractRule implements RuleInterface
 {
     /**
-     * 
+     *
      * The full set of data to be filtered.
      *
      * @var object
-     * 
+     *
      */
     protected $data;
 
     /**
-     * 
+     *
      * The field to be filtered within the data.
      *
      * @var string
-     * 
+     *
      */
     protected $field;
 
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => '',
@@ -53,34 +53,34 @@ abstract class AbstractRule implements RuleInterface
     ];
 
     /**
-     * 
+     *
      * The message key to use.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $message_key = 'failure_is';
-    
+
     /**
-     * 
+     *
      * Params passed into the filter for validate/sanitize; generally used by
      * the message.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $params = [];
-    
+
     /**
-     * 
+     *
      * Prepare the rule for reuse.
-     * 
+     *
      * @param object $data The full set of data to be filtered.
-     * 
+     *
      * @param string $field The field to be filtered within the data.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function prep($data, $field)
     {
@@ -89,12 +89,12 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Get the error message; note that this returns the message whether or
      * not there was an error when validating or sanitizing.
-     * 
+     *
      * @return string
-     * 
+     *
      */
     public function getMessage()
     {
@@ -102,52 +102,52 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Gets the params passed into the filter.
-     * 
+     *
      * @return array
-     * 
+     *
      */
     public function getParams()
     {
         return $this->params;
     }
-    
+
     /**
-     * 
+     *
      * Sets the params passed into the filter.
-     * 
+     *
      * @param array $params The params passed into the filter.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setParams(array $params)
     {
         $this->params = $params;
     }
-    
+
     /**
-     * 
+     *
      * Sets the message key to be used.
-     * 
+     *
      * @param string $message_key The message key to be used.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     protected function setMessageKey($message_key)
     {
         $this->message_key = $message_key;
     }
-    
+
     /**
-     * 
+     *
      * Get the value of the field being filtered, or null if the field is
      * not set in the data.
-     * 
+     *
      * @return mixed
-     * 
+     *
      */
     public function getValue()
     {
@@ -160,13 +160,13 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Set value of field, creating it in the data if needed.
-     * 
+     *
      * @param string $value The new value of the field.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function setValue($value)
     {
@@ -175,11 +175,11 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Is the value valid?
-     * 
+     *
      * @return bool True if valid, false if not valid.
-     * 
+     *
      */
     public function is()
     {
@@ -188,11 +188,11 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Is the value *not* valid?
-     * 
+     *
      * @return bool True if not valid, false if valid.
-     * 
+     *
      */
     public function isNot()
     {
@@ -201,11 +201,11 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Is the value blank, or otherwise valid?
-     * 
+     *
      * @return bool True if blank or valid, false if not.
-     * 
+     *
      */
     public function isBlankOr()
     {
@@ -218,11 +218,11 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Sanitize the value, transforming it as needed.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function fix()
     {
@@ -231,18 +231,18 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * If the value is blank, set to null; sanitize if not blank, transforming
      * it as needed.
-     * 
+     *
      * @return bool True if the value was set to null or sanitized, false if
      * not.
-     * 
+     *
      */
     public function fixBlankOr()
     {
         $this->setMessageKey('failure_fix_blank_or');
-        
+
         if ($this->isBlank()) {
             $this->setValue(null);
             return true;
@@ -252,15 +252,15 @@ abstract class AbstractRule implements RuleInterface
     }
 
     /**
-     * 
+     *
      * Is the value blank?
-     * 
+     *
      * Blank is null, empty string, or a string of only whitespace. Non-null
      * non-string values are not blank; e.g., integer zero, float zero, an
      * empty array, boolean false, etc. are not blank.
-     * 
+     *
      * @return bool True if blank, false if not.
-     * 
+     *
      */
     protected function isBlank()
     {

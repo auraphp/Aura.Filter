@@ -18,7 +18,7 @@
     "autoload": {
         "psr-0": {
             "Aura\\Filter": "src/"
-        },        
+        },
         "psr-4": {
             "Aura\\Filter\\_Config\\": "config/"
         }
@@ -27,7 +27,7 @@
         "aura": {
             "type": "library",
             "config": {
-                "common": "Aura\\Filter\\_Config\\Common"                
+                "common": "Aura\\Filter\\_Config\\Common"
             }
         }
     }

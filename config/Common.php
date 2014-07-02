@@ -70,7 +70,7 @@ class Common extends Config
             $di->lazyRequire(dirname(__DIR__) . "/intl/en_US.php")
         );
     }
-    
+
     public function modify(Container $di)
     {
     }

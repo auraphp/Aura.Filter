@@ -10,7 +10,7 @@ class RuleLocatorTest extends \PHPUnit_Framework_TestCase
                 return new \Aura\Filter\Rule\Alpha;
             },
         ]);
-        
+
         $expect = 'Aura\Filter\Rule\Alpha';
         $actual = $rule_locator->get('alpha');
         $this->assertInstanceOf($expect, $actual);
@@ -27,7 +27,7 @@ class RuleLocatorTest extends \PHPUnit_Framework_TestCase
                 return new \Aura\Filter\Rule\Alnum;
             },
         ]);
-        
+
         $expect = 'Aura\Filter\Rule\Alpha';
         $actual = $rule_locator->get('alpha');
         $this->assertInstanceOf($expect, $actual);
@@ -43,12 +43,12 @@ class RuleLocatorTest extends \PHPUnit_Framework_TestCase
         $rule_locator->set('alpha', function () {
             return new \Aura\Filter\Rule\Alpha;
         });
-        
+
         $expect = 'Aura\Filter\Rule\Alpha';
         $actual = $rule_locator->get('alpha');
         $this->assertInstanceOf($expect, $actual);
     }
-    
+
     public function testGet_noSuchHelper()
     {
         $rule_locator = new RuleLocator;

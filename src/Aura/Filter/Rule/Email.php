@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Validates that a value is an email address.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Email extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_EMAIL',
@@ -39,20 +39,20 @@ class Email extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * The email validation regex.
-     * 
+     *
      * @var string
-     * 
+     *
      */
     protected $expr;
 
     /**
-     * 
+     *
      * Post-construction tasks to complete object construction.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function __construct()
     {
@@ -83,13 +83,13 @@ class Email extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Validates that the value is an email address.
-     * 
+     *
      * Taken directly from <http://www.iamcal.com/publish/articles/php/parsing_email/>.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -97,11 +97,11 @@ class Email extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Can't fix emails
-     * 
+     *
      * @return bool Always false.
-     * 
+     *
      */
     public function sanitize()
     {

@@ -1,12 +1,12 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
@@ -14,22 +14,22 @@ use Aura\Filter\AbstractRule;
 use \Closure as PhpClosure;
 
 /**
- * 
+ *
  * Rule to apply a closure to the data.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Closure extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_CLOSURE',
@@ -40,13 +40,13 @@ class Closure extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates the value against a closure.
-     * 
+     *
      * @param \Closure $closure A PHP closure.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate(PhpClosure $closure)
     {
@@ -55,13 +55,13 @@ class Closure extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Sanitizes a value using a closure.
-     * 
+     *
      * @param \Closure $closure A PHP closure.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function sanitize(PhpClosure $closure)
     {

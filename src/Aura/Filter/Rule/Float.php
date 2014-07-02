@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Rule for floats.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Float extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_FLOAT',
@@ -39,11 +39,11 @@ class Float extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value represents a float.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -58,17 +58,17 @@ class Float extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Forces the value to a float.
-     * 
+     *
      * Attempts to extract a valid float from the given value, using an
      * algorithm somewhat less naive that "remove all characters that are not
      * '0-9.,eE+-'".  The result may not be expected, but it will be a float.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      * @todo Extract scientific notation from weird strings?
-     * 
+     *
      */
     public function sanitize()
     {

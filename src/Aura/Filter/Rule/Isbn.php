@@ -83,13 +83,13 @@ class Isbn extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Tests if a 13 digit ISBN is correct.
      *
      * @param $isbn
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     private function thirteen($isbn)
     {
@@ -104,13 +104,13 @@ class Isbn extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Tests if a 10 digit ISBN is correct.
      *
      * @param $isbn
-     * 
+     *
      * @return bool
-     * 
+     *
      */
     private function ten($isbn)
     {
