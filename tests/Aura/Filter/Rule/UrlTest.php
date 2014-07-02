@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class UrlTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_URL';
-    
+
     public function providerIs()
     {
         return [
@@ -18,7 +18,7 @@ class UrlTest extends AbstractRuleTest
             ["mms://user:pass@site.info/path/to/file.php/info?foo=bar&baz=dib#zim"],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -32,7 +32,7 @@ class UrlTest extends AbstractRuleTest
             ["http://example.com\t/index.html"],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

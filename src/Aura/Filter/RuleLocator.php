@@ -1,50 +1,50 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura Project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter;
 
 /**
- * 
+ *
  * A ServiceLocator implementation for loading and retaining rule objects.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  */
 class RuleLocator
 {
     /**
-     * 
+     *
      * A registry to retain rule objects.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $registry;
 
     /**
-     * 
-     * Tracks whether or not a registry entry has been converted from a 
+     *
+     * Tracks whether or not a registry entry has been converted from a
      * callable to a helper object.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $converted = [];
-    
+
     /**
-     * 
+     *
      * Constructor.
-     * 
+     *
      * @param array $registry An array of key-value pairs where the key is the
      * rule name and the value is a callable that returns a rule object.
-     * 
+     *
      */
     public function __construct(array $registry = [])
     {
@@ -52,13 +52,13 @@ class RuleLocator
     }
 
     /**
-     * 
+     *
      * Merges a new registry of rules over the old registry; new rules will
      * override old ones.
-     * 
+     *
      * @param array $registry An array of key-value pairs where the key is the
      * rule name and the value is a callable that returns a rule object.
-     * 
+     *
      */
     public function merge(array $registry = [])
     {
@@ -68,15 +68,15 @@ class RuleLocator
     }
 
     /**
-     * 
+     *
      * Sets one rule into the registry by name.
-     * 
+     *
      * @param string $name The rule name.
-     * 
+     *
      * @param callable $spec A callable that returns a rule object.
-     * 
+     *
      * @return void
-     * 
+     *
      */
     public function set($name, callable $spec)
     {
@@ -85,15 +85,15 @@ class RuleLocator
     }
 
     /**
-     * 
+     *
      * Gets a rule from the registry by name.
-     * 
+     *
      * @param string $name The rule to retrieve.
-     * 
+     *
      * @return AbstractRule A rule object.
-     * 
+     *
      * @throws Exception\RuleNotMapped
-     * 
+     *
      */
     public function get($name)
     {

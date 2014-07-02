@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class BlankTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_BLANK';
-    
+
     public function providerIs()
     {
         return [
@@ -18,7 +18,7 @@ class BlankTest extends AbstractRuleTest
             [" \t \n \r "],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -31,7 +31,7 @@ class BlankTest extends AbstractRuleTest
             ['someThing8else'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

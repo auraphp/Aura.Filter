@@ -8,7 +8,7 @@ use DateTime as PhpDateTime;
 class DateTimeTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_DATE_TIME';
-    
+
     public function providerIs()
     {
         return [
@@ -24,7 +24,7 @@ class DateTimeTest extends AbstractRuleTest
             [new PhpDateTime()],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -37,7 +37,7 @@ class DateTimeTest extends AbstractRuleTest
             ['1979-02-29'],
         ];
     }
-    
+
     public function providerFix()
     {
         $dt = new PhpDateTime('Nov 7, 1979, 12:34pm');

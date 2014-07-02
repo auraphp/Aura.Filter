@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class AlnumTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_ALNUM';
-    
+
     public function providerIs()
     {
         return [
@@ -23,7 +23,7 @@ class AlnumTest extends AbstractRuleTest
             ['someThing8else'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -34,7 +34,7 @@ class AlnumTest extends AbstractRuleTest
             [[]],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class HexTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_HEX';
-    
+
     public function providerIs()
     {
         return [
@@ -16,7 +16,7 @@ class HexTest extends AbstractRuleTest
             ['ffffff'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -27,7 +27,7 @@ class HexTest extends AbstractRuleTest
             [[]],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

@@ -6,34 +6,34 @@ use Aura\Filter\AbstractRuleTest;
 class EqualToValueTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_EQUAL_TO_VALUE';
-    
+
     protected $other_value = '1';
-    
+
     public function ruleIs($rule)
     {
         return $rule->is($this->other_value);
     }
-    
+
     public function ruleIsNot($rule)
     {
         return $rule->isNot($this->other_value);
     }
-    
+
     public function ruleIsBlankOr($rule)
     {
         return $rule->isBlankOr($this->other_value);
     }
-    
+
     public function ruleFix($rule)
     {
         return $rule->fix($this->other_value);
     }
-    
+
     public function ruleFixBlankOr($rule)
     {
         return $rule->fixBlankOr($this->other_value);
     }
-    
+
     public function providerIs()
     {
         return [
@@ -42,7 +42,7 @@ class EqualToValueTest extends AbstractRuleTest
             [true],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -51,7 +51,7 @@ class EqualToValueTest extends AbstractRuleTest
             [false],
         ];
     }
-    
+
     public function providerFix()
     {
         return [
