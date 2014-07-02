@@ -437,7 +437,7 @@ class RuleCollection
      */
     public function addMessages($field, $messages)
     {
-        if (! $this->messages[$field]) {
+        if (! isset($this->messages[$field])) {
             $this->messages[$field] = [];
         }
 
