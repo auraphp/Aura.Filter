@@ -52,6 +52,13 @@ class FilterFactory
         );
     }
 
+    /**
+     *
+     * Get Translator if already set, else create Translator object
+     *
+     * @return TranslatorInterface
+     *
+     */
     public function getTranslator()
     {
         if (! $this->translator) {
@@ -62,11 +69,25 @@ class FilterFactory
         return $this->translator;
     }
 
+    /**
+     *
+     * Set translator of type TranslatorInterface
+     *
+     * @param TranslatorInterface $translator
+     *
+     */
     public function setTranslator(TranslatorInterface $translator)
     {
         $this->translator = $translator;
     }
 
+    /**
+     *
+     * Registry of rules
+     *
+     * @return array Associate array with key rule name and value Closure
+     *
+     */
     public function registry()
     {
         return [
