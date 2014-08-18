@@ -69,6 +69,11 @@ class Common extends Config
             [$di->lazyGet('intl_package_factory'), 'newInstance'],
             $di->lazyRequire(dirname(__DIR__) . "/intl/en_US.php")
         );
+
+        $di->params['Aura\Intl\PackageLocator']['registry']['Aura.Filter']['de_DE'] = $di->lazy(
+            [$di->lazyGet('intl_package_factory'), 'newInstance'],
+            $di->lazyRequire(dirname(__DIR__) . "/intl/de_DE.php")
+        );
     }
 
     public function modify(Container $di)
