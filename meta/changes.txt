@@ -1,1 +1,1 @@
-Hygeine release: point travis status badge to develop branch.
+Hygiene release: docblock and Composer updates.
