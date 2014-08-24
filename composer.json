@@ -1,6 +1,5 @@
 {
     "name": "aura/filter",
-    "version": "1.0.1",
     "type": "aura-package",
     "description": "The Aura Filter package provides tools to validate and sanitize data objects and arrays.",
     "keywords": [
@@ -9,7 +8,6 @@
         "sanitize"
     ],
     "homepage": "http://auraphp.com/Aura.Filter",
-    "time": "2014-05-31",
     "license": "BSD-2-Clause",
     "authors": [
         {
@@ -54,6 +52,22 @@
     "autoload": {
         "psr-0": {
             "Aura\\Filter": "src/"
+        },
+        "psr-4": {
+            "Aura\\Filter\\_Config\\": "config/"
         }
-    }
+    },
+    "extra": {
+        "aura": {
+            "type": "library",
+            "config": {
+                "common": "Aura\\Filter\\_Config\\Common"
+            }
+        },
+        "branch-alias": {
+            "dev-develop": "1.0.x-dev"
+        }
+    },
+    "version": "1.0.2",
+    "time": "2014-08-24"
 }
