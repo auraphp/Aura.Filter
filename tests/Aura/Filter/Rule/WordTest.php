@@ -4,18 +4,18 @@ namespace Aura\Filter\Rule;
 use Aura\Filter\AbstractRuleTest;
 
 /**
- * 
+ *
  * Sanitizes a value to a string with only word characters.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class WordTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_WORD';
-    
+
     public function providerIs()
     {
         return [
@@ -26,7 +26,7 @@ class WordTest extends AbstractRuleTest
             ['A1s_2Sd'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -38,7 +38,7 @@ class WordTest extends AbstractRuleTest
             ['ab-db cd-ef'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

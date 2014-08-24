@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Rule for booleans.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Bool extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_BOOL',
@@ -39,29 +39,29 @@ class Bool extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Pseudo-true representations.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $true = array('1', 'on', 'true', 't', 'yes', 'y');
 
     /**
-     * 
+     *
      * Pseudo-false representations; `null` and empty-string are *not* included.
-     * 
+     *
      * @var array
-     * 
+     *
      */
     protected $false = array('0', 'off', 'false', 'f', 'no', 'n');
 
     /**
-     * 
+     *
      * Validates that the value is a boolean representation.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate()
     {
@@ -87,13 +87,13 @@ class Bool extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Forces the value to a boolean.
-     * 
+     *
      * Note that this recognizes $this->true and $this->false values.
-     * 
+     *
      * @return bool Always true.
-     * 
+     *
      */
     public function sanitize()
     {

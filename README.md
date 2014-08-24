@@ -28,6 +28,17 @@ $filter = require "/path/to/Aura.Filter/scripts/instance.php";
 Alternatively, we can add the `Aura.Filter` package to an autoloader, and
 instantiate manually:
 
+As of version > 1.0.1
+
+```php
+$filter_factory = new \Aura\Filter\FilterFactory();
+// If you want to set a different translator of type TranslatorInterface
+// $filter_factory->setTranslator($translator)
+$filter = $filter_factory->newInstance();
+```
+
+OR
+
 ```php
 <?php
 use Aura\Filter\RuleCollection as Filter;

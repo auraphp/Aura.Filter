@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class IntTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_INT';
-    
+
     public function providerIs()
     {
         return [
@@ -17,7 +17,7 @@ class IntTest extends AbstractRuleTest
             ['-123'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -29,7 +29,7 @@ class IntTest extends AbstractRuleTest
             ['0000123.456000'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

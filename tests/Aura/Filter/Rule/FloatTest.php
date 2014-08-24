@@ -6,7 +6,7 @@ use Aura\Filter\AbstractRuleTest;
 class FloatTest extends AbstractRuleTest
 {
     protected $expect_message = 'FILTER_RULE_FAILURE_IS_FLOAT';
-    
+
     public function providerIs()
     {
         return [
@@ -17,7 +17,7 @@ class FloatTest extends AbstractRuleTest
             ['-1.23'],
         ];
     }
-    
+
     public function providerIsNot()
     {
         return [
@@ -29,7 +29,7 @@ class FloatTest extends AbstractRuleTest
             ['00.00123.4560.00'],
         ];
     }
-    
+
     public function providerFix()
     {
         return [

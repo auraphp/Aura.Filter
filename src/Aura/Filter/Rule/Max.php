@@ -1,34 +1,34 @@
 <?php
 /**
- * 
+ *
  * This file is part of the Aura project for PHP.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 
 /**
- * 
+ *
  * Validates that a value is less than than or equal to a maximum.
- * 
+ *
  * @package Aura.Filter
- * 
+ *
  * @license http://opensource.org/licenses/bsd-license.php BSD
- * 
+ *
  */
 class Max extends AbstractRule
 {
     /**
-     * 
+     *
      * Messages to use when validate or sanitize fails.
      *
      * @var array
-     * 
+     *
      */
     protected $message_map = [
         'failure_is'            => 'FILTER_RULE_FAILURE_IS_MAX',
@@ -39,13 +39,13 @@ class Max extends AbstractRule
     ];
 
     /**
-     * 
+     *
      * Validates that the value is less than than or equal to a maximum.
-     * 
+     *
      * @param mixed $max The maximum valid value.
-     * 
+     *
      * @return bool True if valid, false if not.
-     * 
+     *
      */
     public function validate($max)
     {
@@ -58,13 +58,13 @@ class Max extends AbstractRule
     }
 
     /**
-     * 
+     *
      * Sanitizes to maximum value if values is greater than max
-     * 
+     *
      * @param mixed $max The maximum valid value.
-     * 
+     *
      * @return bool True if the value was sanitized, false if not.
-     * 
+     *
      */
     public function sanitize($max)
     {
