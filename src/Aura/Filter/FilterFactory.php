@@ -21,6 +21,8 @@ class FilterFactory
 {
     /**
      *
+     * The translator object to use for the filter.
+     *
      * @var TranslatorInterface
      *
      */
