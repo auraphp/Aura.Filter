@@ -11,14 +11,14 @@ This library requires PHP 5.4 or later, and has no userland dependencies.
 
 It is installable and autoloadable via Composer as [aura/filter](https://packagist.org/packages/aura/filter).
 
-Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/releases) 
+Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/releases)
 or clone this repository, then require or include its _autoload.php_ file.
 You don't need to run composer install in order to run the test suite.
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/quality-score.png?s=1c48d6875376b3c07dacf201b30fe997adeb6d15)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/coverage.png?s=7ab1aace65d9b423b8e65dfe43ecea69b1f092dc)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/quality-score.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/coverage.png?b=develop-2)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
 [![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=develop-2)](https://travis-ci.org/auraphp/Aura.Filter)
 
 To run the [PHPUnit][] tests at the command line, go to the _tests_ directory and issue `phpunit`.
@@ -33,8 +33,8 @@ you notice compliance oversights, please send a patch via pull request.
 
 ### Community
 
-To ask questions, provide feedback, or otherwise communicate with the Aura 
-community, please join our [Google Group](http://groups.google.com/group/auraphp), 
+To ask questions, provide feedback, or otherwise communicate with the Aura
+community, please join our [Google Group](http://groups.google.com/group/auraphp),
 follow [@auraphp on Twitter](http://twitter.com/auraphp), or chat with us on #auraphp on Freenode.
 
 
@@ -461,22 +461,22 @@ if (! $success) {
 }
 ```
 
-As you have used `useFieldMessage` you will see 
+As you have used `useFieldMessage` you will see
 
 ```php
 array (
-  'username' => 
+  'username' =>
   array (
     0 => 'User name already exists',
   ),
 )
 ```
 
-instead of 
+instead of
 
 ```php
 array (
-  'username' => 
+  'username' =>
   array (
     0 => 'FILTER_RULE_FAILURE_IS_ALNUM',
     1 => 'FILTER_RULE_FAILURE_IS_BETWEEN',
@@ -549,7 +549,7 @@ use Aura\Filter\AbstractRule;
 class Hex extends AbstractRule
 {
     protected $message = 'FILTER_HEX';
-    
+
     public function validate($max = null)
     {
         // must be scalar
@@ -557,18 +557,18 @@ class Hex extends AbstractRule
         if (! is_scalar($value)) {
             return false;
         }
-    
+
         // must be hex
         $hex = ctype_xdigit($value);
         if (! $hex) {
             return false;
         }
-    
+
         // must be no longer than $max chars
         if ($max && strlen($value) > $max) {
             return false;
         }
-    
+
         // done!
         return true;
     }
@@ -581,19 +581,19 @@ class Hex extends AbstractRule
             // sanitizing failed
             return false;
         }
-    
+
         // strip out non-hex characters
         $value = preg_replace('/[^0-9a-f]/i', '', $value);
         if ($value === '') {
             // failed to sanitize to a hex value
             return false;
         }
-    
+
         // now check length and chop if needed
         if ($max && strlen($value) > $max) {
             $value = substr($value, 0, $max);
         }
-    
+
         // retain the sanitized value, and done!
         $this->setValue($value);
         return true;
