@@ -83,6 +83,15 @@ class RuleCollection
 
     /**
      *
+     * Tokens of the failed rules
+     *
+     * @var array
+     *
+     */
+    protected $tokens = [];
+
+    /**
+     *
      * Fields that have failed on a hard rule.
      *
      * @var array
@@ -389,7 +398,7 @@ class RuleCollection
         if ($message) {
             // yes; note that we set this as the only element in an array.
             $this->messages[$field] = [$message];
-
+            $this->addToken($field, $rule);
             return;
         }
 
@@ -399,6 +408,25 @@ class RuleCollection
 
         // add the rule-specific message the the array of messages, and done.
         $this->messages[$field][] = $rule->getMessage();
+        $this->addToken($field, $rule);
+    }
+
+    /**
+     *
+     * Add tokens for a field.
+     *
+     * @param string $field The field that failed.
+     *
+     * @param RuleInterface $rule The rule that the field failed to pass.
+     *
+     * @return void
+     *
+     */
+    private function addToken($field, RuleInterface $rule = null)
+    {
+        if ($rule instanceof RuleInterface) {
+            $this->tokens[$field][$rule->getMessage()] = $rule->getParams();
+        }
     }
 
     /**
@@ -419,6 +447,31 @@ class RuleCollection
 
         if (isset($this->messages[$field])) {
             return $this->messages[$field];
+        }
+
+        return [];
+    }
+
+    /**
+     *
+     * Returns the array of tokens for the field message
+     *
+     * @param string $field Return tokens just for this field message; if empty,
+     *                      return tokens for all fields.
+     *
+     * @param string $message
+     *
+     * @return array
+     *
+     */
+    public function getToken($field, $message)
+    {
+        if (! $field) {
+            return $this->tokens;
+        }
+
+        if (isset($this->tokens[$field][$message])) {
+            return $this->tokens[$field][$message];
         }
 
         return [];

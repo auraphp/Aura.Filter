@@ -405,4 +405,32 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertTrue($instance->values($data));
     }
+
+    public function testGetTokens()
+    {
+        $this->filter->addHardRule('field1', Filter::IS, 'strlenMin', 6);
+
+        $data = (object) [
+            'field1' => '11',
+        ];
+
+        $result = $this->filter->values($data);
+        $this->assertFalse($result);
+
+        $expect = [
+            'field1' => [
+                'FILTER_RULE_FAILURE_IS_STRLEN_MIN',
+            ],
+        ];
+
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
+
+        $tokens = [
+            'min' => 6
+        ];
+
+        $actual = $this->filter->getToken('field1', 'FILTER_RULE_FAILURE_IS_STRLEN_MIN');
+        $this->assertSame($tokens, $actual);
+    }
 }
