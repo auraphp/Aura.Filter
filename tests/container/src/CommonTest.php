@@ -1,23 +1,23 @@
 <?php
 namespace Aura\Filter\_Config;
 
-use Aura\Di\ContainerAssertionsTrait;
+use Aura\Di\_Config\AbstractContainerTest;
 
-class CommonTest extends \PHPUnit_Framework_TestCase
+class CommonTest extends AbstractContainerTest
 {
-    use ContainerAssertionsTrait;
-
-    public function setUp()
+    protected function getConfigClasses()
     {
-        $this->setUpContainer(array(
+        return array(
             'Aura\Filter\_Config\Common',
-        ));
+        );
     }
 
-    public function test()
+    public function provideNewInstance()
     {
-        $this->assertNewInstance('Aura\Filter\Rule\Any');
-        $this->assertNewInstance('Aura\Filter\RuleCollection');
-        $this->assertNewInstance('Aura\Filter\RuleLocator');
+        return array(
+            array('Aura\Filter\Rule\Any'),
+            array('Aura\Filter\RuleCollection'),
+            array('Aura\Filter\RuleLocator'),
+        );
     }
 }
