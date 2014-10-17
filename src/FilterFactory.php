@@ -51,6 +51,7 @@ class FilterFactory
             'between'               => function () { return new Rule\Between; },
             'blank'                 => function () { return new Rule\Blank; },
             'bool'                  => function () { return new Rule\Bool; },
+            'closure'               => function () { return new Rule\Closure; },
             'creditCard'            => function () { return new Rule\CreditCard; },
             'dateTime'              => function () { return new Rule\DateTime; },
             'email'                 => function () { return new Rule\Email; },
