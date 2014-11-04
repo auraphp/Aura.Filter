@@ -38,6 +38,7 @@ class Common extends Config
             'equalToValue'          =>  $di->lazyNew('Aura\Filter\Rule\EqualToValue'),
             'float'                 =>  $di->lazyNew('Aura\Filter\Rule\Float'),
             'inKeys'                =>  $di->lazyNew('Aura\Filter\Rule\InKeys'),
+            'inTableColumn'         =>  $di->lazyNew('Aura\Filter\Rule\InTableColumn'),
             'inValues'              =>  $di->lazyNew('Aura\Filter\Rule\InValues'),
             'int'                   =>  $di->lazyNew('Aura\Filter\Rule\Int'),
             'ipv4'                  =>  $di->lazyNew('Aura\Filter\Rule\Ipv4'),
