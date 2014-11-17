@@ -79,8 +79,8 @@ class InTableColumn extends AbstractRule
         $quote_name_suffix = ''
     ) {
         $this->pdo = $pdo;
-        $this->quote_name_prefix;
-        $this->quote_name_suffix;
+        $this->quote_name_prefix = $quote_name_prefix;
+        $this->quote_name_suffix = $quote_name_suffix;
     }
 
     /**
