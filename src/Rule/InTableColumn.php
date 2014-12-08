@@ -95,12 +95,15 @@ class InTableColumn extends AbstractRule
      * not be escaped or otherwise secured. Never pass user input as a value
      * here.
      *
+     * @param string $where Additional WHERE conditions. This string is appended
+     * to the query using `AND ($where)` and is not escaped or sanitized.
+     *
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($table, $column)
+    public function validate($table, $column, $where = null)
     {
-        $stm = $this->buildSelect($table, $column);
+        $stm = $this->buildSelect($table, $column, $where);
         $sth = $this->pdo->prepare($stm);
         $sth->bindValue($column, $this->getValue());
         $sth->execute();
@@ -118,14 +121,23 @@ class InTableColumn extends AbstractRule
      * not be escaped or otherwise secured. Never pass user input as a value
      * here.
      *
+     * @param string $where Additional WHERE conditions. This string is appended
+     * to the query using `AND ($where)` and is not escaped or sanitized.
+     *
      * @return string
      *
      */
-    protected function buildSelect($table, $column)
+    protected function buildSelect($table, $column, $where = null)
     {
-        $qt = $this->quoteName($table);
-        $qc = $this->quoteName($column);
-        return "SELECT {$qc} FROM {$qt} WHERE {$qc} = :{$column}";
+        $quoted_table = $this->quoteName($table);
+        $quoted_column = $this->quoteName($column);
+        $select = "SELECT {$quoted_column} "
+                . "FROM {$quoted_table} "
+                . "WHERE {$quoted_column} = :{$column}";
+        if ($where) {
+            $select .= " AND ({$where})";
+        }
+        return $select;
     }
 
     /**
