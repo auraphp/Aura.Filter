@@ -15,9 +15,9 @@ class InTableColumnTest extends AbstractRuleTest
     {
         $this->pdo = new PDO('sqlite::memory:');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->pdo->query('CREATE TABLE test (val INT)');
+        $this->pdo->query('CREATE TABLE test (val INT, foo VARCHAR(10))');
         for ($i = 1; $i <= 10; $i++) {
-            $this->pdo->query("INSERT INTO test (val) VALUES ($i)");
+            $this->pdo->query("INSERT INTO test (val, foo) VALUES ($i, 'foo{$i}')");
         }
     }
 
@@ -29,9 +29,18 @@ class InTableColumnTest extends AbstractRuleTest
         return $rule;
     }
 
+    public function getPrep($value)
+    {
+        $data  = ['field' => $value, 'foo' => "foo$value"];
+        $field = 'field';
+
+        return [$data, $field];
+    }
+
     public function ruleIs($rule)
     {
-        return $rule->is('test', 'val');
+        $where = 'foo = :foo';
+        return $rule->is('test', 'val', $where);
     }
 
     public function ruleIsNot($rule)
@@ -41,7 +50,8 @@ class InTableColumnTest extends AbstractRuleTest
 
     public function ruleIsBlankOr($rule)
     {
-        return $rule->isBlankOr('test', 'val');
+        $where = 'val = val';
+        return $rule->isBlankOr('test', 'val', $where);
     }
 
     public function ruleFix($rule)

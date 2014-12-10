@@ -12,6 +12,7 @@ namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRule;
 use PDO;
+use PDOStatement;
 
 /**
  *
@@ -105,8 +106,7 @@ class InTableColumn extends AbstractRule
     {
         $stm = $this->buildSelect($table, $column, $where);
         $sth = $this->pdo->prepare($stm);
-        $sth->bindValue($column, $this->getValue());
-        $sth->execute();
+        $sth->execute($this->getBindValues($column, $where));
         return $sth->fetchColumn() !== false;
     }
 
@@ -138,6 +138,42 @@ class InTableColumn extends AbstractRule
             $select .= " AND ({$where})";
         }
         return $select;
+    }
+
+    /**
+     *
+     * A brain-dead automatic binding mechanism. Anything that looks like a
+     * named placeholder in the $where string is assumed to be a field name
+     * on the object being filtered, and its value is bound into the statement.
+     *
+     * @param string $column The column being selected for its value.
+     *
+     * @param string $where Additional WHERE conditions.
+     *
+     * @return null
+     *
+     */
+    protected function getBindValues($column, $where)
+    {
+        $bind = array($column => $this->getValue());
+        if (! $where) {
+            return $bind;
+        }
+
+        preg_match_all('/:[_a-zA-Z][_a-zA-Z0-9]*/', $where, $matches);
+        if (empty($matches[0])) {
+            return $bind;
+        }
+
+        $placeholders = $matches[0];
+        foreach ($placeholders as $placeholder) {
+            // strip the leading ":"
+            $field = substr($placeholder, 1);
+            if (isset ($this->data->$field)) {
+                $bind[$field] = $this->data->$field;
+            }
+        }
+        return $bind;
     }
 
     /**
