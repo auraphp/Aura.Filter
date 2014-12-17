@@ -120,6 +120,19 @@ class RuleCollection
         $this->rule_locator = $rule_locator;
     }
 
+    public function __invoke(&$data)
+    {
+        if ($this->values($data)) {
+            return;
+        }
+
+        $message = 'array';
+        $e = new Exception\FilterFailed($message);
+        $e->setFilterMessages($this->getMessages());
+        $e->setFilterSubject($data);
+        throw $e;
+    }
+
     /**
      *
      * Sets a single rule, encapsulated by a closure, for the rule.
