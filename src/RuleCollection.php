@@ -123,7 +123,7 @@ class RuleCollection
     public function __invoke(&$data)
     {
         if ($this->values($data)) {
-            return;
+            return true;
         }
 
         $message = 'array';

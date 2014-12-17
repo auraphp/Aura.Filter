@@ -40,7 +40,7 @@ class FilterFailed extends Exception
         $this->filter_subject = $subject;
     }
 
-    public function getFilterSubject($subject)
+    public function getFilterSubject()
     {
         return $this->filter_subject;
     }

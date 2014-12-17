@@ -405,4 +405,34 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         ];
         $this->assertTrue($instance->values($data));
     }
+
+    public function test__invoke()
+    {
+        $this->filter->addSoftRule('field', Filter::IS, 'alnum');
+        $this->filter->addHardRule('field', Filter::IS, 'strlenMin', 6);
+
+        // check for success
+        $data = (object) ['field' => 'foobar'];
+        $result = $this->filter->__invoke($data);
+        $this->assertTrue($result);
+
+        // check for failure
+        try {
+            $data = (object) ['field' => ''];
+            $this->filter->__invoke($data);
+            $this->fail('Should have thrown an exception');
+        } catch (Exception\FilterFailed $e) {
+
+            $this->assertSame($data, $e->getFilterSubject());
+
+            $expect = array(
+                'field' => array(
+                    0 => 'FILTER_RULE_FAILURE_IS_ALNUM',
+                    1 => 'FILTER_RULE_FAILURE_IS_STRLEN_MIN',
+                ),
+            );
+            $actual = $e->getFilterMessages();
+            $this->assertSame($expect, $actual);
+        }
+    }
 }
