@@ -118,19 +118,24 @@ class RuleCollection
     public function __construct(RuleLocator $rule_locator)
     {
         $this->rule_locator = $rule_locator;
+        $this->init();
     }
 
-    public function __invoke(&$data)
+    public function __invoke(&$subject)
     {
-        if ($this->values($data)) {
+        if ($this->values($subject)) {
             return true;
         }
 
-        $message = 'array';
-        $e = new Exception\FilterFailed($message);
+        $e = new Exception\FilterFailed(get_class($this));
         $e->setFilterMessages($this->getMessages());
-        $e->setFilterSubject($data);
+        $e->setFilterSubject($subject);
         throw $e;
+    }
+
+    protected function init()
+    {
+        // by default do nothing
     }
 
     /**
