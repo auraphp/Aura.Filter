@@ -127,7 +127,16 @@ class RuleCollection
             return true;
         }
 
-        $e = new Exception\FilterFailed(get_class($this));
+        $class = get_class($this);
+        $string = PHP_EOL . "  Filter: " . get_class($this) . PHP_EOL . "  Fields:";
+        foreach ($this->getMessages() as $field => $messages) {
+            foreach ($messages as $message) {
+                $string .= PHP_EOL . "    {$field}: {$message}";
+            }
+        }
+
+        $e = new Exception\FilterFailed($string);
+        $e->setFilterClass($class);
         $e->setFilterMessages($this->getMessages());
         $e->setFilterSubject($subject);
         throw $e;
