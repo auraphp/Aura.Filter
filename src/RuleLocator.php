@@ -21,92 +21,78 @@ class RuleLocator
 {
     /**
      *
-     * A registry to retain rule objects.
+     * Factories to create rule objects.
      *
      * @var array
      *
      */
-    protected $registry;
+    protected $factories = array();
 
     /**
      *
-     * Tracks whether or not a registry entry has been converted from a
-     * callable to a helper object.
+     * Rule object instances.
      *
      * @var array
      *
      */
-    protected $converted = [];
+    protected $instances = array();
 
     /**
      *
      * Constructor.
      *
-     * @param array $registry An array of key-value pairs where the key is the
-     *                        rule name and the value is a callable that returns a rule object.
+     * @param array $factories An array of key-value pairs where the key is the
+     * rule name and the value is a callable that returns a rule object.
      *
      */
-    public function __construct(array $registry = [])
+    public function __construct(array $factories = [])
     {
-        $this->merge($registry);
-    }
-
-    /**
-     *
-     * Merges a new registry of rules over the old registry; new rules will
-     * override old ones.
-     *
-     * @param array $registry An array of key-value pairs where the key is the
-     *                        rule name and the value is a callable that returns a rule object.
-     *
-     */
-    public function merge(array $registry = [])
-    {
-        foreach ($registry as $name => $spec) {
+        foreach ($factories as $name => $spec) {
             $this->set($name, $spec);
         }
     }
 
     /**
      *
-     * Sets one rule into the registry by name.
+     * Sets a rule factory by name.
      *
      * @param string $name The rule name.
      *
-     * @param callable $spec A callable that returns a rule object.
+     * @param callable $spec A callable that returns a rule.
      *
      * @return void
      *
      */
-    public function set($name, callable $spec)
+    public function set($name, $spec)
     {
-        $this->registry[$name] = $spec;
-        $this->converted[$name] = false;
+        $this->factories[$name] = $spec;
+        unset($this->instances[$name]);
     }
 
     /**
      *
-     * Gets a rule from the registry by name.
+     * Gets a rule by name, whether an existing instance or from a factory.
      *
      * @param string $name The rule to retrieve.
      *
-     * @return AbstractRule A rule object.
+     * @return callable A callable rule.
      *
      * @throws Exception\RuleNotMapped
      *
      */
     public function get($name)
     {
-        if (! isset($this->registry[$name])) {
+        $mapped = isset($this->factories[$name])
+               || isset($this->instances[$name]);
+
+        if (! $mapped) {
             throw new Exception\RuleNotMapped($name);
         }
 
-        if (! $this->converted[$name]) {
-            $func = $this->registry[$name];
-            $this->registry[$name] = $func();
-            $this->converted[$name] = true;
+        if (! isset($this->instances[$name])) {
+            $this->instances[$name] = call_user_func($this->factories[$name]);
         }
 
-        return $this->registry[$name];
+        return $this->instances[$name];
     }
 }

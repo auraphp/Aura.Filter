@@ -30,11 +30,11 @@ class FilterFactory
     {
         return new Filter(
             new RuleLocator(array_merge(
-                $this->registry(),
+                $this->factories(),
                 ['any' => function () {
                     $rule = new Rule\Any;
                     $rule->setRuleLocator(new RuleLocator(
-                        $this->registry()
+                        $this->factories()
                     ));
 
                     return $rule;
@@ -43,7 +43,7 @@ class FilterFactory
         );
     }
 
-    public function registry()
+    public function factories()
     {
         return [
             'alnum'                 => function () { return new Rule\Alnum; },

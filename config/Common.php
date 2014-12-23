@@ -23,7 +23,7 @@ class Common extends Config
         /**
          * Aura\Filter\RuleLocator
          */
-        $di->params['Aura\Filter\RuleLocator']['registry'] = [
+        $di->params['Aura\Filter\RuleLocator']['factories'] = [
             'alnum'                 =>  $di->lazyNew('Aura\Filter\Rule\Alnum'),
             'alpha'                 =>  $di->lazyNew('Aura\Filter\Rule\Alpha'),
             'any'                   =>  $di->lazyNew('Aura\Filter\Rule\Any'),

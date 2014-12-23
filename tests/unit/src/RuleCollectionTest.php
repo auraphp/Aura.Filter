@@ -365,7 +365,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         // Get instance
         $instance = (new FilterFactory())->newInstance();
         // Get the Rule Registry
-        $registry = (new FilterFactory())->registry();
+        $factories = (new FilterFactory())->factories();
 
         // Check if the instance is a Filter Object
         $expect = 'Aura\Filter\Filter';
@@ -373,7 +373,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($expect, $actual);
 
         // Test if all normal Rules are present
-        foreach ($registry as $name => $rule) {
+        foreach ($factories as $name => $rule) {
             $expect = get_class($rule());
             $actual = $instance->getRuleLocator()->get($name);
             $this->assertInstanceOf($expect, $actual);
