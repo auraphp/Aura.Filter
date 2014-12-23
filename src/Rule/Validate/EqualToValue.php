@@ -20,7 +20,7 @@ namespace Aura\Filter\Rule;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class EqualToValue extends AbstractRule
+class EqualToValue
 {
     /**
      *

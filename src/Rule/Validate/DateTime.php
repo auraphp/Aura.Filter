@@ -21,7 +21,7 @@ use DateTime as PhpDateTime;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class DateTime extends AbstractRule
+class DateTime
 {
     /**
      *

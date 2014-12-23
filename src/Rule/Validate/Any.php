@@ -22,7 +22,7 @@ use Aura\Filter\Rule\RuleLocator;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Any extends AbstractRule
+class Any
 {
     /**
      *

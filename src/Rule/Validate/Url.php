@@ -19,7 +19,7 @@ namespace Aura\Filter\Rule;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Url extends AbstractRule
+class Url
 {
     /**
      *

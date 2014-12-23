@@ -21,7 +21,7 @@ use \Closure as PhpClosure;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Closure extends AbstractRule
+class Closure
 {
     /**
      *

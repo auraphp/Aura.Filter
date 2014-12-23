@@ -19,7 +19,7 @@ namespace Aura\Filter\Rule;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class StrlenBetween extends AbstractRule
+class StrlenBetween
 {
     /**
      *

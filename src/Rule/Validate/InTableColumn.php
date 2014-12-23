@@ -22,7 +22,7 @@ use PDOStatement;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class InTableColumn extends AbstractRule
+class InTableColumn
 {
     /**
      *
