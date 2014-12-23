@@ -28,9 +28,9 @@ class Alnum
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -45,10 +45,9 @@ class Alnum
      * @return bool Always true.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $this->setValue(preg_replace('/[^a-z0-9]/i', '', $this->getValue()));
-
+        $object->$field = preg_replace('/[^a-z0-9]/i', '', $object->$field);
         return true;
     }
 }

@@ -34,7 +34,7 @@ class Blank
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
         return $this->isBlank();
     }
@@ -46,10 +46,9 @@ class Blank
      * @return bool Always true.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $this->setValue(null);
-
+        $object->$field = null;
         return true;
     }
 }

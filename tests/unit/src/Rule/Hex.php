@@ -11,7 +11,7 @@ class Hex extends AbstractRule
         'failure_fix_blank_or'  => 'FILTER_RULE_FAILURE_FIX_BLANK_OR_HEX',
     ];
 
-    public function validate($max = null)
+    public function validate($object, $field, $max = null)
     {
         // must be scalar
         $value = $this->getValue();

@@ -30,10 +30,9 @@ class Strlen
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($len)
+    public function validate($object, $field, $len)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -54,18 +53,17 @@ class Strlen
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function sanitize($object, $field, $len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
         if (strlen($value) < $len) {
-            $this->setValue(str_pad($value, $len, $pad_string, $pad_type));
+            $object->$field = str_pad($value, $len, $pad_string, $pad_type);
         }
         if (strlen($value) > $len) {
-            $this->setValue(substr($value, 0, $len));
+            $object->$field = substr($value, 0, $len);
         }
 
         return true;

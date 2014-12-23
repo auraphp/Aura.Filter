@@ -31,11 +31,9 @@ class StrictEqualToValue
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function validate($other_value)
+    public function validate($object, $field, $other_value)
     {
-        $this->setParams(get_defined_vars());
-
-        return $this->getValue() === $other_value;
+        return $object->$field === $other_value;
     }
 
     /**
@@ -47,11 +45,9 @@ class StrictEqualToValue
      * @return bool Always true.
      *
      */
-    public function sanitize($other_value)
+    public function sanitize($object, $field, $other_value)
     {
-        $this->setParams(get_defined_vars());
-        $this->setValue($other_value);
-
+        $object->$field = $other_value;
         return true;
     }
 }

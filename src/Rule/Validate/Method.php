@@ -32,9 +32,8 @@ class Method
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($method)
+    public function validate($object, $field, $method)
     {
-        $this->setParams(get_defined_vars());
 
         return (bool) $this->call(func_get_args());
     }
@@ -49,9 +48,8 @@ class Method
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($method)
+    public function sanitize($object, $field, $method)
     {
-        $this->setParams(get_defined_vars());
 
         return (bool) $this->call(func_get_args());
     }
@@ -68,7 +66,7 @@ class Method
      */
     protected function call(array $args)
     {
-        $object = $this->getValue();
+        $object = $object->$field;
         $method = array_shift($args);
 
         return is_object($object)

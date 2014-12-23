@@ -28,9 +28,9 @@ class Ipv4
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         // does the value convert back and forth properly?
         $result = ip2long($value);

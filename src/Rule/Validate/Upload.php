@@ -32,9 +32,9 @@ class Upload
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         $success = $this->preCheck($value);
         if (! $success) {
@@ -73,9 +73,9 @@ class Upload
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         // pre-check
         $success = $this->preCheck($value);
@@ -84,7 +84,7 @@ class Upload
         }
 
         // everything looks ok; some keys may have been removed.
-        $this->setValue($value);
+        $object->$field = $value;
 
         return true;
     }

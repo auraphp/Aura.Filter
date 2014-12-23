@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule;
 
 class MockValue
 {
-    public function validate($return)
+    public function validate($object, $field, $return)
     {
         return $return;
     }

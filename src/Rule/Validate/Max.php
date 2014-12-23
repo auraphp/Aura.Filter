@@ -30,10 +30,9 @@ class Max
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($max)
+    public function validate($object, $field, $max)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -50,15 +49,14 @@ class Max
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($max)
+    public function sanitize($object, $field, $max)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
         if ($value > $max) {
-            $this->setValue($max);
+            $object->$field = $max;
         }
 
         return true;

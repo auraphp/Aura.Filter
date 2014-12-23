@@ -86,7 +86,7 @@ class InTableColumn
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($table, $column, $where = null)
+    public function validate($object, $field, $table, $column, $where = null)
     {
         $stm = $this->buildSelect($table, $column, $where);
         $sth = $this->pdo->prepare($stm);
@@ -139,7 +139,7 @@ class InTableColumn
      */
     protected function getBindValues($column, $where)
     {
-        $bind = array($column => $this->getValue());
+        $bind = array($column => $object->$field);
         if (! $where) {
             return $bind;
         }
@@ -153,8 +153,8 @@ class InTableColumn
         foreach ($placeholders as $placeholder) {
             // strip the leading ":"
             $field = substr($placeholder, 1);
-            if (isset ($this->data->$field)) {
-                $bind[$field] = $this->data->$field;
+            if (isset($object->$field)) {
+                $bind[$field] = $object->$field;
             }
         }
         return $bind;
@@ -182,7 +182,7 @@ class InTableColumn
      * @return bool Always false.
      *
      */
-    public function sanitize($table, $column)
+    public function sanitize($object, $field, $table, $column)
     {
         return false;
     }

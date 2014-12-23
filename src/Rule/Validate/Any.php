@@ -69,7 +69,7 @@ class Any
      * @return bool True if valid, false if not.
      *
      */
-    public function validate(array $list)
+    public function validate($object, $field, array $list)
     {
         foreach ($list as $args) {
             // take the name off the top of the arguments
@@ -77,7 +77,7 @@ class Any
 
             // get the rule for that name and prep it
             $rule = $this->rule_locator->get($name);
-            $rule->prep($this->data, $this->field);
+            $rule->prep($object, $this->field);
 
             // does the data pass the rule?
             $pass = call_user_func_array([$rule, 'validate'], $args);

@@ -32,10 +32,9 @@ class DateTime
      * @return bool
      *
      */
-    public function validate($format = 'Y-m-d H:i:s')
+    public function validate($object, $field, $format = 'Y-m-d H:i:s')
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         $datetime = $this->newDateTime($value);
 
         return (bool) $datetime;
@@ -50,15 +49,14 @@ class DateTime
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($format = 'Y-m-d H:i:s')
+    public function sanitize($object, $field, $format = 'Y-m-d H:i:s')
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         $datetime = $this->newDateTime($value);
         if (! $datetime) {
             return false;
         }
-        $this->setValue($datetime->format($format));
+        $object->$field = $datetime->format($format);
 
         return true;
     }

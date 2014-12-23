@@ -32,7 +32,7 @@ class Closure
      * @return bool True if valid, false if not.
      *
      */
-    public function validate(PhpClosure $closure)
+    public function validate($object, $field, PhpClosure $closure)
     {
         $closure = $closure->bindTo($this, get_class($this));
 
@@ -48,7 +48,7 @@ class Closure
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize(PhpClosure $closure)
+    public function sanitize($object, $field, PhpClosure $closure)
     {
         $closure = $closure->bindTo($this, get_class($this));
 

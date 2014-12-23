@@ -46,9 +46,9 @@ class Bool
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         // php boolean
         if ($value === true || $value === false) {
@@ -78,9 +78,9 @@ class Bool
      * @return bool Always true.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         // PHP booleans
         if ($value === true || $value === false) {
@@ -92,13 +92,13 @@ class Bool
         $lower = strtolower(trim($value));
         if (in_array($lower, $this->true)) {
             // matches a pseudo true
-            $this->setValue(true);
+            $object->$field = true;
         } elseif (in_array($lower, $this->false)) {
             // matches a pseudo false
-            $this->setValue(false);
+            $object->$field = false;
         } else {
             // cast to a boolean
-            $this->setValue((bool) $value);
+            $object->$field = (bool) $value;
         }
 
         // done!

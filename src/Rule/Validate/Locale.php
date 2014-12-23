@@ -46,9 +46,9 @@ class Locale
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         return in_array($value, $this->codes);
     }

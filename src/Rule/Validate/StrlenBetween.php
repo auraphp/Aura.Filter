@@ -32,10 +32,9 @@ class StrlenBetween
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($min, $max)
+    public function validate($object, $field, $min, $max)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -59,18 +58,17 @@ class StrlenBetween
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function sanitize($object, $field, $min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
         if (strlen($value) < $min) {
-            $this->setValue(str_pad($value, $min, $pad_string, $pad_type));
+            $object->$field = str_pad($value, $min, $pad_string, $pad_type);
         }
         if (strlen($value) > $max) {
-            $this->setValue(substr($value, 0, $max));
+            $object->$field = substr($value, 0, $max);
         }
 
         return true;

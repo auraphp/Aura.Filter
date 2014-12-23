@@ -28,9 +28,9 @@ class Float
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         if (is_float($value)) {
             return true;
@@ -53,9 +53,9 @@ class Float
      * @todo Extract scientific notation from weird strings?
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         if (is_float($value)) {
             // already a float, nothing to do
@@ -64,7 +64,7 @@ class Float
 
         if (is_numeric($value)) {
             // numeric string, cast to a float
-            $this->setValue((float) $value);
+            $object->$field = (float) $value;
 
             return true;
         }
@@ -110,7 +110,7 @@ class Float
         }
 
         // done
-        $this->setValue((float) $value);
+        $object->$field = (float) $value;
 
         return true;
     }

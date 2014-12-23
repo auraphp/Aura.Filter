@@ -39,10 +39,9 @@ class Trim
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($chars = null)
+    public function validate($object, $field, $chars = null)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -62,17 +61,16 @@ class Trim
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($chars = null)
+    public function sanitize($object, $field, $chars = null)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
         if (! $chars) {
             $chars = $this->chars;
         }
-        $this->setValue(trim($value, $chars));
+        $object->$field = trim($value, $chars);
 
         return true;
     }

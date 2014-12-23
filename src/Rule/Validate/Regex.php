@@ -34,10 +34,9 @@ class Regex
      * @return bool True if the value matches the expression, false if not.
      *
      */
-    public function validate($expr)
+    public function validate($object, $field, $expr)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -56,14 +55,13 @@ class Regex
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($expr, $replace)
+    public function sanitize($object, $field, $expr, $replace)
     {
-        $this->setParams(get_defined_vars());
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
-        $this->setValue(preg_replace($expr, $replace, $value));
+        $object->$field = preg_replace($expr, $replace, $value);
 
         return true;
     }

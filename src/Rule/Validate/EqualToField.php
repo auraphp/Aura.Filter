@@ -27,25 +27,23 @@ class EqualToField
      * Validates that this value is equal to some other element in the filter
      * chain (note that equality is *not* strict, so type does not matter).
      *
-     * If the other element does not exist in $this->data, or is null, the
+     * If the other element does not exist in $object, or is null, the
      * validation will fail.
      *
      * @param string $other_field Check against the value of this element in
-     *                            $this->data.
+     * $object.
      *
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function validate($other_field)
+    public function validate($object, $field, $other_field)
     {
-        $this->setParams(get_defined_vars());
-
         // the other field needs to exist and *not* be null
-        if (! isset($this->data->$other_field)) {
+        if (! isset($object->$other_field)) {
             return false;
         }
 
-        return $this->getValue() == $this->data->$other_field;
+        return $object->$field == $object->$other_field;
     }
 
     /**
@@ -57,16 +55,15 @@ class EqualToField
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($other_field)
+    public function sanitize($object, $field, $other_field)
     {
-        $this->setParams(get_defined_vars());
 
         // the other field needs to exist and *not* be null
-        if (! isset($this->data->$other_field)) {
+        if (! isset($object->$other_field)) {
             return false;
         }
 
-        $this->setValue($this->data->$other_field);
+        $object->$field = $object->$other_field;
 
         return true;
     }

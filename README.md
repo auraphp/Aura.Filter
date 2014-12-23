@@ -555,7 +555,7 @@ class Hex extends AbstractRule
 {
     protected $message = 'FILTER_HEX';
 
-    public function validate($max = null)
+    public function validate($object, $field, $max = null)
     {
         // must be scalar
         $value = $this->getValue();

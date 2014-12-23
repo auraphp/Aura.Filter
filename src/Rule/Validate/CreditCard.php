@@ -28,10 +28,10 @@ class CreditCard
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
         // get the value; remove spaces, dashes, and dots
-        $value = str_replace([' ', '-', '.'], '', (string) $this->getValue());
+        $value = str_replace([' ', '-', '.'], '', (string) $object->$field);
 
         // is it composed only of digits?
         if (! ctype_digit($value)) {

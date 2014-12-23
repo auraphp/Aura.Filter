@@ -33,9 +33,9 @@ class String
      * @todo allow for __toString() implementations
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        return is_scalar($this->getValue());
+        return is_scalar($object->$field);
     }
 
     /**
@@ -49,14 +49,13 @@ class String
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($find = null, $replace = null)
+    public function sanitize($object, $field, $find = null, $replace = null)
     {
-        $this->setParams(get_defined_vars());
-        $value = (string) $this->getValue();
+        $value = (string) $object->$field;
         if ($find || $replace) {
             $value = str_replace($find, $replace, $value);
         }
-        $this->setValue($value);
+        $object->$field = $value;
 
         return true;
     }

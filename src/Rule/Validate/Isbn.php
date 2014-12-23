@@ -30,15 +30,15 @@ class Isbn
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
         if ($this->sanitize() == true) {
-            $value = $this->getValue();
+            $value = $object->$field;
 
             if (strlen($value) == 13) {
-                return $this->thirteen($this->getValue());
+                return $this->thirteen($object->$field);
             } elseif (strlen($value) == 10) {
-                return $this->ten($this->getValue());
+                return $this->ten($object->$field);
             }
         }
 
@@ -52,14 +52,13 @@ class Isbn
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
         $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $value);
 
         if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value) == 1) {
-            $this->setValue($value);
-
+            $object->$field = $value;
             return true;
         }
 

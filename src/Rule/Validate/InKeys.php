@@ -34,20 +34,20 @@ class InKeys
      * @return bool True if valid, false if not.
      *
      */
-    public function validate(array $array)
+    public function validate($object, $field, array $array)
     {
         $this->setParams([
             'array' => $array,
             'keys' => array_keys($array)
         ]);
 
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_string($value) && ! is_int($value)) {
             // array_key_exists errors on non-string non-int keys.
             return false;
         }
         // using array_keys() converts string numeric keys to integers, which
         // is *not* the behavior we want.
-        return array_key_exists($this->getValue(), $array);
+        return array_key_exists($object->$field, $array);
     }
 }

@@ -28,9 +28,9 @@ class Int
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         if (is_int($value)) {
             return true;
@@ -51,16 +51,16 @@ class Int
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
 
         // sanitize numerics
         if (is_numeric($value)) {
             // we double-cast here to honor scientific notation.
             // (int) 1E5 == 15, but (int) (float) 1E5 == 100000
             $value = (float) $value;
-            $this->setValue((int) $value);
+            $object->$field = (int) $value;
 
             return true;
         }
@@ -90,7 +90,7 @@ class Int
         }
 
         // looks like we're done
-        $this->setValue((int) $value);
+        $object->$field = (int) $value;
 
         return true;
     }

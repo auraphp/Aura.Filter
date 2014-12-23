@@ -31,9 +31,9 @@ class Word
      * @return bool True if valid, false if not.
      *
      */
-    public function validate()
+    public function validate($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -49,14 +49,13 @@ class Word
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize()
+    public function sanitize($object, $field)
     {
-        $value = $this->getValue();
+        $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
-        $this->setValue(preg_replace('/\W/', '', $value));
-
+        $object->$field = preg_replace('/\W/', '', $value);
         return true;
     }
 }

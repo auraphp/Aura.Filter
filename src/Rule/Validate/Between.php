@@ -32,11 +32,10 @@ class Between
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($min, $max)
+    public function validate($object, $field, $min, $max)
     {
-        $this->setParams(get_defined_vars());
 
-        $value = $this->getValue();
+        $value = $object->$field;
 
         if (! is_scalar($value)) {
             return false;
@@ -57,20 +56,18 @@ class Between
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($min, $max)
+    public function sanitize($object, $field, $min, $max)
     {
-        $this->setParams(get_defined_vars());
-
-        $value = $this->getValue();
+        $value = $object->$field;
 
         if (! is_scalar($value)) {
             return false;
         }
 
         if ($value < $min) {
-            $this->setValue($min);
+            $object->$field = $min;
         } elseif ($value > $max) {
-            $this->setValue($max);
+            $object->$field = $max;
         }
 
         return true;

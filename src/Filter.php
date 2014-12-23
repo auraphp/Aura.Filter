@@ -68,7 +68,7 @@ class Filter
         throw $e;
     }
 
-    public function validate($field)
+    public function validate($object, $field, $field)
     {
         return $this->addSpec(
             clone $this->validate_spec,
