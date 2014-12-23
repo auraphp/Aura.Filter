@@ -1,37 +1,17 @@
 <?php
-/**
- *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- *
- */
 namespace Aura\Filter;
 
-use Aura\Filter\Rule\RuleInterface;
-use Aura\Filter\Rule\RuleLocator;
-use InvalidArgumentException;
+use Aura\Filter\Exception;
 
-/**
- *
- * A collection of rules to be applied to a data object.
- *
- * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- *
- */
 class Filter
 {
     /**
-     * Stop filtering on a field when a rule fails.
+     * Stop filtering on a field when a rule for that field fails.
      */
     const HARD_RULE = 'HARD_RULE';
 
     /**
-     * Continue filtering on a field when a rule fails.
+     * Continue filtering on a field even when a rule for that field fails.
      */
     const SOFT_RULE = 'SOFT_RULE';
 
@@ -40,95 +20,39 @@ class Filter
      */
     const STOP_RULE = 'STOP_RULE';
 
-    /**
-     * Apply a rule to check if the value is valid.
-     */
-    const IS = 'is';
+    protected $specs = array();
 
-    /**
-     * Apply a rule to check if the value **is not** valid.
-     */
-    const IS_NOT = 'isNot';
+    protected $skip = array();
 
-    /**
-     * Apply a rule to check if the value is blank **or** is valid.
-     */
-    const IS_BLANK_OR = 'isBlankOr';
+    protected $messages = array();
 
-    /**
-     * Sanitize the value according to the rule.
-     */
-    const FIX = 'fix';
+    protected $validate_spec;
 
-    /**
-     * Sanitize the value to `null` if blank, or according to the rule if not.
-     */
-    const FIX_BLANK_OR = 'fixBlankOr';
+    protected $sanitize_spec;
 
-    /**
-     *
-     * The rules to be applied to a data object.
-     *
-     * @var array
-     *
-     */
-    protected $rules = [];
-
-    /**
-     *
-     * Messages from failed rules.
-     *
-     * @var array
-     *
-     */
-    protected $messages = [];
-
-    /**
-     *
-     * Fields that have failed on a hard rule.
-     *
-     * @var array
-     *
-     */
-    protected $hardrule = [];
-
-    /**
-     *
-     * Alternative messages to use when a field fails its filters.
-     *
-     * @var array
-     *
-     */
-    protected $field_messages = [];
-
-    /**
-     *
-     * A RuleLocator object.
-     *
-     * @var RuleLocator
-     *
-     */
-    protected $rule_locator;
-
-    /**
-     *
-     * Constructor.
-     *
-     * @param RuleLocator $rule_locator The rule locator.
-     *
-     */
-    public function __construct(RuleLocator $rule_locator)
-    {
-        $this->rule_locator = $rule_locator;
+    public function __construct(
+        ValidateSpec $validate_spec,
+        SanitizeSpec $sanitize_spec
+    ) {
+        $this->validate_spec = $validate_spec;
+        $this->sanitize_spec = $sanitize_spec;
         $this->init();
     }
 
-    public function __invoke(&$subject)
+    protected function init()
     {
-        if ($this->values($subject)) {
-            return true;
-        }
+        // do nothing
+    }
 
+    public function __invoke($object)
+    {
+        if (! $this->apply($object)) {
+            $this->throwFailure($object);
+        }
+    }
+
+    protected function throwFailure($object)
+    {
         $class = get_class($this);
         $string = PHP_EOL . "  Filter: " . get_class($this) . PHP_EOL . "  Fields:";
         foreach ($this->getMessages() as $field => $messages) {
@@ -144,372 +68,70 @@ class Filter
         throw $e;
     }
 
-    protected function init()
+    public function validate($field)
     {
-        // by default do nothing
-    }
-
-    /**
-     *
-     * Sets a single rule, encapsulated by a closure, for the rule.
-     *
-     * @param string $field The field for the rule.
-     *
-     * @param string $message The message when the rule fails.
-     *
-     * @param \Closure $closure The closure to use for the rule.
-     *
-     */
-    public function setRule($field, $message, \Closure $closure)
-    {
-        // add a single hard rule for this field with a special method name
-        $this->addHardRule($field, '__closure__', $closure);
-        // add the message for this field
-        $this->useFieldMessage($field, $message);
-    }
-
-    /**
-     *
-     * Add a rule; keep applying all other rules even if it fails.
-     *
-     * @param string $field
-     *
-     * @param string $method
-     *
-     * @param string $name
-     *
-     * @return $this
-     *
-     */
-    public function addSoftRule($field, $method, $name)
-    {
-        $params = func_get_args();
-        array_shift($params); // $field
-        array_shift($params); // $method
-        array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, self::SOFT_RULE);
-
-        return $this;
-    }
-
-    /**
-     *
-     * Add a rule; if it fails, stop applying rules on that field.
-     *
-     * @param string $field
-     *
-     * @param string $method
-     *
-     * @param string $name
-     *
-     * @return $this
-     *
-     */
-    public function addHardRule($field, $method, $name)
-    {
-        $params = func_get_args();
-        array_shift($params); // $field
-        array_shift($params); // $method
-        array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, self::HARD_RULE);
-
-        return $this;
-    }
-
-    /**
-     *
-     * Add a rule; if it fails, stop applying rules on all remaining data.
-     *
-     * @param string $field
-     *
-     * @param string $method
-     *
-     * @param string $name
-     *
-     * @return $this
-     *
-     */
-    public function addStopRule($field, $method, $name)
-    {
-        $params = func_get_args();
-        array_shift($params); // $field
-        array_shift($params); // $method
-        array_shift($params); // $name
-        $this->addRule($field, $method, $name, $params, self::STOP_RULE);
-
-        return $this;
-    }
-
-    /**
-     *
-     * Returns the collection of rules to be applied.
-     *
-     * @return array
-     *
-     */
-    public function getRules()
-    {
-        return $this->rules;
-    }
-
-    /**
-     *
-     * Returns the rule locator.
-     *
-     * @return RuleLocator
-     *
-     */
-    public function getRuleLocator()
-    {
-        return $this->rule_locator;
-    }
-
-    /**
-     *
-     * Add a rule.
-     *
-     * @param string $field The field name.
-     *
-     * @param string $method The rule method to use (is, isNot, isBlankOr,
-     *                       etc).
-     *
-     * @param string $name The name of the rule to apply.
-     *
-     * @param array $params Params for the rule.
-     *
-     * @param string $type The rule type: soft, hard, stop.
-     *
-     */
-    protected function addRule($field, $method, $name, $params, $type)
-    {
-        $this->rules[] = [
-            'field'     => $field,
-            'method'    => $method,
-            'name'      => $name,
-            'params'    => $params,
-            'type'      => $type,
-        ];
-    }
-
-    /**
-     *
-     * Use a custom message for a field when it fails any of its rules; this
-     * single message will replace all the various rule messages.
-     *
-     * @param string $field The field name.
-     *
-     * @param string $message The message to use when the field fails any of
-     *                        its rules.
-     *
-     * @return void
-     *
-     */
-    public function useFieldMessage($field, $message)
-    {
-        $this->field_messages[$field] = $message;
-    }
-
-    /**
-     *
-     * Applies the rules to the field values of a data object or array; note
-     * that sanitizing filters may modify the values in place.
-     *
-     * @param object|array $data The data object or array to be filtered;
-     *                           note that this is passed by reference.
-     *
-     * @return bool True if all rules were applied without error; false if
-     *              there was at least one error.
-     *
-     * @throws \InvalidArgumentException
-     *
-     */
-    public function values(&$data)
-    {
-        // convert array to object and recurse
-        if (is_array($data)) {
-            $object = (object) $data;
-            $result = $this->values($object);
-            $data = (array) $object;
-
-            return $result;
-        }
-
-        // must be an object at this point
-        if (! is_object($data)) {
-            throw new InvalidArgumentException;
-        }
-
-        // reset messages and hard-rule notices
-        $this->messages = [];
-        $this->hardrule = [];
-
-        foreach ($this->rules as $i => &$info) {
-
-            // the field name
-            $field = $info['field'];
-
-            // if we've hit a hard rule for this field, then don't apply
-            // further rules on this field.
-            if (in_array($field, $this->hardrule)) {
-                continue;
-            }
-
-            // apply the rule
-            $method = $info['method'];
-            if ($method == '__closure__') {
-                // from setRule()
-                $rule = null;
-                $closure = $info['name'];
-                $passed = $closure($data->$field, $data);
-            } else {
-                // from add*Rule()
-                $rule = $this->rule_locator->get($info['name']);
-                $rule->prep($data, $field);
-                $params = $info['params'];
-                $passed = call_user_func_array([$rule, $method], $params);
-            }
-
-            if (! $passed) {
-
-                // failed. keep the failure message.
-                $this->addMessageFromRule($field, $rule);
-
-                // should we stop filtering this field?
-                if ($info['type'] == static::HARD_RULE) {
-                    $this->hardrule[] = $field;
-                }
-
-                // should we stop filtering entirely?
-                if ($info['type'] == static::STOP_RULE) {
-                    return false;
-                }
-            }
-        }
-
-        // if there are messages, it's a failure
-        return $this->messages ? false : true;
-    }
-
-    /**
-     *
-     * Adds a failure message for a field.
-     *
-     * @param string $field The field that failed.
-     *
-     * @param RuleInterface $rule The rule that the field failed to pass.
-     *
-     * @return void
-     *
-     */
-    protected function addMessageFromRule($field, RuleInterface $rule = null)
-    {
-        // should we use a field-specific message?
-        $message = isset($this->field_messages[$field])
-                 ? $this->field_messages[$field]
-                 : null;
-
-        // is a field-specific message already set?
-        if ($message && isset($this->messages[$field])) {
-            // no need to set it again
-            return;
-        }
-
-        // do we have a field-specific message at this point?
-        if ($message) {
-            // yes; note that we set this as the only element in an array.
-            $this->messages[$field] = [$message];
-
-            return;
-        }
-
-        if (null == $rule) {
-            throw new \RuntimeException('Needs to specify a rule object');
-        }
-
-        // add the rule-specific message the the array of messages, and done.
-        $this->messages[$field][] = $rule->getMessage();
-    }
-
-    /**
-     *
-     * Returns the array of failure messages.
-     *
-     * @param string $field Return messages just for this field; if empty,
-     *                      return messages for all fields.
-     *
-     * @return array
-     *
-     */
-    public function getMessages($field = null)
-    {
-        if (! $field) {
-            return $this->messages;
-        }
-
-        if (isset($this->messages[$field])) {
-            return $this->messages[$field];
-        }
-
-        return [];
-    }
-
-    /**
-     *
-     * Manually add messages to a particular field.
-     *
-     * @param string $field Add to this field.
-     *
-     * @param string|array $messages Add these messages to the field.
-     *
-     * @return void
-     *
-     */
-    public function addMessages($field, $messages)
-    {
-        if (! isset($this->messages[$field])) {
-            $this->messages[$field] = [];
-        }
-
-        $this->messages[$field] = array_merge(
-            $this->messages[$field],
-            $messages
+        return $this->addSpec(
+            clone $this->validate_spec,
+            $field
         );
     }
 
-    /**
-     *
-     * Convenience method to apply a rule directly to an individual value.
-     *
-     * @param mixed $value Apply the rule to this value; note that this is
-     *                     passed by reference, so the rule may modify the value in place.
-     *
-     * @param string $method The rule method to use; e.g., Filter::IS.
-     *
-     * @param string $name The of the rule to apply.
-     *
-     * @return bool True if the rule was applied successfully, false if not.
-     *
-     */
-    public function value(&$value, $method, $name)
+    public function sanitize($field)
     {
-        // get the params
-        $params = func_get_args();
-        array_shift($params); // $value
-        array_shift($params); // $method
-        array_shift($params); // $name
+        return $this->addSpec(
+            clone $this->sanitize_spec,
+            $field
+        );
+    }
 
-        // set up the field name and data
-        $field = 'field';
-        $data = (object) [$field => $value];
+    protected function addSpec($spec, $field)
+    {
+        $this->specs[] = $spec;
+        $spec->field($field);
+        return $spec;
+    }
 
-        // prep and call the rule object
-        $rule = $this->rule_locator->get($name);
-        $rule->prep($data, $field);
-        $passed = call_user_func_array([$rule, $method], $params);
+    public function apply($object)
+    {
+        $this->applySpecs($object);
+        return ($this->messages) ? false : true;
+    }
 
-        // retain the value and return the pass/fail result
-        $value = $rule->getValue();
+    protected function applySpecs($objects)
+    {
+        $this->skip = array();
+        $this->messages = array();
+        foreach ($this->specs as $spec) {
+            if ($this->skippedOrPassed($spec, $object)) {
+                continue;
+            }
+            if ($this->noteFailure($spec) === self::STOP_RULE) {
+                break;
+            }
+        }
+    }
 
-        return $passed;
+    protected function skippedOrPassed($spec, $object)
+    {
+        return isset($this->skip[$spec->getField()])
+            || call_user_func($spec, $object);
+    }
+
+    protected function noteFailure($spec)
+    {
+        $field = $spec->getField();
+        $this->messages[$field][] = $spec->getMessage();
+
+        $type = $spec->getType();
+        if ($type === self::HARD_RULE) {
+            $this->skip[$field] = true;
+        }
+
+        return $type;
+    }
+
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }
