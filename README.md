@@ -60,7 +60,7 @@ instantiate it manually:
 ```php
 <?php
 use Aura\Filter\Filter;
-use Aura\Filter\RuleLocator;
+use Aura\Filter\Rule\RuleLocator;
 
 $filter = new Filter(new RuleLocator);
 ```

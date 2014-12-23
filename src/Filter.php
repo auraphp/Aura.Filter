@@ -11,6 +11,7 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Rule\RuleInterface;
+use Aura\Filter\Rule\RuleLocator;
 use InvalidArgumentException;
 
 /**

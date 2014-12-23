@@ -2,6 +2,7 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Filter;
+use Aura\Filter\Rule\RuleLocator;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,7 +45,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testGetRuleLocator()
     {
         $actual = $this->filter->getRuleLocator();
-        $expect = 'Aura\Filter\RuleLocator';
+        $expect = 'Aura\Filter\Rule\RuleLocator';
         $this->assertInstanceOf($expect, $actual);
     }
 

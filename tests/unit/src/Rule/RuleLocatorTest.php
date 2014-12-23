@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Filter;
+namespace Aura\Filter\Rule;
 
 class RuleLocatorTest extends \PHPUnit_Framework_TestCase
 {

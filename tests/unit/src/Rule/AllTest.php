@@ -2,7 +2,7 @@
 namespace Aura\Filter\Rule;
 
 use Aura\Filter\AbstractRuleTest;
-use Aura\Filter\RuleLocator;
+use Aura\Filter\Rule\RuleLocator;
 
 class AllTest extends AbstractRuleTest
 {

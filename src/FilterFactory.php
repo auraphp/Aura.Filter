@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Rule\RuleLocator;
+
 /**
  *
  * Factory to create Filter objects.

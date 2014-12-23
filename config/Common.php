@@ -17,13 +17,13 @@ class Common extends Config
          * Aura\Filter\Filter
          */
         $di->params['Aura\Filter\Filter'] = [
-            'rule_locator' => $di->lazyNew('Aura\Filter\RuleLocator'),
+            'rule_locator' => $di->lazyNew('Aura\Filter\Rule\RuleLocator'),
         ];
 
         /**
          * Aura\Filter\RuleLocator
          */
-        $di->params['Aura\Filter\RuleLocator']['factories'] = [
+        $di->params['Aura\Filter\Rule\RuleLocator']['factories'] = [
             'alnum'                 =>  $di->lazyNew('Aura\Filter\Rule\Alnum'),
             'alpha'                 =>  $di->lazyNew('Aura\Filter\Rule\Alpha'),
             'any'                   =>  $di->lazyNew('Aura\Filter\Rule\Any'),
