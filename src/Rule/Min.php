@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
-
 /**
  *
  * Validates that a value is greater than or equal to a minimum.

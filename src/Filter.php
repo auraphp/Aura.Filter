@@ -10,6 +10,7 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Rule\RuleInterface;
 use InvalidArgumentException;
 
 /**

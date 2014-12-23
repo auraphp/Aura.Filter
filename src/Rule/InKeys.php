@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
-
 /**
  *
  * Validates that the value is a key in the list of allowed options.

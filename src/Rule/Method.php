@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
-
 /**
  *
  * Rule to call a method on the value object; the method should return a

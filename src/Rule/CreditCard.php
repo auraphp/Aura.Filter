@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
-
 /**
  *
  * Validates the value as a credit card number.

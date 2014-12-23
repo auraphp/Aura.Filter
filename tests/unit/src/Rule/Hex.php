@@ -1,8 +1,6 @@
 <?php
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
-
 class Hex extends AbstractRule
 {
     protected $message_map = [

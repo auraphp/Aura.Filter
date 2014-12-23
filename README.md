@@ -550,7 +550,6 @@ Here is an example of a hexadecimal rule:
 <?php
 namespace Vendor\Package\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
 
 class Hex extends AbstractRule
 {

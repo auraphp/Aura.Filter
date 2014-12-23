@@ -10,8 +10,6 @@
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
-
 /**
  *
  * Sanitizes a value to a string with only word characters.

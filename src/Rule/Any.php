@@ -10,7 +10,6 @@
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\AbstractRule;
 use Aura\Filter\RuleLocator;
 
 /**
