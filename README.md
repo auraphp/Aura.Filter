@@ -46,7 +46,7 @@ follow [@auraphp on Twitter](http://twitter.com/auraphp), or chat with us on #au
 
 ## Getting Started
 
-The easiest way to instantiate a new filter (i.e., a new `RuleCollection`)
+The easiest way to instantiate a new filter (i.e., a new `Filter`)
 with all the available rules is to use the `FilterFactory` class:
 
 ```php
@@ -59,7 +59,7 @@ instantiate it manually:
 
 ```php
 <?php
-use Aura\Filter\RuleCollection as Filter;
+use Aura\Filter\Filter;
 use Aura\Filter\RuleLocator;
 
 $filter = new Filter(new RuleLocator);
@@ -129,22 +129,22 @@ Validating and Sanitizing
 
 We validate data by applying a rule with one of the following requirements:
 
-- `RuleCollection::IS` means the field value must match the rule.
+- `Filter::IS` means the field value must match the rule.
 
-- `RuleCollection::IS_NOT` means the field value must *not* match the
+- `Filter::IS_NOT` means the field value must *not* match the
   rule.
 
-- `RuleCollection::IS_BLANK_OR` means the field value must *either* be
+- `Filter::IS_BLANK_OR` means the field value must *either* be
   blank, *or* match the rule. This is useful for optional field values that
   may or may not be filled in.
 
 We sanitize data by applying a rule with one of the following transformations:
 
-- `RuleCollection::FIX` to force the field value to comply with the
+- `Filter::FIX` to force the field value to comply with the
   rule; this may forcibly transform the value. Some transformations are not
   possible, so sanitizing the field may result in an error message.
 
-- `RuleCollection::FIX_BLANK_OR` will convert blank values to `null`;
+- `Filter::FIX_BLANK_OR` will convert blank values to `null`;
   non-blank fields will be forced to comply with the rule. This is useful for
   sanitizing optional field values that may or may not match the rule.
 

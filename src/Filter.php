@@ -21,7 +21,7 @@ use InvalidArgumentException;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class RuleCollection
+class Filter
 {
     /**
      * Stop filtering on a field when a rule fails.

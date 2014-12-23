@@ -23,12 +23,12 @@ class FilterFactory
      *
      * Returns a new Filter instance.
      *
-     * @return RuleCollection
+     * @return Filter
      *
      */
     public function newInstance()
     {
-        return new RuleCollection(
+        return new Filter(
             new RuleLocator(array_merge(
                 $this->registry(),
                 ['any' => function () {

@@ -1,9 +1,9 @@
 <?php
 namespace Aura\Filter;
 
-use Aura\Filter\RuleCollection as Filter;
+use Aura\Filter\Filter;
 
-class RuleCollectionTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit_Framework_TestCase
 {
     protected $filter;
 
@@ -367,8 +367,8 @@ class RuleCollectionTest extends \PHPUnit_Framework_TestCase
         // Get the Rule Registry
         $registry = (new FilterFactory())->registry();
 
-        // Check if the instance is a RuleCollection Object
-        $expect = 'Aura\Filter\RuleCollection';
+        // Check if the instance is a Filter Object
+        $expect = 'Aura\Filter\Filter';
         $actual = $instance;
         $this->assertInstanceOf($expect, $actual);
 

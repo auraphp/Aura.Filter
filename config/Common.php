@@ -14,9 +14,9 @@ class Common extends Config
         $di->setter['Aura\Filter\Rule\Any']['setRuleLocator'] = $di->lazyNew('Aura\Filter\RuleLocator');
 
         /**
-         * Aura\Filter\RuleCollection
+         * Aura\Filter\Filter
          */
-        $di->params['Aura\Filter\RuleCollection'] = [
+        $di->params['Aura\Filter\Filter'] = [
             'rule_locator' => $di->lazyNew('Aura\Filter\RuleLocator'),
         ];
 
