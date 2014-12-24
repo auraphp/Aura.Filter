@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -24,23 +24,23 @@ class Regex
 {
     /**
      *
-     * Validates the value against a regular expression.
+     * Applies [[php::preg_replace() | ]] to the value.
      *
-     * Uses [[php::preg_match() | ]] to compare the value against the given
-     * regular expression.
+     * @param string $expr The regular expression pattern to apply.
      *
-     * @param string $expr The regular expression to validate against.
+     * @param string $replace Replace the found pattern with this string.
      *
-     * @return bool True if the value matches the expression, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field, $expr)
+    public function sanitize($object, $field, $expr, $replace)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
+        $object->$field = preg_replace($expr, $replace, $value);
 
-        return (bool) preg_match($expr, $value);
+        return true;
     }
 }

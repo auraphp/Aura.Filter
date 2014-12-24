@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 /**
  *
@@ -36,27 +36,5 @@ class String
     public function validate($object, $field)
     {
         return is_scalar($object->$field);
-    }
-
-    /**
-     *
-     * Forces the value to a string, optionally applying str_replace().
-     *
-     * @param string $find
-     *
-     * @param string $replace
-     *
-     * @return bool True if the value was sanitized, false if not.
-     *
-     */
-    public function sanitize($object, $field, $find = null, $replace = null)
-    {
-        $value = (string) $object->$field;
-        if ($find || $replace) {
-            $value = str_replace($find, $replace, $value);
-        }
-        $object->$field = $value;
-
-        return true;
     }
 }

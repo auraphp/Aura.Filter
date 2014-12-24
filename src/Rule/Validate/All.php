@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 use Aura\Filter\Rule\RuleLocator;
 

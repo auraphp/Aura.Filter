@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -24,15 +24,16 @@ class StrictEqualToValue
 {
     /**
      *
-     * Check the values strictly on type and value
+     * Force the field to the value of the other field
      *
      * @param string $other_value
      *
-     * @return bool True if the values are equal, false if not equal.
+     * @return bool Always true.
      *
      */
-    public function validate($object, $field, $other_value)
+    public function sanitize($object, $field, $other_value)
     {
-        return $object->$field === $other_value;
+        $object->$field = $other_value;
+        return true;
     }
 }

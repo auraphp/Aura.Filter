@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 use PDO;
 use PDOStatement;
@@ -173,17 +173,5 @@ class InTableColumn
     protected function quoteName($name)
     {
         return $this->quote_name_prefix . $name . $this->quote_name_suffix;
-    }
-
-    /**
-     *
-     * Cannot sanitize through this rule.
-     *
-     * @return bool Always false.
-     *
-     */
-    public function sanitize($object, $field, $table, $column)
-    {
-        return false;
     }
 }

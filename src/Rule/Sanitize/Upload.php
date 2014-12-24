@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -23,45 +23,25 @@ class Upload
 {
     /**
      *
-     * Validates that the value is an array of file-upload information, and
-     * if a file is referred to, that is actually an uploaded file.
+     * Sanitizes a file-upload information array.  If no file has been
+     * uploaded, the information will be returned as null.
      *
-     * The required keys are 'error', 'name', 'size', 'tmp_name', 'type'. More
-     * or fewer or different keys than this will return a "malformed" error.
-     *
-     * @return bool True if valid, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field)
+    public function sanitize($object, $field)
     {
         $value = $object->$field;
 
+        // pre-check
         $success = $this->preCheck($value);
         if (! $success) {
             return false;
         }
 
-        // was the upload explicitly ok?
-        $err = $value['error'];
-        if ($err != UPLOAD_ERR_OK) {
-            if (isset($this->message_map[$err])) {
-                $this->setMessageKey($err);
-            } else {
-                $this->setMessageKey('err_unknown');
-            }
+        // everything looks ok; some keys may have been removed.
+        $object->$field = $value;
 
-            return false;
-        }
-
-        // is it actually an uploaded file?
-        if (! $this->isUploadedFile($value['tmp_name'])) {
-            // nefarious happenings are afoot.
-            $this->setMessageKey('err_is_uploaded_file');
-
-            return false;
-        }
-
-        // looks like we're ok!
         return true;
     }
 
@@ -104,19 +84,5 @@ class Upload
 
         // looks ok
         return true;
-    }
-
-    /**
-     *
-     * Check whether the file was uploaded via HTTP POST
-     *
-     * @param string $file
-     *
-     * @return bool True if the file was uploaded via HTTP POST, false if not.
-     *
-     */
-    protected function isUploadedFile($file)
-    {
-        return is_uploaded_file($file);
     }
 }

@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -32,14 +32,14 @@ class Trim
 
     /**
      *
-     * Is the value already trimmed?
+     * Trims characters from the beginning and end of the value.
      *
      * @param string $chars The characters to strip.
      *
-     * @return bool True if valid, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field, $chars = null)
+    public function sanitize($object, $field, $chars = null)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
@@ -48,7 +48,8 @@ class Trim
         if (! $chars) {
             $chars = $this->chars;
         }
+        $object->$field = trim($value, $chars);
 
-        return trim($value, $chars) == $value;
+        return true;
     }
 }

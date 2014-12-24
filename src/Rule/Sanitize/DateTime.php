@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 use DateTime as PhpDateTime;
 
@@ -25,19 +25,23 @@ class DateTime
 {
     /**
      *
-     * validate datetime of default format Y-m-d H:i:s
+     * Sanitize datetime to default format Y-m-d H:i:s
      *
      * @param string $format
      *
-     * @return bool
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field, $format = 'Y-m-d H:i:s')
+    public function sanitize($object, $field, $format = 'Y-m-d H:i:s')
     {
         $value = $object->$field;
         $datetime = $this->newDateTime($value);
+        if (! $datetime) {
+            return false;
+        }
+        $object->$field = $datetime->format($format);
 
-        return (bool) $datetime;
+        return true;
     }
 
     /**

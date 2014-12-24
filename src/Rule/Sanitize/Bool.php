@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -41,31 +41,37 @@ class Bool
 
     /**
      *
-     * Validates that the value is a boolean representation.
+     * Forces the value to a boolean.
      *
-     * @return bool True if valid, false if not.
+     * Note that this recognizes $this->true and $this->false values.
+     *
+     * @return bool Always true.
      *
      */
-    public function validate($object, $field)
+    public function sanitize($object, $field)
     {
         $value = $object->$field;
 
-        // php boolean
+        // PHP booleans
         if ($value === true || $value === false) {
+            // nothing to fix
             return true;
         }
 
-        // pseudo-boolean
-        $lower  = strtolower(trim($value));
-        if (in_array($lower, $this->true, true)) {
-            // pseudo-true
-            return true;
-        } elseif (in_array($lower, $this->false, true)) {
-            // pseudo-false
-            return true;
+        // pseudo booleans
+        $lower = strtolower(trim($value));
+        if (in_array($lower, $this->true)) {
+            // matches a pseudo true
+            $object->$field = true;
+        } elseif (in_array($lower, $this->false)) {
+            // matches a pseudo false
+            $object->$field = false;
         } else {
-            // not boolean
-            return false;
+            // cast to a boolean
+            $object->$field = (bool) $value;
         }
+
+        // done!
+        return true;
     }
 }

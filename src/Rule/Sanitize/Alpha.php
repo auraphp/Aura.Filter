@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -23,18 +23,14 @@ class Alpha
 {
     /**
      *
-     * Validates that the value is letters only (upper or lower case).
+     * Strips non-alphabetic characters from the value.
      *
-     * @return bool True if valid, false if not.
+     * @return bool Always true.
      *
      */
-    public function validate($object, $field)
+    public function sanitize($object, $field)
     {
-        $value = $object->$field;
-        if (! is_scalar($value)) {
-            return false;
-        }
-
-        return ctype_alpha($value);
+        $object->$field = preg_replace('/[^a-z]/i', '', $object->$field);
+        return true;
     }
 }

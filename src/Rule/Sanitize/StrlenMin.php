@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -19,25 +19,31 @@ namespace Aura\Filter\Rule\Validate;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class StrlenMax
+class StrlenMin
 {
     /**
      *
-     * Validates that a string is no longer than a certain length.
+     * Fix to min length
      *
-     * @param mixed $max The value must have no more than this many
-     *                   characters.
+     * @param int $min
      *
-     * @return bool True if valid, false if not.
+     * @param string $pad_string
+     *
+     * @param int $pad_type
+     *
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field, $max)
+    public function sanitize($object, $field, $min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
+        if (strlen($value) < $min) {
+            $object->$field = str_pad($value, $min, $pad_string, $pad_type);
+        }
 
-        return strlen($value) <= $max;
+        return true;
     }
 }

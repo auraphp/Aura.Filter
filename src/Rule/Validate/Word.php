@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 /**
  *
@@ -40,22 +40,5 @@ class Word
         $expr = '/^\w+$/D';
 
         return (bool) preg_match($expr, $value);
-    }
-
-    /**
-     *
-     * Strips non-word characters within the value.
-     *
-     * @return bool True if the value was sanitized, false if not.
-     *
-     */
-    public function sanitize($object, $field)
-    {
-        $value = $object->$field;
-        if (! is_scalar($value)) {
-            return false;
-        }
-        $object->$field = preg_replace('/\W/', '', $value);
-        return true;
     }
 }

@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 /**
  *
@@ -37,18 +37,5 @@ class Blank
     public function validate($object, $field)
     {
         return $this->isBlank();
-    }
-
-    /**
-     *
-     * Set value to null
-     *
-     * @return bool Always true.
-     *
-     */
-    public function sanitize($object, $field)
-    {
-        $object->$field = null;
-        return true;
     }
 }

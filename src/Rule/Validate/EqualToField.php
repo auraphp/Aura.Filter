@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 /**
  *
@@ -44,27 +44,5 @@ class EqualToField
         }
 
         return $object->$field == $object->$other_field;
-    }
-
-    /**
-     *
-     * Force the field to the value of the other field
-     *
-     * @param string $other_field
-     *
-     * @return bool True if the value was sanitized, false if not.
-     *
-     */
-    public function sanitize($object, $field, $other_field)
-    {
-
-        // the other field needs to exist and *not* be null
-        if (! isset($object->$other_field)) {
-            return false;
-        }
-
-        $object->$field = $object->$other_field;
-
-        return true;
     }
 }

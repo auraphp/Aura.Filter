@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -23,23 +23,19 @@ class Isbn
 {
     /**
      *
-     * Validates that the value is a ISBN.
+     * Removes all non numeric values to test if it is a valid ISBN.
      *
-     * All values will be sanitized before tested!
-     *
-     * @return bool True if valid, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field)
+    public function sanitize($object, $field)
     {
-        if ($this->sanitize() == true) {
-            $value = $object->$field;
+        $value = $object->$field;
+        $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $value);
 
-            if (strlen($value) == 13) {
-                return $this->thirteen($object->$field);
-            } elseif (strlen($value) == 10) {
-                return $this->ten($object->$field);
-            }
+        if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value) == 1) {
+            $object->$field = $value;
+            return true;
         }
 
         return false;

@@ -8,33 +8,38 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for alphabetic characters.
+ * Validates that a value is greater than or equal to a minimum.
  *
  * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Alpha
+class Min
 {
     /**
      *
-     * Validates that the value is letters only (upper or lower case).
+     * Check whether the value is less than min, if so set to min
      *
-     * @return bool True if valid, false if not.
+     * @param int $min
+     *
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field)
+    public function sanitize($object, $field, $min)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
+        if ($value < $min) {
+            $object->$field = $min;
+        }
 
-        return ctype_alpha($value);
+        return true;
     }
 }

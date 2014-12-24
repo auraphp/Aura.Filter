@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 /**
  *
@@ -34,20 +34,5 @@ class EqualToValue
     public function validate($object, $field, $other_value)
     {
         return $object->$field == $other_value;
-    }
-
-    /**
-     *
-     * Force the field to the value of the other field
-     *
-     * @param mixed $other_value
-     *
-     * @return bool Always true.
-     *
-     */
-    public function sanitize($object, $field, $other_value)
-    {
-        $this->setValue($other_value);
-        return true;
     }
 }

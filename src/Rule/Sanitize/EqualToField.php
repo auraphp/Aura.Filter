@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
@@ -20,29 +20,27 @@ namespace Aura\Filter\Rule\Validate;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class StrictEqualToField
+class EqualToField
 {
     /**
      *
-     * Validates that this value is equal in value and type to some other
-     * element in the filter chain.
+     * Force the field to the value of the other field
      *
-     * If the other element does not exist in $object, or is null, the
-     * validation will fail.
+     * @param string $other_field
      *
-     * @param string $other_field Check against the value of this element in
-     * $object.
-     *
-     * @return bool True if the values are equal, false if not equal.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field, $other_field)
+    public function sanitize($object, $field, $other_field)
     {
+
         // the other field needs to exist and *not* be null
         if (! isset($object->$other_field)) {
             return false;
         }
 
-        return $object->$field === $object->$other_field;
+        $object->$field = $object->$other_field;
+
+        return true;
     }
 }

@@ -8,33 +8,33 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for alphabetic characters.
+ * Sanitizes a value to a string with only word characters.
  *
  * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Alpha
+class Word
 {
     /**
      *
-     * Validates that the value is letters only (upper or lower case).
+     * Strips non-word characters within the value.
      *
-     * @return bool True if valid, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function validate($object, $field)
+    public function sanitize($object, $field)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
-
-        return ctype_alpha($value);
+        $object->$field = preg_replace('/\W/', '', $value);
+        return true;
     }
 }

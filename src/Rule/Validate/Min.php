@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule;
+namespace Aura\Filter\Rule\Validate;
 
 /**
  *
@@ -38,27 +38,5 @@ class Min
         }
 
         return $value >= $min;
-    }
-
-    /**
-     *
-     * Check whether the value is less than min, if so set to min
-     *
-     * @param int $min
-     *
-     * @return bool True if the value was sanitized, false if not.
-     *
-     */
-    public function sanitize($object, $field, $min)
-    {
-        $value = $object->$field;
-        if (! is_scalar($value)) {
-            return false;
-        }
-        if ($value < $min) {
-            $object->$field = $min;
-        }
-
-        return true;
     }
 }
