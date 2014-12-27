@@ -31,7 +31,7 @@ class StrlenMax
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, $max)
+    public function __invoke($object, $field, $max)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {

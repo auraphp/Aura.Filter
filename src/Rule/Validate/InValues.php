@@ -34,10 +34,8 @@ class InValues
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, array $array)
+    public function __invoke($object, $field, array $array)
     {
-        $this->setParams(['values' => array_values($array)]);
-
         return in_array($object->$field, $array, true);
     }
 }

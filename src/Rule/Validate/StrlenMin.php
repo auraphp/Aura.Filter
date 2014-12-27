@@ -31,7 +31,7 @@ class StrlenMin
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, $min)
+    public function __invoke($object, $field, $min)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {

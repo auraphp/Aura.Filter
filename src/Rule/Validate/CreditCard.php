@@ -28,7 +28,7 @@ class CreditCard
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
         // get the value; remove spaces, dashes, and dots
         $value = str_replace([' ', '-', '.'], '', (string) $object->$field);

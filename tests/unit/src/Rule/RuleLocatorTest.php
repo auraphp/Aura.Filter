@@ -1,6 +1,8 @@
 <?php
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\Rule\Validate;
+
 class RuleLocatorTest extends \PHPUnit_Framework_TestCase
 {
     public function test__constructAndGet()
@@ -8,12 +10,12 @@ class RuleLocatorTest extends \PHPUnit_Framework_TestCase
         $rule_locator = new RuleLocator(
             [
                 'alpha' => function () {
-                    return new \Aura\Filter\Rule\Alpha;
+                    return new Validate\Alpha;
                 },
             ]
         );
 
-        $expect = 'Aura\Filter\Rule\Alpha';
+        $expect = 'Aura\Filter\Rule\Validate\Alpha';
         $actual = $rule_locator->get('alpha');
         $this->assertInstanceOf($expect, $actual);
     }
@@ -22,10 +24,10 @@ class RuleLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $rule_locator = new RuleLocator;
         $rule_locator->set('alpha', function () {
-            return new \Aura\Filter\Rule\Alpha;
+            return new Validate\Alpha;
         });
 
-        $expect = 'Aura\Filter\Rule\Alpha';
+        $expect = 'Aura\Filter\Rule\Validate\Alpha';
         $actual = $rule_locator->get('alpha');
         $this->assertInstanceOf($expect, $actual);
     }

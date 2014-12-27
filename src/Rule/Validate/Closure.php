@@ -32,7 +32,7 @@ class Closure
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, PhpClosure $closure)
+    public function __invoke($object, $field, PhpClosure $closure)
     {
         $closure = $closure->bindTo($this, get_class($this));
 

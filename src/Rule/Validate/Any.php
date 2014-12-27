@@ -69,7 +69,7 @@ class Any
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, array $list)
+    public function __invoke($object, $field, array $list)
     {
         foreach ($list as $args) {
             // take the name off the top of the arguments

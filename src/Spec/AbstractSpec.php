@@ -1,7 +1,9 @@
 <?php
-namespace Aura\Filter;
+namespace Aura\Filter\Spec;
 
 use Exception;
+use Aura\Filter\Rule\RuleLocator;
+use Aura\Filter\Filter;
 
 abstract class AbstractSpec
 {
@@ -21,24 +23,18 @@ abstract class AbstractSpec
     public function __invoke($object)
     {
         $this->exception = null;
-        try {
+        // try {
             return $this->applyBlank($object, $this->field)
                 || $this->applyRule($object);
-        } catch (Exception $e) {
-            $this->exception = $exception;
-            return false;
-        }
+        // } catch (Exception $e) {
+        //     $this->exception = $exception;
+        //     return false;
+        // }
     }
 
     public function field($field)
     {
         $this->field = $field;
-    }
-
-    protected function init($args)
-    {
-        $this->args = $args;
-        $this->rule = array_shift($this->args);
         return $this;
     }
 
@@ -91,6 +87,13 @@ abstract class AbstractSpec
         return $message;
     }
 
+    protected function init($args)
+    {
+        $this->args = $args;
+        $this->rule = array_shift($this->args);
+        return $this;
+    }
+
     protected function getDefaultMessage()
     {
         $message = $this->rule;
@@ -124,8 +127,8 @@ abstract class AbstractSpec
     {
         $rule = $this->rule_locator->get($this->rule);
         $args = $this->args;
-        array_shift($this->field);
-        array_shift($object);
+        array_unshift($args, $this->field);
+        array_unshift($args, $object);
         return call_user_func_array($rule, $args);
     }
 }

@@ -86,11 +86,11 @@ class InTableColumn
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, $table, $column, $where = null)
+    public function __invoke($object, $field, $table, $column, $where = null)
     {
         $stm = $this->buildSelect($table, $column, $where);
         $sth = $this->pdo->prepare($stm);
-        $sth->execute($this->getBindValues($column, $where));
+        $sth->execute($this->getBindValues($object, $field, $column, $where));
         return $sth->fetchColumn() !== false;
     }
 
@@ -137,7 +137,7 @@ class InTableColumn
      * @return null
      *
      */
-    protected function getBindValues($column, $where)
+    protected function getBindValues($object, $field, $column, $where)
     {
         $bind = array($column => $object->$field);
         if (! $where) {

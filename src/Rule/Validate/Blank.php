@@ -34,8 +34,19 @@ class Blank
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
-        return $this->isBlank();
+        // not set, or null, means it is blank
+        if (! isset($object->$field) || $object->$field === null) {
+            return true;
+        }
+
+        // non-strings are not blank: int, float, object, array, resource, etc
+        if (! is_string($object->$field)) {
+            return false;
+        }
+
+        // strings that trim down to exactly nothing are blank
+        return trim($object->$field) === '';
     }
 }

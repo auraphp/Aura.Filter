@@ -77,8 +77,6 @@ class Upload
 
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
-            $this->setMessageKey('err_array_keys');
-
             return false;
         }
 

@@ -74,7 +74,7 @@ class Email
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
         return (bool) preg_match("!^{$this->expr}$!D", $object->$field);
     }

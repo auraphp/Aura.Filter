@@ -36,7 +36,7 @@ class StrictEqualToField
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function validate($object, $field, $other_field)
+    public function __invoke($object, $field, $other_field)
     {
         // the other field needs to exist and *not* be null
         if (! isset($object->$other_field)) {

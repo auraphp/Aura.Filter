@@ -28,7 +28,7 @@ class Alnum
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {

@@ -39,7 +39,7 @@ class Trim
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, $chars = null)
+    public function __invoke($object, $field, $chars = null)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {

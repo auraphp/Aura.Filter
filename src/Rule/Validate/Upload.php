@@ -32,7 +32,7 @@ class Upload
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
 
@@ -44,20 +44,18 @@ class Upload
         // was the upload explicitly ok?
         $err = $value['error'];
         if ($err != UPLOAD_ERR_OK) {
-            if (isset($this->message_map[$err])) {
-                $this->setMessageKey($err);
-            } else {
-                $this->setMessageKey('err_unknown');
-            }
-
+            // if (isset($this->message_map[$err])) {
+            //     $this->setMessageKey($err);
+            // } else {
+            //     $this->setMessageKey('err_unknown');
+            // }
             return false;
         }
 
         // is it actually an uploaded file?
         if (! $this->isUploadedFile($value['tmp_name'])) {
-            // nefarious happenings are afoot.
-            $this->setMessageKey('err_is_uploaded_file');
-
+            // // nefarious happenings are afoot.
+            // $this->setMessageKey('err_is_uploaded_file');
             return false;
         }
 
@@ -97,8 +95,7 @@ class Upload
 
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
-            $this->setMessageKey('err_array_keys');
-
+            // $this->setMessageKey('err_array_keys');
             return false;
         }
 

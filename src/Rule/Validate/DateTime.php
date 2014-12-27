@@ -32,7 +32,7 @@ class DateTime
      * @return bool
      *
      */
-    public function validate($object, $field, $format = 'Y-m-d H:i:s')
+    public function __invoke($object, $field, $format = 'Y-m-d H:i:s')
     {
         $value = $object->$field;
         $datetime = $this->newDateTime($value);

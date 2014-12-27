@@ -30,9 +30,9 @@ class Isbn
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
-        if ($this->sanitize() == true) {
+        if ($this->sanitize($object, $field) == true) {
             $value = $object->$field;
 
             if (strlen($value) == 13) {
@@ -40,6 +40,26 @@ class Isbn
             } elseif (strlen($value) == 10) {
                 return $this->ten($object->$field);
             }
+        }
+
+        return false;
+    }
+
+    /**
+     *
+     * Removes all non numeric values to test if it is a valid ISBN.
+     *
+     * @return bool True if the value was sanitized, false if not.
+     *
+     */
+    public function sanitize($object, $field)
+    {
+        $value = $object->$field;
+        $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $value);
+
+        if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value) == 1) {
+            $object->$field = $value;
+            return true;
         }
 
         return false;

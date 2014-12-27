@@ -19,11 +19,11 @@ class ValidateSpec extends AbstractSpec
 
     protected function getDefaultMessage()
     {
-        $message = 'Value should ';
+        $message = $this->field . ' should';
         if ($this->reverse) {
-            $message .= 'not ';
+            $message .= ' not';
         }
-        $message .= 'have validated as ';
+        $message .= ' have validated as ';
         return $message . parent::getDefaultMessage();
     }
 

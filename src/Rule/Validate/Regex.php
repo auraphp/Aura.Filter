@@ -34,7 +34,7 @@ class Regex
      * @return bool True if the value matches the expression, false if not.
      *
      */
-    public function validate($object, $field, $expr)
+    public function __invoke($object, $field, $expr)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {

@@ -32,7 +32,7 @@ class Method
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, $method)
+    public function __invoke($object, $field, $method)
     {
 
         return (bool) $this->call(func_get_args());

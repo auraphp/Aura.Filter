@@ -33,7 +33,7 @@ class String
      * @todo allow for __toString() implementations
      *
      */
-    public function validate($object, $field)
+    public function __invoke($object, $field)
     {
         return is_scalar($object->$field);
     }

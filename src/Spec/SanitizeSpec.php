@@ -10,7 +10,7 @@ class SanitizeSpec extends AbstractSpec
 
     protected function getDefaultMessage()
     {
-        return 'Value should have sanitized to '
+        return $this->field . ' should have sanitized to '
              . parent::getDefaultMessage();
     }
 }

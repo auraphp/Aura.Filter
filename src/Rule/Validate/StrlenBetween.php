@@ -32,7 +32,7 @@ class StrlenBetween
      * @return bool True if valid, false if not.
      *
      */
-    public function validate($object, $field, $min, $max)
+    public function __invoke($object, $field, $min, $max)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {

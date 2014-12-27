@@ -3,6 +3,9 @@ namespace Aura\Filter;
 
 use Aura\Filter\Filter;
 use Aura\Filter\Rule\RuleLocator;
+use Aura\Filter\Rule\Validate;
+use Aura\Filter\Spec\ValidateSpec;
+use Aura\Filter\Spec\SanitizeSpec;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -10,46 +13,29 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $rule_locator = new RuleLocator([
-            'alnum'     => function () { return new Rule\Alnum; },
-            'alpha'     => function () { return new Rule\Alpha; },
-            'between'   => function () { return new Rule\Between; },
-            'blank'     => function () { return new Rule\Blank; },
-            'closure'   => function () { return new Rule\Closure; },
-            'int'       => function () { return new Rule\Int; },
-            'inKeys'    => function () { return new Rule\InKeys; },
-            'inValues'  => function () { return new Rule\InValues; },
-            'max'       => function () { return new Rule\Max; },
-            'min'       => function () { return new Rule\Min; },
-            'regex'     => function () { return new Rule\Regex; },
-            'string'    => function () { return new Rule\String; },
-            'strlen'    => function () { return new Rule\Strlen; },
-            'strlenMin' => function () { return new Rule\StrlenMin; },
-        ]);
+        $validate_spec = new ValidateSpec(new RuleLocator([
+            'alnum'     => function () { return new Validate\Alnum; },
+            'alpha'     => function () { return new Validate\Alpha; },
+            'between'   => function () { return new Validate\Between; },
+            'blank'     => function () { return new Validate\Blank; },
+            'closure'   => function () { return new Validate\Closure; },
+            'int'       => function () { return new Validate\Int; },
+            'inKeys'    => function () { return new Validate\InKeys; },
+            'inValues'  => function () { return new Validate\InValues; },
+            'max'       => function () { return new Validate\Max; },
+            'min'       => function () { return new Validate\Min; },
+            'regex'     => function () { return new Validate\Regex; },
+            'string'    => function () { return new Validate\String; },
+            'strlen'    => function () { return new Validate\Strlen; },
+            'strlenMin' => function () { return new Validate\StrlenMin; },
+        ]));
 
-        $this->filter = new Filter($rule_locator);
+        $sanitize_spec = new SanitizeSpec(new RuleLocator([]));
+
+        $this->filter = new Filter($validate_spec, $sanitize_spec);
     }
 
-    public function testValue()
-    {
-        // validate
-        $actual = 'abc123def';
-        $this->assertTrue($this->filter->value($actual, Filter::IS, 'alnum'));
-
-        // sanitize in place
-        $expect = 123;
-        $this->assertTrue($this->filter->value($actual, Filter::FIX, 'int'));
-        $this->assertSame(123, $actual);
-    }
-
-    public function testGetRuleLocator()
-    {
-        $actual = $this->filter->getRuleLocator();
-        $expect = 'Aura\Filter\Rule\RuleLocator';
-        $this->assertInstanceOf($expect, $actual);
-    }
-
-    public function testAddAndGetRules()
+    public function testValidate()
     {
         $this->filter->addSoftRule('field1', Filter::IS, 'alnum');
         $this->filter->addHardRule('field1', Filter::IS, 'alpha');
@@ -92,7 +78,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testValues()
+    public function testApply()
     {
         $this->filter->addSoftRule('field', Filter::IS, 'alnum');
         $this->filter->addHardRule('field', Filter::IS, 'strlenMin', 6);
