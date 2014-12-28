@@ -13,11 +13,7 @@ abstract class AbstractSpec
     protected $message;
     protected $allow_blank = false;
     protected $failure_mode = Filter::HARD_RULE;
-
-    public function __construct(RuleLocator $rule_locator)
-    {
-        $this->rule_locator = $rule_locator;
-    }
+    protected $rule_locator;
 
     public function __invoke($object)
     {
