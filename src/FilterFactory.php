@@ -11,6 +11,10 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Rule\RuleLocator;
+use Aura\Filter\Rule\Sanitize;
+use Aura\Filter\Rule\Validate;
+use Aura\Filter\Spec\SanitizeSpec;
+use Aura\Filter\Spec\ValidateSpec;
 
 /**
  *
@@ -21,6 +25,10 @@ use Aura\Filter\Rule\RuleLocator;
  */
 class FilterFactory
 {
+    protected $validate_rule_locator;
+
+    protected $sanitize_rule_locator;
+
     /**
      *
      * Returns a new Filter instance.
@@ -31,54 +39,72 @@ class FilterFactory
     public function newInstance()
     {
         return new Filter(
-            new RuleLocator(array_merge(
-                $this->factories(),
-                ['any' => function () {
-                    $rule = new Rule\Any;
-                    $rule->setRuleLocator(new RuleLocator(
-                        $this->factories()
-                    ));
-
-                    return $rule;
-                }]
-            ))
+            $this->newValidateSpec(),
+            $this->newSanitizeSpec()
         );
     }
 
-    public function factories()
+    public function newValidateSpec()
+    {
+        return new ValidateSpec($this->getValidateRuleLocator());
+    }
+
+    public function newSanitizeSpec()
+    {
+        return new SanitizeSpec($this->getSanitizeRuleLocator());
+    }
+
+    public function getValidateRuleLocator()
+    {
+        if (! $this->validate_rule_locator) {
+            $this->validate_rule_locator = new RuleLocator($this->getValidateFactories());
+        }
+        return $this->validate_rule_locator;
+    }
+
+    public function getSanitizeRuleLocator()
+    {
+        if (! $this->sanitize_rule_locator) {
+            $this->sanitize_rule_locator = new RuleLocator($this->getSanitizeFactories());
+        }
+        return $this->sanitize_rule_locator;
+    }
+
+    public function getValidateFactories()
     {
         return [
-            'alnum'                 => function () { return new Rule\Alnum; },
-            'alpha'                 => function () { return new Rule\Alpha; },
-            'between'               => function () { return new Rule\Between; },
-            'blank'                 => function () { return new Rule\Blank; },
-            'bool'                  => function () { return new Rule\Bool; },
-            'closure'               => function () { return new Rule\Closure; },
-            'creditCard'            => function () { return new Rule\CreditCard; },
-            'dateTime'              => function () { return new Rule\DateTime; },
-            'email'                 => function () { return new Rule\Email; },
-            'equalToField'          => function () { return new Rule\EqualToField; },
-            'equalToValue'          => function () { return new Rule\EqualToValue; },
-            'float'                 => function () { return new Rule\Float; },
-            'inKeys'                => function () { return new Rule\InKeys; },
-            'int'                   => function () { return new Rule\Int; },
-            'inValues'              => function () { return new Rule\InValues; },
-            'ipv4'                  => function () { return new Rule\Ipv4; },
-            'max'                   => function () { return new Rule\Max; },
-            'min'                   => function () { return new Rule\Min; },
-            'regex'                 => function () { return new Rule\Regex; },
-            'strictEqualToField'    => function () { return new Rule\StrictEqualToField; },
-            'strictEqualToValue'    => function () { return new Rule\StrictEqualToValue; },
-            'string'                => function () { return new Rule\String; },
-            'strlenBetween'         => function () { return new Rule\StrlenBetween; },
-            'strlenMax'             => function () { return new Rule\StrlenMax; },
-            'strlenMin'             => function () { return new Rule\StrlenMin; },
-            'strlen'                => function () { return new Rule\Strlen; },
-            'trim'                  => function () { return new Rule\Trim; },
-            'upload'                => function () { return new Rule\Upload; },
-            'url'                   => function () { return new Rule\Url; },
-            'word'                  => function () { return new Rule\Word; },
-            'isbn'                  => function () { return new Rule\Isbn; },
+            'alnum'                 => function () { return new Validate\Alnum; },
+            'alpha'                 => function () { return new Validate\Alpha; },
+            'between'               => function () { return new Validate\Between; },
+            'blank'                 => function () { return new Validate\Blank; },
+            'bool'                  => function () { return new Validate\Bool; },
+            'closure'               => function () { return new Validate\Closure; },
+            'creditCard'            => function () { return new Validate\CreditCard; },
+            'dateTime'              => function () { return new Validate\DateTime; },
+            'email'                 => function () { return new Validate\Email; },
+            'equalToField'          => function () { return new Validate\EqualToField; },
+            'equalToValue'          => function () { return new Validate\EqualToValue; },
+            'float'                 => function () { return new Validate\Float; },
+            'inKeys'                => function () { return new Validate\InKeys; },
+            'int'                   => function () { return new Validate\Int; },
+            'inValues'              => function () { return new Validate\InValues; },
+            'ipv4'                  => function () { return new Validate\Ipv4; },
+            'isbn'                  => function () { return new Validate\Isbn; }
+            'locale'                => function () { return new Validate\Locale; }
+            'max'                   => function () { return new Validate\Max; },
+            'min'                   => function () { return new Validate\Min; },
+            'regex'                 => function () { return new Validate\Regex; },
+            'strictEqualToField'    => function () { return new Validate\StrictEqualToField; },
+            'strictEqualToValue'    => function () { return new Validate\StrictEqualToValue; },
+            'string'                => function () { return new Validate\String; },
+            'strlen'                => function () { return new Validate\Strlen; },
+            'strlenBetween'         => function () { return new Validate\StrlenBetween; },
+            'strlenMax'             => function () { return new Validate\StrlenMax; },
+            'strlenMin'             => function () { return new Validate\StrlenMin; },
+            'trim'                  => function () { return new Validate\Trim; },
+            'upload'                => function () { return new Validate\Upload; },
+            'url'                   => function () { return new Validate\Url; },
+            'word'                  => function () { return new Validate\Word; },
         ];
     }
 }

@@ -47,7 +47,7 @@ class Filter
         // do nothing
     }
 
-    public function __invoke($subject)
+    public function __invoke(&$subject)
     {
         if ($this->apply($subject)) {
             return true;
@@ -89,26 +89,43 @@ class Filter
         return $spec;
     }
 
-    public function apply($subject)
+    public function apply(&$subject)
     {
+        if (is_array($subject)) {
+            return $this->applyToArray($subject);
+        }
+
         if (! is_object($subject)) {
             $type = gettype($subject);
             throw new InvalidArgumentException("Apply the filter to an object, not a {$type}.");
         }
 
+        return $this->applyToObject($subject);
+    }
+
+    protected function applyToArray(&$array)
+    {
+        $object = (object) $array;
+        $result = $this->applyToObject($object);
+        $array = (array) $object;
+        return $result;
+    }
+
+    protected function applyToObject($object)
+    {
         $this->skip = array();
         $this->messages = array();
-        $this->applySpecs($subject);
+        $this->applySpecs($object);
         if ($this->messages) {
             return false;
         }
         return true;
     }
 
-    protected function applySpecs($subject)
+    protected function applySpecs($object)
     {
         foreach ($this->specs as $spec) {
-            if ($this->skippedOrPassed($spec, $subject)) {
+            if ($this->skippedOrPassed($spec, $object)) {
                 continue;
             }
             if ($this->failed($spec) === self::STOP_RULE) {
@@ -117,10 +134,10 @@ class Filter
         }
     }
 
-    protected function skippedOrPassed($spec, $subject)
+    protected function skippedOrPassed($spec, $object)
     {
         return isset($this->skip[$spec->getField()])
-            || call_user_func($spec, $subject);
+            || call_user_func($spec, $object);
     }
 
     protected function failed($spec)

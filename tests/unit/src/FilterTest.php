@@ -20,6 +20,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $sanitize_spec = new SanitizeSpec(new RuleLocator([
             'string'     => function () { return new Sanitize\String; },
+            'strlenMax' => function () { return new Sanitize\StrlenMax; },
         ]));
 
         $this->filter = new Filter($validate_spec, $sanitize_spec);
@@ -136,5 +137,23 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             );
             $this->assertSame($expect, $e->getFilterMessages());
         }
+    }
+
+    public function testApply_onArray()
+    {
+        $this->filter->sanitize('field')->to('strlenMax', 3);
+        $array = array('field' => '123456');
+        $result = $this->filter->apply($array);
+        $this->assertTrue($result);
+        $this->assertSame('123', $array['field']);
+    }
+
+    public function test__invoke_onArray()
+    {
+        $this->filter->sanitize('field')->to('strlenMax', 3);
+        $array = array('field' => '123456');
+        $result = $this->filter->__invoke($array);
+        $this->assertTrue($result);
+        $this->assertSame('123', $array['field']);
     }
 }
