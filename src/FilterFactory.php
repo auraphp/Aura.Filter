@@ -132,7 +132,6 @@ class FilterFactory
             'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
             'trim'                  => function () { return new Sanitize\Trim(); },
             'upload'                => function () { return new Sanitize\Upload(); },
-            'valueIfBlank'          => function () { return new Sanitize\ValueIfBlank(); },
             'word'                  => function () { return new Sanitize\Word(); },
         );
     }

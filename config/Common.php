@@ -43,7 +43,6 @@ class Common extends Config
             'strlenMin'             =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\StrlenMin'),
             'trim'                  =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Trim'),
             'upload'                =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Upload'),
-            'valueIfBlank'          =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\ValueIfBlank'),
             'word'                  =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Word'),
         );
 

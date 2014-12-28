@@ -75,4 +75,12 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
         $object->foo = array();
         $this->assertFalse($this->spec->__invoke($object));
     }
+
+    public function testTo_useBlankValue()
+    {
+        $this->spec->field('foo')->to('strlen', 3)->allowBlank()->useBlankValue('xxx');
+        $object = (object) array();
+        $this->assertTrue($this->spec->__invoke($object));
+        $this->assertSame('xxx', $object->foo);
+    }
 }
