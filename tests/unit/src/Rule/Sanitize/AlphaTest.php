@@ -5,8 +5,8 @@ class AlphaTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {
-        return [
-            ['^&* abc 123 ,./', true, 'abc'],
-        ];
+        return array(
+            array('^&* abc 123 ,./', true, 'abc'),
+        );
     }
 }

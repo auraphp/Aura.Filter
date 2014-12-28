@@ -12,14 +12,14 @@ class MinTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [array(), false, array()],
-            [1, true, 4],
-            [2, true, 4],
-            [3, true, 4],
-            [4, true, 4],
-            [5, true, 5],
-            [6, true, 6],
-        ];
+        return array(
+            array(array(), false, array()),
+            array(1, true, 4),
+            array(2, true, 4),
+            array(3, true, 4),
+            array(4, true, 4),
+            array(5, true, 5),
+            array(6, true, 6),
+        );
     }
 }

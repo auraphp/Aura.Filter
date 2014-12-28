@@ -5,27 +5,27 @@ class UrlTest extends AbstractValidateTest
 {
     public function providerIs()
     {
-        return [
-            ["http://example.com"],
-            ["https://example.com/path/to/file.php"],
-            ["ftp://example.com/path/to/file.php/info"],
-            ["news://example.com/path/to/file.php/info?foo=bar&baz=dib#zim"],
-            ["gopher://example.com/?foo=bar&baz=dib#zim"],
-            ["mms://user:pass@site.info/path/to/file.php/info?foo=bar&baz=dib#zim"],
-        ];
+        return array(
+            array("http://example.com"),
+            array("https://example.com/path/to/file.php"),
+            array("ftp://example.com/path/to/file.php/info"),
+            array("news://example.com/path/to/file.php/info?foo=bar&baz=dib#zim"),
+            array("gopher://example.com/?foo=bar&baz=dib#zim"),
+            array("mms://user:pass@site.info/path/to/file.php/info?foo=bar&baz=dib#zim"),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            [''],
-            [' '],
-            ['example.com'],
-            ['http://'],
-            ["http://example.com\r/index.html"],
-            ["http://example.com\n/index.html"],
-            ["http://example.com\t/index.html"],
-        ];
+        return array(
+            array(array()),
+            array(''),
+            array(' '),
+            array('example.com'),
+            array('http://'),
+            array("http://example.com\r/index.html"),
+            array("http://example.com\n/index.html"),
+            array("http://example.com\t/index.html"),
+        );
     }
 }

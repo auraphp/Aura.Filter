@@ -12,19 +12,19 @@ class StrlenMinTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['abcd'],
-            ['efghijkl'],
-        ];
+        return array(
+            array('abcd'),
+            array('efghijkl'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            ['a'],
-            ['ab'],
-            ['abc'],
-        ];
+        return array(
+            array(array()),
+            array('a'),
+            array('ab'),
+            array('abc'),
+        );
     }
 }

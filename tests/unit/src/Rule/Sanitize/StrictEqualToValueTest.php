@@ -12,12 +12,12 @@ class StrictEqualToValueTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [0,     true, '1'],
-            [1,     true, '1'],
-            ['1',   true, '1'],
-            [true,  true, '1'],
-            [false, true, '1'],
-        ];
+        return array(
+            array(0,     true, '1'),
+            array(1,     true, '1'),
+            array('1',   true, '1'),
+            array(true,  true, '1'),
+            array(false, true, '1'),
+        );
     }
 }

@@ -5,25 +5,25 @@ class EmailTest extends AbstractValidateTest
 {
     public function providerIs()
     {
-        return [
-            ["pmjones@solarphp.net"],
-            ["no.body@no.where.com"],
-            ["any-thing@gmail.com"],
-            ["any_one@hotmail.com"],
-            ["nobody1234567890@yahoo.co.uk"],
-            ["something+else@example.com"],
-        ];
+        return array(
+            array("pmjones@solarphp.net"),
+            array("no.body@no.where.com"),
+            array("any-thing@gmail.com"),
+            array("any_one@hotmail.com"),
+            array("nobody1234567890@yahoo.co.uk"),
+            array("something+else@example.com"),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            ["something @ somewhere.edu"],
-            ["the-name.for!you"],
-            ["non:alpha@example.com"],
-            [""],
-            ["\t\n"],
-            [" "],
-        ];
+        return array(
+            array("something @ somewhere.edu"),
+            array("the-name.for!you"),
+            array("non:alpha@example.com"),
+            array(""),
+            array("\t\n"),
+            array(" "),
+        );
     }
 }

@@ -12,19 +12,19 @@ class StrlenMaxTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['a'],
-            ['ab'],
-            ['abc'],
-        ];
+        return array(
+            array('a'),
+            array('ab'),
+            array('abc'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            ['abcd'],
-            ['abcdefg'],
-        ];
+        return array(
+            array(array()),
+            array('abcd'),
+            array('abcdefg'),
+        );
     }
 }

@@ -5,47 +5,47 @@ class BoolTest extends AbstractValidateTest
 {
     public function providerIs()
     {
-        return [
-            [true],
-            ['on'],
-            ['On'],
-            ['ON'],
-            ['yes'],
-            ['Yes'],
-            ['YeS'],
-            ['y'],
-            ['Y'],
-            ['true'],
-            ['True'],
-            ['TrUe'],
-            ['t'],
-            ['T'],
-            [1],
-            ['1'],
-            [false],
-            ['off'],
-            ['Off'],
-            ['OfF'],
-            ['no'],
-            ['No'],
-            ['NO'],
-            ['n'],
-            ['N'],
-            ['false'],
-            ['False'],
-            ['FaLsE'],
-            ['f'],
-            ['F'],
-            [0],
-            ['0'],
-        ];
+        return array(
+            array(true),
+            array('on'),
+            array('On'),
+            array('ON'),
+            array('yes'),
+            array('Yes'),
+            array('YeS'),
+            array('y'),
+            array('Y'),
+            array('true'),
+            array('True'),
+            array('TrUe'),
+            array('t'),
+            array('T'),
+            array(1),
+            array('1'),
+            array(false),
+            array('off'),
+            array('Off'),
+            array('OfF'),
+            array('no'),
+            array('No'),
+            array('NO'),
+            array('n'),
+            array('N'),
+            array('false'),
+            array('False'),
+            array('FaLsE'),
+            array('f'),
+            array('F'),
+            array(0),
+            array('0'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            ['nothing'],
-            [123],
-        ];
+        return array(
+            array('nothing'),
+            array(123),
+        );
     }
 }

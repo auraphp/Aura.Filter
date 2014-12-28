@@ -12,11 +12,11 @@ class StrlenMinTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [array(), false, array()],
-            ['a',       true, 'a   '],
-            ['abcd',    true, 'abcd'],
-            ['abcdefg', true, 'abcdefg'],
-        ];
+        return array(
+            array(array(), false, array()),
+            array('a',       true, 'a   '),
+            array('abcd',    true, 'abcd'),
+            array('abcdefg', true, 'abcdefg'),
+        );
     }
 }

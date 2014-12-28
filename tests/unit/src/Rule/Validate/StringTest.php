@@ -15,20 +15,20 @@ class StringTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            [12345],
-            [123.45],
-            [true],
-            [false],
-            ['string'],
-        ];
+        return array(
+            array(12345),
+            array(123.45),
+            array(true),
+            array(false),
+            array('string'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            [new \StdClass],
-        ];
+        return array(
+            array(array()),
+            array(new \StdClass),
+        );
     }
 }

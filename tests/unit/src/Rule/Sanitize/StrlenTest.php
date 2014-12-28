@@ -12,11 +12,11 @@ class StrlenTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [array(),   false, array()],
-            ['a',       true, 'a   '],
-            ['abcd',    true, 'abcd'],
-            ['abcdef',  true, 'abcd'],
-        ];
+        return array(
+            array(array(),   false, array()),
+            array('a',       true, 'a   '),
+            array('abcd',    true, 'abcd'),
+            array('abcdef',  true, 'abcd'),
+        );
     }
 }

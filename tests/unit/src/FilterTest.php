@@ -68,9 +68,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
 
         $actual = $this->filter->getMessages('field');
-        $expect = [
+        $expect = array(
             'field should have validated as alnum',
-        ];
+        );
         $this->assertSame($expect, $actual);
 
         $expect = array();

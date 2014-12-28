@@ -5,9 +5,9 @@ class AlnumTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {
-        return [
+        return array(
             // value, result, expect
-            ['$#% abc () 123 ,./', true, 'abc123'],
-        ];
+            array('$#% abc () 123 ,./', true, 'abc123'),
+        );
     }
 }

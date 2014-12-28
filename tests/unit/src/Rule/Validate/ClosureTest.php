@@ -12,26 +12,26 @@ class ClosureTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            [true],
-            [false],
-        ];
+        return array(
+            array(true),
+            array(false),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [0],
-            [1],
-            [null],
-        ];
+        return array(
+            array(0),
+            array(1),
+            array(null),
+        );
     }
 
     public function providerFix()
     {
-        return [
-            [0, true, false],
-            [1, true, true],
-        ];
+        return array(
+            array(0, true, false),
+            array(1, true, true),
+        );
     }
 }

@@ -14,9 +14,9 @@ class ClosureTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [0, true, false],
-            [1, true, true],
-        ];
+        return array(
+            array(0, true, false),
+            array(1, true, true),
+        );
     }
 }

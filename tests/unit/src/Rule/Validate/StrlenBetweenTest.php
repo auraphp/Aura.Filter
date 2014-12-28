@@ -14,19 +14,19 @@ class StrlenBetweenTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['abcd'],
-            ['efghi'],
-            ['jklmno'],
-        ];
+        return array(
+            array('abcd'),
+            array('efghi'),
+            array('jklmno'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            ['abc'],
-            ['defghij'],
-        ];
+        return array(
+            array(array()),
+            array('abc'),
+            array('defghij'),
+        );
     }
 }

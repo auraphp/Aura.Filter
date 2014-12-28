@@ -41,33 +41,33 @@ class InTableColumnTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            [1],
-            [2],
-            [3],
-            [4],
-            [5],
-            [6],
-            [7],
-            [8],
-            [9],
-            [10],
-        ];
+        return array(
+            array(1),
+            array(2),
+            array(3),
+            array(4),
+            array(5),
+            array(6),
+            array(7),
+            array(8),
+            array(9),
+            array(10),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [null],
-            [false],
-            [''],
-            [1.2],
-            ['a'],
-            ['b'],
-            ['c'],
-            [11],
-            [12]
-        ];
+        return array(
+            array(null),
+            array(false),
+            array(''),
+            array(1.2),
+            array('a'),
+            array('b'),
+            array('c'),
+            array(11),
+            array(12),
+        );
     }
 
     public function testIs_where()

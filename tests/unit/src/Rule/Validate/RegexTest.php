@@ -15,25 +15,25 @@ class RegexTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['+1234567890'],
-            [1234567890],
-            [-123456789.0],
-            [-1234567890],
-            ['-123'],
-        ];
+        return array(
+            array('+1234567890'),
+            array(1234567890),
+            array(-123456789.0),
+            array(-1234567890),
+            array('-123'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            [' '],
-            [''],
-            ['-abc.123'],
-            ['123.abc'],
-            ['123],456'],
-            ['0000123.456000'],
-        ];
+        return array(
+            array(array()),
+            array(' '),
+            array(''),
+            array('-abc.123'),
+            array('123.abc'),
+            array('123),456'),
+            array('0000123.456000'),
+        );
     }
 }

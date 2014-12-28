@@ -14,9 +14,9 @@ class WordTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {
-        return [
-            [array(), false, array()],
-            ['abc _ 123 - ,./', true, 'abc_123'],
-        ];
+        return array(
+            array(array(), false, array()),
+            array('abc _ 123 - ,./', true, 'abc_123'),
+        );
     }
 }

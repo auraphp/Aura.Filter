@@ -12,18 +12,18 @@ class StrlenTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['abcd'],
-            ['efgh'],
-        ];
+        return array(
+            array('abcd'),
+            array('efgh'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            ['abc'],
-            ['defgh'],
-        ];
+        return array(
+            array(array()),
+            array('abc'),
+            array('defgh'),
+        );
     }
 }

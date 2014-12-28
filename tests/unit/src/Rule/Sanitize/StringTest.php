@@ -13,9 +13,9 @@ class StringTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            ['abc 123 ,./', true, 'abc@123@,./'],
-            [12345, true, '12345'],
-        ];
+        return array(
+            array('abc 123 ,./', true, 'abc@123@,./'),
+            array(12345, true, '12345'),
+        );
     }
 }

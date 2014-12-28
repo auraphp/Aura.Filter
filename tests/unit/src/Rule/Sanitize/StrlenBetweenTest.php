@@ -14,14 +14,14 @@ class StrlenBetweenTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [array(), false, array()],
-            ['abc',         true, 'abc '],
-            ['abcd',        true, 'abcd'],
-            ['abcde',       true, 'abcde'],
-            ['abcdef',      true, 'abcdef'],
-            ['abcdefg',     true, 'abcdef'],
-            ['abcdefgh',    true, 'abcdef'],
-        ];
+        return array(
+            array(array(), false, array()),
+            array('abc',         true, 'abc '),
+            array('abcd',        true, 'abcd'),
+            array('abcde',       true, 'abcde'),
+            array('abcdef',      true, 'abcdef'),
+            array('abcdefg',     true, 'abcdef'),
+            array('abcdefgh',    true, 'abcdef'),
+        );
     }
 }

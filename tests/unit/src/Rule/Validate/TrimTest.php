@@ -5,16 +5,16 @@ class TrimTest extends AbstractValidateTest
 {
     public function providerIs()
     {
-        return [
-            ['abc'],
-        ];
+        return array(
+            array('abc'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            [' abc '],
-        ];
+        return array(
+            array(array()),
+            array(' abc '),
+        );
     }
 }

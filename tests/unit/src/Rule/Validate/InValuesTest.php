@@ -3,13 +3,13 @@ namespace Aura\Filter\Rule\Validate;
 
 class InValuesTest extends AbstractValidateTest
 {
-    protected $opts = [
+    protected $opts = array(
         0      => 'val0',
         1      => 'val1',
         'key0' => 'val3',
         'key1' => 'val4',
         'key2' => 'val5',
-    ];
+    );
 
     public function getArgs()
     {
@@ -18,23 +18,23 @@ class InValuesTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['val0'],
-            ['val1'],
-            ['val3'],
-            ['val4'],
-            ['val5'],
-        ];
+        return array(
+            array('val0'),
+            array('val1'),
+            array('val3'),
+            array('val4'),
+            array('val5'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [3],
-            [4],
-            ['a'],
-            ['b'],
-            ['c'],
-        ];
+        return array(
+            array(3),
+            array(4),
+            array('a'),
+            array('b'),
+            array('c'),
+        );
     }
 }

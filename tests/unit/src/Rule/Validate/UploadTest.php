@@ -3,40 +3,40 @@ namespace Aura\Filter\Rule\Validate;
 
 class UploadTest extends AbstractValidateTest
 {
-    protected $good_upload = [
+    protected $good_upload = array(
         'error'     => UPLOAD_ERR_OK,
         'name'      => 'file.jpg',
         'size'      => '1024',
         'tmp_name'  => '/tmp/asdfghjkl.jpg',
         'type'      => 'image/jpeg',
         'extra_key' => 'extra',
-    ];
+    );
 
-    protected $bad_upload_1 = [
+    protected $bad_upload_1 = array(
         'error'     => UPLOAD_ERR_PARTIAL,
         'name'      => 'file.jpg',
         'size'      => '1024',
         'tmp_name'  => '/tmp/asdfghjkl.jpg',
         'type'      => 'image/jpeg',
         'extra_key' => 'extra',
-    ];
+    );
 
-    protected $bad_upload_2 = [
+    protected $bad_upload_2 = array(
         'error'     => 96,
         'name'      => 'file.jpg',
         'size'      => '1024',
         'tmp_name'  => '/tmp/asdfghjkl.jpg',
         'type'      => 'image/jpeg',
         'extra_key' => 'extra',
-    ];
+    );
 
     // missing key
-    protected $bad_upload_3 = [
+    protected $bad_upload_3 = array(
         'error'     => 96,
         'name'      => 'file.jpg',
         'tmp_name'  => '/tmp/asdfghjkl.jpg',
         'type'      => 'image/jpeg',
-    ];
+    );
 
     protected function getClass()
     {
@@ -47,19 +47,19 @@ class UploadTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            [$this->good_upload],
-        ];
+        return array(
+            array($this->good_upload),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [null], // not an array,
-            [$this->bad_upload_1],
-            [$this->bad_upload_2],
-            [$this->bad_upload_3],
-        ];
+        return array(
+            array(null), // not an array,
+            array($this->bad_upload_1),
+            array($this->bad_upload_2),
+            array($this->bad_upload_3),
+        );
     }
 
     public function testIs_notUploadedFile()

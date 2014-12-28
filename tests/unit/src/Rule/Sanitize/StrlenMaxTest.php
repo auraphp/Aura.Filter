@@ -12,12 +12,12 @@ class StrlenMaxTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [array(),   false, array()],
-            ['a',       true, 'a'],
-            ['abc',     true, 'abc'],
-            ['abcd',    true, 'abc'],
-            ['abcdefg', true, 'abc'],
-        ];
+        return array(
+            array(array(),   false, array()),
+            array('a',       true, 'a'),
+            array('abc',     true, 'abc'),
+            array('abcd',    true, 'abc'),
+            array('abcdefg', true, 'abc'),
+        );
     }
 }

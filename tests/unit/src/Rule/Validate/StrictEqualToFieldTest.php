@@ -23,18 +23,18 @@ class StrictEqualToFieldTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            ['1'],
-        ];
+        return array(
+            array('1'),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [1],
-            [true],
-            [1.00],
-        ];
+        return array(
+            array(1),
+            array(true),
+            array(1.00),
+        );
     }
 
     public function testIs_fieldNotSet()

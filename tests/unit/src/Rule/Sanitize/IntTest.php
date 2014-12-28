@@ -5,11 +5,11 @@ class IntTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {
-        return [
-            [array(), false, array()], // cannot sanitize
-            ['abc ... 123.45 ,.../', true, 12345],
-            ['a-bc .1. alkasldjf 23 aslk.45 ,.../', true, -12345],
-            ['1E5', true, 100000],
-        ];
+        return array(
+            array(array(), false, array()), // cannot sanitize
+            array('abc ... 123.45 ,.../', true, 12345),
+            array('a-bc .1. alkasldjf 23 aslk.45 ,.../', true, -12345),
+            array('1E5', true, 100000),
+        );
     }
 }

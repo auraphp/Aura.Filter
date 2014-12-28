@@ -17,21 +17,21 @@ class BetweenTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            [4],
-            [5],
-            [6],
-        ];
+        return array(
+            array(4),
+            array(5),
+            array(6),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [array()],
-            [2],
-            [3],
-            [7],
-            [8],
-        ];
+        return array(
+            array(array()),
+            array(2),
+            array(3),
+            array(7),
+            array(8),
+        );
     }
 }

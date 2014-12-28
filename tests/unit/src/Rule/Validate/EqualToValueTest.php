@@ -14,19 +14,19 @@ class EqualToValueTest extends AbstractValidateTest
 
     public function providerIs()
     {
-        return [
-            [1],
-            ['1'],
-            [true],
-        ];
+        return array(
+            array(1),
+            array('1'),
+            array(true),
+        );
     }
 
     public function providerIsNot()
     {
-        return [
-            [0],
-            ['2'],
-            [false],
-        ];
+        return array(
+            array(0),
+            array('2'),
+            array(false),
+        );
     }
 }

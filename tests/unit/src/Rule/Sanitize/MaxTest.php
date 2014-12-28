@@ -12,14 +12,14 @@ class MaxTest extends AbstractSanitizeTest
 
     public function providerTo()
     {
-        return [
-            [array(), false, array()],
-            [1, true, 1],
-            [2, true, 2],
-            [3, true, 3],
-            [4, true, 3],
-            [5, true, 3],
-            [6, true, 3],
-        ];
+        return array(
+            array(array(), false, array()),
+            array(1, true, 1),
+            array(2, true, 2),
+            array(3, true, 3),
+            array(4, true, 3),
+            array(5, true, 3),
+            array(6, true, 3),
+        );
     }
 }
