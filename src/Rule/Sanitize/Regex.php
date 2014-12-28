@@ -24,7 +24,7 @@ class Regex
 {
     /**
      *
-     * Applies [[php::preg_replace() | ]] to the value.
+     * Applies `preg_replace()` to the value.
      *
      * @param string $expr The regular expression pattern to apply.
      *

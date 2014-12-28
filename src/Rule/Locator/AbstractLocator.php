@@ -47,7 +47,7 @@ class AbstractLocator
      * rule name and the value is a callable that returns a rule object.
      *
      */
-    public function __construct(array $factories = [])
+    public function __construct(array $factories = array())
     {
         foreach ($factories as $name => $spec) {
             $this->set($name, $spec);

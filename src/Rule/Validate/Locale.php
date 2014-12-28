@@ -28,7 +28,7 @@ class Locale
      * @var array
      *
      */
-    protected $codes = [
+    protected $codes = array(
         'af_ZA', 'am_ET', 'be_BY', 'bg_BG', 'ca_ES', 'cs_CZ', 'da_DK',
         'de_AT', 'de_CH', 'de_DE', 'el_GR', 'en_AU', 'en_CA', 'en_GB',
         'en_IE', 'en_NZ', 'en_US', 'es_ES', 'et_EE', 'eu_ES', 'fi_FI',
@@ -37,7 +37,7 @@ class Locale
         'ko_KR', 'lt_LT', 'nl_BE', 'nl_NL', 'no_NO', 'pl_PL', 'pt_BR',
         'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sr_YU', 'sv_SE',
         'tr_TR', 'uk_UA', 'zh_CN', 'zh_HK', 'zh_TW',
-    ];
+    );
 
     /**
      *
@@ -49,7 +49,6 @@ class Locale
     public function __invoke($object, $field)
     {
         $value = $object->$field;
-
         return in_array($value, $this->codes);
     }
 }

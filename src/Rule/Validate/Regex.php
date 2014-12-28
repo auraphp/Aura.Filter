@@ -26,7 +26,7 @@ class Regex
      *
      * Validates the value against a regular expression.
      *
-     * Uses [[php::preg_match() | ]] to compare the value against the given
+     * Uses `preg_match()` to compare the value against the given
      * regular expression.
      *
      * @param string $expr The regular expression to validate against.
@@ -40,7 +40,6 @@ class Regex
         if (! is_scalar($value)) {
             return false;
         }
-
         return (bool) preg_match($expr, $value);
     }
 }
