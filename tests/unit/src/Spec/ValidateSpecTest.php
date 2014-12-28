@@ -1,6 +1,7 @@
 <?php
 namespace Aura\Filter\Spec;
 
+use Aura\Filter\Filter;
 use Aura\Filter\Rule\RuleLocator;
 use Aura\Filter\Rule\Validate;
 
@@ -13,6 +14,29 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $this->spec = new ValidateSpec(new RuleLocator([
             'strlen' => function () { return new Validate\Strlen; },
         ]));
+    }
+
+    public function testGetField()
+    {
+        $this->spec->field('foo');
+        $this->assertSame('foo', $this->spec->getField());
+    }
+
+    public function testFailureModes()
+    {
+        $this->assertSame(Filter::HARD_RULE, $this->spec->getFailureMode());
+
+        $this->spec->asSoftRule('soft failure message');
+        $this->assertSame(Filter::SOFT_RULE, $this->spec->getFailureMode());
+        $this->assertSame('soft failure message', $this->spec->getMessage());
+
+        $this->spec->asHardRule('hard failure message');
+        $this->assertSame(Filter::HARD_RULE, $this->spec->getFailureMode());
+        $this->assertSame('hard failure message', $this->spec->getMessage());
+
+        $this->spec->asStopRule('stop failure message');
+        $this->assertSame(Filter::STOP_RULE, $this->spec->getFailureMode());
+        $this->assertSame('stop failure message', $this->spec->getMessage());
     }
 
     public function testIs()
@@ -49,5 +73,46 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $this->spec->field('foo')->isNot('strlen', 3);
         $expect = 'foo should not have validated as strlen(3)';
         $this->assertSame($expect, $this->spec->getMessage());
+    }
+
+    public function testIs_allowBlank()
+    {
+        $this->spec->field('foo')->is('strlen', 3)->allowBlank();
+
+        $object = (object) array();
+        $this->assertTrue($this->spec->__invoke($object));
+
+        $object->foo = null;
+        $this->assertTrue($this->spec->__invoke($object));
+
+        $object->foo = 123;
+        $this->assertTrue($this->spec->__invoke($object));
+
+        $object->foo = 'bar';
+        $this->assertTrue($this->spec->__invoke($object));
+
+        $object->foo = 'zimgir';
+        $this->assertFalse($this->spec->__invoke($object));
+    }
+
+
+    public function testIsNot_allowBlank()
+    {
+        $this->spec->field('foo')->isNot('strlen', 3)->allowBlank();
+
+        $object = (object) array();
+        $this->assertTrue($this->spec->__invoke($object));
+
+        $object->foo = null;
+        $this->assertTrue($this->spec->__invoke($object));
+
+        $object->foo = 123;
+        $this->assertFalse($this->spec->__invoke($object));
+
+        $object->foo = 'bar';
+        $this->assertFalse($this->spec->__invoke($object));
+
+        $object->foo = 'zimgir';
+        $this->assertTrue($this->spec->__invoke($object));
     }
 }

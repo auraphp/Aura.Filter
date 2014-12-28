@@ -12,8 +12,7 @@ abstract class AbstractSpec
     protected $args;
     protected $message;
     protected $allow_blank = false;
-    protected $type = Filter::HARD_RULE;
-    protected $exception;
+    protected $failure_mode = Filter::HARD_RULE;
 
     public function __construct(RuleLocator $rule_locator)
     {
@@ -22,14 +21,8 @@ abstract class AbstractSpec
 
     public function __invoke($object)
     {
-        $this->exception = null;
-        // try {
-            return $this->applyBlank($object, $this->field)
-                || $this->applyRule($object);
-        // } catch (Exception $e) {
-        //     $this->exception = $exception;
-        //     return false;
-        // }
+        return $this->applyBlank($object, $this->field)
+            || $this->applyRule($object);
     }
 
     public function field($field)
@@ -44,27 +37,33 @@ abstract class AbstractSpec
         return $this;
     }
 
-    public function asSoftRule($message)
+    public function asSoftRule($message = null)
     {
-        $this->type = Filter::SOFT_RULE;
-        $this->message = $message;
+        $this->setFailureMode(Filter::SOFT_RULE, $message);
     }
 
-    public function asHardRule($message)
+    public function asHardRule($message = null)
     {
-        $this->type = Filter::HARD_RULE;
-        $this->message = $message;
+        $this->setFailureMode(Filter::HARD_RULE, $message);
     }
 
-    public function asStopRule($message)
+    public function asStopRule($message = null)
     {
-        $this->type = Filter::STOP_RULE;
-        $this->message = $message;
+        $this->setFailureMode(Filter::STOP_RULE, $message);
     }
 
-    public function getType()
+    protected function setFailureMode($failure_mode, $message)
     {
-        return $this->type;
+        $this->failure_mode = $failure_mode;
+        if ($message) {
+            $this->message = $message;
+        }
+        return $this;
+    }
+
+    public function getFailureMode()
+    {
+        return $this->failure_mode;
     }
 
     public function getField()
@@ -74,17 +73,10 @@ abstract class AbstractSpec
 
     public function getMessage()
     {
-        $message = $this->message;
-
-        if (! $message) {
-            $message = $this->getDefaultMessage();
+        if (! $this->message) {
+            $this->message = $this->getDefaultMessage();
         }
-
-        if ($this->exception) {
-            $message .= PHP_EOL . $this->exception->getMessage();
-        }
-
-        return $message;
+        return $this->message;
     }
 
     protected function init($args)
