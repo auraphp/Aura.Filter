@@ -52,9 +52,14 @@ abstract class AbstractSpec
     {
         $this->failure_mode = $failure_mode;
         if ($message) {
-            $this->message = $message;
+            $this->setMessage($message);
         }
         return $this;
+    }
+
+    public function setMessage($message)
+    {
+        $this->message = $message;
     }
 
     public function getFailureMode()
