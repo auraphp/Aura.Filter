@@ -11,9 +11,9 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->spec = new SanitizeSpec(new SanitizeLocator([
+        $this->spec = new SanitizeSpec(new SanitizeLocator(array(
             'strlen' => function () { return new Sanitize\Strlen; },
-        ]));
+        )));
     }
 
     public function testGetField()

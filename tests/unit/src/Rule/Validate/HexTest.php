@@ -20,7 +20,7 @@ class HexTest extends AbstractValidateTest
             array(' '),
             array("Seven 8 nine"),
             array("non:alpha-numeric's"),
-            array([]),
+            array(array()),
         );
     }
 }

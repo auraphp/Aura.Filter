@@ -7,9 +7,9 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
 {
     public function test__constructAndGet()
     {
-        $fake_locator = new FakeLocator([
+        $fake_locator = new FakeLocator(array(
             'alpha' => function () { return new Validate\Alpha(); },
-        ]);
+        ));
 
         $expect = 'Aura\Filter\Rule\Validate\Alpha';
         $actual = $fake_locator->get('alpha');

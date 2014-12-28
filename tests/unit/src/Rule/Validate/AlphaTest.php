@@ -27,7 +27,7 @@ class AlphaTest extends AbstractValidateTest
             array("Seven 8 nine"),
             array("non:alpha-numeric's"),
             array('someThing8else'),
-            array([]),
+            array(array()),
         );
     }
 }

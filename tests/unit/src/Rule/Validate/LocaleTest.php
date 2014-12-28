@@ -20,7 +20,7 @@ class LocaleTest extends AbstractValidateTest
             array('en_us'),
             array("Seven 8 nine"),
             array("non:alpha-numeric's"),
-            array([]),
+            array(array()),
         );
     }
 }

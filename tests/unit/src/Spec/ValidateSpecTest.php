@@ -11,9 +11,9 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->spec = new ValidateSpec(new ValidateLocator([
+        $this->spec = new ValidateSpec(new ValidateLocator(array(
             'strlen' => function () { return new Validate\Strlen; },
-        ]));
+        )));
     }
 
     public function testGetField()
