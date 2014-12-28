@@ -109,6 +109,7 @@ $filter->sanitize('username')->to('string');
 $filter->validate('password')->is('strlenMin', 6);
 $filter->validate('password_confirm')->is('equalToField', 'password');
 ?>
+```
 
 We can call `$filter->validate(...)->is(...)` and `isNot(...)`, as well as
 `$filter->sanitize(...)->to(...)`, to specify how to filter the field.
