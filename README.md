@@ -53,9 +53,9 @@ on #auraphp on Freenode.
 This document gives a general overview of how to use the library, but we also
 have these pages available:
 
-- (README-VALIDATE.md): rules that validate field values
-- (README-SANITIZE.md): rules that sanitize field values
-- (README-CUSTOM.md): how to write custom filter rules
+- [Validator rules](README-VALIDATE.md) (rules that validate field values)
+- [Sanitizer rules](README-SANITIZE.md) (rules that sanitize field values)
+- [Custom rules](README-CUSTOM.md) (how to write custom filter rules)
 
 ### Terminology
 
@@ -201,11 +201,11 @@ even if they evaluate to zero:
 ```php
 <?php
 $not_blank = array(
-    0,              // integer
-    0.00,           // float
-    false,          // boolean false
-    array(),        // empty array
-    (object) [],    // an object
+    0,                // integer
+    0.00,             // float
+    false,            // boolean false
+    array(),          // empty array
+    (object) array(), // an object
 );
 ?>
 ```
