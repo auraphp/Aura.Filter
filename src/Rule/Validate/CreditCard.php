@@ -31,7 +31,7 @@ class CreditCard
     public function __invoke($object, $field)
     {
         // get the value; remove spaces, dashes, and dots
-        $value = str_replace([' ', '-', '.'], '', (string) $object->$field);
+        $value = str_replace(array(' ', '-', '.'), '', (string) $object->$field);
 
         // is it composed only of digits?
         if (! ctype_digit($value)) {
