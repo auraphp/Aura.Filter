@@ -122,11 +122,11 @@ means all the rules passed, while `false` means one or more failed.
 ```php
 <?php
 // the data to be filtered; could also be an array
-$data = (object) [
+$data = (object) array(
     'username' => 'bolivar',
     'password' => 'p@55w0rd',
     'password_confirm' => 'p@55word', // not the same!
-];
+);
 
 // filter the object and see if there were failures
 $success = $filter->apply($data);
@@ -160,7 +160,7 @@ custom message:
 
 In each case, the custom message will be used instead of the default one for
 the specified rule.  If we want to just set a custom message without changing
-the failure mode, we can use `$filter->...->setMessage('custom message').
+the failure mode, we can use `$filter->...->setMessage('custom message')`.
 
 If a field fails multiple rules, there will be multiple failure messages. To
 specify a single failure message for a field, regardless of how many rules it
@@ -237,5 +237,5 @@ $filter->sanitize('field')->to('string')->useBlankValue('');
 ```
 Now if the field is not set or composed only of whitespace characters, it will
 be modified to be an empty string. (If we call `useBlankValue()` with no
-arguments, or call only `allowBlank()` with specifying a blank value,
+arguments, or call only `allowBlank()` without specifying a blank value,
 blanks will be sanitized to `null`.)
