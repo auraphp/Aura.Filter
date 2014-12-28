@@ -29,6 +29,8 @@ class Filter
 
     protected $messages = array();
 
+    protected $field_messages = array();
+
     protected $validate_spec;
 
     protected $sanitize_spec;
