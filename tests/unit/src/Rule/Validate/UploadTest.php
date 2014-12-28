@@ -41,7 +41,7 @@ class UploadTest extends AbstractValidateTest
     protected function getClass()
     {
         $class = parent::getClass();
-        $class = str_replace('Upload', 'MockUpload', $class);
+        $class = str_replace('Upload', 'FakeUpload', $class);
         return $class;
     }
 
@@ -64,7 +64,8 @@ class UploadTest extends AbstractValidateTest
 
     public function testIs_notUploadedFile()
     {
-        $rule = new MockUpload();
+        $class = $this->getClass();
+        $rule = new $class();
         $rule->is_uploaded_file = false;
         $object = (object) array('field' => $this->good_upload);
         $this->assertFalse($rule->__invoke($object, 'field'));

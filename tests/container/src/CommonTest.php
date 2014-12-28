@@ -20,9 +20,9 @@ class CommonTest extends AbstractContainerTest
     public function provideNewInstance()
     {
         return array(
-            array('Aura\Filter\Rule\Any'),
             array('Aura\Filter\Filter'),
-            array('Aura\Filter\Rule\RuleLocator'),
+            array('Aura\Filter\Spec\SanitizeSpec'),
+            array('Aura\Filter\Spec\ValidateSpec'),
         );
     }
 }

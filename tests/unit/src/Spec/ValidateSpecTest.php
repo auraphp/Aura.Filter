@@ -2,7 +2,7 @@
 namespace Aura\Filter\Spec;
 
 use Aura\Filter\Filter;
-use Aura\Filter\Rule\RuleLocator;
+use Aura\Filter\Rule\Locator\ValidateLocator;
 use Aura\Filter\Rule\Validate;
 
 class ValidateSpecTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +11,7 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->spec = new ValidateSpec(new RuleLocator([
+        $this->spec = new ValidateSpec(new ValidateLocator([
             'strlen' => function () { return new Validate\Strlen; },
         ]));
     }

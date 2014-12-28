@@ -13,17 +13,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $validate_spec = new ValidateSpec(new RuleLocator([
-            'alnum'     => function () { return new Validate\Alnum; },
-            'strlenMin' => function () { return new Validate\StrlenMin; },
-        ]));
-
-        $sanitize_spec = new SanitizeSpec(new RuleLocator([
-            'string'     => function () { return new Sanitize\String; },
-            'strlenMax' => function () { return new Sanitize\StrlenMax; },
-        ]));
-
-        $this->filter = new Filter($validate_spec, $sanitize_spec);
+        $filter_factory = new FilterFactory();
+        $this->filter = $filter_factory->newInstance();
     }
 
     public function testApply_softRule()

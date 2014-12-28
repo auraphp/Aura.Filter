@@ -2,7 +2,7 @@
 namespace Aura\Filter\Spec;
 
 use Aura\Filter\Filter;
-use Aura\Filter\Rule\RuleLocator;
+use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Sanitize;
 
 class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
@@ -11,7 +11,7 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->spec = new SanitizeSpec(new RuleLocator([
+        $this->spec = new SanitizeSpec(new SanitizeLocator([
             'strlen' => function () { return new Sanitize\Strlen; },
         ]));
     }

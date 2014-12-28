@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-class MockUpload extends Upload
+class FakeUpload extends Upload
 {
     public $is_uploaded_file = true;
 
