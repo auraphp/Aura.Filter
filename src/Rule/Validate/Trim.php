@@ -23,15 +23,6 @@ class Trim
 {
     /**
      *
-     * The characters to strip; same as PHP trim().
-     *
-     * @var string
-     *
-     */
-    protected $chars = " \t\n\r\0\x0B";
-
-    /**
-     *
      * Is the value already trimmed?
      *
      * @param string $chars The characters to strip.
@@ -39,16 +30,12 @@ class Trim
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field, $chars = null)
+    public function __invoke($object, $field, $chars = " \t\n\r\0\x0B")
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
-        if (! $chars) {
-            $chars = $this->chars;
-        }
-
         return trim($value, $chars) == $value;
     }
 }

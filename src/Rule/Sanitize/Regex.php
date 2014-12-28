@@ -33,14 +33,13 @@ class Regex
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $expr, $replace)
+    public function __invoke($object, $field, $expr, $replace)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
             return false;
         }
         $object->$field = preg_replace($expr, $replace, $value);
-
         return true;
     }
 }

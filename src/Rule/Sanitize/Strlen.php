@@ -34,7 +34,7 @@ class Strlen
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function __invoke($object, $field, $len, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
@@ -46,7 +46,6 @@ class Strlen
         if (strlen($value) > $len) {
             $object->$field = substr($value, 0, $len);
         }
-
         return true;
     }
 }

@@ -48,7 +48,7 @@ class Bool
      * @return bool Always true.
      *
      */
-    public function sanitize($object, $field)
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
 

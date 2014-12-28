@@ -30,12 +30,4 @@ class AlnumTest extends AbstractValidateTest
             [[]],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            // value, result, expect
-            ['$#% abc () 123 ,./', true, 'abc123'],
-        ];
-    }
 }

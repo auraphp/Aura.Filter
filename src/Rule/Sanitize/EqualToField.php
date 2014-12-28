@@ -31,16 +31,13 @@ class EqualToField
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $other_field)
+    public function __invoke($object, $field, $other_field)
     {
-
         // the other field needs to exist and *not* be null
         if (! isset($object->$other_field)) {
             return false;
         }
-
         $object->$field = $object->$other_field;
-
         return true;
     }
 }

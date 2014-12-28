@@ -39,17 +39,6 @@ class EqualToFieldTest extends AbstractValidateTest
         ];
     }
 
-    public function providerFix()
-    {
-        return [
-            [0,         true, '1'],
-            [1,         true, '1'],
-            ['1',       true, '1'],
-            [true,      true, '1'],
-            [false,     true, '1'],
-        ];
-    }
-
     // public function testRuleIs_fieldNotSet()
     // {
     //     list($data, $field) = $this->getPrep('foo');

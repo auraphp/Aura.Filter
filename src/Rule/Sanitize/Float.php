@@ -34,7 +34,7 @@ class Float
      * @todo Extract scientific notation from weird strings?
      *
      */
-    public function sanitize($object, $field)
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
 
@@ -46,7 +46,6 @@ class Float
         if (is_numeric($value)) {
             // numeric string, cast to a float
             $object->$field = (float) $value;
-
             return true;
         }
 
@@ -92,7 +91,6 @@ class Float
 
         // done
         $object->$field = (float) $value;
-
         return true;
     }
 }

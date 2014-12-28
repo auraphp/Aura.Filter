@@ -32,7 +32,7 @@ class Int
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field)
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
 
@@ -42,7 +42,6 @@ class Int
             // (int) 1E5 == 15, but (int) (float) 1E5 == 100000
             $value = (float) $value;
             $object->$field = (int) $value;
-
             return true;
         }
 
@@ -72,7 +71,6 @@ class Int
 
         // looks like we're done
         $object->$field = (int) $value;
-
         return true;
     }
 }

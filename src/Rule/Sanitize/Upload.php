@@ -29,7 +29,7 @@ class Upload
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field)
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
 

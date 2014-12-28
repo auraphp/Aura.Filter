@@ -31,7 +31,7 @@ class EqualToValue
      * @return bool Always true.
      *
      */
-    public function sanitize($object, $field, $other_value)
+    public function __invoke($object, $field, $other_value)
     {
         $object->field = $other_value;
         return true;

@@ -36,7 +36,7 @@ class StrlenBetween
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function __invoke($object, $field, $min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
@@ -48,7 +48,6 @@ class StrlenBetween
         if (strlen($value) > $max) {
             $object->$field = substr($value, 0, $max);
         }
-
         return true;
     }
 }

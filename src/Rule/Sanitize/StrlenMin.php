@@ -34,7 +34,7 @@ class StrlenMin
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    public function __invoke($object, $field, $min, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
@@ -43,7 +43,6 @@ class StrlenMin
         if (strlen($value) < $min) {
             $object->$field = str_pad($value, $min, $pad_string, $pad_type);
         }
-
         return true;
     }
 }

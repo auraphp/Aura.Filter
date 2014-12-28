@@ -34,18 +34,4 @@ class BetweenTest extends AbstractValidateTest
             [8],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            [2, true, 4],
-            [3, true, 4],
-            [4, true, 4],
-            [5, true, 5],
-            [6, true, 6],
-            [7, true, 6],
-            [8, true, 6],
-        ];
-    }
 }

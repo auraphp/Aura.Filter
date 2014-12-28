@@ -32,7 +32,7 @@ class Closure
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, PhpClosure $closure)
+    public function __invoke($object, $field, PhpClosure $closure)
     {
         $closure = $closure->bindTo($this, get_class($this));
         return $closure();

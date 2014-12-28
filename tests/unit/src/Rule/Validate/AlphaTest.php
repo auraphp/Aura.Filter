@@ -30,11 +30,4 @@ class AlphaTest extends AbstractValidateTest
             [[]],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            ['^&* abc 123 ,./', true, 'abc'],
-        ];
-    }
 }

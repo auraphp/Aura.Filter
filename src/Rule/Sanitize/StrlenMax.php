@@ -30,7 +30,7 @@ class StrlenMax
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $max)
+    public function __invoke($object, $field, $max)
     {
         $value = $object->$field;
         if (! is_scalar($value)) {
@@ -39,7 +39,6 @@ class StrlenMax
         if (strlen($value) > $max) {
             $object->$field = substr($value, 0, $max);
         }
-
         return true;
     }
 }

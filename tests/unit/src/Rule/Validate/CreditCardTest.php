@@ -27,11 +27,4 @@ class CreditCardTest extends AbstractValidateTest
             ['1234.1234.1234.1234'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            ['bad', false, 'bad'], // cannot fix
-        ];
-    }
 }

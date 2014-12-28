@@ -28,7 +28,7 @@ class Alnum
      * @return bool Always true.
      *
      */
-    public function sanitize($object, $field)
+    public function __invoke($object, $field)
     {
         $object->$field = preg_replace('/[^a-z0-9]/i', '', $object->$field);
         return true;

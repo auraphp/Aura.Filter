@@ -32,7 +32,7 @@ class DateTime
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function sanitize($object, $field, $format = 'Y-m-d H:i:s')
+    public function __invoke($object, $field, $format = 'Y-m-d H:i:s')
     {
         $value = $object->$field;
         $datetime = $this->newDateTime($value);
@@ -40,7 +40,6 @@ class DateTime
             return false;
         }
         $object->$field = $datetime->format($format);
-
         return true;
     }
 

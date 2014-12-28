@@ -6,6 +6,7 @@ class BlankTest extends AbstractValidateTest
     public function providerIs()
     {
         return [
+            [null],
             [""],
             [" "],
             ["\t"],
@@ -25,18 +26,6 @@ class BlankTest extends AbstractValidateTest
             ["Seven 8 nine"],
             ["non:alpha-numeric's"],
             ['someThing8else'],
-        ];
-    }
-
-    public function providerFix()
-    {
-        return [
-            ["",                true, null],
-            [" ",               true, null],
-            ["\t",              true, null],
-            ["\n",              true, null],
-            ["\r",              true, null],
-            [" \t \n \r ",      true, null],
         ];
     }
 }

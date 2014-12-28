@@ -26,11 +26,4 @@ class EmailTest extends AbstractValidateTest
             [" "],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            ["non:alpha@example.com", false, "non:alpha@example.com"], // can't fix
-        ];
-    }
 }
