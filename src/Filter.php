@@ -82,6 +82,11 @@ class Filter
         );
     }
 
+    public function useFieldMessage($field, $message)
+    {
+        $this->field_messages[$field] = $message;
+    }
+
     protected function addSpec($spec, $field)
     {
         $this->specs[] = $spec;
@@ -143,7 +148,12 @@ class Filter
     protected function failed($spec)
     {
         $field = $spec->getField();
-        $this->messages[$field][] = $spec->getMessage();
+
+        if (isset($this->field_messages[$field])) {
+            $this->messages[$field] = array($this->field_messages[$field]);
+        } else {
+            $this->messages[$field][] = $spec->getMessage();
+        }
 
         $failure_mode = $spec->getFailureMode();
         if ($failure_mode === self::HARD_RULE) {

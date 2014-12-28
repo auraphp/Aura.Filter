@@ -78,7 +78,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testValues_stopRule()
+    public function testApply_stopRule()
     {
         $this->filter->validate('field1')->is('alnum')->asSoftRule();
         $this->filter->validate('field1')->is('strlenMin', 6)->asStopRule();
@@ -93,6 +93,37 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'field1' => array(
                 'field1 should have validated as alnum',
                 'field1 should have validated as strlenMin(6)',
+            ),
+        );
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
+    }
+
+    public function testUseFieldMessage()
+    {
+        $this->filter->validate('field')->isNot('blank')->asSoftRule();
+        $this->filter->validate('field')->is('alnum')->asSoftRule();
+        $this->filter->validate('field')->is('strlenMin', 6)->asSoftRule();
+
+        $object = (object) array('field' => '');
+        $result = $this->filter->apply($object);
+        $this->assertFalse($result);
+        $expect = array(
+            'field' => array(
+                'field should not have validated as blank',
+                'field should have validated as alnum',
+                'field should have validated as strlenMin(6)',
+            ),
+        );
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
+
+        $this->filter->useFieldMessage('field', 'Please use 6-12 alphanumeric characters.');
+        $result = $this->filter->apply($object);
+        $this->assertFalse($result);
+        $expect = array(
+            'field' => array(
+                'Please use 6-12 alphanumeric characters.',
             ),
         );
         $actual = $this->filter->getMessages();
