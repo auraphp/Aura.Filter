@@ -8,9 +8,9 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Sanitize;
+namespace Aura\Filter\Rule\Validate;
 
-use \Closure as PhpClosure;
+use Closure as PhpClosure;
 
 /**
  *
@@ -25,16 +25,15 @@ class Closure
 {
     /**
      *
-     * Sanitizes a value using a closure.
+     * Validates the value against a closure.
      *
      * @param \Closure $closure A PHP closure.
      *
-     * @return bool True if the value was sanitized, false if not.
+     * @return bool True if valid, false if not.
      *
      */
     public function __invoke($object, $field, PhpClosure $closure)
     {
-        $closure = $closure->bindTo($this, get_class($this));
-        return $closure();
+        return $closure($object, $field);
     }
 }
