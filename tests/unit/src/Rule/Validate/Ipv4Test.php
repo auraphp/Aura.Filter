@@ -33,11 +33,4 @@ class Ipv4Test extends AbstractValidateTest
             ['a.b.c.d'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [12345, false, 12345], // can't fix
-        ];
-    }
 }

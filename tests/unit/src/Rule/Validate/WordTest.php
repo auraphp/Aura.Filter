@@ -34,12 +34,4 @@ class WordTest extends AbstractValidateTest
             ['ab-db cd-ef'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            ['abc _ 123 - ,./', true, 'abc_123'],
-        ];
-    }
 }

@@ -25,15 +25,4 @@ class StrictEqualToValueTest extends AbstractValidateTest
             [1.00],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [0,     true, '1'],
-            [1,     true, '1'],
-            ['1',   true, '1'],
-            [true,  true, '1'],
-            [false, true, '1'],
-        ];
-    }
 }

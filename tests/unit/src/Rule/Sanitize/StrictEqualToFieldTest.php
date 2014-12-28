@@ -32,24 +32,10 @@ class StrictEqualToFieldTest extends AbstractSanitizeTest
         ];
     }
 
-    // public function testRuleIs_fieldNotSet()
-    // {
-    //     list($data, $field) = $this->getPrep('foo');
-    //     $rule = $this->newRule($data, $field);
-    //     $this->assertFalse($rule->is('no_such_field'));
-    // }
-
-    // public function testRuleIsNot_fieldNotSet()
-    // {
-    //     list($data, $field) = $this->getPrep('foo');
-    //     $rule = $this->newRule($data, $field);
-    //     $this->assertTrue($rule->isNot('no_such_field'));
-    // }
-
-    // public function testRuleFix_fieldNotSet()
-    // {
-    //     list($data, $field) = $this->getPrep('foo');
-    //     $rule = $this->newRule($data, $field);
-    //     $this->assertFalse($rule->fix('no_such_field'));
-    // }
+    public function testTo_fieldNotSet()
+    {
+        $object = (object) array('field' => '1');
+        $rule = new StrictEqualToField();
+        $this->assertFalse($rule->__invoke($object, 'field', 'no_such_field'));
+    }
 }

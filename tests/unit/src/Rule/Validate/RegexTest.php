@@ -36,12 +36,4 @@ class RegexTest extends AbstractValidateTest
             ['0000123.456000'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            ['abc 123 ,./', true, 'abc@@@@@@@@'],
-        ];
-    }
 }

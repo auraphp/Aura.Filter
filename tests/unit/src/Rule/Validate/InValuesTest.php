@@ -37,11 +37,4 @@ class InValuesTest extends AbstractValidateTest
             ['c'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            ['no-good', false, 'no-good'], // cannot fix
-        ];
-    }
 }

@@ -27,15 +27,4 @@ class StrlenMaxTest extends AbstractValidateTest
             ['abcdefg'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            ['a',       true, 'a'],
-            ['abc',     true, 'abc'],
-            ['abcd',    true, 'abc'],
-            ['abcdefg', true, 'abc'],
-        ];
-    }
 }

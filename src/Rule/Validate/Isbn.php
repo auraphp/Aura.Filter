@@ -32,36 +32,26 @@ class Isbn
      */
     public function __invoke($object, $field)
     {
-        if ($this->sanitize($object, $field) == true) {
-            $value = $object->$field;
-
-            if (strlen($value) == 13) {
-                return $this->thirteen($object->$field);
-            } elseif (strlen($value) == 10) {
-                return $this->ten($object->$field);
-            }
+        $value = $this->normalize($object, $field);
+        if (! $value) {
+            return false;
         }
-
-        return false;
+        return $this->isbn13($value) || $this->isbn10($value);
     }
 
     /**
      *
      * Removes all non numeric values to test if it is a valid ISBN.
      *
-     * @return bool True if the value was sanitized, false if not.
+     * @return mixed
      *
      */
-    public function sanitize($object, $field)
+    public function normalize($object, $field)
     {
-        $value = $object->$field;
-        $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $value);
-
-        if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value) == 1) {
-            $object->$field = $value;
-            return true;
+        $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $object->$field);
+        if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value)) {
+            return $value;
         }
-
         return false;
     }
 
@@ -69,47 +59,67 @@ class Isbn
      *
      * Tests if a 13 digit ISBN is correct.
      *
-     * @param $isbn
+     * @param $value
      *
      * @return bool
      *
      */
-    private function thirteen($isbn)
+    protected function isbn13($value)
     {
-        $three = $isbn{0} + $isbn{2} + $isbn{4} + $isbn{6} + $isbn{8} + $isbn{10} + $isbn{12};
-        $one   = ($isbn{1} + $isbn{3} + $isbn{5} + $isbn{7} + $isbn{9} + $isbn{11}) * 3;
-
-        if (($three + $one) % 10 == 0) {
-            return true;
+        if (strlen($value) != 13) {
+            return false;
         }
 
-        return false;
+        $even = $value{0}  + $value{2}  + $value{4} + $value{6}
+               + $value{8} + $value{10} + $value{12};
+
+        $odd   = $value{1} + $value{3} + $value{5} + $value{7}
+               + $value{9} + $value{11};
+
+        $sum   = $even + ($odd * 3);
+
+        if ($sum % 10) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      *
      * Tests if a 10 digit ISBN is correct.
      *
-     * @param $isbn
+     * @param $value
      *
      * @return bool
      *
      */
-    private function ten($isbn)
+    protected function isbn10($value)
     {
-        $sum = $isbn{0} + $isbn{1} * 2 + $isbn{2} * 3 + $isbn{3} * 4 + $isbn{4} * 5 + $isbn{5} * 6 + $isbn{6} * 7
-            + $isbn{7} * 8 + $isbn{8} * 9;
+        if (strlen($value) != 10) {
+            return false;
+        }
 
-        if ($isbn{9} == 'X') {
+        $sum = $value{0}
+             + $value{1} * 2
+             + $value{2} * 3
+             + $value{3} * 4
+             + $value{4} * 5
+             + $value{5} * 6
+             + $value{6} * 7
+             + $value{7} * 8
+             + $value{8} * 9;
+
+        if ($value{9} == 'X') {
             $sum += 100;
         } else {
-            $sum += $isbn{9} * 10;
+            $sum += $value{9} * 10;
         }
 
-        if ($sum % 11 == 0) {
-            return true;
+        if ($sum % 11) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 }

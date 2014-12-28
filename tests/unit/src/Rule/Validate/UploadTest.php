@@ -30,6 +30,14 @@ class UploadTest extends AbstractValidateTest
         'extra_key' => 'extra',
     ];
 
+    // missing key
+    protected $bad_upload_3 = [
+        'error'     => 96,
+        'name'      => 'file.jpg',
+        'tmp_name'  => '/tmp/asdfghjkl.jpg',
+        'type'      => 'image/jpeg',
+    ];
+
     protected function getClass()
     {
         $class = parent::getClass();
@@ -50,30 +58,15 @@ class UploadTest extends AbstractValidateTest
             [null], // not an array,
             [$this->bad_upload_1],
             [$this->bad_upload_2],
+            [$this->bad_upload_3],
         ];
     }
 
-    public function providerFix()
+    public function testIs_notUploadedFile()
     {
-        $fixed = [
-            'error'     => UPLOAD_ERR_OK,
-            'name'      => 'file.jpg',
-            'size'      => '1024',
-            'tmp_name'  => '/tmp/asdfghjkl.jpg',
-            'type'      => 'image/jpeg',
-        ];
-
-        return [
-            [[], false, []], // can't fix
-            [$this->good_upload, true, $fixed],
-        ];
+        $rule = new MockUpload();
+        $rule->is_uploaded_file = false;
+        $object = (object) array('field' => $this->good_upload);
+        $this->assertFalse($rule->__invoke($object, 'field'));
     }
-
-    // public function testRuleIs_notUploadedFile()
-    // {
-    //     list($data, $field) = $this->getPrep($this->good_upload);
-    //     $rule = $this->newRule($data, $field);
-    //     $rule->is_uploaded_file = false;
-    //     $this->assertFalse($rule->is());
-    // }
 }

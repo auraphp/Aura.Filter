@@ -28,17 +28,4 @@ class MinTest extends AbstractValidateTest
             [3],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            [1, true, 4],
-            [2, true, 4],
-            [3, true, 4],
-            [4, true, 4],
-            [5, true, 5],
-            [6, true, 6],
-        ];
-    }
 }

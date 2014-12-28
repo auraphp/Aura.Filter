@@ -67,11 +67,6 @@ class DateTime
 
         $datetime = date_create($value);
 
-        // generic failure
-        if (! $datetime) {
-            return false;
-        }
-
         // invalid dates (like 1979-02-29) show up as warnings.
         $errors = PhpDateTime::getLastErrors();
         if ($errors['warnings']) {

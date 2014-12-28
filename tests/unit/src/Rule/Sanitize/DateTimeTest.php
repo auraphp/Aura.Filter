@@ -11,6 +11,7 @@ class DateTimeTest extends AbstractSanitizeTest
 
         return [
             [array(), false, array()],
+            ['  ', false, '  '],
             ['abcdefghi', false, 'abcdefghi'],
             ['2012-08-02 17:37:29', true, '2012-08-02 17:37:29'],
             [$dt, true, '1979-11-07 12:34:00'],

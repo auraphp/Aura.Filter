@@ -31,12 +31,4 @@ class StringTest extends AbstractValidateTest
             [new \StdClass],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            ['abc 123 ,./', true, 'abc@123@,./'],
-            [12345, true, '12345'],
-        ];
-    }
 }

@@ -37,35 +37,10 @@ class StrictEqualToFieldTest extends AbstractValidateTest
         ];
     }
 
-    public function providerFix()
+    public function testIs_fieldNotSet()
     {
-        return [
-            [0,     true, '1'],
-            [1,     true, '1'],
-            ['1',   true, '1'],
-            [true,  true, '1'],
-            [false, true, '1'],
-        ];
+        $object = (object) array('field' => '1');
+        $rule = new StrictEqualToField();
+        $this->assertFalse($rule->__invoke($object, 'field', 'no_such_field'));
     }
-
-    // public function testRuleIs_fieldNotSet()
-    // {
-    //     list($data, $field) = $this->getPrep('foo');
-    //     $rule = $this->newRule($data, $field);
-    //     $this->assertFalse($rule->is('no_such_field'));
-    // }
-
-    // public function testRuleIsNot_fieldNotSet()
-    // {
-    //     list($data, $field) = $this->getPrep('foo');
-    //     $rule = $this->newRule($data, $field);
-    //     $this->assertTrue($rule->isNot('no_such_field'));
-    // }
-
-    // public function testRuleFix_fieldNotSet()
-    // {
-    //     list($data, $field) = $this->getPrep('foo');
-    //     $rule = $this->newRule($data, $field);
-    //     $this->assertFalse($rule->fix('no_such_field'));
-    // }
 }

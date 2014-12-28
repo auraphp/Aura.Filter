@@ -28,12 +28,4 @@ class UrlTest extends AbstractValidateTest
             ["http://example.com\t/index.html"],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            ['not a url', false, 'not a url'], // cannot fix
-        ];
-    }
 }

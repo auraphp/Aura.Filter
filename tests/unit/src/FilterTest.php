@@ -2,9 +2,10 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Rule\RuleLocator;
+use Aura\Filter\Rule\Sanitize;
 use Aura\Filter\Rule\Validate;
-use Aura\Filter\Spec\ValidateSpec;
 use Aura\Filter\Spec\SanitizeSpec;
+use Aura\Filter\Spec\ValidateSpec;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,28 +15,19 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $validate_spec = new ValidateSpec(new RuleLocator([
             'alnum'     => function () { return new Validate\Alnum; },
-            'alpha'     => function () { return new Validate\Alpha; },
-            'between'   => function () { return new Validate\Between; },
-            'blank'     => function () { return new Validate\Blank; },
-            'closure'   => function () { return new Validate\Closure; },
-            'int'       => function () { return new Validate\Int; },
-            'inKeys'    => function () { return new Validate\InKeys; },
-            'inValues'  => function () { return new Validate\InValues; },
-            'max'       => function () { return new Validate\Max; },
-            'min'       => function () { return new Validate\Min; },
-            'regex'     => function () { return new Validate\Regex; },
-            'string'    => function () { return new Validate\String; },
-            'strlen'    => function () { return new Validate\Strlen; },
             'strlenMin' => function () { return new Validate\StrlenMin; },
         ]));
 
-        $sanitize_spec = new SanitizeSpec(new RuleLocator([]));
+        $sanitize_spec = new SanitizeSpec(new RuleLocator([
+            'string'     => function () { return new Sanitize\String; },
+        ]));
 
         $this->filter = new Filter($validate_spec, $sanitize_spec);
     }
 
     public function testApply_softRule()
     {
+        $this->filter->sanitize('field')->to('string');
         $this->filter->validate('field')->is('alnum')->asSoftRule();
         $this->filter->validate('field')->is('strlenMin', 6)->asHardRule();
 
@@ -135,15 +127,14 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         } catch (Exception\FilterFailed $e) {
 
             $this->assertSame($object, $e->getFilterSubject());
-
+            $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
             $expect = array(
                 'field' => array(
                     'field should have validated as alnum',
                     'field should have validated as strlenMin(6)',
                 ),
             );
-            $actual = $e->getFilterMessages();
-            $this->assertSame($expect, $actual);
+            $this->assertSame($expect, $e->getFilterMessages());
         }
     }
 }

@@ -26,14 +26,4 @@ class StrlenTest extends AbstractValidateTest
             ['defgh'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(),   false, array()],
-            ['a',       true, 'a   '],
-            ['abcd',    true, 'abcd'],
-            ['abcdef',  true, 'abcd'],
-        ];
-    }
 }

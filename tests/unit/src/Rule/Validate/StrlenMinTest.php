@@ -27,14 +27,4 @@ class StrlenMinTest extends AbstractValidateTest
             ['abc'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            ['a',       true, 'a   '],
-            ['abcd',    true, 'abcd'],
-            ['abcdefg', true, 'abcdefg'],
-        ];
-    }
 }

@@ -17,12 +17,4 @@ class TrimTest extends AbstractValidateTest
             [' abc '],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            [' abc ', true, 'abc'],
-        ];
-    }
 }

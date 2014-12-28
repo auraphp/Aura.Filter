@@ -36,7 +36,6 @@ class InTableColumnTest extends AbstractValidateTest
         $args = parent::getArgs();
         $args[] = 'test';
         $args[] = 'val';
-        $args[] = 'foo = :foo';
         return $args;
     }
 
@@ -71,10 +70,17 @@ class InTableColumnTest extends AbstractValidateTest
         ];
     }
 
-    public function providerFix()
+    public function testIs_where()
     {
-        return [
-            ['no-good', false, 'no-good'], // cannot fix
-        ];
+        $object = $this->getObject(1);
+        $rule = $this->newRule();
+        $this->assertTrue($rule->__invoke($object, 'field', 'test', 'val', 'foo = "foo1"'));
+    }
+
+    public function testIs_whereBind()
+    {
+        $object = $this->getObject(1);
+        $rule = $this->newRule();
+        $this->assertTrue($rule->__invoke($object, 'field', 'test', 'val', 'foo = :foo'));
     }
 }

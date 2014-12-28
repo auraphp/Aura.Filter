@@ -23,12 +23,4 @@ class LocaleTest extends AbstractValidateTest
             [[]],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            // value, result, expect
-            ['notacode', false, 'notacode'],
-        ];
-    }
 }

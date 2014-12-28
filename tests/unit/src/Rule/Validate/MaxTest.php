@@ -28,17 +28,4 @@ class MaxTest extends AbstractValidateTest
             [6],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            [1, true, 1],
-            [2, true, 2],
-            [3, true, 3],
-            [4, true, 3],
-            [5, true, 3],
-            [6, true, 3],
-        ];
-    }
 }

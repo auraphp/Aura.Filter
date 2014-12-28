@@ -29,17 +29,4 @@ class StrlenBetweenTest extends AbstractValidateTest
             ['defghij'],
         ];
     }
-
-    public function providerFix()
-    {
-        return [
-            [array(), false, array()],
-            ['abc',         true, 'abc '],
-            ['abcd',        true, 'abcd'],
-            ['abcde',       true, 'abcde'],
-            ['abcdef',      true, 'abcdef'],
-            ['abcdefg',     true, 'abcdef'],
-            ['abcdefgh',    true, 'abcdef'],
-        ];
-    }
 }
