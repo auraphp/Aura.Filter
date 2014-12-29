@@ -52,7 +52,7 @@ to fail.
 
 ```php
 <?php
-$filter->validate('field')->is('closure', function ($subject, $field) {
+$filter->sanitize('field')->is('closure', function ($subject, $field) {
     // always force the field to 'foo'
     $subject->$field = 'foo';
     return true;
