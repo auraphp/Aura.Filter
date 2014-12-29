@@ -75,9 +75,9 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->spec->getMessage());
     }
 
-    public function testIs_allowBlank()
+    public function testIsBlankOr()
     {
-        $this->spec->field('foo')->is('strlen', 3)->allowBlank();
+        $this->spec->field('foo')->isBlankOr('strlen', 3);
 
         $object = (object) array();
         $this->assertTrue($this->spec->__invoke($object));
@@ -93,12 +93,15 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
 
         $object->foo = 'zimgir';
         $this->assertFalse($this->spec->__invoke($object));
+        $expect = 'foo should have been blank or have validated as strlen(3)';
+        $actual = $this->spec->getMessage();
+        $this->assertSame($expect, $actual);
     }
 
 
-    public function testIsNot_allowBlank()
+    public function testIsBlankOrNot()
     {
-        $this->spec->field('foo')->isNot('strlen', 3)->allowBlank();
+        $this->spec->field('foo')->isBlankOrNot('strlen', 3);
 
         $object = (object) array();
         $this->assertTrue($this->spec->__invoke($object));
@@ -108,9 +111,15 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
 
         $object->foo = 123;
         $this->assertFalse($this->spec->__invoke($object));
+        $expect = 'foo should have been blank or not have validated as strlen(3)';
+        $actual = $this->spec->getMessage();
+        $this->assertSame($expect, $actual);
 
         $object->foo = 'bar';
         $this->assertFalse($this->spec->__invoke($object));
+        $expect = 'foo should have been blank or not have validated as strlen(3)';
+        $actual = $this->spec->getMessage();
+        $this->assertSame($expect, $actual);
 
         $object->foo = 'zimgir';
         $this->assertTrue($this->spec->__invoke($object));

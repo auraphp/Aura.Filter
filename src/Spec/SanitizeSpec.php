@@ -14,12 +14,19 @@ class SanitizeSpec extends AbstractSpec
 
     public function to($rule)
     {
+        $this->allow_blank = false;
+        return $this->init(func_get_args());
+    }
+
+    public function toBlankOr($rule)
+    {
+        $this->allow_blank = true;
         return $this->init(func_get_args());
     }
 
     public function useBlankValue($blank_value)
     {
-        $this->allowBlank();
+        $this->allow_blank = true;
         $this->blank_value = $blank_value;
     }
 

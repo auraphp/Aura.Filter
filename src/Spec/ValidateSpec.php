@@ -14,12 +14,28 @@ class ValidateSpec extends AbstractSpec
 
     public function is($rule)
     {
+        $this->allow_blank = false;
+        $this->reverse = false;
+        return $this->init(func_get_args());
+    }
+
+    public function isBlankOr($rule)
+    {
+        $this->allow_blank = true;
         $this->reverse = false;
         return $this->init(func_get_args());
     }
 
     public function isNot($rule)
     {
+        $this->allow_blank = false;
+        $this->reverse = true;
+        return $this->init(func_get_args());
+    }
+
+    public function isBlankOrNot($rule)
+    {
+        $this->allow_blank = true;
         $this->reverse = true;
         return $this->init(func_get_args());
     }
@@ -27,11 +43,13 @@ class ValidateSpec extends AbstractSpec
     protected function getDefaultMessage()
     {
         $message = $this->field . ' should';
+        if ($this->allow_blank) {
+            $message .= ' have been blank or';
+        }
         if ($this->reverse) {
             $message .= ' not';
         }
-        $message .= ' have validated as ';
-        return $message . parent::getDefaultMessage();
+        return "{$message} have validated as " . parent::getDefaultMessage();
     }
 
     protected function applyRule($object)

@@ -111,8 +111,23 @@ $filter->validate('password_confirm')->is('equalToField', 'password');
 ?>
 ```
 
-We can call `$filter->validate(...)->is(...)` and `isNot(...)`, as well as
-`$filter->sanitize(...)->to(...)`, to specify how to filter the field.
+We can call the following methods after `validate()`:
+
+- `is(...)` to specify that the value **must** match the rule
+- `isNot(...)` to specify that the value **must not** match the rule
+- `isBlankOr(...)` to specify that the value may be blank, or that it **must**
+  match the rule
+- `isBlankOrNot(...)` to specify that the value may be blank, or that it
+  **must not** match the rule
+
+We can call the following methods after `sanitize()`:
+
+- `to(...)` to specify the value should be changed according to the rule
+- `toBlankOr(...)` to specify that blank values should be changed to `null`,
+  and that non-blank values should be changed according to the rule
+- `useBlankValue(...)` to specify what blank values should be changed to (default `null`)
+
+For more on blanks, see the section on [Blank Values](#blank-values).
 
 ### Applying The Filter
 
@@ -181,23 +196,17 @@ We can get the list of failure messages by calling `$filter->getMessages()`.
 
 ### Blank Values
 
-The library incorporates the concept of "blank" values, as distinct from
-`isset()` and `empty()`. A value is blank if it is `null`, an empty string, or
-a string composed of only whitespace characters. Thus, the following are
-blank:
+This library incorporates the concept of "blank" fields, as distinct from
+`isset()` and `empty()`, to allow for input elements that are missing or have
+not been filled in. A field is blank if it is:
 
-```php
-<?php
-$blank = array(
-    null,           // a null value
-    '',             // an empty string
-    " \r \n \t ",   // a whitespace-only string
-);
-?>
-```
+- not set in the subject being filtered,
+- `null`,
+- an empty string (''), or
+- a string composed of only whitespace characters.
 
-Integers, floats, booleans, and other non-strings are never counted as blank,
-even if they evaluate to zero:
+Integers, floats, booleans, resources, arrays, and objects are never "blank"
+even if they evaluate to zero or are empty:
 
 ```php
 <?php
@@ -213,32 +222,51 @@ $not_blank = array(
 
 #### Allowing For Blank Values
 
-Generally, a blank field will fail its specified rule. To allow a field to pass
-a specified rule even if it is blank, call `allowBlank()` on the specification:
+Generally, a blank field will fail to validate. To allow a validate rule to pass
+even if the field is blank, call `isBlankOr()` or `isBlankOrNot()` on its rule
+specification:
 
 ```php
 <?php
-// both an alphanumeric value *and* a blank value will pass
-$filter->validate('field')->is('alnum')->allowBlank();
+// either an alphanumeric value *or* a blank value will validate
+$filter->validate('field')->isBlankOr('alnum');
 ?>
 ```
-
-This leaves us with a special case for sanitizing, since if the value is blank,
-we may wish to force it to a particular *kind* of blank value. We can call the
-`useBlankValue()` method on the rule specification to sanitize blank values to
-something else:
+Likewise, a blank field may fail to sanitize properly. To allow for a blank
+field with a sanitize rule, call `toBlankOr()` on its rule specification:
 
 ```php
 <?php
 // both an alphanumeric field *and* a blank field will pass
-$filter->validate('field')->is('alnum')->allowBlank();
-$filter->sanitize('field')->to('string')->useBlankValue('');
+$filter->sanitize('field')->toBlankOr('alnum');
 ?>
 ```
-Now if the field is not set or composed only of whitespace characters, it will
-be modified to be an empty string. (If we call `useBlankValue()` with no
-arguments, or call only `allowBlank()` without specifying a blank value,
-blanks will be sanitized to `null`.)
+
+This will cause blank values to be sanitized to `null`, and non-blank values
+to be sanitized using the `alnum` rule.
+
+Finally, if we want blanks values to be sanitized to something other than
+`null`, call can call `useBlankValue()` to specify the value to use when
+blank:
+
+```php
+<?php
+// both an alphanumeric field *and* a blank field will pass
+$filter->sanitize('field')->toBlankOr('alnum')->useBlankValue('');
+?>
+```
+
+That will cause blank values to be sanitized to an empty string. Additionally,
+please note that `useBlankValue()` implies `toBlankOr()`, so the following has
+the same effect as the above:
+
+```php
+<?php
+// both an alphanumeric field *and* a blank field will pass
+$filter->sanitize('field')->to('alnum')->useBlankValue('');
+?>
+```
+
 
 ### Using The Filter As A Callable
 

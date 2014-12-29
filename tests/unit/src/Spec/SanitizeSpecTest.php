@@ -59,9 +59,9 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->spec->getMessage());
     }
 
-    public function testTo_allowBlank()
+    public function testToBlankOr()
     {
-        $this->spec->field('foo')->to('strlen', 3)->allowBlank();
+        $this->spec->field('foo')->toBlankOr('strlen', 3);
 
         $object = (object) array();
         $this->assertTrue($this->spec->__invoke($object));
@@ -76,9 +76,9 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->spec->__invoke($object));
     }
 
-    public function testTo_useBlankValue()
+    public function testToBlankOr_useBlankValue()
     {
-        $this->spec->field('foo')->to('strlen', 3)->allowBlank()->useBlankValue('xxx');
+        $this->spec->field('foo')->toBlankOr('strlen', 3)->useBlankValue('xxx');
         $object = (object) array();
         $this->assertTrue($this->spec->__invoke($object));
         $this->assertSame('xxx', $object->foo);

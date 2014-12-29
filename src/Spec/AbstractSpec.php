@@ -27,12 +27,6 @@ abstract class AbstractSpec
         return $this;
     }
 
-    public function allowBlank($allow_blank = true)
-    {
-        $this->allow_blank = (bool) $allow_blank;
-        return $this;
-    }
-
     public function asSoftRule($message = null)
     {
         $this->setFailureMode(Filter::SOFT_RULE, $message);
