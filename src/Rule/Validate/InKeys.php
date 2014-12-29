@@ -34,15 +34,15 @@ class InKeys
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field, array $array)
+    public function __invoke($subject, $field, array $array)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_string($value) && ! is_int($value)) {
             // array_key_exists errors on non-string non-int keys.
             return false;
         }
         // using array_keys() converts string numeric keys to integers, which
         // is *not* the behavior we want.
-        return array_key_exists($object->$field, $array);
+        return array_key_exists($subject->$field, $array);
     }
 }

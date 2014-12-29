@@ -34,19 +34,19 @@ class Blank
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
         // not set, or null, means it is blank
-        if (! isset($object->$field) || $object->$field === null) {
+        if (! isset($subject->$field) || $subject->$field === null) {
             return true;
         }
 
         // non-strings are not blank: int, float, object, array, resource, etc
-        if (! is_string($object->$field)) {
+        if (! is_string($subject->$field)) {
             return false;
         }
 
         // strings that trim down to exactly nothing are blank
-        return trim($object->$field) === '';
+        return trim($subject->$field) === '';
     }
 }

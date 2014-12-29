@@ -32,16 +32,16 @@ class Int
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
 
         // sanitize numerics
         if (is_numeric($value)) {
             // we double-cast here to honor scientific notation.
             // (int) 1E5 == 15, but (int) (float) 1E5 == 100000
             $value = (float) $value;
-            $object->$field = (int) $value;
+            $subject->$field = (int) $value;
             return true;
         }
 
@@ -70,7 +70,7 @@ class Int
         }
 
         // looks like we're done
-        $object->$field = (int) $value;
+        $subject->$field = (int) $value;
         return true;
     }
 }

@@ -46,9 +46,9 @@ class Bool
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
 
         // php boolean
         if ($value === true || $value === false) {

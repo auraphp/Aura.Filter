@@ -28,9 +28,9 @@ class Alpha
      * @return bool Always true.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $object->$field = preg_replace('/[^a-z]/i', '', $object->$field);
+        $subject->$field = preg_replace('/[^a-z]/i', '', $subject->$field);
         return true;
     }
 }

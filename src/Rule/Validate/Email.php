@@ -74,8 +74,8 @@ class Email
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        return (bool) preg_match("!^{$this->expr}$!D", $object->$field);
+        return (bool) preg_match("!^{$this->expr}$!D", $subject->$field);
     }
 }

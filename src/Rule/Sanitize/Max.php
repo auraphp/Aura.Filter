@@ -30,14 +30,14 @@ class Max
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field, $max)
+    public function __invoke($subject, $field, $max)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }
         if ($value > $max) {
-            $object->$field = $max;
+            $subject->$field = $max;
         }
         return true;
     }

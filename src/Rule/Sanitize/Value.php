@@ -30,9 +30,9 @@ class Value
      * @return bool Always true.
      *
      */
-    public function __invoke($object, $field, $other_value)
+    public function __invoke($subject, $field, $other_value)
     {
-        $object->field = $other_value;
+        $subject->field = $other_value;
         return true;
     }
 }

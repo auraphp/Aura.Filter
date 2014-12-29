@@ -28,10 +28,10 @@ class CreditCard
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
         // get the value; remove spaces, dashes, and dots
-        $value = str_replace(array(' ', '-', '.'), '', (string) $object->$field);
+        $value = str_replace(array(' ', '-', '.'), '', (string) $subject->$field);
 
         // is it composed only of digits?
         if (! ctype_digit($value)) {

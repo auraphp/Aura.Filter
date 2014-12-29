@@ -52,12 +52,12 @@ class ValidateSpec extends AbstractSpec
         return "{$message} have validated as " . parent::getDefaultMessage();
     }
 
-    protected function applyRule($object)
+    protected function applyRule($subject)
     {
         if ($this->reverse) {
-            return ! parent::applyRule($object);
+            return ! parent::applyRule($subject);
         }
 
-        return parent::applyRule($object);
+        return parent::applyRule($subject);
     }
 }

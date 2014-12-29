@@ -48,9 +48,9 @@ class Bool
      * @return bool Always true.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
 
         // PHP booleans
         if ($value === true || $value === false) {
@@ -62,13 +62,13 @@ class Bool
         $lower = strtolower(trim($value));
         if (in_array($lower, $this->true)) {
             // matches a pseudo true
-            $object->$field = true;
+            $subject->$field = true;
         } elseif (in_array($lower, $this->false)) {
             // matches a pseudo false
-            $object->$field = false;
+            $subject->$field = false;
         } else {
             // cast to a boolean
-            $object->$field = (bool) $value;
+            $subject->$field = (bool) $value;
         }
 
         // done!

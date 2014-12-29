@@ -32,8 +32,8 @@ class Closure
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field, PhpClosure $closure)
+    public function __invoke($subject, $field, PhpClosure $closure)
     {
-        return $closure($object, $field);
+        return $closure($subject, $field);
     }
 }

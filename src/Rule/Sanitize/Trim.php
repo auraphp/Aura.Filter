@@ -30,13 +30,13 @@ class Trim
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field, $chars = " \t\n\r\0\x0B")
+    public function __invoke($subject, $field, $chars = " \t\n\r\0\x0B")
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }
-        $object->$field = trim($value, $chars);
+        $subject->$field = trim($value, $chars);
         return true;
     }
 }

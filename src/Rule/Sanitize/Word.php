@@ -28,13 +28,13 @@ class Word
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }
-        $object->$field = preg_replace('/\W/', '', $value);
+        $subject->$field = preg_replace('/\W/', '', $value);
         return true;
     }
 }

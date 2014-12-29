@@ -30,9 +30,9 @@ class Isbn
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $value = $this->normalize($object, $field);
+        $value = $this->normalize($subject, $field);
         if (! $value) {
             return false;
         }
@@ -46,9 +46,9 @@ class Isbn
      * @return mixed
      *
      */
-    public function normalize($object, $field)
+    public function normalize($subject, $field)
     {
-        $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $object->$field);
+        $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $subject->$field);
         if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value)) {
             return $value;
         }

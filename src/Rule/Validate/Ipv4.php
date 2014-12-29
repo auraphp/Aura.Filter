@@ -28,9 +28,9 @@ class Ipv4
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
 
         // does the value convert back and forth properly?
         $result = ip2long($value);

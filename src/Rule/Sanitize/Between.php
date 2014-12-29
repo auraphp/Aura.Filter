@@ -33,17 +33,17 @@ class Between
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field, $min, $max)
+    public function __invoke($subject, $field, $min, $max)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }
         if ($value < $min) {
-            $object->$field = $min;
+            $subject->$field = $min;
         }
         if ($value > $max) {
-            $object->$field = $max;
+            $subject->$field = $max;
         }
         return true;
     }

@@ -30,9 +30,9 @@ class Min
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field, $min)
+    public function __invoke($subject, $field, $min)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }

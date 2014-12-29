@@ -31,8 +31,8 @@ class StrictEqualToValue
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function __invoke($object, $field, $other_value)
+    public function __invoke($subject, $field, $other_value)
     {
-        return $object->$field === $other_value;
+        return $subject->$field === $other_value;
     }
 }

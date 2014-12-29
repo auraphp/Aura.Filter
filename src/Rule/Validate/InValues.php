@@ -34,8 +34,8 @@ class InValues
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field, array $array)
+    public function __invoke($subject, $field, array $array)
     {
-        return in_array($object->$field, $array, true);
+        return in_array($subject->$field, $array, true);
     }
 }

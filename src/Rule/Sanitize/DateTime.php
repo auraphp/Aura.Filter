@@ -32,14 +32,14 @@ class DateTime
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field, $format = 'Y-m-d H:i:s')
+    public function __invoke($subject, $field, $format = 'Y-m-d H:i:s')
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         $datetime = $this->newDateTime($value);
         if (! $datetime) {
             return false;
         }
-        $object->$field = $datetime->format($format);
+        $subject->$field = $datetime->format($format);
         return true;
     }
 

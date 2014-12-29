@@ -104,47 +104,42 @@ class Filter
 
         if (! is_object($subject)) {
             $type = gettype($subject);
-            throw new InvalidArgumentException("Apply the filter to an object, not a {$type}.");
+            throw new InvalidArgumentException("Apply the filter to an array or object, not a {$type}.");
         }
 
-        return $this->applyToObject($subject);
+        return $this->applyToSubject($subject);
     }
 
     protected function applyToArray(&$array)
     {
-        $object = (object) $array;
-        $result = $this->applyToObject($object);
-        $array = (array) $object;
+        $subject = (object) $array;
+        $result = $this->applyToSubject($subject);
+        $array = (array) $subject;
         return $result;
     }
 
-    protected function applyToObject($object)
+    protected function applyToSubject($subject)
     {
         $this->skip = array();
         $this->messages = array();
-        $this->applySpecs($object);
-        if ($this->messages) {
-            return false;
-        }
-        return true;
-    }
-
-    protected function applySpecs($object)
-    {
         foreach ($this->specs as $spec) {
-            if ($this->skippedOrPassed($spec, $object)) {
+            if ($this->skippedOrPassed($spec, $subject)) {
                 continue;
             }
             if ($this->failed($spec) === self::STOP_RULE) {
                 break;
             }
         }
+        if ($this->messages) {
+            return false;
+        }
+        return true;
     }
 
-    protected function skippedOrPassed($spec, $object)
+    protected function skippedOrPassed($spec, $subject)
     {
         return isset($this->skip[$spec->getField()])
-            || call_user_func($spec, $object);
+            || call_user_func($spec, $subject);
     }
 
     protected function failed($spec)

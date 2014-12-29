@@ -32,13 +32,13 @@ class String
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($object, $field, $find = null, $replace = null)
+    public function __invoke($subject, $field, $find = null, $replace = null)
     {
-        $value = (string) $object->$field;
+        $value = (string) $subject->$field;
         if ($find || $replace) {
             $value = str_replace($find, $replace, $value);
         }
-        $object->$field = $value;
+        $subject->$field = $value;
         return true;
     }
 }

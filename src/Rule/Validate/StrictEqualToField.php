@@ -27,22 +27,22 @@ class StrictEqualToField
      * Validates that this value is equal in value and type to some other
      * element in the filter chain.
      *
-     * If the other element does not exist in $object, or is null, the
+     * If the other element does not exist in $subject, or is null, the
      * validation will fail.
      *
      * @param string $other_field Check against the value of this element in
-     * $object.
+     * $subject.
      *
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function __invoke($object, $field, $other_field)
+    public function __invoke($subject, $field, $other_field)
     {
         // the other field needs to exist and *not* be null
-        if (! isset($object->$other_field)) {
+        if (! isset($subject->$other_field)) {
             return false;
         }
 
-        return $object->$field === $object->$other_field;
+        return $subject->$field === $subject->$other_field;
     }
 }

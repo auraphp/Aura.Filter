@@ -15,10 +15,10 @@ abstract class AbstractSpec
     protected $failure_mode = Filter::HARD_RULE;
     protected $rule_locator;
 
-    public function __invoke($object)
+    public function __invoke($subject)
     {
-        return $this->applyBlank($object, $this->field)
-            || $this->applyRule($object);
+        return $this->applyBlank($subject, $this->field)
+            || $this->applyRule($subject);
     }
 
     public function field($field)
@@ -90,32 +90,32 @@ abstract class AbstractSpec
         return $message;
     }
 
-    protected function applyBlank($object, $field)
+    protected function applyBlank($subject, $field)
     {
         if (! $this->allow_blank) {
             return false;
         }
 
         // not set, or null, means it is blank
-        if (! isset($object->$field) || $object->$field === null) {
+        if (! isset($subject->$field) || $subject->$field === null) {
             return true;
         }
 
         // non-strings are not blank: int, float, object, array, resource, etc
-        if (! is_string($object->$field)) {
+        if (! is_string($subject->$field)) {
             return false;
         }
 
         // strings that trim down to exactly nothing are blank
-        return trim($object->$field) === '';
+        return trim($subject->$field) === '';
     }
 
-    protected function applyRule($object)
+    protected function applyRule($subject)
     {
         $rule = $this->rule_locator->get($this->rule);
         $args = $this->args;
         array_unshift($args, $this->field);
-        array_unshift($args, $object);
+        array_unshift($args, $subject);
         return call_user_func_array($rule, $args);
     }
 }

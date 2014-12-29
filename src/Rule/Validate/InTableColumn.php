@@ -86,11 +86,11 @@ class InTableColumn
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field, $table, $column, $where = null)
+    public function __invoke($subject, $field, $table, $column, $where = null)
     {
         $stm = $this->buildSelect($table, $column, $where);
         $sth = $this->pdo->prepare($stm);
-        $sth->execute($this->getBindValues($object, $field, $column, $where));
+        $sth->execute($this->getBindValues($subject, $field, $column, $where));
         return $sth->fetchColumn() !== false;
     }
 
@@ -137,9 +137,9 @@ class InTableColumn
      * @return null
      *
      */
-    protected function getBindValues($object, $field, $column, $where)
+    protected function getBindValues($subject, $field, $column, $where)
     {
-        $bind = array($column => $object->$field);
+        $bind = array($column => $subject->$field);
         if (! $where) {
             return $bind;
         }
@@ -153,8 +153,8 @@ class InTableColumn
         foreach ($placeholders as $placeholder) {
             // strip the leading ":"
             $field = substr($placeholder, 1);
-            if (isset($object->$field)) {
-                $bind[$field] = $object->$field;
+            if (isset($subject->$field)) {
+                $bind[$field] = $subject->$field;
             }
         }
         return $bind;

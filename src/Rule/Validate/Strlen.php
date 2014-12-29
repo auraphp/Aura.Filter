@@ -30,9 +30,9 @@ class Strlen
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($object, $field, $len)
+    public function __invoke($subject, $field, $len)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }

@@ -28,9 +28,9 @@ class Alnum
      * @return bool Always true.
      *
      */
-    public function __invoke($object, $field)
+    public function __invoke($subject, $field)
     {
-        $object->$field = preg_replace('/[^a-z0-9]/i', '', $object->$field);
+        $subject->$field = preg_replace('/[^a-z0-9]/i', '', $subject->$field);
         return true;
     }
 }

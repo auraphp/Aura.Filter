@@ -30,13 +30,13 @@ class SanitizeSpec extends AbstractSpec
         $this->blank_value = $blank_value;
     }
 
-    protected function applyBlank($object, $field)
+    protected function applyBlank($subject, $field)
     {
-        if (! parent::applyBlank($object, $field)) {
+        if (! parent::applyBlank($subject, $field)) {
             return false;
         }
 
-        $object->$field = $this->blank_value;
+        $subject->$field = $this->blank_value;
         return true;
     }
 
