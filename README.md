@@ -178,7 +178,7 @@ the specified rule.  If we want to just set a custom message without changing
 the failure mode, we can use `$filter->...->setMessage('custom message')`.
 
 If a field fails multiple rules, there will be multiple failure messages. To
-specify a single failure message for a field, regardless of how many rules it
+specify a single failure message for a field, regardless of which rule(s) it
 fails, call `$filter->useFieldMessage()`:
 
 ```php
