@@ -115,8 +115,7 @@ class FilterFactory
             'bool'                  => function () { return new Sanitize\Bool(); },
             'closure'               => function () { return new Sanitize\Closure(); },
             'dateTime'              => function () { return new Sanitize\DateTime(); },
-            'equalToField'          => function () { return new Sanitize\EqualToField(); },
-            'equalToValue'          => function () { return new Sanitize\EqualToValue(); },
+            'field'                 => function () { return new Sanitize\Field(); },
             'float'                 => function () { return new Sanitize\Float(); },
             'int'                   => function () { return new Sanitize\Int(); },
             'isbn'                  => function () { return new Sanitize\Isbn(); },
@@ -131,6 +130,7 @@ class FilterFactory
             'strlenMax'             => function () { return new Sanitize\StrlenMax(); },
             'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
             'trim'                  => function () { return new Sanitize\Trim(); },
+            'value'                 => function () { return new Sanitize\Value(); },
             'word'                  => function () { return new Sanitize\Word(); },
         );
     }

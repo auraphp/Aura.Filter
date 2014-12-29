@@ -12,19 +12,18 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that this value is equal to some other element in the filter
- * chain (note that equality is not strict, so type does not matter).
+ * Modifies the field value to match that of another field.
  *
  * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class EqualToField
+class Field
 {
     /**
      *
-     * Force the field to the value of the other field
+     * Force the field to the value of the other field.
      *
      * @param string $other_field
      *

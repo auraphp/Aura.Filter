@@ -12,28 +12,27 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that this value is equal to some other element in the filter
- * chain (note that equality is not strict, so type does not matter).
+ * Modifies the field value to match another value.
  *
  * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class StrictEqualToValue
+class Value
 {
     /**
      *
-     * Force the field to the value of the other field
+     * Force the field to another value.
      *
-     * @param string $other_value
+     * @param mixed $other_value
      *
      * @return bool Always true.
      *
      */
     public function __invoke($object, $field, $other_value)
     {
-        $object->$field = $other_value;
+        $object->field = $other_value;
         return true;
     }
 }

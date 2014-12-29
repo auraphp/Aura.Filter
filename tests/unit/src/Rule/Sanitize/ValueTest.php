@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class EqualToValueTest extends AbstractSanitizeTest
+class ValueTest extends AbstractSanitizeTest
 {
     protected $other_value = '1';
 

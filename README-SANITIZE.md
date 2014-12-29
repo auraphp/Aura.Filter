@@ -70,23 +70,13 @@ $filter->sanitize('field', $filter::FIX, 'dateTime', $format);
 ?>
 ```
 
-## equalToField
+## field
 
 Sanitizes to the value of another field in the subject.
 
 ```php
 <?php
-$filter->sanitize('field')->to('equalToField', 'other_field_name');
-?>
-```
-
-## equalToValue
-
-Sanitizes to the specified value.
-
-```php
-<?php
-$filter->sanitize('field')->to('equalToValue', $other_value);
+$filter->sanitize('field')->to('field', 'other_field_name');
 ?>
 ```
 
@@ -152,26 +142,6 @@ $filter->sanitize('field')->to('regex', $expr);
 ?>
 ```
 
-## strictEqualToField
-
-Sanitizes to the value of another field in the subject.
-
-```php
-<?php
-$filter->sanitize('field')->to('strictEqualToField', 'other_field_name');
-?>
-```
-
-## strictEqualToValue
-
-Sanitizes to the specified value.
-
-```php
-<?php
-$filter->sanitize('field')->to('strictEqualToValue', $other_value);
-?>
-```
-
 ## string
 
 Sanitizes the value by casting to a string and optionally using `str_replace()`
@@ -232,6 +202,16 @@ Sanitizes the value to `trim()` it. Optionally specify characters to trim.
 ```php
 <?php
 $filter->sanitize('field')->to('trim', $chars);
+?>
+```
+
+## value
+
+Sanitizes to the specified value.
+
+```php
+<?php
+$filter->sanitize('field')->to('value', $other_value);
 ?>
 ```
 

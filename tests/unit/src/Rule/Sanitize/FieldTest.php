@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class StrictEqualToFieldTest extends AbstractSanitizeTest
+class FieldTest extends AbstractSanitizeTest
 {
     protected $other_field = 'other';
 
@@ -24,18 +24,19 @@ class StrictEqualToFieldTest extends AbstractSanitizeTest
     public function providerTo()
     {
         return array(
-            array(0,     true, '1'),
-            array(1,     true, '1'),
-            array('1',   true, '1'),
-            array(true,  true, '1'),
-            array(false, true, '1'),
+            array(0,         true, '1'),
+            array(1,         true, '1'),
+            array('1',       true, '1'),
+            array(true,      true, '1'),
+            array(false,     true, '1'),
         );
     }
 
     public function testTo_fieldNotSet()
     {
         $object = (object) array('field' => '1');
-        $rule = new StrictEqualToField();
+        $class = $this->getClass();
+        $rule = new $class();
         $this->assertFalse($rule->__invoke($object, 'field', 'no_such_field'));
     }
 }
