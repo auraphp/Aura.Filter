@@ -52,7 +52,7 @@ class FilterFactory
         return new SanitizeSpec($this->getSanitizeLocator());
     }
 
-    protected function getValidateLocator()
+    public function getValidateLocator()
     {
         if (! $this->validate_locator) {
             $this->validate_locator = new ValidateLocator($this->getValidateFactories());
@@ -60,7 +60,7 @@ class FilterFactory
         return $this->validate_locator;
     }
 
-    protected function getSanitizeLocator()
+    public function getSanitizeLocator()
     {
         if (! $this->sanitize_locator) {
             $this->sanitize_locator = new SanitizeLocator($this->getSanitizeFactories());

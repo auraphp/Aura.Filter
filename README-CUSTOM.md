@@ -1,45 +1,33 @@
-## Creating and Using Custom Rules
+# Creating and Using Custom Rules
 
 There are three steps to creating and using new rules:
 
-1. Write a rule class
+1. Write a rule class, either to validate or sanitize a subject field
 
-2. Set that class as a service in the `RuleLocator`
+2. Set a factory for the class in the appropriate rule locator
 
-3. Use the new rule in our filter chain
+3. Use the new rule in a filter specification
 
-### Writing a Rule Class
+## Writing a Rule Class
 
-Writing a rule class is straightforward:
+Writing a rule class is straightforward.  Define a class with an
+`__invoke($subject, $field)` method, along with any additional needed arguments.
+The method should return a boolean: true on success, or false on failure.
 
-- Extend `Aura\Filter\AbstractRule` with two methods: `validate()` and
-  `sanitize()`.
+### A Validate Class
 
-- Add params as needed to each method.
-
-- Each method should return a boolean: true on success, or false on failure.
-
-- Use `getValue()` to get the value being validated, and `setValue()` to change
-  the value being sanitized.
-
-- Add a property `$message` to indicate a string that should be returned
-  as a message when validation or sanitizing fails.
-
-Here is an example of a hexadecimal rule:
+Here is an example of a hexdecimal validator:
 
 ```php
 <?php
-namespace Vendor\Package\Filter\Rule;
+namespace Vendor\Package\Filter\Rule\Validate;
 
-
-class Hex extends AbstractRule
+class ValidateHex
 {
-    protected $message = 'FILTER_HEX';
-
-    public function validate($object, $field, $max = null)
+    public function __invoke($subject, $field, $max = null)
     {
         // must be scalar
-        $value = $this->getValue();
+        $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }
@@ -58,11 +46,26 @@ class Hex extends AbstractRule
         // done!
         return true;
     }
+}
+?>
+```
 
-    public function sanitize($max = null)
+### A Sanitize Class
+
+Here is an example of a hexadecimal sanitizer. Note how we modify the
+`$subject->$field` value directly at the end of the method.
+
+```php
+<?php
+namespace Vendor\Package\Filter\Rule\Sanitize;
+
+class SanitizeHex
+{
+    public function __invoke($subject, $field, $max = null)
     {
+        $value = $subject->$field;
+
         // must be scalar
-        $value = $this->getValue();
         if (! is_scalar($value)) {
             // sanitizing failed
             return false;
@@ -81,32 +84,46 @@ class Hex extends AbstractRule
         }
 
         // retain the sanitized value, and done!
-        $this->setValue($value);
+        $subject->$field = $value;
         return true;
     }
 }
 ?>
 ```
 
-### Set The Class As A Service
+## Set A Factory In The Locator
 
-Now we set the rule class into the `RuleLocator`.
+Now we set a factory for the rule into the appropriate locator from the
+_FilterFactory_. Validate rules should go in the _ValidateLocator_, and
+sanitize rules should go in the _SanitizeLocator_. Wrap the rule instantion
+logic in a closure so that it is lazy-loaded only when the rule is called.
 
 ```php
 <?php
-$locator = $filter->getRuleLocator();
-$locator->set('hex', function () {
-    return new Vendor\Package\Filter\Rule\Hex;
+use Aura\Filter\FilterFactory;
+
+$filter_factory = new FilterFactory();
+
+$validate_locator = $filter_factory->getValidateLocator();
+$validate_locator->set('hex', function () {
+    return new Vendor\Package\Filter\Rule\Validate\ValidateHex();
+});
+
+$sanitize_locator = $filter_factory->getSanitizeLocator();
+$sanitize_locator->set('hex', function () {
+    return new Vendor\Package\Filter\Rule\Sanitize\SanitizeHex();
 });
 ?>
 ```
 
-### Apply The New Rule
+## Apply The New Rule
 
 Finally, we can use the rule in our filter:
 
 ```php
 <?php
+$filter = $filter_locator->newInstance();
+
 // the 'color' field must be a hex value of no more than 6 digits
-$filter->addHardRule('color', $filter::IS, 'hex', 6);
+$filter->validate('color')->is('hex', 6);
 ```

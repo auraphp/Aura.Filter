@@ -89,9 +89,9 @@ $filter = $filter_factory->newInstance();
 ?>
 ```
 
-### Adding Filter Specifications
+### Adding Rule Specifications
 
-Add filtering specifications to the filter for each subject field.
+Add rule specifications to the filter for each subject field.
 
 ```php
 <?php
@@ -239,3 +239,11 @@ Now if the field is not set or composed only of whitespace characters, it will
 be modified to be an empty string. (If we call `useBlankValue()` with no
 arguments, or call only `allowBlank()` without specifying a blank value,
 blanks will be sanitized to `null`.)
+
+### Using The Filter As A Callable
+
+TBD
+
+### Extending And Initializing A Filter
+
+TBD
