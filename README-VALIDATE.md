@@ -56,9 +56,8 @@ $filter->validate('field')->is('bool');
 ## closure
 
 Validates the value using a closure. The closure should take two arguments,
-`$subject` and `$field` to indicate the subject (either an array or object)
-and the field within that subject. It should return `true` to pass, or `false`
-to fail.
+`$subject` and `$field` to indicate the subject and the field within that
+subject. It should return `true` to pass, or `false` to fail.
 
 ```php
 <?php
@@ -70,6 +69,10 @@ $filter->validate('field')->is('closure', function ($subject, $field) {
 });
 ?>
 ```
+
+> N.b.: Always use object notation (`$subject->$field`) and not array notation
+(`$subject[$field]`) in the closure, as the _Filter_ converts arrays to objects
+on the fly.
 
 ## creditCard
 
