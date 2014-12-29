@@ -32,11 +32,10 @@ class DateTime
      * @return bool
      *
      */
-    public function __invoke($object, $field, $format = 'Y-m-d H:i:s')
+    public function __invoke($object, $field)
     {
         $value = $object->$field;
         $datetime = $this->newDateTime($value);
-
         return (bool) $datetime;
     }
 

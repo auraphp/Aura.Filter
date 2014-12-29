@@ -131,7 +131,6 @@ class FilterFactory
             'strlenMax'             => function () { return new Sanitize\StrlenMax(); },
             'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
             'trim'                  => function () { return new Sanitize\Trim(); },
-            'upload'                => function () { return new Sanitize\Upload(); },
             'word'                  => function () { return new Sanitize\Word(); },
         );
     }
