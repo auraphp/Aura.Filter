@@ -98,7 +98,8 @@ class Filter
 
         if (! is_object($subject)) {
             $type = gettype($subject);
-            throw new InvalidArgumentException("Apply the filter to an array or object, not a {$type}.");
+            $message = "Apply the filter to an array or object, not a {$type}.";
+            throw new InvalidArgumentException($message);
         }
 
         return $this->applyToSubject($subject);
