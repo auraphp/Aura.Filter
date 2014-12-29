@@ -70,23 +70,12 @@ class Filter
 
     public function validate($field)
     {
-        return $this->addSpec(
-            clone $this->validate_spec,
-            $field
-        );
+        return $this->addSpec(clone $this->validate_spec, $field);
     }
 
     public function sanitize($field)
     {
-        return $this->addSpec(
-            clone $this->sanitize_spec,
-            $field
-        );
-    }
-
-    public function useFieldMessage($field, $message)
-    {
-        $this->field_messages[$field] = $message;
+        return $this->addSpec(clone $this->sanitize_spec, $field);
     }
 
     protected function addSpec($spec, $field)
@@ -94,6 +83,11 @@ class Filter
         $this->specs[] = $spec;
         $spec->field($field);
         return $spec;
+    }
+
+    public function useFieldMessage($field, $message)
+    {
+        $this->field_messages[$field] = $message;
     }
 
     public function apply(&$subject)
