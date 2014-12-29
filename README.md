@@ -111,7 +111,7 @@ $filter->validate('password_confirm')->is('equalToField', 'password');
 ?>
 ```
 
-We can call the following methods after `validate()`:
+We can call one of the following methods after `validate()`:
 
 - `is(...)` to specify that the value **must** match the rule
 - `isNot(...)` to specify that the value **must not** match the rule
@@ -120,14 +120,14 @@ We can call the following methods after `validate()`:
 - `isBlankOrNot(...)` to specify that the value may be blank, or that it
   **must not** match the rule
 
-We can call the following methods after `sanitize()`:
+We can call one of the following methods after `sanitize()`:
 
 - `to(...)` to specify the value should be changed according to the rule
 - `toBlankOr(...)` to specify that blank values should be changed to `null`,
   and that non-blank values should be changed according to the rule
 - `useBlankValue(...)` to specify what blank values should be changed to (default `null`)
 
-For more on blanks, see the section on [Blank Values](#blank-values).
+For more about blanks, see the section on [Blank Values](#blank-values).
 
 ### Applying The Filter
 
@@ -136,15 +136,15 @@ means all the rules passed, while `false` means one or more failed.
 
 ```php
 <?php
-// the data to be filtered; could also be an array
-$data = (object) array(
+// the data to be filtered; could also be an object
+$subject = array(
     'username' => 'bolivar',
     'password' => 'p@55w0rd',
     'password_confirm' => 'p@55word', // not the same!
 );
 
 // filter the object and see if there were failures
-$success = $filter->apply($data);
+$success = $filter->apply($subject);
 if (! $success) {
     // get the failure messages
     $messages = $filter->getMessages();
@@ -201,7 +201,7 @@ This library incorporates the concept of "blank" fields, as distinct from
 not been filled in. A field is blank if it is:
 
 - not set in the subject being filtered,
-- `null`,
+- set to `null`,
 - an empty string (''), or
 - a string composed of only whitespace characters.
 
@@ -215,7 +215,7 @@ $not_blank = array(
     0.00,             // float
     false,            // boolean false
     array(),          // empty array
-    (object) array(), // an object
+    new StdClass,     // an object
 );
 ?>
 ```
@@ -245,9 +245,8 @@ $filter->sanitize('field')->toBlankOr('alnum');
 This will cause blank values to be sanitized to `null`, and non-blank values
 to be sanitized using the `alnum` rule.
 
-Finally, if we want blanks values to be sanitized to something other than
-`null`, call can call `useBlankValue()` to specify the value to use when
-blank:
+Finally, if we want blank values to be sanitized to something other than
+`null`, call `useBlankValue()` to specify the value to use when blank:
 
 ```php
 <?php
