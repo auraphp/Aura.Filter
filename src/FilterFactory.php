@@ -10,6 +10,13 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Rule\Sanitize;
+use Aura\Filter\Rule\Validate;
+use Aura\Filter\Rule\Locator\SanitizeLocator;
+use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Spec\SanitizeSpec;
+use Aura\Filter\Spec\ValidateSpec;
+
 /**
  *
  * Factory to create Filter objects.
@@ -19,64 +26,112 @@ namespace Aura\Filter;
  */
 class FilterFactory
 {
+    protected $validate_locator;
+
+    protected $sanitize_locator;
+
     /**
      *
      * Returns a new Filter instance.
      *
-     * @return RuleCollection
+     * @return Filter
      *
      */
     public function newInstance()
     {
-        return new RuleCollection(
-            new RuleLocator(array_merge(
-                $this->registry(),
-                ['any' => function () {
-                    $rule = new Rule\Any;
-                    $rule->setRuleLocator(new RuleLocator(
-                        $this->registry()
-                    ));
+        return new Filter($this->newValidateSpec(), $this->newSanitizeSpec());
+    }
 
-                    return $rule;
-                }]
-            ))
+    protected function newValidateSpec()
+    {
+        return new ValidateSpec($this->getValidateLocator());
+    }
+
+    protected function newSanitizeSpec()
+    {
+        return new SanitizeSpec($this->getSanitizeLocator());
+    }
+
+    public function getValidateLocator()
+    {
+        if (! $this->validate_locator) {
+            $this->validate_locator = new ValidateLocator($this->getValidateFactories());
+        }
+        return $this->validate_locator;
+    }
+
+    public function getSanitizeLocator()
+    {
+        if (! $this->sanitize_locator) {
+            $this->sanitize_locator = new SanitizeLocator($this->getSanitizeFactories());
+        }
+        return $this->sanitize_locator;
+    }
+
+    protected function getValidateFactories()
+    {
+        return array(
+            'alnum'                 => function () { return new Validate\Alnum(); },
+            'alpha'                 => function () { return new Validate\Alpha(); },
+            'between'               => function () { return new Validate\Between(); },
+            'blank'                 => function () { return new Validate\Blank(); },
+            'bool'                  => function () { return new Validate\Bool(); },
+            'closure'               => function () { return new Validate\Closure(); },
+            'creditCard'            => function () { return new Validate\CreditCard(); },
+            'dateTime'              => function () { return new Validate\DateTime(); },
+            'email'                 => function () { return new Validate\Email(); },
+            'equalToField'          => function () { return new Validate\EqualToField(); },
+            'equalToValue'          => function () { return new Validate\EqualToValue(); },
+            'float'                 => function () { return new Validate\Float(); },
+            'inKeys'                => function () { return new Validate\InKeys(); },
+            'int'                   => function () { return new Validate\Int(); },
+            'inValues'              => function () { return new Validate\InValues(); },
+            'ipv4'                  => function () { return new Validate\Ipv4(); },
+            'isbn'                  => function () { return new Validate\Isbn(); },
+            'locale'                => function () { return new Validate\Locale(); },
+            'max'                   => function () { return new Validate\Max(); },
+            'min'                   => function () { return new Validate\Min(); },
+            'regex'                 => function () { return new Validate\Regex(); },
+            'strictEqualToField'    => function () { return new Validate\StrictEqualToField(); },
+            'strictEqualToValue'    => function () { return new Validate\StrictEqualToValue(); },
+            'string'                => function () { return new Validate\String(); },
+            'strlen'                => function () { return new Validate\Strlen(); },
+            'strlenBetween'         => function () { return new Validate\StrlenBetween(); },
+            'strlenMax'             => function () { return new Validate\StrlenMax(); },
+            'strlenMin'             => function () { return new Validate\StrlenMin(); },
+            'trim'                  => function () { return new Validate\Trim(); },
+            'upload'                => function () { return new Validate\Upload(); },
+            'url'                   => function () { return new Validate\Url(); },
+            'word'                  => function () { return new Validate\Word(); },
         );
     }
 
-    public function registry()
+    protected function getSanitizeFactories()
     {
-        return [
-            'alnum'                 => function () { return new Rule\Alnum; },
-            'alpha'                 => function () { return new Rule\Alpha; },
-            'between'               => function () { return new Rule\Between; },
-            'blank'                 => function () { return new Rule\Blank; },
-            'bool'                  => function () { return new Rule\Bool; },
-            'closure'               => function () { return new Rule\Closure; },
-            'creditCard'            => function () { return new Rule\CreditCard; },
-            'dateTime'              => function () { return new Rule\DateTime; },
-            'email'                 => function () { return new Rule\Email; },
-            'equalToField'          => function () { return new Rule\EqualToField; },
-            'equalToValue'          => function () { return new Rule\EqualToValue; },
-            'float'                 => function () { return new Rule\Float; },
-            'inKeys'                => function () { return new Rule\InKeys; },
-            'int'                   => function () { return new Rule\Int; },
-            'inValues'              => function () { return new Rule\InValues; },
-            'ipv4'                  => function () { return new Rule\Ipv4; },
-            'max'                   => function () { return new Rule\Max; },
-            'min'                   => function () { return new Rule\Min; },
-            'regex'                 => function () { return new Rule\Regex; },
-            'strictEqualToField'    => function () { return new Rule\StrictEqualToField; },
-            'strictEqualToValue'    => function () { return new Rule\StrictEqualToValue; },
-            'string'                => function () { return new Rule\String; },
-            'strlenBetween'         => function () { return new Rule\StrlenBetween; },
-            'strlenMax'             => function () { return new Rule\StrlenMax; },
-            'strlenMin'             => function () { return new Rule\StrlenMin; },
-            'strlen'                => function () { return new Rule\Strlen; },
-            'trim'                  => function () { return new Rule\Trim; },
-            'upload'                => function () { return new Rule\Upload; },
-            'url'                   => function () { return new Rule\Url; },
-            'word'                  => function () { return new Rule\Word; },
-            'isbn'                  => function () { return new Rule\Isbn; },
-        ];
+        return array(
+            'alnum'                 => function () { return new Sanitize\Alnum(); },
+            'alpha'                 => function () { return new Sanitize\Alpha(); },
+            'between'               => function () { return new Sanitize\Between(); },
+            'bool'                  => function () { return new Sanitize\Bool(); },
+            'closure'               => function () { return new Sanitize\Closure(); },
+            'dateTime'              => function () { return new Sanitize\DateTime(); },
+            'equalToField'          => function () { return new Sanitize\EqualToField(); },
+            'equalToValue'          => function () { return new Sanitize\EqualToValue(); },
+            'float'                 => function () { return new Sanitize\Float(); },
+            'int'                   => function () { return new Sanitize\Int(); },
+            'isbn'                  => function () { return new Sanitize\Isbn(); },
+            'max'                   => function () { return new Sanitize\Max(); },
+            'min'                   => function () { return new Sanitize\Min(); },
+            'regex'                 => function () { return new Sanitize\Regex(); },
+            'strictEqualToField'    => function () { return new Sanitize\StrictEqualToField(); },
+            'strictEqualToValue'    => function () { return new Sanitize\StrictEqualToValue(); },
+            'string'                => function () { return new Sanitize\String(); },
+            'strlen'                => function () { return new Sanitize\Strlen(); },
+            'strlenBetween'         => function () { return new Sanitize\StrlenBetween(); },
+            'strlenMax'             => function () { return new Sanitize\StrlenMax(); },
+            'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
+            'trim'                  => function () { return new Sanitize\Trim(); },
+            'word'                  => function () { return new Sanitize\Word(); },
+        );
     }
 }
