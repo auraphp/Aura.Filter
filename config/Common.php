@@ -32,6 +32,7 @@ class Common extends Config
             'isbn'                  =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Isbn'),
             'max'                   =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Max'),
             'min'                   =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Min'),
+            'now'                   =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Now'),
             'regex'                 =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Regex'),
             'string'                =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\String'),
             'strlen'                =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Strlen'),

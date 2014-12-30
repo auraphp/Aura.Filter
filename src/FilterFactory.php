@@ -16,6 +16,7 @@ use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
+use PDO;
 
 /**
  *
@@ -29,6 +30,22 @@ class FilterFactory
     protected $validate_locator;
 
     protected $sanitize_locator;
+
+    protected $pdo;
+
+    protected $quote_prefix;
+
+    protected $quote_suffix;
+
+    public function __construct(
+        PDO $pdo = null,
+        $quote_prefix = '"',
+        $quote_suffix = '"'
+    ) {
+        $this->pdo = $pdo;
+        $this->quote_prefix = $quote_prefix;
+        $this->quote_suffix = $quote_suffix;
+    }
 
     /**
      *
@@ -70,7 +87,7 @@ class FilterFactory
 
     protected function getValidateFactories()
     {
-        return array(
+        $factories = array(
             'alnum'                 => function () { return new Validate\Alnum(); },
             'alpha'                 => function () { return new Validate\Alpha(); },
             'between'               => function () { return new Validate\Between(); },
@@ -91,6 +108,7 @@ class FilterFactory
             'locale'                => function () { return new Validate\Locale(); },
             'max'                   => function () { return new Validate\Max(); },
             'min'                   => function () { return new Validate\Min(); },
+            'now'                   => function () { return new Validate\Now(); },
             'regex'                 => function () { return new Validate\Regex(); },
             'strictEqualToField'    => function () { return new Validate\StrictEqualToField(); },
             'strictEqualToValue'    => function () { return new Validate\StrictEqualToValue(); },
@@ -104,6 +122,24 @@ class FilterFactory
             'url'                   => function () { return new Validate\Url(); },
             'word'                  => function () { return new Validate\Word(); },
         );
+
+        $this->addValidatePdo($factories);
+        return $factories;
+    }
+
+    protected function addValidatePdo(&$factories)
+    {
+        if (! $this->pdo) {
+            return;
+        }
+
+        $pdo = $this->pdo;
+        $quote_prefix = $this->quote_prefix;
+        $quote_suffix = $this->quote_suffix;
+
+        $factories['inTableColumn'] = function () use ($pdo, $quote_prefix, $quote_suffix) {
+            return new Validate\InTableColumn($pdo, $quote_prefix, $quote_suffix);
+        };
     }
 
     protected function getSanitizeFactories()

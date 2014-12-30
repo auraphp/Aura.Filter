@@ -135,6 +135,17 @@ $filter->sanitize('field')->to('min', $min);
 ?>
 ```
 
+## now
+
+Sanitizes the value to force it to the current datetime, default format
+'Y-m-d H:i:s'.
+
+```php
+<?php
+$filter->sanitize('field')->to('now', $format);
+?>
+```
+
 ## regex
 
 Sanitizes the value using `preg_replace()`.

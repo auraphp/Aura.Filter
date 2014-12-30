@@ -6,6 +6,7 @@ use Aura\Filter\Rule\Sanitize;
 use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
+use PDO;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
