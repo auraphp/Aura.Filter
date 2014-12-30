@@ -34,9 +34,9 @@ class FieldTest extends AbstractSanitizeTest
 
     public function testTo_fieldNotSet()
     {
-        $object = (object) array('field' => '1');
+        $object = (object) array('foo' => '1');
         $class = $this->getClass();
         $rule = new $class();
-        $this->assertFalse($rule->__invoke($object, 'field', 'no_such_field'));
+        $this->assertFalse($rule->__invoke($object, 'foo', 'no_such_field'));
     }
 }

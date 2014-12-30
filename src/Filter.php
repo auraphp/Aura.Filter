@@ -51,8 +51,13 @@ class Filter
 
     public function __invoke(&$subject)
     {
+        return $this->assert($subject);
+    }
+
+    public function assert(&$subject)
+    {
         if ($this->apply($subject)) {
-            return true;
+            return;
         }
 
         $class = get_class($this);

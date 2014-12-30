@@ -39,8 +39,8 @@ class StrictEqualToFieldTest extends AbstractValidateTest
 
     public function testIs_fieldNotSet()
     {
-        $object = (object) array('field' => '1');
+        $object = (object) array('foo' => '1');
         $rule = new StrictEqualToField();
-        $this->assertFalse($rule->__invoke($object, 'field', 'no_such_field'));
+        $this->assertFalse($rule->__invoke($object, 'foo', 'no_such_field'));
     }
 }

@@ -19,24 +19,24 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     public function testApply_softRule()
     {
-        $this->filter->sanitize('field')->to('string');
-        $this->filter->validate('field')->is('alnum')->asSoftRule();
-        $this->filter->validate('field')->is('strlenMin', 6)->asHardRule();
+        $this->filter->sanitize('foo')->to('string');
+        $this->filter->validate('foo')->is('alnum')->asSoftRule();
+        $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $object = (object) array('field' => 'foobar');
+        $object = (object) array('foo' => 'foobar');
         $result = $this->filter->apply($object);
         $this->assertTrue($result);
         $expect = array();
         $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
 
-        $object = (object) array('field' => '!@#');
+        $object = (object) array('foo' => '!@#');
         $result = $this->filter->apply($object);
         $this->assertFalse($result);
         $expect = array(
-            'field' => array(
-                'field should have validated as alnum',
-                'field should have validated as strlenMin(6)',
+            'foo' => array(
+                'foo should have validated as alnum',
+                'foo should have validated as strlenMin(6)',
             ),
         );
         $actual = $this->filter->getMessages();
@@ -52,24 +52,24 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     public function testApply_hardRule()
     {
-        $this->filter->validate('field')->is('alnum')->asHardRule();
-        $this->filter->validate('field')->is('strlenMin', 6)->asHardRule();
+        $this->filter->validate('foo')->is('alnum')->asHardRule();
+        $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $object = (object) array('field' => '!@#');
+        $object = (object) array('foo' => '!@#');
         $result = $this->filter->apply($object);
         $this->assertFalse($result);
 
         $expect = array(
-            'field' => array(
-                'field should have validated as alnum',
+            'foo' => array(
+                'foo should have validated as alnum',
             ),
         );
         $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
 
-        $actual = $this->filter->getMessages('field');
+        $actual = $this->filter->getMessages('foo');
         $expect = array(
-            'field should have validated as alnum',
+            'foo should have validated as alnum',
         );
         $this->assertSame($expect, $actual);
 
@@ -80,19 +80,19 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     public function testApply_stopRule()
     {
-        $this->filter->validate('field1')->is('alnum')->asSoftRule();
-        $this->filter->validate('field1')->is('strlenMin', 6)->asStopRule();
-        $this->filter->validate('field2')->is('alnum');
-        $this->filter->validate('field2')->is('strlenMin', 6);
+        $this->filter->validate('foo1')->is('alnum')->asSoftRule();
+        $this->filter->validate('foo1')->is('strlenMin', 6)->asStopRule();
+        $this->filter->validate('foo2')->is('alnum');
+        $this->filter->validate('foo2')->is('strlenMin', 6);
 
-        $object = (object) array('field1' => '!@#', 'field2' => 'abcdef');
+        $object = (object) array('foo1' => '!@#', 'foo2' => 'abcdef');
         $result = $this->filter->apply($object);
         $this->assertFalse($result);
 
         $expect = array(
-            'field1' => array(
-                'field1 should have validated as alnum',
-                'field1 should have validated as strlenMin(6)',
+            'foo1' => array(
+                'foo1 should have validated as alnum',
+                'foo1 should have validated as strlenMin(6)',
             ),
         );
         $actual = $this->filter->getMessages();
@@ -101,28 +101,28 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     public function testUseFieldMessage()
     {
-        $this->filter->validate('field')->isNot('blank')->asSoftRule();
-        $this->filter->validate('field')->is('alnum')->asSoftRule();
-        $this->filter->validate('field')->is('strlenMin', 6)->asSoftRule();
+        $this->filter->validate('foo')->isNot('blank')->asSoftRule();
+        $this->filter->validate('foo')->is('alnum')->asSoftRule();
+        $this->filter->validate('foo')->is('strlenMin', 6)->asSoftRule();
 
-        $object = (object) array('field' => '');
+        $object = (object) array('foo' => '');
         $result = $this->filter->apply($object);
         $this->assertFalse($result);
         $expect = array(
-            'field' => array(
-                'field should not have validated as blank',
-                'field should have validated as alnum',
-                'field should have validated as strlenMin(6)',
+            'foo' => array(
+                'foo should not have validated as blank',
+                'foo should have validated as alnum',
+                'foo should have validated as strlenMin(6)',
             ),
         );
         $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
 
-        $this->filter->useFieldMessage('field', 'Please use 6-12 alphanumeric characters.');
+        $this->filter->useFieldMessage('foo', 'Please use 6-12 alphanumeric characters.');
         $result = $this->filter->apply($object);
         $this->assertFalse($result);
         $expect = array(
-            'field' => array(
+            'foo' => array(
                 'Please use 6-12 alphanumeric characters.',
             ),
         );
@@ -132,18 +132,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     public function test__invoke()
     {
-        $this->filter->validate('field')->is('alnum')->asSoftRule();
-        $this->filter->validate('field')->is('strlenMin', 6)->asHardRule();
+        $this->filter->validate('foo')->is('alnum')->asSoftRule();
+        $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
         // check for success
-        $object = (object) array('field' => 'foobar');
+        $object = (object) array('foo' => 'foobar');
         $result = $this->filter->__invoke($object);
-        $this->assertTrue($result);
+        $this->assertNull($result);
 
         // check for failure
         try {
 
-            $object = (object) array('field' => '');
+            $object = (object) array('foo' => '');
             $this->filter->__invoke($object);
             $this->fail('Should have thrown an exception');
 
@@ -152,9 +152,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($object, $e->getFilterSubject());
             $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
             $expect = array(
-                'field' => array(
-                    'field should have validated as alnum',
-                    'field should have validated as strlenMin(6)',
+                'foo' => array(
+                    'foo should have validated as alnum',
+                    'foo should have validated as strlenMin(6)',
                 ),
             );
             $this->assertSame($expect, $e->getFilterMessages());
@@ -163,19 +163,19 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     public function testApply_onArray()
     {
-        $this->filter->sanitize('field')->to('strlenMax', 3);
-        $array = array('field' => '123456');
+        $this->filter->sanitize('foo')->to('strlenMax', 3);
+        $array = array('foo' => '123456');
         $result = $this->filter->apply($array);
         $this->assertTrue($result);
-        $this->assertSame('123', $array['field']);
+        $this->assertSame('123', $array['foo']);
     }
 
     public function test__invoke_onArray()
     {
-        $this->filter->sanitize('field')->to('strlenMax', 3);
-        $array = array('field' => '123456');
+        $this->filter->sanitize('foo')->to('strlenMax', 3);
+        $array = array('foo' => '123456');
         $result = $this->filter->__invoke($array);
-        $this->assertTrue($result);
-        $this->assertSame('123', $array['field']);
+        $this->assertNull($result);
+        $this->assertSame('123', $array['foo']);
     }
 }

@@ -11,9 +11,9 @@ class InTableColumnTest extends AbstractValidateTest
     {
         $this->pdo = new PDO('sqlite::memory:');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->pdo->query('CREATE TABLE test (val INT, foo VARCHAR(10))');
+        $this->pdo->query('CREATE TABLE test (val INT, bar VARCHAR(10))');
         for ($i = 1; $i <= 10; $i++) {
-            $this->pdo->query("INSERT INTO test (val, foo) VALUES ($i, 'foo{$i}')");
+            $this->pdo->query("INSERT INTO test (val, bar) VALUES ($i, 'bar{$i}')");
         }
     }
 
@@ -27,7 +27,7 @@ class InTableColumnTest extends AbstractValidateTest
     public function getObject($value)
     {
         $object = parent::getObject($value);
-        $object->foo = "foo$value";
+        $object->bar = "bar$value";
         return $object;
     }
 
@@ -74,13 +74,13 @@ class InTableColumnTest extends AbstractValidateTest
     {
         $object = $this->getObject(1);
         $rule = $this->newRule();
-        $this->assertTrue($rule->__invoke($object, 'field', 'test', 'val', 'foo = "foo1"'));
+        $this->assertTrue($rule->__invoke($object, 'foo', 'test', 'val', 'bar = "bar1"'));
     }
 
     public function testIs_whereBind()
     {
         $object = $this->getObject(1);
         $rule = $this->newRule();
-        $this->assertTrue($rule->__invoke($object, 'field', 'test', 'val', 'foo = :foo'));
+        $this->assertTrue($rule->__invoke($object, 'foo', 'test', 'val', 'bar = :bar'));
     }
 }
