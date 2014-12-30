@@ -25,6 +25,10 @@ class Value
      *
      * Force the field to another value.
      *
+     * @param mixed $subject
+     *
+     * @param string $field
+     *
      * @param mixed $other_value
      *
      * @return bool Always true.
@@ -32,7 +36,7 @@ class Value
      */
     public function __invoke($subject, $field, $other_value)
     {
-        $subject->field = $other_value;
+        $subject->$field = $other_value;
         return true;
     }
 }

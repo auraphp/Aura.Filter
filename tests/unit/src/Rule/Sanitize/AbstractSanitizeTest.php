@@ -22,13 +22,13 @@ abstract class AbstractSanitizeTest extends \PHPUnit_Framework_TestCase
 
     protected function getObject($value)
     {
-        return (object) array('field' => $value);
+        return (object) array('field1' => $value);
     }
 
     protected function invoke($value)
     {
         $object = $this->getObject($value);
-        $field = 'field';
+        $field = 'field1';
         $args = array_merge(
             array($object, $field),
             (array) $this->getArgs()
