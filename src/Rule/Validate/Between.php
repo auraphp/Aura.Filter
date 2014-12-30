@@ -34,13 +34,10 @@ class Between
      */
     public function __invoke($subject, $field, $min, $max)
     {
-
         $value = $subject->$field;
-
         if (! is_scalar($value)) {
             return false;
         }
-
         return ($value >= $min && $value <= $max);
     }
 }

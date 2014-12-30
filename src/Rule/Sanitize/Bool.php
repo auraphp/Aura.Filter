@@ -10,6 +10,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
+use Aura\Filter\Rule\AbstractBool;
+
 /**
  *
  * Rule for booleans.
@@ -19,26 +21,8 @@ namespace Aura\Filter\Rule\Sanitize;
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Bool
+class Bool extends AbstractBool
 {
-    /**
-     *
-     * Pseudo-true representations.
-     *
-     * @var array
-     *
-     */
-    protected $true = array('1', 'on', 'true', 't', 'yes', 'y');
-
-    /**
-     *
-     * Pseudo-false representations; `null` and empty-string are *not* included.
-     *
-     * @var array
-     *
-     */
-    protected $false = array('0', 'off', 'false', 'f', 'no', 'n');
-
     /**
      *
      * Forces the value to a boolean.
@@ -52,26 +36,17 @@ class Bool
     {
         $value = $subject->$field;
 
-        // PHP booleans
-        if ($value === true || $value === false) {
-            // nothing to fix
+        if ($this->isTrue($value)) {
+            $subject->$field = true;
             return true;
         }
 
-        // pseudo booleans
-        $lower = strtolower(trim($value));
-        if (in_array($lower, $this->true)) {
-            // matches a pseudo true
-            $subject->$field = true;
-        } elseif (in_array($lower, $this->false)) {
-            // matches a pseudo false
+        if ($this->isFalse($value)) {
             $subject->$field = false;
-        } else {
-            // cast to a boolean
-            $subject->$field = (bool) $value;
+            return true;
         }
 
-        // done!
+        $subject->$field = (bool) $value;
         return true;
     }
 }
