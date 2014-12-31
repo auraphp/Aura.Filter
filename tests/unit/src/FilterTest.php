@@ -178,4 +178,26 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result);
         $this->assertSame('123', $array['foo']);
     }
+
+    public function testStrict()
+    {
+        $this->filter->validate('foo')->is('strlenMax', 6);
+        $this->filter->strict();
+
+        $subject = (object) array(
+            'foo' => 'foobar',
+            'bar' => 'barbaz'
+        );
+
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'bar' => array(
+                'This field should not be present.',
+            ),
+        );
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
+    }
 }
