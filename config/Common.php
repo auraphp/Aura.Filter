@@ -95,6 +95,15 @@ class Common extends Config
         $di->params['Aura\Filter\Spec\ValidateSpec'] = array(
             'rule_locator' => $di->lazyNew('Aura\Filter\Rule\Locator\ValidateLocator'),
         );
+
+        /**
+         * Aura\Filter\ValueFilter
+         */
+        $di->params['Aura\Filter\ValueFilter'] = array(
+            'validate_locator' => $di->lazyNew('Aura\Filter\Rule\Locator\ValidateLocator'),
+            'sanitize_locator' => $di->lazyNew('Aura\Filter\Rule\Locator\SanitizeLocator'),
+        );
+
     }
 
     public function modify(Container $di)

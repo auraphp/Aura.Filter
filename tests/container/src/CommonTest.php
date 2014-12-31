@@ -21,8 +21,11 @@ class CommonTest extends AbstractContainerTest
     {
         return array(
             array('Aura\Filter\Filter'),
+            array('Aura\Filter\Rule\Locator\SanitizeLocator'),
+            array('Aura\Filter\Rule\Locator\ValidateLocator'),
             array('Aura\Filter\Spec\SanitizeSpec'),
             array('Aura\Filter\Spec\ValidateSpec'),
+            array('Aura\Filter\ValueFilter'),
         );
     }
 }

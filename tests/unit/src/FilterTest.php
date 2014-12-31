@@ -6,7 +6,6 @@ use Aura\Filter\Rule\Sanitize;
 use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
-use PDO;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +14,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filter_factory = new FilterFactory();
-        $this->filter = $filter_factory->newInstance();
+        $this->filter = $filter_factory->newFilter();
     }
 
     public function testApply_softRule()

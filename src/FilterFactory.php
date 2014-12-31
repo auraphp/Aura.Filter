@@ -54,9 +54,17 @@ class FilterFactory
      * @return Filter
      *
      */
-    public function newInstance()
+    public function newFilter()
     {
         return new Filter($this->newValidateSpec(), $this->newSanitizeSpec());
+    }
+
+    public function newValueFilter()
+    {
+        return new ValueFilter(
+            $this->getValidateLocator(),
+            $this->getSanitizeLocator()
+        );
     }
 
     protected function newValidateSpec()
