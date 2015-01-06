@@ -33,13 +33,19 @@ $filter->sanitize('field')->to('between', $min, $max);
 
 ## bool
 
-Sanitizes to a strict PHP boolean.
+Sanitizes to a strict PHP boolean value.
 Pseudo-true values include the strings '1', 'y', 'yes', and 'true';
 pseudo-false values include the strings '0', 'n', 'no', and 'false'.
+(You can sanitize to alternative true and false values in place of PHP `true`
+and `false`.)
 
 ```php
 <?php
+// sanitize to `true` and `false`
 $filter->sanitize('field')->to('bool');
+
+// sanitize to alternative true and false values
+$filter->sanitize('field')->to('bool', $value_if_true, $value_if_false);
 ?>
 ```
 
