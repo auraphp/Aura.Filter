@@ -43,13 +43,13 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
     {
         $this->spec->field('foo')->to('strlen', 3);
 
-        $object = (object) array('foo' => 'zimgir');
-        $this->assertTrue($this->spec->__invoke($object));
-        $this->assertSame($object->foo, 'zim');
+        $subject = (object) array('foo' => 'zimgir');
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame($subject->foo, 'zim');
 
-        $object->foo = array();
-        $this->assertFalse($this->spec->__invoke($object));
-        $this->assertSame($object->foo, array());
+        $subject->foo = array();
+        $this->assertFalse($this->spec->__invoke($subject));
+        $this->assertSame($subject->foo, array());
     }
 
     public function testGetMessage()
@@ -63,24 +63,24 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
     {
         $this->spec->field('foo')->toBlankOr('strlen', 3);
 
-        $object = (object) array();
-        $this->assertTrue($this->spec->__invoke($object));
+        $subject = (object) array();
+        $this->assertTrue($this->spec->__invoke($subject));
 
-        $object->foo = null;
-        $this->assertTrue($this->spec->__invoke($object));
+        $subject->foo = null;
+        $this->assertTrue($this->spec->__invoke($subject));
 
-        $object->foo = 'zimgir';
-        $this->assertTrue($this->spec->__invoke($object));
+        $subject->foo = 'zimgir';
+        $this->assertTrue($this->spec->__invoke($subject));
 
-        $object->foo = array();
-        $this->assertFalse($this->spec->__invoke($object));
+        $subject->foo = array();
+        $this->assertFalse($this->spec->__invoke($subject));
     }
 
     public function testToBlankOr_useBlankValue()
     {
         $this->spec->field('foo')->toBlankOr('strlen', 3)->useBlankValue('xxx');
-        $object = (object) array();
-        $this->assertTrue($this->spec->__invoke($object));
-        $this->assertSame('xxx', $object->foo);
+        $subject = (object) array();
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame('xxx', $subject->foo);
     }
 }

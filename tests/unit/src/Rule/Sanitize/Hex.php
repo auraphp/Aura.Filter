@@ -3,9 +3,9 @@ namespace Aura\Filter\Rule\Sanitize;
 
 class Hex
 {
-    public function __invoke($object, $field, $max = null)
+    public function __invoke($subject, $field, $max = null)
     {
-        $value = $object->$field;
+        $value = $subject->$field;
 
         // must be scalar
         if (! is_scalar($value)) {
@@ -24,7 +24,7 @@ class Hex
         }
 
         // retain the sanitized value, and done!
-        $object->$field = $value;
+        $subject->$field = $value;
         return true;
     }
 }

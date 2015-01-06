@@ -7,11 +7,11 @@ class EqualToFieldTest extends AbstractValidateTest
 
     protected $other_value = '1';
 
-    protected function getObject($value)
+    protected function getSubject($value)
     {
-        $object = parent::getObject($value);
-        $object->{$this->other_field} = $this->other_value;
-        return $object;
+        $subject = parent::getSubject($value);
+        $subject->{$this->other_field} = $this->other_value;
+        return $subject;
     }
 
     protected function getArgs()
@@ -41,8 +41,8 @@ class EqualToFieldTest extends AbstractValidateTest
 
     public function testIs_fieldNotSet()
     {
-        $object = (object) array('foo' => '1');
+        $subject = (object) array('foo' => '1');
         $rule = new EqualToField();
-        $this->assertFalse($rule->__invoke($object, 'foo', 'no_such_field'));
+        $this->assertFalse($rule->__invoke($subject, 'foo', 'no_such_field'));
     }
 }

@@ -67,7 +67,7 @@ class UploadTest extends AbstractValidateTest
         $class = $this->getClass();
         $rule = new $class();
         $rule->is_uploaded_file = false;
-        $object = (object) array('foo' => $this->good_upload);
-        $this->assertFalse($rule->__invoke($object, 'foo'));
+        $subject = (object) array('foo' => $this->good_upload);
+        $this->assertFalse($rule->__invoke($subject, 'foo'));
     }
 }

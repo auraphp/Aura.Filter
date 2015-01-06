@@ -23,15 +23,15 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo')->is('alnum')->asSoftRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $object = (object) array('foo' => 'foobar');
-        $result = $this->filter->apply($object);
+        $subject = (object) array('foo' => 'foobar');
+        $result = $this->filter->apply($subject);
         $this->assertTrue($result);
         $expect = array();
         $actual = $this->filter->getMessages();
         $this->assertSame($expect, $actual);
 
-        $object = (object) array('foo' => '!@#');
-        $result = $this->filter->apply($object);
+        $subject = (object) array('foo' => '!@#');
+        $result = $this->filter->apply($subject);
         $this->assertFalse($result);
         $expect = array(
             'foo' => array(
@@ -46,8 +46,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testApply_notAnObject()
     {
         $this->setExpectedException('InvalidArgumentException');
-        $object = 'string';
-        $this->filter->apply($object);
+        $subject = 'string';
+        $this->filter->apply($subject);
     }
 
     public function testApply_hardRule()
@@ -55,8 +55,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo')->is('alnum')->asHardRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $object = (object) array('foo' => '!@#');
-        $result = $this->filter->apply($object);
+        $subject = (object) array('foo' => '!@#');
+        $result = $this->filter->apply($subject);
         $this->assertFalse($result);
 
         $expect = array(
@@ -85,8 +85,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo2')->is('alnum');
         $this->filter->validate('foo2')->is('strlenMin', 6);
 
-        $object = (object) array('foo1' => '!@#', 'foo2' => 'abcdef');
-        $result = $this->filter->apply($object);
+        $subject = (object) array('foo1' => '!@#', 'foo2' => 'abcdef');
+        $result = $this->filter->apply($subject);
         $this->assertFalse($result);
 
         $expect = array(
@@ -105,8 +105,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo')->is('alnum')->asSoftRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asSoftRule();
 
-        $object = (object) array('foo' => '');
-        $result = $this->filter->apply($object);
+        $subject = (object) array('foo' => '');
+        $result = $this->filter->apply($subject);
         $this->assertFalse($result);
         $expect = array(
             'foo' => array(
@@ -119,7 +119,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
 
         $this->filter->useFieldMessage('foo', 'Please use 6-12 alphanumeric characters.');
-        $result = $this->filter->apply($object);
+        $result = $this->filter->apply($subject);
         $this->assertFalse($result);
         $expect = array(
             'foo' => array(
@@ -136,20 +136,20 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
         // check for success
-        $object = (object) array('foo' => 'foobar');
-        $result = $this->filter->__invoke($object);
+        $subject = (object) array('foo' => 'foobar');
+        $result = $this->filter->__invoke($subject);
         $this->assertNull($result);
 
         // check for failure
         try {
 
-            $object = (object) array('foo' => '');
-            $this->filter->__invoke($object);
+            $subject = (object) array('foo' => '');
+            $this->filter->__invoke($subject);
             $this->fail('Should have thrown an exception');
 
         } catch (Exception\FilterFailed $e) {
 
-            $this->assertSame($object, $e->getFilterSubject());
+            $this->assertSame($subject, $e->getFilterSubject());
             $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
             $expect = array(
                 'foo' => array(

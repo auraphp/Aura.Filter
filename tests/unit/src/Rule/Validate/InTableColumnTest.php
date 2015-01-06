@@ -24,11 +24,11 @@ class InTableColumnTest extends AbstractValidateTest
         return $rule;
     }
 
-    public function getObject($value)
+    public function getSubject($value)
     {
-        $object = parent::getObject($value);
-        $object->bar = "bar$value";
-        return $object;
+        $subject = parent::getSubject($value);
+        $subject->bar = "bar$value";
+        return $subject;
     }
 
     public function getArgs()
@@ -72,15 +72,15 @@ class InTableColumnTest extends AbstractValidateTest
 
     public function testIs_where()
     {
-        $object = $this->getObject(1);
+        $subject = $this->getSubject(1);
         $rule = $this->newRule();
-        $this->assertTrue($rule->__invoke($object, 'foo', 'test', 'val', 'bar = "bar1"'));
+        $this->assertTrue($rule->__invoke($subject, 'foo', 'test', 'val', 'bar = "bar1"'));
     }
 
     public function testIs_whereBind()
     {
-        $object = $this->getObject(1);
+        $subject = $this->getSubject(1);
         $rule = $this->newRule();
-        $this->assertTrue($rule->__invoke($object, 'foo', 'test', 'val', 'bar = :bar'));
+        $this->assertTrue($rule->__invoke($subject, 'foo', 'test', 'val', 'bar = :bar'));
     }
 }

@@ -5,9 +5,9 @@ class ClosureTest extends AbstractSanitizeTest
 {
     protected function getArgs()
     {
-        return array(function ($object, $field) {
-            $value = $object->$field;
-            $object->$field = (bool) $value;
+        return array(function ($subject, $field) {
+            $value = $subject->$field;
+            $subject->$field = (bool) $value;
             return true;
         });
     }

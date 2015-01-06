@@ -20,17 +20,17 @@ abstract class AbstractValidateTest extends \PHPUnit_Framework_TestCase
         return array();
     }
 
-    protected function getObject($value)
+    protected function getSubject($value)
     {
         return (object) array('foo' => $value);
     }
 
     protected function invoke($value)
     {
-        $object = $this->getObject($value);
+        $subject = $this->getSubject($value);
         $field = 'foo';
         $args = array_merge(
-            array($object, $field),
+            array($subject, $field),
             (array) $this->getArgs()
         );
         $rule = $this->newRule();

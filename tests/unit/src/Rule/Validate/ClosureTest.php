@@ -5,8 +5,8 @@ class ClosureTest extends AbstractValidateTest
 {
     protected function getArgs()
     {
-        return array(function ($object, $field) {
-            return is_bool($object->$field);
+        return array(function ($subject, $field) {
+            return is_bool($subject->$field);
         });
     }
 
