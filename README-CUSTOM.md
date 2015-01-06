@@ -122,7 +122,7 @@ Finally, we can use the rule in our filter:
 
 ```php
 <?php
-$filter = $filter_locator->newInstance();
+$filter = $filter_factory->newFilter();
 
 // the 'color' field must be a hex value of no more than 6 digits
 $filter->validate('color')->is('hex', 6);

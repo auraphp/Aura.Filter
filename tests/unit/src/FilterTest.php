@@ -6,7 +6,6 @@ use Aura\Filter\Rule\Sanitize;
 use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
-use PDO;
 
 class FilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +14,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $filter_factory = new FilterFactory();
-        $this->filter = $filter_factory->newInstance();
+        $this->filter = $filter_factory->newFilter();
     }
 
     public function testApply_softRule()
@@ -178,5 +177,27 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $result = $this->filter->__invoke($array);
         $this->assertNull($result);
         $this->assertSame('123', $array['foo']);
+    }
+
+    public function testStrict()
+    {
+        $this->filter->validate('foo')->is('strlenMax', 6);
+        $this->filter->strict();
+
+        $subject = (object) array(
+            'foo' => 'foobar',
+            'bar' => 'barbaz'
+        );
+
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'bar' => array(
+                'This field should not be present.',
+            ),
+        );
+        $actual = $this->filter->getMessages();
+        $this->assertSame($expect, $actual);
     }
 }

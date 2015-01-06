@@ -35,6 +35,10 @@ class Filter
 
     protected $sanitize_spec;
 
+    protected $strict;
+
+    protected $strict_message = 'This field should not be present.';
+
     public function __construct(
         ValidateSpec $validate_spec,
         SanitizeSpec $sanitize_spec
@@ -110,6 +114,13 @@ class Filter
         return $this->applyToSubject($subject);
     }
 
+    // the subject should not have any fields that are not addressed
+    // by at least one rule
+    public function strict($strict = true)
+    {
+        $this->strict = $strict;
+    }
+
     protected function applyToArray(&$array)
     {
         $subject = (object) $array;
@@ -122,6 +133,16 @@ class Filter
     {
         $this->skip = array();
         $this->messages = array();
+        $this->applySpecs($subject);
+        $this->applyStrict($subject);
+        if ($this->messages) {
+            return false;
+        }
+        return true;
+    }
+
+    protected function applySpecs($subject)
+    {
         foreach ($this->specs as $spec) {
             if ($this->skippedOrPassed($spec, $subject)) {
                 continue;
@@ -130,10 +151,6 @@ class Filter
                 break;
             }
         }
-        if ($this->messages) {
-            return false;
-        }
-        return true;
     }
 
     protected function skippedOrPassed($spec, $subject)
@@ -158,6 +175,22 @@ class Filter
         }
 
         return $failure_mode;
+    }
+
+    protected function applyStrict($subject)
+    {
+        if (! $this->strict) {
+            return;
+        }
+
+        $fields = get_object_vars($subject);
+        foreach ($this->specs as $spec) {
+            unset($fields[$spec->getField()]);
+        }
+
+        foreach ($fields as $field => $value) {
+            $this->messages[$field][] = $this->strict_message;
+        }
     }
 
     public function getMessages($field = null)

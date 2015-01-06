@@ -85,7 +85,7 @@ class:
 use Aura\Filter\FilterFactory;
 
 $filter_factory = new FilterFactory();
-$filter = $filter_factory->newInstance();
+$filter = $filter_factory->newFilter();
 ?>
 ```
 
