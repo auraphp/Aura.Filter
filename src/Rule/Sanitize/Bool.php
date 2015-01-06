@@ -25,28 +25,26 @@ class Bool extends AbstractBool
 {
     /**
      *
-     * Forces the value to a boolean.
-     *
-     * Note that this recognizes $this->true and $this->false values.
+     * Forces the value to a boolean, or an alternative boolean value.
      *
      * @return bool Always true.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke($subject, $field, $true = true, $false = false)
     {
         $value = $subject->$field;
 
         if ($this->isTrue($value)) {
-            $subject->$field = true;
+            $subject->$field = $true;
             return true;
         }
 
         if ($this->isFalse($value)) {
-            $subject->$field = false;
+            $subject->$field = $false;
             return true;
         }
 
-        $subject->$field = (bool) $value;
+        $subject->$field = $value ? $true : $false;
         return true;
     }
 }
