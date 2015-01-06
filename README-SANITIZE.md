@@ -152,6 +152,16 @@ $filter->sanitize('field')->to('now', $format);
 ?>
 ```
 
+## remove
+
+Removes the field from the subject with `unset()`.
+
+```php
+<?php
+$filter->sanitize('field')->to('remove');
+?>
+```
+
 ## regex
 
 Sanitizes the value using `preg_replace()`.
