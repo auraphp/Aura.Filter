@@ -166,6 +166,7 @@ class FilterFactory
             'max'                   => function () { return new Sanitize\Max(); },
             'min'                   => function () { return new Sanitize\Min(); },
             'regex'                 => function () { return new Sanitize\Regex(); },
+            'remove'                => function () { return new Sanitize\Remove(); },
             'strictEqualToField'    => function () { return new Sanitize\StrictEqualToField(); },
             'strictEqualToValue'    => function () { return new Sanitize\StrictEqualToValue(); },
             'string'                => function () { return new Sanitize\String(); },

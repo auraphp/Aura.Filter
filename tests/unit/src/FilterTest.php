@@ -164,10 +164,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testApply_onArray()
     {
         $this->filter->sanitize('foo')->to('strlenMax', 3);
-        $array = array('foo' => '123456');
+        $this->filter->sanitize('bar')->to('remove');
+        $array = array('foo' => '123456', 'bar' => 'remove-me');
         $result = $this->filter->apply($array);
         $this->assertTrue($result);
-        $this->assertSame('123', $array['foo']);
+        $expect = array('foo' => '123');
+        $this->assertSame($expect, $array);
     }
 
     public function test__invoke_onArray()

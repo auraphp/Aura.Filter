@@ -34,6 +34,7 @@ class Common extends Config
             'min'                   =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Min'),
             'now'                   =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Now'),
             'regex'                 =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Regex'),
+            'remove'                =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Remove'),
             'string'                =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\String'),
             'strlen'                =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Strlen'),
             'strlenBetween'         =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\StrlenBetween'),
