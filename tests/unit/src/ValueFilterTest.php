@@ -23,4 +23,19 @@ class ValueFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($actual);
         $this->assertSame('foo', $value);
     }
+
+    public function testAssert()
+    {
+        $this->assertNull($this->filter->assert(true, 'message'));
+
+        $this->setExpectedException('Aura\Filter\Exception\ValueFailed', 'message', 96);
+        $this->filter->assert(false, 'message', 96);
+    }
+
+    public function testSetExceptionClass()
+    {
+        $this->filter->setExceptionClass('DomainException');
+        $this->setExpectedException('DomainException', 'message', 96);
+        $this->filter->assert(false, 'message', 96);
+    }
 }

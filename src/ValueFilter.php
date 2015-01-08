@@ -3,10 +3,13 @@ namespace Aura\Filter;
 
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Exception;
 
 class ValueFilter
 {
-    public $value;
+    protected $subject;
+
+    protected $exception_class = Exception\ValueFailed::CLASS;
 
     public function __construct(
         ValidateLocator $validate_locator,
@@ -14,28 +17,42 @@ class ValueFilter
     ) {
         $this->validate_locator = $validate_locator;
         $this->sanitize_locator = $sanitize_locator;
+        $this->subject = (object) array('value' => null);
+    }
+
+    public function setExceptionClass($exception_class)
+    {
+        $this->exception_class = $exception_class;
     }
 
     public function validate($value, $rule)
     {
-        $this->value = $value;
+        $this->subject->value = $value;
         $rule = $this->validate_locator->get($rule);
         return $this->apply($rule, func_get_args());
     }
 
     public function sanitize(&$value, $rule)
     {
-        $this->value =& $value;
+        $this->subject->value =& $value;
         $rule = $this->sanitize_locator->get($rule);
         return $this->apply($rule, func_get_args());
+    }
+
+    public function assert($result, $message, $code = null)
+    {
+        if (! $result) {
+            $exception = $this->exception_class;
+            throw new $exception($message, $code);
+        }
     }
 
     protected function apply($rule, $args)
     {
         array_shift($args); // remove $value
         array_shift($args); // remove $rule
-        array_unshift($args, 'value'); // add field name on $this
-        array_unshift($args, $this); // add $this as subject
+        array_unshift($args, 'value'); // add field name on $this->subject
+        array_unshift($args, $this->subject); // add $this->subject
         return call_user_func_array($rule, $args);
     }
 }
