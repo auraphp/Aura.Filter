@@ -128,6 +128,7 @@ class FilterFactory
             'trim'                  => function () { return new Validate\Trim(); },
             'upload'                => function () { return new Validate\Upload(); },
             'url'                   => function () { return new Validate\Url(); },
+            'uuid'                  => function () { return new Validate\Uuid(); },
             'word'                  => function () { return new Validate\Word(); },
         );
 
@@ -175,6 +176,7 @@ class FilterFactory
             'strlenMax'             => function () { return new Sanitize\StrlenMax(); },
             'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
             'trim'                  => function () { return new Sanitize\Trim(); },
+            'uuid'                  => function () { return new Sanitize\Uuid(); },
             'value'                 => function () { return new Sanitize\Value(); },
             'word'                  => function () { return new Sanitize\Word(); },
         );
