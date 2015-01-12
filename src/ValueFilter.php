@@ -3,13 +3,12 @@ namespace Aura\Filter;
 
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
-use Aura\Filter\Exception;
 
 class ValueFilter
 {
     protected $subject;
 
-    protected $exception_class = Exception\ValueFailed::CLASS;
+    protected $exception_class = 'Aura\Filter\Exception\ValueFailed';
 
     public function __construct(
         ValidateLocator $validate_locator,

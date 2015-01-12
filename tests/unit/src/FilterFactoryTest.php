@@ -12,7 +12,7 @@ class FilterFactoryTest extends \PHPUnit_Framework_TestCase
         $filter_factory = new FilterFactory($pdo);
         $validate_locator = $filter_factory->getValidateLocator();
         $this->assertInstanceOf(
-            InTableColumn::CLASS,
+            'Aura\Filter\Rule\Validate\InTableColumn',
             $validate_locator->get('inTableColumn')
         );
     }
