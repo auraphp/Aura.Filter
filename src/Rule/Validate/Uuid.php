@@ -24,15 +24,17 @@ class Uuid
     /**
      *
      * Validates that the value is a uuid.
+     * 
+     * Remove hyphens before validating
      *
      * @return bool True if valid, false if not.
      *
      */
     public function __invoke($subject, $field)
     {
-        $pattern = 
-            '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/';
-        if (preg_match($pattern, $subject->$field)) {
+        $pattern = '/^[0-9a-f]{32}/';
+        $value = preg_replace('/[-]/', '', $subject->$field);
+        if (preg_match($pattern, $value)) {
             return true;
         }
         return false;

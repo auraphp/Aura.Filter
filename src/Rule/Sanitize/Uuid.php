@@ -30,9 +30,8 @@ class Uuid
      */
     public function __invoke($subject, $field)
     {
-        $pattern = 
-            '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/';
-        $value = preg_replace('/[^a-z0-9-]/i', '', $subject->$field);
+        $pattern = '/^[0-9a-f]{32}/';
+        $value = preg_replace('/[^a-f0-9]/', '', $subject->$field);
         if (preg_match($pattern, $value) == 1) {
             $subject->$field = $value;
             return true;
