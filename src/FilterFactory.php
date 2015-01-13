@@ -129,6 +129,7 @@ class FilterFactory
             'upload'                => function () { return new Validate\Upload(); },
             'url'                   => function () { return new Validate\Url(); },
             'uuid'                  => function () { return new Validate\Uuid(); },
+            'uuidHexonly'           => function () { return new Validate\UuidHexonly(); },
             'word'                  => function () { return new Validate\Word(); },
         );
 
@@ -177,6 +178,7 @@ class FilterFactory
             'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
             'trim'                  => function () { return new Sanitize\Trim(); },
             'uuid'                  => function () { return new Sanitize\Uuid(); },
+            'uuidHexonly'           => function () { return new Sanitize\UuidHexonly(); },
             'value'                 => function () { return new Sanitize\Value(); },
             'word'                  => function () { return new Sanitize\Word(); },
         );
