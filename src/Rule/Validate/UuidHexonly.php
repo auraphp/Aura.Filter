@@ -14,25 +14,24 @@ use Aura\Filter\Rule\AbstractUuid;
 
 /**
  *
- * Validates that the value is a canonical human-readable Universally Unique
- * Identifier (UUID).
+ * Validates the value is a hex-only Universally Unique Identifier (UUID).
  *
  * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Uuid extends AbstractUuid
+class UuidHexonly extends AbstractUuid
 {
     /**
      *
-     * Validates that the value is a canonical human-readable UUID.
+     * Validates that the value is a hex-only UUID.
      *
      * @return bool True if valid, false if not.
      *
      */
     public function __invoke($subject, $field)
     {
-        return $this->isCanonical($subject->$field);
+        return $this->isHexOnly($subject->$field);
     }
 }

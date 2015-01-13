@@ -1,23 +1,21 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-class UuidTest extends AbstractValidateTest
+class UuidHexonlyTest extends AbstractValidateTest
 {
     public function providerIs()
     {
-        return array(
-            array('12345678-90ab-cdef-1234-567890123456'),
-            array('12345678-90Ab-cdef-1234-5678901abc56'),
-            array('12345678-90ab-cdef-1234-567890123456'),
-            array('11111111-1111-1111-1111-111111111111'),
-            array('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa'),
-        );
+        // random 32-char hex strings
+        $data = array();
+        for ($i = 1; $i <= 10; $i ++) {
+            $data[] = array(md5(mt_rand()));
+        }
+        return $data;
     }
 
     public function providerIsNot()
     {
         return array(
-            array('1000067890abcdef1234562340123456'),
             array('12345678-90ab-cdef-1234-5678901234567'),
             array('123-34324'),
             array('97844444-asdf-fgfd-vf45-383621139112'),

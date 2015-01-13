@@ -1,36 +1,26 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class UuidTest extends AbstractSanitizeTest
+class UuidHexonlyTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {
         return array(
             // sanitize passes
             array(
-                '12345678-90ab-cDef-1234-567890123456',
-                true,
-                '12345678-90ab-cDef-1234-567890123456'
-            ),
-            array(
-                '1234567890abcDef1234567890123456',
-                true,
-                '12345678-90ab-cDef-1234-567890123456'
-            ),
-            array(
                 '12345678-90ab-cDef-1234-5678&&90123456',
                 true,
-                '12345678-90ab-cDef-1234-567890123456'
+                '1234567890abcDef1234567890123456'
             ),
             array(
                 '1234567890abcDef12345678&&90123456',
                 true,
-                '12345678-90ab-cDef-1234-567890123456'
+                '1234567890abcDef1234567890123456'
             ),
             array(
                 '1234#@5678-90ab-cdef-1234-5678&&90123456',
                 true,
-                '12345678-90ab-cdef-1234-567890123456'
+                '1234567890abcdef1234567890123456'
             ),
 
 

@@ -41,6 +41,8 @@ class Common extends Config
             'strlenMax'             =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\StrlenMax'),
             'strlenMin'             =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\StrlenMin'),
             'trim'                  =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Trim'),
+            'uuid'                  =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Uuid'),
+            'uuidHexonly'           =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\UuidHexonly'),
             'value'                 =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Value'),
             'word'                  =>  $di->lazyNew('Aura\Filter\Rule\Sanitize\Word'),
         );
@@ -80,6 +82,8 @@ class Common extends Config
             'trim'                  =>  $di->lazyNew('Aura\Filter\Rule\Validate\Trim'),
             'upload'                =>  $di->lazyNew('Aura\Filter\Rule\Validate\Upload'),
             'url'                   =>  $di->lazyNew('Aura\Filter\Rule\Validate\Url'),
+            'uuid'                  =>  $di->lazyNew('Aura\Filter\Rule\Validate\Uuid'),
+            'uuidHexonly'           =>  $di->lazyNew('Aura\Filter\Rule\Validate\UuidHexonly'),
             'word'                  =>  $di->lazyNew('Aura\Filter\Rule\Validate\Word'),
         );
 
