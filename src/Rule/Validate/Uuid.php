@@ -32,7 +32,7 @@ class Uuid
      */
     public function __invoke($subject, $field)
     {
-        $pattern = '/^[0-9a-f]{32}/';
+        $pattern = '/^[0-9a-f]{32}$/i';
         $value = preg_replace('/[-]/', '', $subject->$field);
         if (preg_match($pattern, $value)) {
             return true;

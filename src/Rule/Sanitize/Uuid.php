@@ -23,15 +23,18 @@ class Uuid
 {
     /**
      *
-     * Removes all non hexadecimal values to test if it is a valid Uuid.
+     * Removes all non hexadecimal values or hyphens to test if it is a valid Uuid.
      *
      * @return bool True if the value was sanitized, false if not.
      *
      */
     public function __invoke($subject, $field)
     {
-        $pattern = '/^[0-9a-f]{32}/';
-        $value = preg_replace('/[^a-f0-9]/', '', $subject->$field);
+        //either sanitize to pattern with 32 hexadecimals without hyphens or to
+        //groups of 8, 4, 4, 4 and 12 hexadecimals with hyphens in between
+        $pattern = '/(^[0-9A-Fa-f]{32}$|^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$)/';
+        
+        $value = preg_replace('/[^a-f0-9-]/i', '', $subject->$field);
         if (preg_match($pattern, $value) == 1) {
             $subject->$field = $value;
             return true;
