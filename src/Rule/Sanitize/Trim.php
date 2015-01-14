@@ -33,10 +33,10 @@ class Trim
     public function __invoke($subject, $field, $chars = " \t\n\r\0\x0B")
     {
         $value = $subject->$field;
-        if (! is_scalar($value)) {
-            return false;
+        if (is_scalar($value) || $value === null) {
+            $subject->$field = trim($value, $chars);
+            return true;
         }
-        $subject->$field = trim($value, $chars);
-        return true;
+        return false;
     }
 }
