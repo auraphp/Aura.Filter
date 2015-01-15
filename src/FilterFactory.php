@@ -67,12 +67,12 @@ class FilterFactory
         );
     }
 
-    protected function newValidateSpec()
+    public function newValidateSpec()
     {
         return new ValidateSpec($this->getValidateLocator());
     }
 
-    protected function newSanitizeSpec()
+    public function newSanitizeSpec()
     {
         return new SanitizeSpec($this->getSanitizeLocator());
     }
