@@ -42,6 +42,22 @@ class Translator implements TranslatorInterface
 
     /**
      *
+     * Sets a custom message.
+     *
+     * @param string $key The message key
+     *
+     * @param string $value The message value.
+     *
+     * @return void
+     *
+     */
+    public function set($key, $value)
+    {
+        $this->messages[$key] = $value;
+    }
+
+    /**
+     *
      * Translate the key with the token values replaced.
      *
      * @param string $key The message key.
