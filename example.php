@@ -1,25 +1,30 @@
 <?php
-$filter = require_once dirname(__DIR__). '/scripts/instance.php';
+
+require __DIR__ . '/vendor/autoload.php';
+
+use Aura\Filter\FilterFactory;
+
+$filter_factory = new FilterFactory();
+$filter = $filter_factory->newFilter();
 
 // set up the filter chain.
-// $filter->addHardRule($field, $method, $name, $param1, $param2, $paramN);
 
-$filter->addHardRule('username', $filter::IS, 'alnum');
-$filter->addHardRule('username', $filter::IS, 'strlenBetween', 6, 12);
-$filter->addHardRule('username', $filter::FIX, 'alnum');
+$filter->validate('username')->is('alnum');
+$filter->validate('username')->is('strlenBetween', 6, 12);
+$filter->sanitize('username')->to('alnum');
 
-$filter->addHardRule('birthday', $filter::IS, 'dateTime');
-$filter->addHardRule('birthday', $filter::FIX, 'dateTime', 'Y-m-d');
-$filter->addHardRule('birthday', $filter::IS, 'min', '1970-08-08'); // at least 42 on Aug 8
+$filter->validate('birthday')->is('dateTime');
+$filter->sanitize('birthday')->to('dateTime', 'Y-m-d');
+$filter->validate('birthday')->is('min', '1970-08-08'); // at least 42 on Aug 8
 
-$filter->addHardRule('nickname', $filter::IS_BLANK_OR, 'string');
-$filter->addHardRule('nickname', $filter::FIX_BLANK_OR, 'string');
+$filter->validate('nickname')->isBlankOr('string');
+$filter->validate('nickname')->isBlankOr('string');
 
-$filter->addHardRule('accept_terms', $filter::IS, 'bool', true);
-$filter->addHardRule('accept_terms', $filter::FIX, 'bool');
+$filter->validate('accept_terms')->is('bool', true);
+$filter->sanitize('accept_terms')->to('bool');
 
-$filter->addHardRule('password_plaintext', $filter::IS, 'strlenMin', 6);
-$filter->addHardRule('password_confirmed', $filter::IS, 'equalToField', 'password_plaintext');
+$filter->validate('password_plaintext')->is('strlenMin', 6);
+$filter->validate('password_confirmed')->is('equalToField', 'password_plaintext');
 
 $data = (object) [
     'username' => 'username',
@@ -32,7 +37,7 @@ $data = (object) [
 ];
 
 // execute the chain on a data object or array
-$success = $filter->values($data);
+$success = $filter->apply($data);
 if (! $success) {
     // an array of failure messages, with info about the failures
     $failure = $filter->getMessages();
