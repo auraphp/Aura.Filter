@@ -46,6 +46,7 @@ class BoolTest extends AbstractValidateTest
         return array(
             array('nothing'),
             array(123),
+            array(array(1)),
         );
     }
 }

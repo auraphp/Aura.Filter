@@ -24,6 +24,7 @@ class BoolTest extends AbstractSanitizeTest
             array(1,             true, true),
             array('1',           true, true),
             array('not empty',   true, true),
+            array(array(1),      true, true),
             // sanitize to false
             array(false,         true, false),
             array('off',         true, false),

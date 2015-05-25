@@ -41,13 +41,27 @@ abstract class AbstractBool
 
     protected function isTrue($value)
     {
+        if (! $this->validateValue($value)) {
+            return false;
+        }
         return $value === true
             || in_array(strtolower(trim($value)), $this->true);
     }
 
     protected function isFalse($value)
     {
+        if (! $this->validateValue($value)) {
+            return false;
+        }
         return $value === false
             || in_array(strtolower(trim($value)), $this->false);
+    }
+
+    protected function validateValue($value)
+    {
+        if (is_string($value) || is_int($value) || is_bool($value)) {
+            return true;
+        }
+        return false;
     }
 }
