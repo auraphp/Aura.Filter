@@ -1,1 +1,2 @@
-Hygiene release: docblock and Composer updates.
+- Add Translator::set() method, to set custom messages.
+- Docblock and metadata corrections.
