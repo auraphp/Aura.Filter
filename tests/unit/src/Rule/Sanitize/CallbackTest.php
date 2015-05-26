@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class ClosureTest extends AbstractSanitizeTest
+class CallbackTest extends AbstractSanitizeTest
 {
     protected function getArgs()
     {

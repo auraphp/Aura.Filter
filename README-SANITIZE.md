@@ -49,11 +49,11 @@ $filter->sanitize('field')->to('bool', $value_if_true, $value_if_false);
 ?>
 ```
 
-## closure
+## callback
 
-Sanitizes the value using a closure. The closure should take two arguments,
-`$subject` and `$field` to indicate the subject and the field within that
-subject. It should return `true` to pass, or `false` to fail.
+Sanitizes the value using a callable/callback. The callback should take
+two arguments, `$subject` and `$field`, to indicate the subject and the field
+within that subject. It should return `true` to pass, or `false` to fail.
 
 ```php
 <?php
@@ -66,7 +66,7 @@ $filter->sanitize('field')->is('closure', function ($subject, $field) {
 ```
 
 > N.b.: Always use object notation (`$subject->$field`) and not array notation
-(`$subject[$field]`) in the closure, as the _Filter_ converts arrays to objects
+(`$subject[$field]`) in the callable, as the _Filter_ converts arrays to objects
 on the fly.
 
 ## dateTime

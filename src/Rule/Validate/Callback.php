@@ -10,30 +10,28 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Closure as PhpClosure;
-
 /**
  *
- * Rule to apply a closure to the data.
+ * Rule to apply a callable/callback to the data.
  *
  * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-class Closure
+class Callback
 {
     /**
      *
-     * Validates the value against a closure.
+     * Validates the value against a callable/callback.
      *
-     * @param \Closure $closure A PHP closure.
+     * @param callable $callable A PHP callable/callback.
      *
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, PhpClosure $closure)
+    public function __invoke($subject, $field, callable $callable)
     {
-        return $closure($subject, $field);
+        return $callable($subject, $field);
     }
 }

@@ -53,11 +53,11 @@ $filter->validate('field')->is('bool');
 ?>
 ```
 
-## closure
+## callback
 
-Validates the value using a closure. The closure should take two arguments,
-`$subject` and `$field` to indicate the subject and the field within that
-subject. It should return `true` to pass, or `false` to fail.
+Validates the value using a callable/callback. The callable should take two
+arguments, `$subject` and `$field`, to indicate the subject and the field within
+that subject. It should return `true` to pass, or `false` to fail.
 
 ```php
 <?php

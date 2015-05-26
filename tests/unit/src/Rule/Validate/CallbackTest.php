@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-class ClosureTest extends AbstractValidateTest
+class CallbackTest extends AbstractValidateTest
 {
     protected function getArgs()
     {
