@@ -3,8 +3,6 @@
  *
  * This file is part of the Aura project for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -18,8 +16,6 @@ use Aura\Filter\RuleLocator;
  * A "meta-rule" indicating that the value must pass all of a series of rules.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class All extends AbstractRule

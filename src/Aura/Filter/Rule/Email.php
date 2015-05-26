@@ -3,8 +3,6 @@
  *
  * This file is part of the Aura project for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
