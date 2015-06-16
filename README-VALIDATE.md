@@ -61,7 +61,7 @@ that subject. It should return `true` to pass, or `false` to fail.
 
 ```php
 <?php
-$filter->validate('field')->is('closure', function ($subject, $field) {
+$filter->validate('field')->is('callback', function ($subject, $field) {
     if ($subject->$field === 'foo') {
         return true;
     }
