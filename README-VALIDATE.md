@@ -185,6 +185,16 @@ $filter->validate('field')->is('ipv4');
 ?>
 ```
 
+## ipv6
+
+Validates the value as an IPv6 address.
+
+```php
+<?php
+$filter->validate('field')->is('ipv6');
+?>
+```
+
 ## isbn
 
 Validates the value is a correct ISBN (International Standard Book Number).
