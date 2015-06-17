@@ -12,7 +12,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a value to an IPv4 address.
+ * Validates a value is an IPv4 address.
  *
  * @package Aura.Filter
  *
@@ -32,13 +32,10 @@ class Ipv4
     {
         $value = $subject->$field;
 
-        // does the value convert back and forth properly?
-        $result = ip2long($value);
-        if ($result == -1 || $result === false) {
-            // does not properly convert to a "long" result
+        // This validates without regard to reserved or private ranges in v4
+        if (filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) {
             return false;
         } else {
-            // looks valid
             return true;
         }
     }
