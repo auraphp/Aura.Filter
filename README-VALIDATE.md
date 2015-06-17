@@ -167,7 +167,7 @@ $filter->validate('field')->is('inValues', $array);
 
 ## ip
 
-Validates the value as an IP address.
+Validates the value as an IP address. (ALLOWS reserved and private addresses)
 
 ```php
 <?php
@@ -177,7 +177,7 @@ $filter->validate('field')->is('ip');
 
 ## ipv4
 
-Validates the value as an IPv4 address.
+Validates the value as an IPv4 address. (ALLOWS reserved and private addresses)
 
 ```php
 <?php
@@ -187,7 +187,7 @@ $filter->validate('field')->is('ipv4');
 
 ## ipv6
 
-Validates the value as an IPv6 address.
+Validates the value as an IPv6 address. (ALLOWS reserved and private addresses)
 
 ```php
 <?php
