@@ -57,7 +57,7 @@ within that subject. It should return `true` to pass, or `false` to fail.
 
 ```php
 <?php
-$filter->sanitize('field')->is('closure', function ($subject, $field) {
+$filter->sanitize('field')->to('callback', function ($subject, $field) {
     // always force the field to 'foo'
     $subject->$field = 'foo';
     return true;
