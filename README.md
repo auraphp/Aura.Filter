@@ -9,6 +9,7 @@ This package provides tools to validate and sanitize objects and arrays.
 This library requires PHP 5.3 or later, and has no userland dependencies.
 
 It is installable and autoloadable via Composer as [aura/filter](https://packagist.org/packages/aura/filter).
+This will install the version 1.1(unless you specifically point to the 2.x-dev) and you are currently looking at the the 2.x dev branch and its README file.
 
 Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/releases)
 or clone this repository, then require or include its _autoload.php_ file.
