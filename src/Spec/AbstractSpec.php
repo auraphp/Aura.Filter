@@ -9,7 +9,6 @@
 namespace Aura\Filter\Spec;
 
 use Exception;
-use Aura\Filter\Rule\RuleLocator;
 use Aura\Filter\Filter;
 
 /**
@@ -21,41 +20,152 @@ use Aura\Filter\Filter;
  */
 abstract class AbstractSpec
 {
+    /**
+     *
+     * The field name to be filtered.
+     *
+     * @var string
+     *
+     */
     protected $field;
+
+    /**
+     *
+     * The rule name to be applied.
+     *
+     * @var string
+     *
+     */
     protected $rule;
+
+    /**
+     *
+     * Arguments to pass to the rule.
+     *
+     * @var array
+     *
+     */
     protected $args;
+
+    /**
+     *
+     * The message to use on failure.
+     *
+     * @var string
+     *
+     */
     protected $message;
+
+    /**
+     *
+     * Allow the field to be blank?
+     *
+     * @var bool
+     *
+     */
     protected $allow_blank = false;
+
+    /**
+     *
+     * The failure mode to use.
+     *
+     * @var string
+     *
+     */
     protected $failure_mode = Filter::HARD_RULE;
+
+    /**
+     *
+     * The rule locator to use.
+     *
+     * @var AbstractLocator
+     *
+     */
     protected $rule_locator;
 
+    /**
+     *
+     * Applies the rule specification to a subject.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool True on success, false on failure.
+     *
+     */
     public function __invoke($subject)
     {
         return $this->applyBlank($subject, $this->field)
             || $this->applyRule($subject);
     }
 
+    /**
+     *
+     * Sets the subject field name.
+     *
+     * @param string $field The subject field name.
+     *
+     * @return self
+     *
+     */
     public function field($field)
     {
         $this->field = $field;
         return $this;
     }
 
+    /**
+     *
+     * Sets this specification as a "soft" rule.
+     *
+     * @param string $message The failure message.
+     *
+     * @return self
+     *
+     */
     public function asSoftRule($message = null)
     {
-        $this->setFailureMode(Filter::SOFT_RULE, $message);
+        return $this->setFailureMode(Filter::SOFT_RULE, $message);
     }
 
+    /**
+     *
+     * Sets this specification as a "hard" rule.
+     *
+     * @param string $message The failure message.
+     *
+     * @return self
+     *
+     */
     public function asHardRule($message = null)
     {
-        $this->setFailureMode(Filter::HARD_RULE, $message);
+        return $this->setFailureMode(Filter::HARD_RULE, $message);
     }
 
+    /**
+     *
+     * Sets this specification as a "stop" rule.
+     *
+     * @param string $message The failure message.
+     *
+     * @return self
+     *
+     */
     public function asStopRule($message = null)
     {
-        $this->setFailureMode(Filter::STOP_RULE, $message);
+        return $this->setFailureMode(Filter::STOP_RULE, $message);
     }
 
+    /**
+     *
+     * Sets the failure mode for this rule specification.
+     *
+     * @param string $failure_mode The failure mode.
+     *
+     * @param string $message The failure message.
+     *
+     * @return self
+     *
+     */
     protected function setFailureMode($failure_mode, $message)
     {
         $this->failure_mode = $failure_mode;
@@ -65,21 +175,52 @@ abstract class AbstractSpec
         return $this;
     }
 
+    /**
+     *
+     * Sets the failure message for this rule specification.
+     *
+     * @param string $message The failure message.
+     *
+     * @return self
+     *
+     */
     public function setMessage($message)
     {
         $this->message = $message;
+        return $this;
     }
 
+    /**
+     *
+     * Returns the failure mode for this rule specification.
+     *
+     * @return string
+     *
+     */
     public function getFailureMode()
     {
         return $this->failure_mode;
     }
 
+    /**
+     *
+     * Returns the field name for this rule specification.
+     *
+     * @return string
+     *
+     */
     public function getField()
     {
         return $this->field;
     }
 
+    /**
+     *
+     * Returns the failure message for this rule specification.
+     *
+     * @return string
+     *
+     */
     public function getMessage()
     {
         if (! $this->message) {
@@ -88,6 +229,15 @@ abstract class AbstractSpec
         return $this->message;
     }
 
+    /**
+     *
+     * Initializes this specification.
+     *
+     * @param array $args Arguments for the rule.
+     *
+     * @return self
+     *
+     */
     protected function init($args)
     {
         $this->args = $args;
@@ -95,6 +245,13 @@ abstract class AbstractSpec
         return $this;
     }
 
+    /**
+     *
+     * Returns the default failure message for this rule specification.
+     *
+     * @return string
+     *
+     */
     protected function getDefaultMessage()
     {
         $message = $this->rule;
