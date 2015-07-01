@@ -1,9 +1,9 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
+ * This file is part of Aura for PHP.
  *
- * @package Aura.Autoload
+ * @package Aura.Filter
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
