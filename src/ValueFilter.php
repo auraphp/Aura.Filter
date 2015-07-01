@@ -20,10 +20,35 @@ use Aura\Filter\Rule\Locator\ValidateLocator;
  */
 class ValueFilter
 {
+    /**
+     *
+     * A pesudo-subject to hold the value being filtered.
+     *
+     * @var object
+     *
+     */
     protected $subject;
 
+    /**
+     *
+     * The exception class to use when assert() fails.
+     *
+     * @var string
+     *
+     */
     protected $exception_class = 'Aura\Filter\Exception\ValueFailed';
 
+    /**
+     *
+     * Constructor.
+     *
+     * @param ValidateLocator $validate_locator A locator for "validate" rules.
+     *
+     * @param SanitizeLocator $sanitize_locator A locator for "sanitize" rules.
+     *
+     * @return self
+     *
+     */
     public function __construct(
         ValidateLocator $validate_locator,
         SanitizeLocator $sanitize_locator
@@ -33,11 +58,34 @@ class ValueFilter
         $this->subject = (object) array('value' => null);
     }
 
+    /**
+     *
+     * Sets the exception class to use when assert() fails.
+     *
+     * @param string $exception_class The exception class to use when filtering
+     * fails.
+     *
+     * @return null
+     *
+     */
     public function setExceptionClass($exception_class)
     {
         $this->exception_class = $exception_class;
     }
 
+    /**
+     *
+     * Validates a value using a rule.
+     *
+     * @param mixed $value The value to validate.
+     *
+     * @param string $rule The rule name.
+     *
+     * @param ...$args Arguments to pass to the rule.
+     *
+     * @return bool True on success, false on failure.
+     *
+     */
     public function validate($value, $rule)
     {
         $this->subject->value = $value;
@@ -45,6 +93,19 @@ class ValueFilter
         return $this->apply($rule, func_get_args());
     }
 
+    /**
+     *
+     * Sanitized a value in place using a rule.
+     *
+     * @param mixed $value The value to sanitize.
+     *
+     * @param string $rule The rule name.
+     *
+     * @param ...$args Arguments to pass to the rule.
+     *
+     * @return bool True on success, false on failure.
+     *
+     */
     public function sanitize(&$value, $rule)
     {
         $this->subject->value =& $value;
@@ -52,6 +113,20 @@ class ValueFilter
         return $this->apply($rule, func_get_args());
     }
 
+    /**
+     *
+     * Asserts that a result is true; throws an exception with a message and
+     * code if not.
+     *
+     * @param bool $result A filter result, usually from validate() or sanitize().
+     *
+     * @param string $message The exception message to use if the assertion fails.
+     *
+     * @param int $code The exception code to use if the assertion fails.
+     *
+     * @return null
+     *
+     */
     public function assert($result, $message, $code = null)
     {
         if (! $result) {
@@ -60,6 +135,17 @@ class ValueFilter
         }
     }
 
+    /**
+     *
+     * Applies a rule.
+     *
+     * @param string $rule The rule name.
+     *
+     * @param string $args Arugments for the rule.
+     *
+     * @return bool True on success, false on failure.
+     *
+     */
     protected function apply($rule, $args)
     {
         array_shift($args); // remove $value
