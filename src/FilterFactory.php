@@ -25,24 +25,72 @@ use PDO;
  */
 class FilterFactory
 {
+    /**
+     *
+     * A locator for "validate" rules.
+     *
+     * @var ValidateLocator
+     *
+     */
     protected $validate_locator;
 
+    /**
+     *
+     * A locator for "sanitize" rules.
+     *
+     * @var SanitizeLocator
+     *
+     */
     protected $sanitize_locator;
 
+    /**
+     *
+     * A PDO instance for PDO-specific rules.
+     *
+     * @var PDO
+     *
+     */
     protected $pdo;
 
-    protected $quote_prefix;
+    /**
+     *
+     * The prefix to use when quoting identifier names.
+     *
+     * @var string
+     *
+     */
+    protected $quote_name_prefix;
 
-    protected $quote_suffix;
+    /**
+     *
+     * The suffix to use when quoting identifier names.
+     *
+     * @var string
+     *
+     */
+    protected $quote_name_suffix;
 
+    /**
+     *
+     * Constructor; note that passing a PDO connection is optional.
+     *
+     * @param PDO $pdo A PDO database connection.
+     *
+     * @param string $quote_name_prefix The prefix to use when quoting identifier names.
+     *
+     * @param string $quote_name_suffix The suffix to use when quoting identifier names.
+     *
+     * @return self
+     *
+     */
     public function __construct(
         PDO $pdo = null,
-        $quote_prefix = '"',
-        $quote_suffix = '"'
+        $quote_name_prefix = '"',
+        $quote_name_suffix = '"'
     ) {
         $this->pdo = $pdo;
-        $this->quote_prefix = $quote_prefix;
-        $this->quote_suffix = $quote_suffix;
+        $this->quote_name_prefix = $quote_name_prefix;
+        $this->quote_name_suffix = $quote_name_suffix;
     }
 
     /**
@@ -57,6 +105,13 @@ class FilterFactory
         return new Filter($this->newValidateSpec(), $this->newSanitizeSpec());
     }
 
+    /**
+     *
+     * Returns a new ValueFilter instance.
+     *
+     * @return ValueFilter
+     *
+     */
     public function newValueFilter()
     {
         return new ValueFilter(
@@ -65,16 +120,37 @@ class FilterFactory
         );
     }
 
+    /**
+     *
+     * Returns a new ValidateSpec instance.
+     *
+     * @return ValidateSpec
+     *
+     */
     protected function newValidateSpec()
     {
         return new ValidateSpec($this->getValidateLocator());
     }
 
+    /**
+     *
+     * Returns a new SanitizeSpec instance.
+     *
+     * @return SanitizeSpec
+     *
+     */
     protected function newSanitizeSpec()
     {
         return new SanitizeSpec($this->getSanitizeLocator());
     }
 
+    /**
+     *
+     * Returns a shared ValidateLocator instance.
+     *
+     * @return ValidateLocator
+     *
+     */
     public function getValidateLocator()
     {
         if (! $this->validate_locator) {
@@ -83,6 +159,13 @@ class FilterFactory
         return $this->validate_locator;
     }
 
+    /**
+     *
+     * Returns a shared SanitizeLocator instance.
+     *
+     * @return SanitizeLocator
+     *
+     */
     public function getSanitizeLocator()
     {
         if (! $this->sanitize_locator) {
@@ -91,6 +174,13 @@ class FilterFactory
         return $this->sanitize_locator;
     }
 
+    /**
+     *
+     * Returns an array of "validate" rule factories.
+     *
+     * @return array
+     *
+     */
     protected function getValidateFactories()
     {
         $factories = array(
@@ -136,6 +226,15 @@ class FilterFactory
         return $factories;
     }
 
+    /**
+     *
+     * If $pdo is set, adds PDO-specific rules to the "validate" factories.
+     *
+     * @param array $factories The "validate" factories.
+     *
+     * @return null
+     *
+     */
     protected function addValidatePdo(&$factories)
     {
         if (! $this->pdo) {
@@ -143,14 +242,21 @@ class FilterFactory
         }
 
         $pdo = $this->pdo;
-        $quote_prefix = $this->quote_prefix;
-        $quote_suffix = $this->quote_suffix;
+        $quote_name_prefix = $this->quote_name_prefix;
+        $quote_name_suffix = $this->quote_name_suffix;
 
-        $factories['inTableColumn'] = function () use ($pdo, $quote_prefix, $quote_suffix) {
-            return new Validate\InTableColumn($pdo, $quote_prefix, $quote_suffix);
+        $factories['inTableColumn'] = function () use ($pdo, $quote_name_prefix, $quote_name_suffix) {
+            return new Validate\InTableColumn($pdo, $quote_name_prefix, $quote_name_suffix);
         };
     }
 
+    /**
+     *
+     * Returns an array of "sanitize" rule factories.
+     *
+     * @return array
+     *
+     */
     protected function getSanitizeFactories()
     {
         return array(

@@ -53,6 +53,10 @@ class InTableColumn
      *
      * @param PDO $pdo A PDO database connection.
      *
+     * @param string $quote_name_prefix The prefix to use when quoting identifier names.
+     *
+     * @param string $quote_name_suffix The suffix to use when quoting identifier names.
+     *
      */
     public function __construct(
         PDO $pdo,

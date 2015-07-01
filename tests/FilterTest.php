@@ -196,7 +196,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $expect = array(
             'bar' => array(
-                'This field should not be present.',
+                'This field has no rule specified.',
             ),
         );
         $actual = $this->filter->getMessages();
