@@ -94,7 +94,7 @@ abstract class AbstractSpec
      */
     public function __invoke($subject)
     {
-        return $this->applyBlank($subject, $this->field)
+        return $this->applyBlank($subject)
             || $this->applyRule($subject);
     }
 
@@ -261,11 +261,23 @@ abstract class AbstractSpec
         return $message;
     }
 
-    protected function applyBlank($subject, $field)
+    /**
+     *
+     * Check if the field is allowed to be, and actually is, blank.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool
+     *
+     */
+    protected function applyBlank($subject)
     {
         if (! $this->allow_blank) {
             return false;
         }
+
+        // the field name
+        $field = $this->field;
 
         // not set, or null, means it is blank
         if (! isset($subject->$field) || $subject->$field === null) {
@@ -281,6 +293,15 @@ abstract class AbstractSpec
         return trim($subject->$field) === '';
     }
 
+    /**
+     *
+     * Check if the subject field passes the rule specification.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool
+     *
+     */
     protected function applyRule($subject)
     {
         $rule = $this->rule_locator->get($this->rule);
