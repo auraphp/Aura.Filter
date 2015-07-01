@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -14,6 +12,13 @@ use Exception;
 use Aura\Filter\Rule\RuleLocator;
 use Aura\Filter\Filter;
 
+/**
+ *
+ * A generic rule specification.
+ *
+ * @package Aura.Filter
+ *
+ */
 abstract class AbstractSpec
 {
     protected $field;

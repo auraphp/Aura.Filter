@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -12,6 +10,13 @@ namespace Aura\Filter\Spec;
 
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 
+/**
+ *
+ * A generic "sanitize" specification.
+ *
+ * @package Aura.Filter
+ *
+ */
 class SanitizeSpec extends AbstractSpec
 {
     protected $blank_value;

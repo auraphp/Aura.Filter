@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -16,8 +14,6 @@ namespace Aura\Filter\Rule\Validate;
  * chain (note that equality is not strict, so type does not matter).
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class EqualToValue

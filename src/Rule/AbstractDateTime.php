@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -17,8 +15,6 @@ use DateTime;
  * Validate and Sanitize date time
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 abstract class AbstractDateTime

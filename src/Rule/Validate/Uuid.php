@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -18,8 +16,6 @@ use Aura\Filter\Rule\AbstractUuid;
  * Identifier (UUID).
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Uuid extends AbstractUuid

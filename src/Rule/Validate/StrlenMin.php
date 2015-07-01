@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -15,8 +13,6 @@ namespace Aura\Filter\Rule\Validate;
  * Validates that a value is no longer than a certain length.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class StrlenMin

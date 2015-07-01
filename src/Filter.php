@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -15,6 +13,13 @@ use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 use InvalidArgumentException;
 
+/**
+ *
+ * A filter for an entire "subject".
+ *
+ * @package Aura.Filter
+ *
+ */
 class Filter
 {
     /**

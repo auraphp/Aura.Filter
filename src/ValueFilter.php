@@ -3,8 +3,6 @@
  *
  * This file is part of Aura for PHP.
  *
- * @package Aura.Filter
- *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
@@ -13,6 +11,13 @@ namespace Aura\Filter;
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
 
+/**
+ *
+ * A standalone filter for individual values.
+ *
+ * @package Aura.Filter
+ *
+ */
 class ValueFilter
 {
     protected $subject;
