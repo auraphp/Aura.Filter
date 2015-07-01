@@ -26,17 +26,21 @@
             "Aura\\Filter\\": "src/"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Aura\\Filter\\": "tests"
-        }
-    },
     "extra": {
         "aura": {
             "type": "library",
             "config": {
                 "common": "Aura\\Filter\\_Config\\Common"
             }
+        }
+    },
+    "require-dev": {
+        "aura/di": "~2.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\Filter\\": "tests/",
+            "Aura\\Di\\": "vendor/aura/di/tests/"
         }
     }
 }
