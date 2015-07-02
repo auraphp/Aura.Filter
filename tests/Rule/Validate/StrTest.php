@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-class StringTest extends AbstractValidateTest
+class StrTest extends AbstractValidateTest
 {
     public function ruleFix($rule)
     {

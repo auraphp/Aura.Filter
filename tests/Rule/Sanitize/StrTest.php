@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class StringTest extends AbstractSanitizeTest
+class StrTest extends AbstractSanitizeTest
 {
     protected $find = ' ';
     protected $repl = '@';
