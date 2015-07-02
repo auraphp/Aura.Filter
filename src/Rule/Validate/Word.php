@@ -24,6 +24,10 @@ class Word
      * These include a-z, A-Z, 0-9, and underscore, indicated by a
      * regular expression "\w".
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

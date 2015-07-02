@@ -21,8 +21,12 @@ class StrlenMax
      *
      * Validates that a string is no longer than a certain length.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param mixed $max The value must have no more than this many
-     *                   characters.
+     * characters.
      *
      * @return bool True if valid, false if not.
      *

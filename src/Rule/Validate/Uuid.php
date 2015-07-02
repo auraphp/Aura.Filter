@@ -24,6 +24,10 @@ class Uuid extends AbstractUuid
      *
      * Validates that the value is a canonical human-readable UUID.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

@@ -73,6 +73,10 @@ class InTableColumn
      * Validates that the value exists in a table column; the value will be
      * securely bound into a prepared statement.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param string $table The table to select from. This name will not be
      * escaped or otherwise secured. Never pass user input as a name here.
      *
@@ -129,6 +133,10 @@ class InTableColumn
      * A brain-dead automatic binding mechanism. Anything that looks like a
      * named placeholder in the $where string is assumed to be a field name
      * on the object being filtered, and its value is bound into the statement.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param string $column The column being selected for its value.
      *

@@ -24,8 +24,12 @@ class InKeys
      * Given an array (second parameter), the value (first parameter) must
      * match at least one of the array keys.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param array $array An array of key-value pairs; the value must match
-     *                     one of the keys in this array.
+     * one of the keys in this array.
      *
      * @return bool True if valid, false if not.
      *

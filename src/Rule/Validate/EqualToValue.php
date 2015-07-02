@@ -22,6 +22,10 @@ class EqualToValue
      *
      * Check whether the value is equal
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param mixed $other_value
      *
      * @return bool True if the values are equal, false if not equal.

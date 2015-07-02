@@ -24,6 +24,10 @@ class Url
      * The value must match a generic URL format; for example,
      * ``http://example.com``, ``mms://example.org``, and so on.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

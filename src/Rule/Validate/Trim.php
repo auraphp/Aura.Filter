@@ -21,6 +21,10 @@ class Trim
      *
      * Is the value already trimmed?
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param string $chars The characters to strip.
      *
      * @return bool True if valid, false if not.

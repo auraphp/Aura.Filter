@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule for alphanumeric characters.
+ * Validates that the value is only letters (upper/lower case) and digits.
  *
  * @package Aura.Filter
  *
@@ -20,6 +20,10 @@ class Alnum
     /**
      *
      * Validates that the value is only letters (upper/lower case) and digits.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool True if valid, false if not.
      *

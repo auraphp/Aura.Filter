@@ -26,6 +26,10 @@ class StrictEqualToField
      * If the other element does not exist in $subject, or is null, the
      * validation will fail.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param string $other_field Check against the value of this element in
      * $subject.
      *

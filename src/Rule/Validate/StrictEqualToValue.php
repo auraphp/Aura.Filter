@@ -22,6 +22,10 @@ class StrictEqualToValue
      *
      * Check the values strictly on type and value
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param string $other_value
      *
      * @return bool True if the values are equal, false if not equal.

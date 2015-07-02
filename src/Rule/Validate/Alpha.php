@@ -21,6 +21,10 @@ class Alpha
      *
      * Validates that the value is letters only (upper or lower case).
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

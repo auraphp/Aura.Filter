@@ -25,6 +25,10 @@ class InValues
      * an integer 1.  This helps to avoid matching between 0, false, null,
      * and empty string.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param array $array An array of allowed values.
      *
      * @return bool True if valid, false if not.

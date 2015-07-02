@@ -21,6 +21,10 @@ class Strlen
      *
      * Validates that the length of the value is within a given range.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param mixed $len The minimum valid length.
      *
      * @return bool True if valid, false if not.

@@ -28,9 +28,10 @@ class Email
 
     /**
      *
-     * Post-construction tasks to complete object construction.
+     * Constructor.
      *
-     * @return void
+     * The email validation regex is taking directly from
+     * <http://www.iamcal.com/publish/articles/php/parsing_email/>.
      *
      */
     public function __construct()
@@ -65,7 +66,9 @@ class Email
      *
      * Validates that the value is an email address.
      *
-     * Taken directly from <http://www.iamcal.com/publish/articles/php/parsing_email/>.
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool True if valid, false if not.
      *

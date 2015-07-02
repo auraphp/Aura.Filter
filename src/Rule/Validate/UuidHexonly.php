@@ -23,6 +23,10 @@ class UuidHexonly extends AbstractUuid
      *
      * Validates that the value is a hex-only UUID.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

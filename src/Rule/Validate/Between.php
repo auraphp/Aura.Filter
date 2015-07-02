@@ -21,6 +21,10 @@ class Between
      *
      * Validates that the value is within a given range.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param mixed $min The minimum valid value.
      *
      * @param mixed $max The maximum valid value.

@@ -23,6 +23,10 @@ class DateTime extends AbstractDateTime
      *
      * Validate a datetime value.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool
      *
      */

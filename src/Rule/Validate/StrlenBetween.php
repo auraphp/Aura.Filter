@@ -21,6 +21,10 @@ class StrlenBetween
      *
      * Validates that the length of the value is within a given range.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param mixed $min The minimum valid length.
      *
      * @param mixed $max The maximum valid length.

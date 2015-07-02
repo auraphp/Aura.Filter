@@ -23,6 +23,10 @@ class Bool extends AbstractBool
      *
      * Validates that the value is a boolean representation.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

@@ -24,6 +24,10 @@ class String
      * Essentially, this means any scalar value is valid (no arrays, objects,
      * resources, etc).
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      * @todo allow for __toString() implementations

@@ -27,6 +27,10 @@ class Blank
      * integers, floats, numeric zero, boolean true and false, any array with
      * zero or more elements, and all objects and resources.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */

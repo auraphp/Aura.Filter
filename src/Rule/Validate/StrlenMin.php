@@ -21,8 +21,11 @@ class StrlenMin
      *
      * Validates that a string is no longer than a certain length.
      *
-     * @param mixed $min The value must have no more than this many
-     *                   characters.
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param mixed $min The value must have at least this many characters.
      *
      * @return bool True if valid, false if not.
      *
