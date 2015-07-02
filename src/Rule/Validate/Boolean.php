@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Aura\Filter\Rule\AbstractBool;
+use Aura\Filter\Rule\AbstractBoolean;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractBool;
  * @package Aura.Filter
  *
  */
-class Bool extends AbstractBool
+class Boolean extends AbstractBoolean
 {
     /**
      *

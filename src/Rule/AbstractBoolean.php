@@ -15,7 +15,7 @@ namespace Aura\Filter\Rule;
  * @package Aura.Filter
  *
  */
-abstract class AbstractBool
+abstract class AbstractBoolean
 {
     /**
      *
