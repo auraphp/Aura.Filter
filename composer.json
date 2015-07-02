@@ -1,7 +1,7 @@
 {
     "name": "aura/filter",
     "type": "library",
-    "description": "Validate and sanitize objects and arrays.",
+    "description": "Filters to validate and sanitize objects and arrays.",
     "keywords": [
         "filter",
         "validate",
@@ -22,8 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Aura\\Filter\\_Config\\": "config/",
-            "Aura\\Filter\\": "src/"
+            "Aura\\Filter\\": "src/",
+            "Aura\\Filter\\_Config\\": "config/"
         }
     },
     "extra": {
