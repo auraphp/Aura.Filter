@@ -15,7 +15,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class Int
+class Integer
 {
     /**
      *

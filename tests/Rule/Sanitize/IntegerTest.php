@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class IntTest extends AbstractSanitizeTest
+class IntegerTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {

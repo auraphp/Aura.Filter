@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-class IntTest extends AbstractValidateTest
+class IntegerTest extends AbstractValidateTest
 {
     public function providerIs()
     {

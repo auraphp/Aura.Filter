@@ -15,7 +15,7 @@ namespace Aura\Filter\Rule\Sanitize;
  * @package Aura.Filter
  *
  */
-class Int
+class Integer
 {
     /**
      *
