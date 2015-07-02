@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class FloatTest extends AbstractSanitizeTest
+class DoubleTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {

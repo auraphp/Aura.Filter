@@ -15,7 +15,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class Float
+class Double
 {
     /**
      *

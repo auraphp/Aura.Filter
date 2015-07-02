@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-class FloatTest extends AbstractValidateTest
+class DoubleTest extends AbstractValidateTest
 {
     public function providerIs()
     {
