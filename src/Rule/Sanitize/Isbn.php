@@ -21,6 +21,10 @@ class Isbn
      *
      * Removes all non numeric values to test if it is a valid ISBN.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if the value was sanitized, false if not.
      *
      */

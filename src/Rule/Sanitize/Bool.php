@@ -12,7 +12,7 @@ use Aura\Filter\Rule\AbstractBool;
 
 /**
  *
- * Rule for booleans.
+ * Sanitize the value to a boolean, or a pseudo-boolean.
  *
  * @package Aura.Filter
  *
@@ -21,7 +21,15 @@ class Bool extends AbstractBool
 {
     /**
      *
-     * Forces the value to a boolean, or an alternative boolean value.
+     * Sanitize the value to a boolean, or a pseudo-boolean.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param mixed $true Use this value for `true`.
+     *
+     * @param mixed $false Use this value for `false`.
      *
      * @return bool Always true.
      *

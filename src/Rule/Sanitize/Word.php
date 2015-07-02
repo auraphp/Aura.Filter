@@ -21,6 +21,10 @@ class Word
      *
      * Strips non-word characters within the value.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if the value was sanitized, false if not.
      *
      */

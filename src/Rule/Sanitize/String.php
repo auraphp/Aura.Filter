@@ -21,9 +21,13 @@ class String
      *
      * Forces the value to a string, optionally applying str_replace().
      *
-     * @param string $find
+     * @param object $subject The subject to be filtered.
      *
-     * @param string $replace
+     * @param string $field The subject field name.
+     *
+     * @param string|array $find Find this/these in the value.
+     *
+     * @param string|array $replace Replace with this/these in the value.
      *
      * @return bool True if the value was sanitized, false if not.
      *

@@ -21,11 +21,11 @@ class Now
      *
      * Force the field to the current time, default format "Y-m-d H:i:s".
      *
-     * @param mixed $subject
+     * @param object $subject The subject to be filtered.
      *
-     * @param string $field
+     * @param string $field The subject field name.
      *
-     * @param mixed $other_value
+     * @param mixed $format The date format.
      *
      * @return bool Always true.
      *

@@ -21,11 +21,11 @@ class Value
      *
      * Force the field to another value.
      *
-     * @param mixed $subject
+     * @param object $subject The subject to be filtered.
      *
-     * @param string $field
+     * @param string $field The subject field name.
      *
-     * @param mixed $other_value
+     * @param mixed $other_value The value to set.
      *
      * @return bool Always true.
      *

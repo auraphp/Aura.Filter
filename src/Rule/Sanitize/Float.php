@@ -25,6 +25,10 @@ class Float
      * algorithm somewhat less naive that "remove all characters that are not
      * '0-9.,eE+-'".  The result may not be expected, but it will be a float.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if the value was sanitized, false if not.
      *
      * @todo Extract scientific notation from weird strings?

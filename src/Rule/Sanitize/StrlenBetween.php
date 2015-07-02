@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that a value's length is within a given range.
+ * Sanitizes a string to a length range by padding or chopping it.
  *
  * @package Aura.Filter
  *
@@ -19,15 +19,19 @@ class StrlenBetween
 {
     /**
      *
-     * Sanitize
+     * Sanitizes a string to a length range by padding or chopping it.
      *
-     * @param int $min
+     * @param object $subject The subject to be filtered.
      *
-     * @param int $max
+     * @param string $field The subject field name.
      *
-     * @param string $pad_string
+     * @param int $min The minimum length.
      *
-     * @param int $pad_type
+     * @param int $max The maximum length.
+     *
+     * @param string $pad_string Pad using this string.
+     *
+     * @param int $pad_type A `STR_PAD_*` constant.
      *
      * @return bool True if the value was sanitized, false if not.
      *

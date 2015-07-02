@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that a value is greater than or equal to a minimum.
+ * Sanitizes to minimum value if value is less than min.
  *
  * @package Aura.Filter
  *
@@ -19,9 +19,13 @@ class Min
 {
     /**
      *
-     * Check whether the value is less than min, if so set to min
+     * Sanitizes to minimum value if value is less than min.
      *
-     * @param int $min
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param int $min The minimum value.
      *
      * @return bool True if the value was sanitized, false if not.
      *

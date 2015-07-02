@@ -19,9 +19,13 @@ class Trim
 {
     /**
      *
-     * Trims characters from the beginning and end of the value.
+     * Sanitizes a value to a string using trim().
      *
-     * @param string $chars The characters to strip.
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param string $chars The characters to trim.
      *
      * @return bool True if the value was sanitized, false if not.
      *

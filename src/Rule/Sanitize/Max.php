@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that a value is less than than or equal to a maximum.
+ * Sanitizes to maximum value if value is greater than max.
  *
  * @package Aura.Filter
  *
@@ -19,7 +19,11 @@ class Max
 {
     /**
      *
-     * Sanitizes to maximum value if values is greater than max
+     * Sanitizes to maximum value if value is greater than max.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param mixed $max The maximum valid value.
      *

@@ -21,6 +21,10 @@ class Alnum
      *
      * Strips non-alphanumeric characters from the value.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool Always true.
      *
      */

@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that a value is no longer than a certain length.
+ * Sanitizes a string to a minimum length by padding it.
  *
  * @package Aura.Filter
  *
@@ -19,13 +19,17 @@ class StrlenMin
 {
     /**
      *
-     * Fix to min length
+     * Sanitizes a string to a minimum length by padding it.
      *
-     * @param int $min
+     * @param object $subject The subject to be filtered.
      *
-     * @param string $pad_string
+     * @param string $field The subject field name.
      *
-     * @param int $pad_type
+     * @param int $min The minimum length.
+     *
+     * @param string $pad_string Pad using this string.
+     *
+     * @param int $pad_type A `STR_PAD_*` constant.
      *
      * @return bool True if the value was sanitized, false if not.
      *

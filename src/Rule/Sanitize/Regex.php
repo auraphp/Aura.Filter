@@ -10,8 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates a value using preg_match(), and sanitizes a value to a string
- * using preg_replace().
+ * Sanitizes a value using preg_replace().
  *
  * @package Aura.Filter
  *
@@ -21,6 +20,10 @@ class Regex
     /**
      *
      * Applies `preg_replace()` to the value.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param string $expr The regular expression pattern to apply.
      *

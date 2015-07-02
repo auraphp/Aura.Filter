@@ -21,7 +21,11 @@ class Field
      *
      * Force the field to the value of the other field.
      *
-     * @param string $other_field
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param string $other_field The name of the other subject field.
      *
      * @return bool True if the value was sanitized, false if not.
      *

@@ -22,6 +22,10 @@ class Between
      * If the value is < min , will set the min value,
      * and if value is greater than max, set the max value
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @param mixed $min The minimum valid value.
      *
      * @param mixed $max The maximum valid value.
