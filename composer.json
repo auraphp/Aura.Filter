@@ -9,11 +9,11 @@
         "validator",
         "validation"
     ],
-    "homepage": "http://auraphp.github.com/Aura.Filter",
+    "homepage": "https://github.com/auraphp/Aura.Filter",
     "license": "BSD-2-Clause",
     "authors": [
         {
-            "name": "Aura Contributors",
+            "name": "Aura.Filter Contributors",
             "homepage": "https://github.com/auraphp/Aura.Filter/contributors"
         }
     ],
