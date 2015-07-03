@@ -192,7 +192,7 @@ $filter->sanitize('field')->to('alnum')->useBlankValue('');
 
 Sometimes it may be useful to extend the _Filter_ class for a specific purpose, one that can initialize itself. This can be useful when filtering a specific kind of object or dataset.  To do so, override the the `init()` method on the extended _Filter_ class; the above examples remain instructive, but use `$this` instead of `$filter` since you are working from inside the filter object:
 
-```
+```php
 namespace Vendor\Package;
 
 use Aura\Filter\Filter;
@@ -213,7 +213,7 @@ class EntityFilter extends Filter
 
 You can then create a new instance of your extended filter class through the _FilterContainer_:
 
-```
+```php
 $entity_filter = $filter_container->newFilter('Vendor\Package\EntityFilter');
 $success = $entity_filter->apply($entity);
 ```
