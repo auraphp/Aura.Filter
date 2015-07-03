@@ -38,8 +38,6 @@ class ValidateLocator extends Locator
             'int'                   => function () { return new Validate\Integer(); },
             'inValues'              => function () { return new Validate\InValues(); },
             'ip'                    => function () { return new Validate\Ip(); },
-            'ipv4'                  => function () { return new Validate\Ipv4(); },
-            'ipv6'                  => function () { return new Validate\Ipv6(); },
             'isbn'                  => function () { return new Validate\Isbn(); },
             'locale'                => function () { return new Validate\Locale(); },
             'max'                   => function () { return new Validate\Max(); },
