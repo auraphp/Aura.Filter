@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that the value is a key in the list of allowed options.
+ * Validates that the value is a key in a given array.
  *
  * @package Aura.Filter
  *
@@ -20,9 +20,6 @@ class InKeys
     /**
      *
      * Validates that the value is a key in a given array.
-     *
-     * Given an array (second parameter), the value (first parameter) must
-     * match at least one of the array keys.
      *
      * @param object $subject The subject to be filtered.
      *

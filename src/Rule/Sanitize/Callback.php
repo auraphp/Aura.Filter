@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule to apply a callable/callback to the data.
+ * Sanitizes a value using a callable/callback.
  *
  * @package Aura.Filter
  *

@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule for locale (language and country) codes.
+ * Validates that the value is in the list of allowed locale codes.
  *
  * @package Aura.Filter
  *

@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that a value is a URL.
+ * Validates the value as a URL.
  *
  * @package Aura.Filter
  *

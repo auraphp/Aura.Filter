@@ -19,7 +19,7 @@ class Field
 {
     /**
      *
-     * Force the field to the value of the other field.
+     * Modifies the field value to match that of another field.
      *
      * @param object $subject The subject to be filtered.
      *

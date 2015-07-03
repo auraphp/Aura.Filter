@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Forces a value to a string, no encoding or escaping.
+ * Forces the value to a string, optionally applying `str_replace()`.
  *
  * @package Aura.Filter
  *
@@ -19,7 +19,7 @@ class Str
 {
     /**
      *
-     * Forces the value to a string, optionally applying str_replace().
+     * Forces the value to a string, optionally applying `str_replace()`.
      *
      * @param object $subject The subject to be filtered.
      *

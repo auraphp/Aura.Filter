@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Sanitizes a value to a string with only word characters.
+ * Strips non-word characters within the value.
  *
  * @package Aura.Filter
  *

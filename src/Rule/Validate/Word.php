@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a value to a string with only word characters.
+ * Validates that the value is composed only of word characters.
  *
  * @package Aura.Filter
  *

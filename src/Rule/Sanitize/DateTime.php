@@ -21,7 +21,7 @@ class DateTime extends AbstractDateTime
 {
     /**
      *
-     * Sanitize datetime to a specified format, default "Y-m-d H:i:s".
+     * Sanitize a datetime to a specified format, default "Y-m-d H:i:s".
      *
      * @param object $subject The subject to be filtered.
      *

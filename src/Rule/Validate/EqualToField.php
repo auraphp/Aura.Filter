@@ -10,8 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that this value is equal to some other element in the filter
- * chain (note that equality is not strict, so type does not matter).
+ * Validates that this value is loosely equal to some other subject field.
  *
  * @package Aura.Filter
  *
@@ -20,8 +19,7 @@ class EqualToField
 {
     /**
      *
-     * Validates that this value is equal to some other element in the filter
-     * chain (note that equality is *not* strict, so type does not matter).
+     * Validates that this value is loosely equal to some other subject field.
      *
      * If the other element does not exist in $subject, or is null, the
      * validation will fail.
@@ -30,8 +28,7 @@ class EqualToField
      *
      * @param string $field The subject field name.
      *
-     * @param string $other_field Check against the value of this element in
-     * $subject.
+     * @param string $other_field Check against the value of this subject field.
      *
      * @return bool True if the values are equal, false if not equal.
      *

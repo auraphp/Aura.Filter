@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a value to an integer.
+ * Validates that the value represents an integer.
  *
  * @package Aura.Filter
  *

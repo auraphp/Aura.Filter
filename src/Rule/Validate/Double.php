@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule for floats.
+ * Validates that the value represents a float.
  *
  * @package Aura.Filter
  *

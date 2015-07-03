@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for alphabetic characters.
+ * Strips non-alphabetic characters from the value.
  *
  * @package Aura.Filter
  *

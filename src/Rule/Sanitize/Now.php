@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Modifies the field value to match the current time, default format "Y-m-d H:i:s".
+ * Force the value to the current time, default format "Y-m-d H:i:s".
  *
  * @package Aura.Filter
  *
@@ -19,7 +19,7 @@ class Now
 {
     /**
      *
-     * Force the field to the current time, default format "Y-m-d H:i:s".
+     * Force the value to the current time, default format "Y-m-d H:i:s".
      *
      * @param object $subject The subject to be filtered.
      *

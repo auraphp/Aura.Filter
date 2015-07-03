@@ -21,7 +21,7 @@ class DateTime extends AbstractDateTime
 {
     /**
      *
-     * Validate a datetime value.
+     * Validate that a value can be represented as a date/time.
      *
      * @param object $subject The subject to be filtered.
      *

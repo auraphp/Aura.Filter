@@ -20,8 +20,8 @@ class Blank
 {
     /**
      *
-     * Validates that the value is null, or is a string composed only of
-     * whitespace.
+     * Validates that a value is blank (null, empty string, or string of only
+     * whitespace characters).
      *
      * Non-strings and non-nulls never validate as blank; this includes
      * integers, floats, numeric zero, boolean true and false, any array with

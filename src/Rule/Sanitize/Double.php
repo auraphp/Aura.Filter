@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for floats.
+ * Forces the value to a float.
  *
  * @package Aura.Filter
  *

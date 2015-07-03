@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that a value is in a list of allowed values.
+ * Validates that the value is in a given array.
  *
  * @package Aura.Filter
  *

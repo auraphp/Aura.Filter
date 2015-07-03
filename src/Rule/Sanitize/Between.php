@@ -19,8 +19,8 @@ class Between
 {
     /**
      *
-     * If the value is < min , will set the min value,
-     * and if value is greater than max, set the max value
+     * If the value is less than min, will set the min value,
+     * and if value is greater than max, set the max value.
      *
      * @param object $subject The subject to be filtered.
      *

@@ -12,7 +12,7 @@ use Aura\Filter\Rule\AbstractBoolean;
 
 /**
  *
- * Rule for booleans.
+ * Validates that the value is a boolean representation.
  *
  * @package Aura.Filter
  *

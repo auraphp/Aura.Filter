@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a value to a string using trim().
+ * Validates that a value is already trimmed.
  *
  * @package Aura.Filter
  *
@@ -19,7 +19,7 @@ class Trim
 {
     /**
      *
-     * Is the value already trimmed?
+     * Validates that a value is already trimmed.
      *
      * @param object $subject The subject to be filtered.
      *

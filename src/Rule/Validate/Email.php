@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that a value is an email address.
+ * Validates that the value is an email address.
  *
  * @package Aura.Filter
  *

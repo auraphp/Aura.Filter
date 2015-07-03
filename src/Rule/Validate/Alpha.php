@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule for alphabetic characters.
+ * Validates that the value is letters only (upper or lower case).
  *
  * @package Aura.Filter
  *

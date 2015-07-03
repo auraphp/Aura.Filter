@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule for International Standard Book Numbers (ISBN).
+ * Validates that the value represents an ISBN.
  *
  * @package Aura.Filter
  *
@@ -19,7 +19,7 @@ class Isbn
 {
     /**
      *
-     * Validates that the value is an ISBN.
+     * Validates that the value represents an ISBN.
      *
      * @param object $subject The subject to be filtered.
      *

@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule to apply a callable/callback to the data.
+ * Validates the value against a callable/callback.
  *
  * @package Aura.Filter
  *

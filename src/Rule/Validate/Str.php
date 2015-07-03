@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Forces a value to a string, no encoding or escaping.
+ * Validates that the value can be represented as a string.
  *
  * @package Aura.Filter
  *

@@ -12,7 +12,7 @@ use Aura\Filter\Rule\AbstractUuid;
 
 /**
  *
- * Rule for hex-only Universally Unique Identifier (UUID).
+ * Forces the value to a hex-only UUID.
  *
  * @package Aura.Filter
  *

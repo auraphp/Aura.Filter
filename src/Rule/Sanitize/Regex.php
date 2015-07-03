@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Sanitizes a value using preg_replace().
+ * Applies `preg_replace()` to the value.
  *
  * @package Aura.Filter
  *

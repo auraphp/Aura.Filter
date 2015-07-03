@@ -10,7 +10,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for International Standard Book Numbers (ISBN).
+ * Forces the value to an ISBN.
  *
  * @package Aura.Filter
  *
@@ -19,7 +19,7 @@ class Isbn
 {
     /**
      *
-     * Removes all non numeric values to test if it is a valid ISBN.
+     * Forces the value to an ISBN.
      *
      * @param object $subject The subject to be filtered.
      *

@@ -10,7 +10,8 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a file-upload information array.
+ * Validates that the value is an array of file-upload information, and
+ * if a file is referred to, that is actually an uploaded file.
  *
  * @package Aura.Filter
  *

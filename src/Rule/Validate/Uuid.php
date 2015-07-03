@@ -12,8 +12,7 @@ use Aura\Filter\Rule\AbstractUuid;
 
 /**
  *
- * Validates that the value is a canonical human-readable Universally Unique
- * Identifier (UUID).
+ * Validates that the value is a canonical human-readable UUID.
  *
  * @package Aura.Filter
  *

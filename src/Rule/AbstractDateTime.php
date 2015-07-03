@@ -12,7 +12,7 @@ use DateTime;
 
 /**
  *
- * Validate and Sanitize date time
+ * Abstract rule for date-time filters.
  *
  * @package Aura.Filter
  *

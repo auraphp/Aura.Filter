@@ -19,7 +19,7 @@ class StrlenMin
 {
     /**
      *
-     * Validates that a string is no longer than a certain length.
+     * Validates that a value is no longer than a certain length.
      *
      * @param object $subject The subject to be filtered.
      *

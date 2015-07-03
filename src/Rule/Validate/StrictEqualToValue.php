@@ -10,8 +10,7 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that this value is equal to some other element in the filter
- * chain (note that equality is not strict, so type does not matter).
+ * Validates that this value is strictly equal to another value.
  *
  * @package Aura.Filter
  *
@@ -20,7 +19,7 @@ class StrictEqualToValue
 {
     /**
      *
-     * Check the values strictly on type and value
+     * Validates that this value is strictly equal to another value.
      *
      * @param object $subject The subject to be filtered.
      *
