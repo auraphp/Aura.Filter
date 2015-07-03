@@ -78,7 +78,7 @@ abstract class AbstractSpec
      *
      * The rule locator to use.
      *
-     * @var AbstractLocator
+     * @var Locator
      *
      */
     protected $rule_locator;

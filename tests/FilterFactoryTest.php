@@ -1,19 +1,12 @@
 <?php
 namespace Aura\Filter;
 
-use Aura\Filter\Rule\Validate\InTableColumn;
-use PDO;
-
 class FilterFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWithPdo()
+    public function test()
     {
-        $pdo = new PDO('sqlite::memory:');
-        $filter_factory = new FilterFactory($pdo);
+        $filter_factory = new FilterFactory();
         $validate_locator = $filter_factory->getValidateLocator();
-        $this->assertInstanceOf(
-            'Aura\Filter\Rule\Validate\InTableColumn',
-            $validate_locator->get('inTableColumn')
-        );
+        $this->markTestIncomplete();
     }
 }

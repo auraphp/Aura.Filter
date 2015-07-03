@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Locator;
 
-class FakeLocator extends AbstractLocator
+class FakeLocator extends Locator
 {
 
 }

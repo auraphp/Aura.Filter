@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Locator;
 
+use Aura\Filter\Rule\Sanitize;
+
 /**
  *
  * A ServiceLocator implementation for loading and retaining Sanitize rule objects.
@@ -15,6 +17,39 @@ namespace Aura\Filter\Rule\Locator;
  * @package Aura.Filter
  *
  */
-class SanitizeLocator extends AbstractLocator
+class SanitizeLocator extends Locator
 {
+    protected function initFactories(array $factories)
+    {
+        $this->factories = array(
+            'alnum'                 => function () { return new Sanitize\Alnum(); },
+            'alpha'                 => function () { return new Sanitize\Alpha(); },
+            'between'               => function () { return new Sanitize\Between(); },
+            'bool'                  => function () { return new Sanitize\Boolean(); },
+            'callback'              => function () { return new Sanitize\Callback(); },
+            'dateTime'              => function () { return new Sanitize\DateTime(); },
+            'field'                 => function () { return new Sanitize\Field(); },
+            'float'                 => function () { return new Sanitize\Double(); },
+            'int'                   => function () { return new Sanitize\Integer(); },
+            'isbn'                  => function () { return new Sanitize\Isbn(); },
+            'max'                   => function () { return new Sanitize\Max(); },
+            'min'                   => function () { return new Sanitize\Min(); },
+            'now'                   => function () { return new Sanitize\Now(); },
+            'regex'                 => function () { return new Sanitize\Regex(); },
+            'remove'                => function () { return new Sanitize\Remove(); },
+            'strictEqualToField'    => function () { return new Sanitize\StrictEqualToField(); },
+            'strictEqualToValue'    => function () { return new Sanitize\StrictEqualToValue(); },
+            'string'                => function () { return new Sanitize\Str(); },
+            'strlen'                => function () { return new Sanitize\Strlen(); },
+            'strlenBetween'         => function () { return new Sanitize\StrlenBetween(); },
+            'strlenMax'             => function () { return new Sanitize\StrlenMax(); },
+            'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
+            'trim'                  => function () { return new Sanitize\Trim(); },
+            'uuid'                  => function () { return new Sanitize\Uuid(); },
+            'uuidHexonly'           => function () { return new Sanitize\UuidHexonly(); },
+            'value'                 => function () { return new Sanitize\Value(); },
+            'word'                  => function () { return new Sanitize\Word(); },
+        );
+        parent::initFactories($factories);
+    }
 }

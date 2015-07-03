@@ -45,52 +45,39 @@ class FilterFactory
 
     /**
      *
-     * A PDO instance for PDO-specific rules.
+     * Additional factories for the ValidateLocator.
      *
-     * @var PDO
+     * @var array
      *
      */
-    protected $pdo;
+    protected $validate_factories;
 
     /**
      *
-     * The prefix to use when quoting identifier names.
+     * Additional factories for the SanitizeLocator.
      *
-     * @var string
+     * @var array
      *
      */
-    protected $quote_name_prefix;
+    protected $sanitize_factories;
 
     /**
      *
-     * The suffix to use when quoting identifier names.
+     * Constructor.
      *
-     * @var string
+     * @param array $validate_factories Additional factories for the ValidateLocator.
      *
-     */
-    protected $quote_name_suffix;
-
-    /**
-     *
-     * Constructor; note that passing a PDO connection is optional.
-     *
-     * @param PDO $pdo A PDO database connection.
-     *
-     * @param string $quote_name_prefix The prefix to use when quoting identifier names.
-     *
-     * @param string $quote_name_suffix The suffix to use when quoting identifier names.
+     * @param array $sanitize_factories Additional factories for the SanitizeLocator.
      *
      * @return self
      *
      */
     public function __construct(
-        PDO $pdo = null,
-        $quote_name_prefix = '"',
-        $quote_name_suffix = '"'
+        array $validate_factories = array(),
+        array $sanitize_factories = array()
     ) {
-        $this->pdo = $pdo;
-        $this->quote_name_prefix = $quote_name_prefix;
-        $this->quote_name_suffix = $quote_name_suffix;
+        $this->validate_factories = $validate_factories;
+        $this->sanitize_factories = $sanitize_factories;
     }
 
     /**
@@ -154,7 +141,7 @@ class FilterFactory
     public function getValidateLocator()
     {
         if (! $this->validate_locator) {
-            $this->validate_locator = new ValidateLocator($this->getValidateFactories());
+            $this->validate_locator = $this->newValidateLocator();
         }
         return $this->validate_locator;
     }
@@ -169,124 +156,32 @@ class FilterFactory
     public function getSanitizeLocator()
     {
         if (! $this->sanitize_locator) {
-            $this->sanitize_locator = new SanitizeLocator($this->getSanitizeFactories());
+            $this->sanitize_locator = $this->newSanitizeLocator();
         }
         return $this->sanitize_locator;
     }
 
     /**
      *
-     * Returns an array of "validate" rule factories.
+     * Returns a new ValidateLocator instance.
      *
-     * @return array
+     * @return ValidateLocator
      *
      */
-    protected function getValidateFactories()
+    protected function newValidateLocator()
     {
-        $factories = array(
-            'alnum'                 => function () { return new Validate\Alnum(); },
-            'alpha'                 => function () { return new Validate\Alpha(); },
-            'between'               => function () { return new Validate\Between(); },
-            'blank'                 => function () { return new Validate\Blank(); },
-            'bool'                  => function () { return new Validate\Boolean(); },
-            'callback'              => function () { return new Validate\Callback(); },
-            'creditCard'            => function () { return new Validate\CreditCard(); },
-            'dateTime'              => function () { return new Validate\DateTime(); },
-            'email'                 => function () { return new Validate\Email(); },
-            'equalToField'          => function () { return new Validate\EqualToField(); },
-            'equalToValue'          => function () { return new Validate\EqualToValue(); },
-            'float'                 => function () { return new Validate\Double(); },
-            'inKeys'                => function () { return new Validate\InKeys(); },
-            'int'                   => function () { return new Validate\Integer(); },
-            'inValues'              => function () { return new Validate\InValues(); },
-            'ip'                    => function () { return new Validate\Ip(); },
-            'ipv4'                  => function () { return new Validate\Ipv4(); },
-            'ipv6'                  => function () { return new Validate\Ipv6(); },
-            'isbn'                  => function () { return new Validate\Isbn(); },
-            'locale'                => function () { return new Validate\Locale(); },
-            'max'                   => function () { return new Validate\Max(); },
-            'min'                   => function () { return new Validate\Min(); },
-            'regex'                 => function () { return new Validate\Regex(); },
-            'strictEqualToField'    => function () { return new Validate\StrictEqualToField(); },
-            'strictEqualToValue'    => function () { return new Validate\StrictEqualToValue(); },
-            'string'                => function () { return new Validate\Str(); },
-            'strlen'                => function () { return new Validate\Strlen(); },
-            'strlenBetween'         => function () { return new Validate\StrlenBetween(); },
-            'strlenMax'             => function () { return new Validate\StrlenMax(); },
-            'strlenMin'             => function () { return new Validate\StrlenMin(); },
-            'trim'                  => function () { return new Validate\Trim(); },
-            'upload'                => function () { return new Validate\Upload(); },
-            'url'                   => function () { return new Validate\Url(); },
-            'uuid'                  => function () { return new Validate\Uuid(); },
-            'uuidHexonly'           => function () { return new Validate\UuidHexonly(); },
-            'word'                  => function () { return new Validate\Word(); },
-        );
-
-        $this->addValidatePdo($factories);
-        return $factories;
+        return new ValidateLocator($this->validate_factories);
     }
 
     /**
      *
-     * If $pdo is set, adds PDO-specific rules to the "validate" factories.
+     * Returns a new SanitizeLocator instance.
      *
-     * @param array $factories The "validate" factories.
-     *
-     * @return null
+     * @return SanitizeLocator
      *
      */
-    protected function addValidatePdo(&$factories)
+    protected function newSanitizeLocator()
     {
-        if (! $this->pdo) {
-            return;
-        }
-
-        $pdo = $this->pdo;
-        $quote_name_prefix = $this->quote_name_prefix;
-        $quote_name_suffix = $this->quote_name_suffix;
-
-        $factories['inTableColumn'] = function () use ($pdo, $quote_name_prefix, $quote_name_suffix) {
-            return new Validate\InTableColumn($pdo, $quote_name_prefix, $quote_name_suffix);
-        };
-    }
-
-    /**
-     *
-     * Returns an array of "sanitize" rule factories.
-     *
-     * @return array
-     *
-     */
-    protected function getSanitizeFactories()
-    {
-        return array(
-            'alnum'                 => function () { return new Sanitize\Alnum(); },
-            'alpha'                 => function () { return new Sanitize\Alpha(); },
-            'between'               => function () { return new Sanitize\Between(); },
-            'bool'                  => function () { return new Sanitize\Boolean(); },
-            'callback'              => function () { return new Sanitize\Callback(); },
-            'dateTime'              => function () { return new Sanitize\DateTime(); },
-            'field'                 => function () { return new Sanitize\Field(); },
-            'float'                 => function () { return new Sanitize\Double(); },
-            'int'                   => function () { return new Sanitize\Integer(); },
-            'isbn'                  => function () { return new Sanitize\Isbn(); },
-            'max'                   => function () { return new Sanitize\Max(); },
-            'min'                   => function () { return new Sanitize\Min(); },
-            'now'                   => function () { return new Sanitize\Now(); },
-            'regex'                 => function () { return new Sanitize\Regex(); },
-            'remove'                => function () { return new Sanitize\Remove(); },
-            'strictEqualToField'    => function () { return new Sanitize\StrictEqualToField(); },
-            'strictEqualToValue'    => function () { return new Sanitize\StrictEqualToValue(); },
-            'string'                => function () { return new Sanitize\Str(); },
-            'strlen'                => function () { return new Sanitize\Strlen(); },
-            'strlenBetween'         => function () { return new Sanitize\StrlenBetween(); },
-            'strlenMax'             => function () { return new Sanitize\StrlenMax(); },
-            'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
-            'trim'                  => function () { return new Sanitize\Trim(); },
-            'uuid'                  => function () { return new Sanitize\Uuid(); },
-            'uuidHexonly'           => function () { return new Sanitize\UuidHexonly(); },
-            'value'                 => function () { return new Sanitize\Value(); },
-            'word'                  => function () { return new Sanitize\Word(); },
-        );
+        return new SanitizeLocator($this->sanitize_factories);
     }
 }

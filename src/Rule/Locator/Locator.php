@@ -17,7 +17,7 @@ use Aura\Filter\Exception;
  * @package Aura.Filter
  *
  */
-class AbstractLocator
+class Locator
 {
     /**
      *
@@ -46,6 +46,11 @@ class AbstractLocator
      *
      */
     public function __construct(array $factories = array())
+    {
+        $this->initFactories($factories);
+    }
+
+    protected function initFactories(array $factories)
     {
         foreach ($factories as $name => $spec) {
             $this->set($name, $spec);

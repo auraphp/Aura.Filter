@@ -8,8 +8,9 @@ Check agreement between class-level and method-level comments on validate and sa
 
 Remove IPv4 and IPv6 in favor of just IP?
 
-Check coverage.
-
-Mark 2.x as the default branch.
-
 Drop the PDO-based InTableColumn, and place elsewhere?
+
+FilterFactory might actually be a FilterContainer instead, given that it retains
+the locators etc.
+
+Move README files to docs/ for bookdown.
