@@ -20,12 +20,10 @@ The easiest way to instantiate a new _Filter_ is to use the _FilterContainer_
 class:
 
 ```php
-<?php
 use Aura\Filter\FilterContainer;
 
 $filter_container = new FilterContainer();
 $filter = $filter_container->newFilter();
-?>
 ```
 
 ## Adding Rule Specifications
@@ -33,7 +31,6 @@ $filter = $filter_container->newFilter();
 Add rule specifications to the filter for each subject field.
 
 ```php
-<?php
 // the username must be alphanumeric
 // but not *only* numeric,
 // at least 6 characters long,
@@ -47,7 +44,6 @@ $filter->sanitize('username')->to('string');
 // confirmation field
 $filter->validate('password')->is('strlenMin', 6);
 $filter->validate('password_confirm')->is('equalToField', 'password');
-?>
 ```
 
 We can call one of the following methods after `validate()`:
@@ -74,7 +70,6 @@ We can then apply the filter specifications to the subject. A `true` result
 means all the rules passed, while `false` means one or more failed.
 
 ```php
-<?php
 // the data to be filtered; could also be an object
 $subject = array(
     'username' => 'bolivar',
@@ -89,7 +84,6 @@ if (! $success) {
     $messages = $filter->getMessages();
     var_export($messages);
 }
-?>
 ```
 
 ## Failure Modes And Messages
@@ -121,14 +115,12 @@ specify a single failure message for a field, regardless of which rule(s) it
 fails, call `$filter->useFieldMessage()`:
 
 ```php
-<?php
 $filter->validate('field')->isNot('blank')->asSoftRule();
 $filter->validate('field')->is('alnum')->asSoftRule();
 $filter->validate('field')->is('strlenMin', 6)->asSoftRule();
 $filter->validate('field')->is('strlenMax', 12)->asSoftRule();
 
 $filter->useFieldMessage('field', 'Please use 6-12 alphanumeric characters.');
-?>
 ```
 
 We can get the list of failure messages by calling `$filter->getMessages()`.
@@ -148,7 +140,6 @@ Integers, floats, booleans, resources, arrays, and objects are never "blank"
 even if they evaluate to zero or are empty:
 
 ```php
-<?php
 $not_blank = array(
     0,                // integer
     0.00,             // float
@@ -156,7 +147,6 @@ $not_blank = array(
     array(),          // empty array
     new StdClass,     // an object
 );
-?>
 ```
 
 ### Allowing For Blank Values
@@ -166,19 +156,16 @@ even if the field is blank, call `isBlankOr()` or `isBlankOrNot()` on its rule
 specification:
 
 ```php
-<?php
 // either an alphanumeric value *or* a blank value will validate
 $filter->validate('field')->isBlankOr('alnum');
-?>
 ```
+
 Likewise, a blank field may fail to sanitize properly. To allow for a blank
 field with a sanitize rule, call `toBlankOr()` on its rule specification:
 
 ```php
-<?php
 // both an alphanumeric field *and* a blank field will pass
 $filter->sanitize('field')->toBlankOr('alnum');
-?>
 ```
 
 This will cause blank values to be sanitized to `null`, and non-blank values
@@ -188,10 +175,8 @@ Finally, if we want blank values to be sanitized to something other than
 `null`, call `useBlankValue()` to specify the value to use when blank:
 
 ```php
-<?php
 // both an alphanumeric field *and* a blank field will pass
 $filter->sanitize('field')->toBlankOr('alnum')->useBlankValue('');
-?>
 ```
 
 That will cause blank values to be sanitized to an empty string. Additionally,
@@ -199,10 +184,8 @@ please note that `useBlankValue()` implies `toBlankOr()`, so the following has
 the same effect as the above:
 
 ```php
-<?php
 // both an alphanumeric field *and* a blank field will pass
 $filter->sanitize('field')->to('alnum')->useBlankValue('');
-?>
 ```
 
 
