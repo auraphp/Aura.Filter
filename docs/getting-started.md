@@ -188,11 +188,61 @@ the same effect as the above:
 $filter->sanitize('field')->to('alnum')->useBlankValue('');
 ```
 
-
-## Using The Filter As A Callable
-
-TBD
-
 ## Extending And Initializing A Filter
 
-TBD
+Sometimes it may be useful to extend the _Filter_ class for a specific purpose, one that can initialize itself. This can be useful when filtering a specific kind of object or dataset.  To do so, override the the `init()` method on the extended _Filter_ class; the above examples remain instructive, but use `$this` instead of `$filter` since you are working from inside the filter object:
+
+```
+namespace Vendor\Package;
+
+use Aura\Filter\Filter;
+
+class EntityFilter extends Filter
+{
+    protected function init()
+    {
+        $this->validate('field')->isNot('blank')->asSoftRule();
+        $this->validate('field')->is('alnum')->asSoftRule();
+        $this->validate('field')->is('strlenMin', 6)->asSoftRule();
+        $this->validate('field')->is('strlenMax', 12)->asSoftRule();
+
+        $this->useFieldMessage('field', 'Please use 6-12 alphanumeric characters.');
+    }
+}
+```
+
+You can then create a new instance of your extended filter class through the _FilterContainer_:
+
+```
+$entity_filter = $filter_container->newFilter('Vendor\Package\EntityFilter');
+$success = $entity_filter->apply($entity);
+```
+
+## Asserting or Invoking the Filter
+
+Whereas calling `$filter->apply($subject)` returns a boolean, calling `$filter->assert($subject)` will returns nothing on success and throws an exception on failure. (Invoking the filter as a callable a la `$filter($subject)` works the same as `assert()`.)
+
+```php
+use Aura\Filter\Exception\FilterFailed;
+
+// the data to be filtered; could also be an object
+$subject = array(
+    'username' => 'bolivar',
+    'password' => 'p@55w0rd',
+    'password_confirm' => 'p@55word', // not the same!
+);
+
+// filter the object and see if there were failures
+try {
+    $filter($subject);
+} catch (FilterFailed $e)
+    // ...
+}
+```
+
+The _FilterFailed_ exception has these methods in addition to the normal _Exception_ methods:
+
+- `getFilterClass()` -- returns the class of the filter object being used
+- `getFilterSubject()` -- returns the subject being filtered
+- `getFilterMessages()` -- returns the failure messages
+
