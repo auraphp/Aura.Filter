@@ -7,8 +7,8 @@ class ValueFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filter_factory = new FilterContainer();
-        $this->filter = $filter_factory->newValueFilter();
+        $filter_container = new FilterContainer();
+        $this->filter = $filter_container->newValueFilter();
     }
 
     public function test()

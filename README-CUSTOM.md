@@ -102,14 +102,14 @@ logic in a closure so that it is lazy-loaded only when the rule is called.
 <?php
 use Aura\Filter\FilterContainer;
 
-$filter_factory = new FilterContainer();
+$filter_container = new FilterContainer();
 
-$validate_locator = $filter_factory->getValidateLocator();
+$validate_locator = $filter_container->getValidateLocator();
 $validate_locator->set('hex', function () {
     return new Vendor\Package\Filter\Rule\Validate\ValidateHex();
 });
 
-$sanitize_locator = $filter_factory->getSanitizeLocator();
+$sanitize_locator = $filter_container->getSanitizeLocator();
 $sanitize_locator->set('hex', function () {
     return new Vendor\Package\Filter\Rule\Sanitize\SanitizeHex();
 });
@@ -122,7 +122,7 @@ Finally, we can use the rule in our filter:
 
 ```php
 <?php
-$filter = $filter_factory->newFilter();
+$filter = $filter_container->newFilter();
 
 // the 'color' field must be a hex value of no more than 6 digits
 $filter->validate('color')->is('hex', 6);

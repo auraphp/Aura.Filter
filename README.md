@@ -71,8 +71,8 @@ class:
 <?php
 use Aura\Filter\FilterContainer;
 
-$filter_factory = new FilterContainer();
-$filter = $filter_factory->newFilter();
+$filter_container = new FilterContainer();
+$filter = $filter_container->newFilter();
 ?>
 ```
 

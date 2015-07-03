@@ -15,6 +15,7 @@ class Common extends Config
             'validate_spec' => $di->lazyNew('Aura\Filter\Spec\ValidateSpec'),
             'sanitize_spec' => $di->lazyNew('Aura\Filter\Spec\SanitizeSpec'),
         );
+
         /**
          * Aura\Filter\Spec\SanitizeSpec
          */
@@ -36,7 +37,6 @@ class Common extends Config
             'validate_locator' => $di->lazyNew('Aura\Filter\Rule\Locator\ValidateLocator'),
             'sanitize_locator' => $di->lazyNew('Aura\Filter\Rule\Locator\SanitizeLocator'),
         );
-
     }
 
     public function modify(Container $di)
