@@ -8,13 +8,12 @@
  */
 namespace Aura\Filter;
 
-use Aura\Filter\Rule\Sanitize;
-use Aura\Filter\Rule\Validate;
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Rule\Sanitize;
+use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
-use PDO;
 
 /**
  *

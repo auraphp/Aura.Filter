@@ -31,8 +31,12 @@ class Ip
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)
+    public function __invoke($subject, $field, $flags = null)
     {
+        if ($flags === null) {
+            $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
+        }
+
         $value = $subject->$field;
         return filter_var($value, FILTER_VALIDATE_IP, $flags) !== false;
     }
