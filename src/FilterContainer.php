@@ -83,12 +83,14 @@ class FilterContainer
      *
      * Returns a new Filter instance.
      *
+     * @param string $class The filter class to instantiate.
+     *
      * @return Filter
      *
      */
-    public function newFilter()
+    public function newFilter($class = 'Aura\Filter\Filter')
     {
-        return new Filter($this->newValidateSpec(), $this->newSanitizeSpec());
+        return new $class($this->newValidateSpec(), $this->newSanitizeSpec());
     }
 
     /**
