@@ -64,14 +64,14 @@ definitions:
 
 ### Instantiation
 
-The easiest way to instantiate a new _Filter_ is to use the _FilterFactory_
+The easiest way to instantiate a new _Filter_ is to use the _FilterContainer_
 class:
 
 ```php
 <?php
-use Aura\Filter\FilterFactory;
+use Aura\Filter\FilterContainer;
 
-$filter_factory = new FilterFactory();
+$filter_factory = new FilterContainer();
 $filter = $filter_factory->newFilter();
 ?>
 ```

@@ -94,15 +94,15 @@ class SanitizeHex
 ## Set A Factory In The Locator
 
 Now we set a factory for the rule into the appropriate locator from the
-_FilterFactory_. Validate rules should go in the _ValidateLocator_, and
+_FilterContainer_. Validate rules should go in the _ValidateLocator_, and
 sanitize rules should go in the _SanitizeLocator_. Wrap the rule instantion
 logic in a closure so that it is lazy-loaded only when the rule is called.
 
 ```php
 <?php
-use Aura\Filter\FilterFactory;
+use Aura\Filter\FilterContainer;
 
-$filter_factory = new FilterFactory();
+$filter_factory = new FilterContainer();
 
 $validate_locator = $filter_factory->getValidateLocator();
 $validate_locator->set('hex', function () {

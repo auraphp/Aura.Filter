@@ -18,12 +18,12 @@ use PDO;
 
 /**
  *
- * Factory to create Filter objects.
+ * Container to create and retain Filter objects.
  *
  * @package Aura.Filter
  *
  */
-class FilterFactory
+class FilterContainer
 {
     /**
      *
