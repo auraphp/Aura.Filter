@@ -8,6 +8,7 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Failure\FailureFactory;
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
 use Aura\Filter\Rule\Sanitize;
@@ -90,7 +91,11 @@ class FilterContainer
      */
     public function newFilter($class = 'Aura\Filter\Filter')
     {
-        return new $class($this->newValidateSpec(), $this->newSanitizeSpec());
+        return new $class(
+            $this->newValidateSpec(),
+            $this->newSanitizeSpec(),
+            $this->newFailureFactory()
+        );
     }
 
     /**
@@ -184,5 +189,17 @@ class FilterContainer
     protected function newSanitizeLocator()
     {
         return new SanitizeLocator($this->sanitize_factories);
+    }
+
+    /**
+     *
+     * Returns a new FailureFactory instance.
+     *
+     * @return FailureFactory
+     *
+     */
+    protected function newFailureFactory()
+    {
+        return new FailureFactory();
     }
 }

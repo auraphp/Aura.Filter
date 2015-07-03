@@ -80,13 +80,23 @@ $subject = array(
 // filter the object and see if there were failures
 $success = $filter->apply($subject);
 if (! $success) {
-    // get the failure messages
-    $messages = $filter->getMessages();
-    var_export($messages);
+    // get the failures
+    $failures = $filter->getFailures();
+    var_export($failures);
 }
 ```
 
-## Failure Modes And Messages
+When we get the failures via `getFailures()`, we can examine in detail which fields failed, and what the failure messages were. The `getFailures()` method returns an array keyed on the field names; each field key itself has an array of _Failure_ objects, each with these methods:
+
+- `Failure::getField()` -- the field that failed
+- `Failure::getMessage()` -- the failure message
+- `Failure::getArgs()` -- arguments passed to the rule specification
+- `Failure::getMode()` -- the failure mode (`SOFT_RULE`, `HARD_RULE`, `STOP_RULE`)
+
+These can be combined in various ways to generate output regarding the filter failures.
+
+
+## Failure Modes
 
 Normally, the filter will stop filtering any field that fails one of
 its rules, but will continue applying rules to the rest of the fields. Also,
@@ -110,9 +120,9 @@ In each case, the custom message will be used instead of the default one for
 the specified rule.  If we want to just set a custom message without changing
 the failure mode, we can use `$filter->...->setMessage('custom message')`.
 
-If a field fails multiple rules, there will be multiple failure messages. To
-specify a single failure message for a field, regardless of which rule(s) it
-fails, call `$filter->useFieldMessage()`:
+## Field-Specific Failure Messages
+
+If a field fails multiple rules, there will be multiple failure messages (one for each failed rule). To specify a single failure message for a field, regardless of which rule(s) it fails, call `$filter->useFieldMessage()`:
 
 ```php
 $filter->validate('field')->isNot('blank')->asSoftRule();
@@ -123,7 +133,6 @@ $filter->validate('field')->is('strlenMax', 12)->asSoftRule();
 $filter->useFieldMessage('field', 'Please use 6-12 alphanumeric characters.');
 ```
 
-We can get the list of failure messages by calling `$filter->getMessages()`.
 
 ## Blank Values
 
@@ -242,7 +251,6 @@ try {
 
 The _FilterFailed_ exception has these methods in addition to the normal _Exception_ methods:
 
-- `getFilterClass()` -- returns the class of the filter object being used
+- `getFilterClass()` -- returns the class of the filter being used, in case you were using a custom filter class
 - `getFilterSubject()` -- returns the subject being filtered
-- `getFilterMessages()` -- returns the failure messages
-
+- `getFilterFailures()` -- returns the array of _Failure_ objects

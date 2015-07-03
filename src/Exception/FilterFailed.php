@@ -21,12 +21,12 @@ class FilterFailed extends Exception
 {
     /**
      *
-     * Messages from the filter.
+     * Failures from the filter.
      *
      * @var array
      *
      */
-    protected $filter_messages;
+    protected $filter_failures;
 
     /**
      *
@@ -74,28 +74,28 @@ class FilterFailed extends Exception
 
     /**
      *
-     * Sets the messages from the filter.
+     * Sets the failures from the filter.
      *
-     * @param array $filter_messages The filter messages.
+     * @param array $filter_failures The filter failures.
      *
      * @return null
      *
      */
-    public function setFilterMessages(array $filter_messages)
+    public function setFilterFailures(array $filter_failures)
     {
-        $this->filter_messages = $filter_messages;
+        $this->filter_failures = $filter_failures;
     }
 
     /**
      *
-     * Gets the messages from the filter.
+     * Gets the failures from the filter.
      *
      * @return array
      *
      */
-    public function getFilterMessages()
+    public function getFilterFailures()
     {
-        return $this->filter_messages;
+        return $this->filter_failures;
     }
 
     /**

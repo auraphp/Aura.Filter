@@ -45,7 +45,7 @@ abstract class AbstractSpec
      * @var array
      *
      */
-    protected $args;
+    protected $args = array();
 
     /**
      *
@@ -227,6 +227,18 @@ abstract class AbstractSpec
             $this->message = $this->getDefaultMessage();
         }
         return $this->message;
+    }
+
+    /**
+     *
+     * Returns the arguments for this rule specification.
+     *
+     * @return array
+     *
+     */
+    public function getArgs()
+    {
+        return $this->args;
     }
 
     /**

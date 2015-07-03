@@ -9,6 +9,7 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Exception;
+use Aura\Filter\Failure\FailureFactory;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 use InvalidArgumentException;
@@ -57,12 +58,12 @@ class Filter
 
     /**
      *
-     * A collection of failure messages.
+     * A collection of failure objects.
      *
      * @var array
      *
      */
-    protected $messages = array();
+    protected $failures = array();
 
     /**
      *
@@ -112,21 +113,34 @@ class Filter
 
     /**
      *
+     * A factory to create Failure objects.
+     *
+     * @var FailureFactory
+     *
+     */
+    protected $failure_factory;
+
+    /**
+     *
      * Constructor.
      *
      * @param ValidateSpec $validate_spec A prototype ValidateSpec.
      *
      * @param ValidateSpec $sanitize_spec A prototype SanitizeSpec.
      *
+     * @param FailureFactory $failure_factory A factory to create Failure objects.
+     *
      * @return self
      *
      */
     public function __construct(
         ValidateSpec $validate_spec,
-        SanitizeSpec $sanitize_spec
+        SanitizeSpec $sanitize_spec,
+        FailureFactory $failure_factory
     ) {
         $this->validate_spec = $validate_spec;
         $this->sanitize_spec = $sanitize_spec;
+        $this->failure_factory = $failure_factory;
         $this->init();
     }
 
@@ -179,11 +193,11 @@ class Filter
         $message = PHP_EOL
                  . "  Filter: {$class}" . PHP_EOL
                  . "  Fields:" . PHP_EOL
-                 . $this->getMessagesAsString();
+                 . $this->getFailuresAsString();
 
         $e = new Exception\FilterFailed($message);
         $e->setFilterClass($class);
-        $e->setFilterMessages($this->getMessages());
+        $e->setFilterFailures($this->failures);
         $e->setFilterSubject($subject);
         throw $e;
     }
@@ -317,10 +331,10 @@ class Filter
     protected function applyToObject($object)
     {
         $this->skip = array();
-        $this->messages = array();
+        $this->failures = array();
         $this->applySpecs($object);
         $this->applyStrict($object);
-        if ($this->messages) {
+        if ($this->failures) {
             return false;
         }
         return true;
@@ -369,27 +383,55 @@ class Filter
      *
      * A rule specification failed.
      *
-     * @param AbstractSpec $spec The rule specification.
+     * @param AbstractSpec $spec The failed rule specification.
      *
      * @return string The failure mode (hard, soft, or stop).
      *
      */
     protected function failed($spec)
     {
-        $field = $spec->getField();
+        $failure = $this->addFailure($spec);
+        $field = $failure->getField();
 
-        if (isset($this->field_messages[$field])) {
-            $this->messages[$field] = array($this->field_messages[$field]);
-        } else {
-            $this->messages[$field][] = $spec->getMessage();
-        }
-
-        $failure_mode = $spec->getFailureMode();
+        $failure_mode = $failure->getMode();
         if ($failure_mode === self::HARD_RULE) {
             $this->skip[$field] = true;
         }
 
         return $failure_mode;
+    }
+
+    /**
+     *
+     * Adds a failure.s
+     *
+     * @param AbstractSpec $spec The failed rule specification.
+     *
+     * @return Failure
+     *
+     */
+    protected function addFailure($spec)
+    {
+        $field = $spec->getField();
+
+        if (isset($this->field_messages[$field])) {
+            $failure = $this->failure_factory->newInstance(
+                $field,
+                $spec->getFailureMode(),
+                $this->field_messages[$field]
+            );
+            $this->failures[$field] = array($failure);
+            return $failure;
+        }
+
+        $failure = $this->failure_factory->newInstance(
+            $field,
+            $spec->getFailureMode(),
+            $spec->getMessage(),
+            $spec->getArgs()
+        );
+        $this->failures[$field][] = $failure;
+        return $failure;
     }
 
     /**
@@ -413,28 +455,32 @@ class Filter
         }
 
         foreach ($fields as $field => $value) {
-            $this->messages[$field][] = $this->strict_message;
+            $this->failures[$field][] = $this->failure_factory->newInstance(
+                $field,
+                self::SOFT_RULE,
+                $this->strict_message
+            );
         }
     }
 
     /**
      *
-     * Returns the failure messages as an array.
+     * Returns the failures as an array.
      *
-     * @param string|null $field Return the messages for this field; if null,
-     * return the messages for all fields.
+     * @param string|null $field Return the failures for this field; if null,
+     * return the failures for all fields.
      *
      * @return array
      *
      */
-    public function getMessages($field = null)
+    public function getFailures($field = null)
     {
         if (! $field) {
-            return $this->messages;
+            return $this->failures;
         }
 
-        if (isset($this->messages[$field])) {
-            return $this->messages[$field];
+        if (isset($this->failures[$field])) {
+            return $this->failures[$field];
         }
 
         return array();
@@ -447,11 +493,12 @@ class Filter
      * @return string
      *
      */
-    public function getMessagesAsString()
+    public function getFailuresAsString()
     {
         $string = '';
-        foreach ($this->getMessages() as $field => $messages) {
-            foreach ($messages as $message) {
+        foreach ($this->getFailures() as $field => $failures) {
+            foreach ($failures as $failure) {
+                $message = $failure->getMessage();
                 $string .= "    {$field}: {$message}" . PHP_EOL;
             }
         }
