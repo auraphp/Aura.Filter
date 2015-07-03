@@ -50,6 +50,16 @@ class Locator
         $this->initFactories($factories);
     }
 
+    /**
+     *
+     * Initialize the $factories property for the first time.
+     *
+     * @param array $factories An array of key-value pairs where the key is the
+     * rule name and the value is a callable that returns a rule object.
+     *
+     * @return null
+     *
+     */
     protected function initFactories(array $factories)
     {
         foreach ($factories as $name => $spec) {

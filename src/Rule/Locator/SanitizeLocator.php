@@ -19,6 +19,16 @@ use Aura\Filter\Rule\Sanitize;
  */
 class SanitizeLocator extends Locator
 {
+    /**
+     *
+     * Initialize the $factories property for the first time.
+     *
+     * @param array $factories An array of key-value pairs where the key is the
+     * rule name and the value is a callable that returns a rule object.
+     *
+     * @return null
+     *
+     */
     protected function initFactories(array $factories)
     {
         $this->factories = array(
