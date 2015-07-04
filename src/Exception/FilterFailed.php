@@ -9,6 +9,7 @@
 namespace Aura\Filter\Exception;
 
 use Aura\Filter\Exception;
+use Aura\Filter\Failure\FailureCollection;
 
 /**
  *
@@ -21,12 +22,12 @@ class FilterFailed extends Exception
 {
     /**
      *
-     * Messages from the filter.
+     * Failures from the filter.
      *
-     * @var array
+     * @var FailureCollection
      *
      */
-    protected $filter_messages;
+    protected $failures;
 
     /**
      *
@@ -35,7 +36,7 @@ class FilterFailed extends Exception
      * @var mixed
      *
      */
-    protected $filter_subject;
+    protected $subject;
 
     /**
      *
@@ -74,28 +75,28 @@ class FilterFailed extends Exception
 
     /**
      *
-     * Sets the messages from the filter.
+     * Sets the failures from the filter.
      *
-     * @param array $filter_messages The filter messages.
+     * @param FailureCollection $failures The filter failures.
      *
      * @return null
      *
      */
-    public function setFilterMessages(array $filter_messages)
+    public function setFailures(FailureCollection $failures)
     {
-        $this->filter_messages = $filter_messages;
+        $this->failures = $failures;
     }
 
     /**
      *
-     * Gets the messages from the filter.
+     * Gets the failures from the filter.
      *
-     * @return array
+     * @return FailureCollection
      *
      */
-    public function getFilterMessages()
+    public function getFailures()
     {
-        return $this->filter_messages;
+        return $this->failures;
     }
 
     /**
@@ -107,9 +108,9 @@ class FilterFailed extends Exception
      * @return null
      *
      */
-    public function setFilterSubject($subject)
+    public function setSubject($subject)
     {
-        $this->filter_subject = $subject;
+        $this->subject = $subject;
     }
 
     /**
@@ -119,8 +120,8 @@ class FilterFailed extends Exception
      * @return mixed
      *
      */
-    public function getFilterSubject()
+    public function getSubject()
     {
-        return $this->filter_subject;
+        return $this->subject;
     }
 }

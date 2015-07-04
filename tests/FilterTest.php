@@ -17,6 +17,17 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->filter = $filter_container->newFilter();
     }
 
+    protected function assertFailureMessages($expect, $field = null)
+    {
+        $failures = $this->filter->getFailures();
+        if ($field) {
+            $actual = $failures->getMessagesForField($field);
+        } else {
+            $actual = $failures->getMessages();
+        }
+        $this->assertSame($expect, $actual);
+    }
+
     public function testApply_softRule()
     {
         $this->filter->sanitize('foo')->to('string');
@@ -27,8 +38,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $result = $this->filter->apply($subject);
         $this->assertTrue($result);
         $expect = array();
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
 
         $subject = (object) array('foo' => '!@#');
         $result = $this->filter->apply($subject);
@@ -39,8 +49,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'foo should have validated as strlenMin(6)',
             ),
         );
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
     }
 
     public function testApply_notAnObject()
@@ -64,18 +73,15 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'foo should have validated as alnum',
             ),
         );
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
 
-        $actual = $this->filter->getMessages('foo');
         $expect = array(
             'foo should have validated as alnum',
         );
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect, 'foo');
 
         $expect = array();
-        $actual = $this->filter->getMessages('no-such-field');
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect, 'no-such-field');
     }
 
     public function testApply_stopRule()
@@ -95,8 +101,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'foo1 should have validated as strlenMin(6)',
             ),
         );
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
     }
 
     public function testUseFieldMessage()
@@ -115,8 +120,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'foo should have validated as strlenMin(6)',
             ),
         );
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
 
         $this->filter->useFieldMessage('foo', 'Please use 6-12 alphanumeric characters.');
         $result = $this->filter->apply($subject);
@@ -126,8 +130,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'Please use 6-12 alphanumeric characters.',
             ),
         );
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
     }
 
     public function test__invoke()
@@ -149,7 +152,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         } catch (Exception\FilterFailed $e) {
 
-            $this->assertSame($subject, $e->getFilterSubject());
+            $this->assertSame($subject, $e->getSubject());
             $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
             $expect = array(
                 'foo' => array(
@@ -157,7 +160,9 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                     'foo should have validated as strlenMin(6)',
                 ),
             );
-            $this->assertSame($expect, $e->getFilterMessages());
+
+            $actual = $e->getFailures()->getMessages();
+            $this->assertSame($expect, $actual);
         }
     }
 
@@ -199,7 +204,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 'This field has no rule specified.',
             ),
         );
-        $actual = $this->filter->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertFailureMessages($expect);
     }
 }
