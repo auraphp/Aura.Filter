@@ -8,6 +8,7 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Rule\Locator\Locator;
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Locator\ValidateLocator;
 
@@ -89,8 +90,7 @@ class ValueFilter
     public function validate($value, $rule)
     {
         $this->subject->value = $value;
-        $rule = $this->validate_locator->get($rule);
-        return $this->apply($rule, func_get_args());
+        return $this->apply($this->validate_locator, func_get_args());
     }
 
     /**
@@ -109,8 +109,7 @@ class ValueFilter
     public function sanitize(&$value, $rule)
     {
         $this->subject->value =& $value;
-        $rule = $this->sanitize_locator->get($rule);
-        return $this->apply($rule, func_get_args());
+        return $this->apply($this->sanitize_locator, func_get_args());
     }
 
     /**
@@ -139,17 +138,19 @@ class ValueFilter
      *
      * Applies a rule.
      *
-     * @param string $rule The rule name.
+     * @param Locator $locator A rule locator.
      *
      * @param string $args Arugments for the rule.
      *
      * @return bool True on success, false on failure.
      *
      */
-    protected function apply($rule, $args)
+    protected function apply(Locator $locator, $args)
     {
         array_shift($args); // remove $value
-        array_shift($args); // remove $rule
+        $rule = array_shift($args); // remove $rule
+        $rule = $locator->get($rule); // create rule object
+
         array_unshift($args, 'value'); // add field name on $this->subject
         array_unshift($args, $this->subject); // add $this->subject
         return call_user_func_array($rule, $args);
