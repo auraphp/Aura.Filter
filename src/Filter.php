@@ -16,7 +16,7 @@ use InvalidArgumentException;
 
 /**
  *
- * A filter for an entire "subject".
+ * A filter for an entire "subject" (i.e., an array or object).
  *
  * @package Aura.Filter
  *
