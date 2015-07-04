@@ -19,32 +19,13 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
     protected function assertFailureMessages($expect, $field = null)
     {
+        $failures = $this->filter->getFailures();
         if ($field) {
-            $actual = $this->getFailureMessagesField($this->filter->getFailures($field));
+            $actual = $failures->getMessagesForField($field);
         } else {
-            $actual = $this->getFailureMessages($this->filter->getFailures());
+            $actual = $failures->getMessages();
         }
         $this->assertSame($expect, $actual);
-    }
-
-    protected function getFailureMessagesField($failures)
-    {
-        $actual = array();
-        foreach ($failures as $failure) {
-            $actual[] = $failure->getMessage();
-        }
-        return $actual;
-    }
-
-    protected function getFailureMessages($fields_failures)
-    {
-        $actual = array();
-        foreach ($fields_failures as $field => $failures) {
-            foreach ($failures as $failure) {
-                $actual[$field][] = $failure->getMessage();
-            }
-        }
-        return $actual;
     }
 
     public function testApply_softRule()
@@ -171,7 +152,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         } catch (Exception\FilterFailed $e) {
 
-            $this->assertSame($subject, $e->getFilterSubject());
+            $this->assertSame($subject, $e->getSubject());
             $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
             $expect = array(
                 'foo' => array(
@@ -180,7 +161,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
                 ),
             );
 
-            $actual = $this->getFailureMessages($e->getFilterFailures());
+            $actual = $e->getFailures()->getMessages();
             $this->assertSame($expect, $actual);
         }
     }

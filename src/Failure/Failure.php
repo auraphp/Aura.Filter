@@ -28,15 +28,6 @@ class Failure
 
     /**
      *
-     * The failure mode.
-     *
-     * @var string
-     *
-     */
-    protected $mode;
-
-    /**
-     *
      * The failure message.
      *
      * @var string
@@ -59,8 +50,6 @@ class Failure
      *
      * @param string $field The field that failed.
      *
-     * @param string $mode The failure mode.
-     *
      * @param string $message The failure message.
      *
      * @param array $args The arguments passed to the rule specification.
@@ -70,12 +59,10 @@ class Failure
      */
     public function __construct(
         $field,
-        $mode,
         $message,
         array $args = array()
     ) {
         $this->field = $field;
-        $this->mode = $mode;
         $this->message = $message;
         $this->args = $args;
     }
@@ -90,18 +77,6 @@ class Failure
     public function getField()
     {
         return $this->field;
-    }
-
-    /**
-     *
-     * Returns the failure mode.
-     *
-     * @return string
-     *
-     */
-    public function getMode()
-    {
-        return $this->mode;
     }
 
     /**

@@ -9,6 +9,7 @@
 namespace Aura\Filter\Exception;
 
 use Aura\Filter\Exception;
+use Aura\Filter\Failure\FailureCollection;
 
 /**
  *
@@ -23,10 +24,10 @@ class FilterFailed extends Exception
      *
      * Failures from the filter.
      *
-     * @var array
+     * @var FailureCollection
      *
      */
-    protected $filter_failures;
+    protected $failures;
 
     /**
      *
@@ -35,7 +36,7 @@ class FilterFailed extends Exception
      * @var mixed
      *
      */
-    protected $filter_subject;
+    protected $subject;
 
     /**
      *
@@ -76,26 +77,26 @@ class FilterFailed extends Exception
      *
      * Sets the failures from the filter.
      *
-     * @param array $filter_failures The filter failures.
+     * @param FailureCollection $failures The filter failures.
      *
      * @return null
      *
      */
-    public function setFilterFailures(array $filter_failures)
+    public function setFailures(FailureCollection $failures)
     {
-        $this->filter_failures = $filter_failures;
+        $this->failures = $failures;
     }
 
     /**
      *
      * Gets the failures from the filter.
      *
-     * @return array
+     * @return FailureCollection
      *
      */
-    public function getFilterFailures()
+    public function getFailures()
     {
-        return $this->filter_failures;
+        return $this->failures;
     }
 
     /**
@@ -107,9 +108,9 @@ class FilterFailed extends Exception
      * @return null
      *
      */
-    public function setFilterSubject($subject)
+    public function setSubject($subject)
     {
-        $this->filter_subject = $subject;
+        $this->subject = $subject;
     }
 
     /**
@@ -119,8 +120,8 @@ class FilterFailed extends Exception
      * @return mixed
      *
      */
-    public function getFilterSubject()
+    public function getSubject()
     {
-        return $this->filter_subject;
+        return $this->subject;
     }
 }
