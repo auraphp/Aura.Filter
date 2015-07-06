@@ -20,11 +20,11 @@ class ContainerTest extends AbstractContainerTest
     public function provideNewInstance()
     {
         return array(
-            array('Aura\Filter\Filter'),
             array('Aura\Filter\Rule\Locator\SanitizeLocator'),
             array('Aura\Filter\Rule\Locator\ValidateLocator'),
             array('Aura\Filter\Spec\SanitizeSpec'),
             array('Aura\Filter\Spec\ValidateSpec'),
+            array('Aura\Filter\SubjectFilter'),
             array('Aura\Filter\ValueFilter'),
         );
     }

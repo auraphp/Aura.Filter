@@ -9,15 +9,6 @@ class Common extends Config
     public function define(Container $di)
     {
         /**
-         * Aura\Filter\Filter
-         */
-        $di->params['Aura\Filter\Filter'] = array(
-            'validate_spec' => $di->lazyNew('Aura\Filter\Spec\ValidateSpec'),
-            'sanitize_spec' => $di->lazyNew('Aura\Filter\Spec\SanitizeSpec'),
-            'failures' => $di->lazyNew('Aura\Filter\Failure\FailureCollection'),
-        );
-
-        /**
          * Aura\Filter\Spec\SanitizeSpec
          */
         $di->params['Aura\Filter\Spec\SanitizeSpec'] = array(
@@ -29,6 +20,15 @@ class Common extends Config
          */
         $di->params['Aura\Filter\Spec\ValidateSpec'] = array(
             'rule_locator' => $di->lazyNew('Aura\Filter\Rule\Locator\ValidateLocator'),
+        );
+
+        /**
+         * Aura\Filter\SubjectFilter
+         */
+        $di->params['Aura\Filter\SubjectFilter'] = array(
+            'validate_spec' => $di->lazyNew('Aura\Filter\Spec\ValidateSpec'),
+            'sanitize_spec' => $di->lazyNew('Aura\Filter\Spec\SanitizeSpec'),
+            'failures' => $di->lazyNew('Aura\Filter\Failure\FailureCollection'),
         );
 
         /**

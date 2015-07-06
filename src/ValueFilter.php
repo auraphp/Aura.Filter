@@ -14,7 +14,7 @@ use Aura\Filter\Rule\Locator\ValidateLocator;
 
 /**
  *
- * A standalone filter for individual values.
+ * A filter for individual values.
  *
  * @package Aura.Filter
  *

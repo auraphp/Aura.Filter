@@ -17,7 +17,7 @@ use Aura\Filter\Rule\Locator\ValidateLocator;
  * @package Aura.Filter
  *
  */
-class ValidateSpec extends AbstractSpec
+class ValidateSpec extends Spec
 {
     /**
      *

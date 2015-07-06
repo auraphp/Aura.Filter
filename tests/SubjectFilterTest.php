@@ -7,14 +7,14 @@ use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+class SubjectFilterTest extends \PHPUnit_Framework_TestCase
 {
     protected $filter;
 
     protected function setUp()
     {
         $filter_container = new FilterContainer();
-        $this->filter = $filter_container->newFilter();
+        $this->filter = $filter_container->newSubjectFilter();
     }
 
     protected function assertFailureMessages($expect, $field = null)
@@ -153,7 +153,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         } catch (Exception\FilterFailed $e) {
 
             $this->assertSame($subject, $e->getSubject());
-            $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
+            $this->assertSame('Aura\Filter\SubjectFilter', $e->getFilterClass());
             $expect = array(
                 'foo' => array(
                     'foo should have validated as alnum',
@@ -184,26 +184,5 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $result = $this->filter->__invoke($array);
         $this->assertNull($result);
         $this->assertSame('123', $array['foo']);
-    }
-
-    public function testStrict()
-    {
-        $this->filter->validate('foo')->is('strlenMax', 6);
-        $this->filter->strict();
-
-        $subject = (object) array(
-            'foo' => 'foobar',
-            'bar' => 'barbaz'
-        );
-
-        $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
-
-        $expect = array(
-            'bar' => array(
-                'This field has no rule specified.',
-            ),
-        );
-        $this->assertFailureMessages($expect);
     }
 }

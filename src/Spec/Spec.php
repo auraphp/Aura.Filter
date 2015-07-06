@@ -9,7 +9,7 @@
 namespace Aura\Filter\Spec;
 
 use Exception;
-use Aura\Filter\Filter;
+use Aura\Filter\SubjectFilter;
 
 /**
  *
@@ -18,8 +18,23 @@ use Aura\Filter\Filter;
  * @package Aura.Filter
  *
  */
-abstract class AbstractSpec
+class Spec
 {
+    /**
+     * Stop filtering on a field when a rule for that field fails.
+     */
+    const HARD_RULE = 'HARD_RULE';
+
+    /**
+     * Continue filtering on a field even when a rule for that field fails.
+     */
+    const SOFT_RULE = 'SOFT_RULE';
+
+    /**
+     * Stop filtering on all fields when a rule fails.
+     */
+    const STOP_RULE = 'STOP_RULE';
+
     /**
      *
      * The field name to be filtered.
@@ -72,7 +87,7 @@ abstract class AbstractSpec
      * @var string
      *
      */
-    protected $failure_mode = Filter::HARD_RULE;
+    protected $failure_mode = self::HARD_RULE;
 
     /**
      *
@@ -124,7 +139,7 @@ abstract class AbstractSpec
      */
     public function asSoftRule($message = null)
     {
-        return $this->setFailureMode(Filter::SOFT_RULE, $message);
+        return $this->setFailureMode(self::SOFT_RULE, $message);
     }
 
     /**
@@ -138,7 +153,7 @@ abstract class AbstractSpec
      */
     public function asHardRule($message = null)
     {
-        return $this->setFailureMode(Filter::HARD_RULE, $message);
+        return $this->setFailureMode(self::HARD_RULE, $message);
     }
 
     /**
@@ -152,7 +167,7 @@ abstract class AbstractSpec
      */
     public function asStopRule($message = null)
     {
-        return $this->setFailureMode(Filter::STOP_RULE, $message);
+        return $this->setFailureMode(self::STOP_RULE, $message);
     }
 
     /**
@@ -200,6 +215,21 @@ abstract class AbstractSpec
     public function getFailureMode()
     {
         return $this->failure_mode;
+    }
+
+    public function isStopRule()
+    {
+        return $this->failure_mode === self::STOP_RULE;
+    }
+
+    public function isHardRule()
+    {
+        return $this->failure_mode === self::HARD_RULE;
+    }
+
+    public function isSoftRule()
+    {
+        return $this->failure_mode === self::SOFT_RULE;
     }
 
     /**

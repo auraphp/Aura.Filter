@@ -17,7 +17,7 @@ use Aura\Filter\Rule\Locator\SanitizeLocator;
  * @package Aura.Filter
  *
  */
-class SanitizeSpec extends AbstractSpec
+class SanitizeSpec extends Spec
 {
     /**
      *

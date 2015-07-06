@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\Filter;
+use Aura\Filter\SubjectFilter;
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Sanitize;
 
@@ -24,18 +24,18 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
 
     public function testFailureModes()
     {
-        $this->assertSame(Filter::HARD_RULE, $this->spec->getFailureMode());
+        $this->assertSame(Spec::HARD_RULE, $this->spec->getFailureMode());
 
         $this->spec->asSoftRule('soft failure message');
-        $this->assertSame(Filter::SOFT_RULE, $this->spec->getFailureMode());
+        $this->assertSame(Spec::SOFT_RULE, $this->spec->getFailureMode());
         $this->assertSame('soft failure message', $this->spec->getMessage());
 
         $this->spec->asHardRule('hard failure message');
-        $this->assertSame(Filter::HARD_RULE, $this->spec->getFailureMode());
+        $this->assertSame(Spec::HARD_RULE, $this->spec->getFailureMode());
         $this->assertSame('hard failure message', $this->spec->getMessage());
 
         $this->spec->asStopRule('stop failure message');
-        $this->assertSame(Filter::STOP_RULE, $this->spec->getFailureMode());
+        $this->assertSame(Spec::STOP_RULE, $this->spec->getFailureMode());
         $this->assertSame('stop failure message', $this->spec->getMessage());
     }
 

@@ -10,6 +10,7 @@ namespace Aura\Filter;
 
 use Aura\Filter\Exception;
 use Aura\Filter\Failure\FailureCollection;
+use Aura\Filter\Spec\Spec;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 use InvalidArgumentException;
@@ -21,23 +22,8 @@ use InvalidArgumentException;
  * @package Aura.Filter
  *
  */
-class Filter
+class SubjectFilter
 {
-    /**
-     * Stop filtering on a field when a rule for that field fails.
-     */
-    const HARD_RULE = 'HARD_RULE';
-
-    /**
-     * Continue filtering on a field even when a rule for that field fails.
-     */
-    const SOFT_RULE = 'SOFT_RULE';
-
-    /**
-     * Stop filtering on all fields when a rule fails.
-     */
-    const STOP_RULE = 'STOP_RULE';
-
     /**
      *
      * An array of specifications for the filter subject.
@@ -91,25 +77,6 @@ class Filter
      *
      */
     protected $sanitize_spec;
-
-    /**
-     *
-     * Operate in strict mode? (Subject fields without specifications are
-     * failures for merely existing; all fields must have a specification.)
-     *
-     * @var bool
-     *
-     */
-    protected $strict;
-
-    /**
-     *
-     * The message to use when a field is present without a rule specified.
-     *
-     * @var string
-     *
-     */
-    protected $strict_message = 'This field has no rule specified.';
 
     /**
      *
@@ -234,11 +201,11 @@ class Filter
      *
      * Adds a specification for a subject field.
      *
-     * @param AbstractSpec $spec The specification object.
+     * @param Spec $spec The specification object.
      *
      * @param string $field The subject field name.
      *
-     * @return AbstractSpec
+     * @return Spec
      *
      */
     protected function addSpec($spec, $field)
@@ -290,20 +257,6 @@ class Filter
 
     /**
      *
-     * Should all fields have at least one rule?
-     *
-     * @param bool $strict All fields should have one rule, or not.
-     *
-     * @return null
-     *
-     */
-    public function strict($strict = true)
-    {
-        $this->strict = $strict;
-    }
-
-    /**
-     *
      * Applies the rule specifications to an array.
      *
      * @param array $array The filter subject.
@@ -332,114 +285,66 @@ class Filter
     {
         $this->skip = array();
         $this->failures = clone $this->proto_failures;
-        $this->applySpecs($object);
-        $this->applyStrict($object);
+        foreach ($this->specs as $spec) {
+            $continue = $this->applySpec($spec, $object);
+            if (! $continue) {
+                break;
+            }
+        }
         return $this->failures->isEmpty();
     }
 
     /**
      *
-     * Applies the rule specifications to the subject.
+     * Apply a rule specification to the subject.
+     *
+     * @param Spec $spec The rule specification.
      *
      * @param object $subject The filter subject.
      *
-     * @return bool True if all rules passed, false if not.
+     * @return bool True to continue, false to stop.
      *
      */
-    protected function applySpecs($subject)
+    protected function applySpec($spec, $subject)
     {
-        foreach ($this->specs as $spec) {
-            if ($this->skippedOrPassed($spec, $subject)) {
-                continue;
-            }
-            if ($this->failed($spec) === self::STOP_RULE) {
-                break;
-            }
-        }
-    }
-
-    /**
-     *
-     * Given a rule specification, is it to be skipped, or does the subject
-     * pass?
-     *
-     * @param AbstractSpec $spec The rule specification.
-     *
-     * @param object $subject The filter subject.
-     *
-     * @return bool True if all rules passed, false if not.
-     *
-     */
-    protected function skippedOrPassed($spec, $subject)
-    {
-        return isset($this->skip[$spec->getField()])
-            || call_user_func($spec, $subject);
-    }
-
-    /**
-     *
-     * A rule specification failed.
-     *
-     * @param AbstractSpec $spec The failed rule specification.
-     *
-     * @return string The failure mode (hard, soft, or stop).
-     *
-     */
-    protected function failed($spec)
-    {
-        $this->addFailure($spec);
-
-        $field = $spec->getField();
-        $failure_mode = $spec->getFailureMode();
-        if ($failure_mode === self::HARD_RULE) {
-            $this->skip[$field] = true;
+        if (isset($this->skip[$spec->getField()])) {
+            return true;
         }
 
-        return $failure_mode;
+        if (call_user_func($spec, $subject)) {
+            return true;
+        }
+
+        $this->failed($spec);
+        if ($spec->isStopRule()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
      *
      * Adds a failure.
      *
-     * @param AbstractSpec $spec The failed rule specification.
+     * @param Spec $spec The failed rule specification.
      *
      * @return Failure
      *
      */
-    protected function addFailure($spec)
+    protected function failed($spec)
     {
         $field = $spec->getField();
+
+        if ($spec->isHardRule()) {
+            $this->skip[$field] = true;
+        }
+
         if (isset($this->field_messages[$field])) {
             return $this->failures->set($field, $this->field_messages[$field]);
         }
 
         return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
-    }
-
-    /**
-     *
-     * Make sure that all fields have a rule specification.
-     *
-     * @param object $subject The filter subject.
-     *
-     * @return null
-     *
-     */
-    protected function applyStrict($subject)
-    {
-        if (! $this->strict) {
-            return;
-        }
-
-        $fields = get_object_vars($subject);
-        foreach ($this->specs as $spec) {
-            unset($fields[$spec->getField()]);
-        }
-
-        foreach ($fields as $field => $value) {
-            $this->failures->set($field, $this->strict_message);
-        }
     }
 
     /**
