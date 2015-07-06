@@ -11,8 +11,6 @@ namespace Aura\Filter;
 use Aura\Filter\Failure\FailureCollection;
 use Aura\Filter\Locator\SanitizeLocator;
 use Aura\Filter\Locator\ValidateLocator;
-use Aura\Filter\Rule\Sanitize;
-use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 
