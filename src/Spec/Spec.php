@@ -9,7 +9,7 @@
 namespace Aura\Filter\Spec;
 
 use Exception;
-use Aura\Filter\SubjectFilter;
+use Aura\Filter\Filter;
 
 /**
  *

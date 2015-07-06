@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\SubjectFilter;
+use Aura\Filter\Filter;
 use Aura\Filter\Rule\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Sanitize;
 

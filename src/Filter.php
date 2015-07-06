@@ -10,7 +10,6 @@ namespace Aura\Filter;
 
 use Aura\Filter\Exception;
 use Aura\Filter\Failure\FailureCollection;
-use Aura\Filter\Spec\Spec;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 use InvalidArgumentException;
@@ -22,7 +21,7 @@ use InvalidArgumentException;
  * @package Aura.Filter
  *
  */
-class SubjectFilter
+class Filter
 {
     /**
      *

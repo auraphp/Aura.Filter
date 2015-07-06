@@ -7,14 +7,14 @@ use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
 
-class SubjectFilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends \PHPUnit_Framework_TestCase
 {
     protected $filter;
 
     protected function setUp()
     {
         $filter_container = new FilterContainer();
-        $this->filter = $filter_container->newSubjectFilter();
+        $this->filter = $filter_container->newFilter();
     }
 
     protected function assertFailureMessages($expect, $field = null)
@@ -153,7 +153,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         } catch (Exception\FilterFailed $e) {
 
             $this->assertSame($subject, $e->getSubject());
-            $this->assertSame('Aura\Filter\SubjectFilter', $e->getFilterClass());
+            $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
             $expect = array(
                 'foo' => array(
                     'foo should have validated as alnum',

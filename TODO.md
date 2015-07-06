@@ -2,4 +2,4 @@ https://github.com/auraphp/Aura.Filter/issues/61 (Validation arguments should be
 
 Write ValueFilter docs.
 
-Rename Filter to SubjectFilter?
+Rename Filter to Filter?

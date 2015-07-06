@@ -24,7 +24,7 @@ class ContainerTest extends AbstractContainerTest
             array('Aura\Filter\Rule\Locator\ValidateLocator'),
             array('Aura\Filter\Spec\SanitizeSpec'),
             array('Aura\Filter\Spec\ValidateSpec'),
-            array('Aura\Filter\SubjectFilter'),
+            array('Aura\Filter\Filter'),
             array('Aura\Filter\ValueFilter'),
         );
     }
