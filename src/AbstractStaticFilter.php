@@ -24,7 +24,7 @@ abstract class AbstractStaticFilter
      * @var ValueFilter
      *
      */
-    protected static $singleton;
+    protected static $instance;
 
     /**
      *
@@ -39,18 +39,18 @@ abstract class AbstractStaticFilter
      *
      * Sets the proxied filter instance.
      *
-     * @param ValueFilter $singleton The proxied filter instance.
+     * @param ValueFilter $instance The proxied filter instance.
      *
      * @return null
      *
      */
-    public static function setSingleton(ValueFilter $singleton)
+    public static function setInstance(ValueFilter $instance)
     {
-        if (static::$singleton) {
+        if (static::$instance) {
             $class = get_called_class();
-            throw new Exception("{$class}::\$singleton is already set.");
+            throw new Exception("{$class}::\$instance is already set.");
         }
-        static::$singleton = $singleton;
+        static::$instance = $instance;
     }
 
     /**
@@ -68,14 +68,14 @@ abstract class AbstractStaticFilter
      */
     public static function validate($value, $rule)
     {
-        if (! static::$singleton) {
+        if (! static::$instance) {
             $class = get_called_class();
-            throw new Exception("{$class}::\$singleton not set.");
+            throw new Exception("{$class}::\$instance not set.");
         }
 
         $args = func_get_args();
         return call_user_func_array(
-            array(static::$singleton, 'validate'),
+            array(static::$instance, 'validate'),
             $args
         );
     }
@@ -95,14 +95,14 @@ abstract class AbstractStaticFilter
      */
     public static function sanitize(&$value, $rule)
     {
-        if (! static::$singleton) {
-            throw new Exception('StaticValueFilter::$singleton not set.');
+        if (! static::$instance) {
+            throw new Exception('StaticValueFilter::$instance not set.');
         }
 
         $args = func_get_args();
         $args[0] = &$value;
         return call_user_func_array(
-            array(static::$singleton, 'sanitize'),
+            array(static::$instance, 'sanitize'),
             $args
         );
     }

@@ -8,7 +8,7 @@ class StaticFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function test()
     {
-        FakeStaticFilter::setSingleton(new ValueFilter(
+        FakeStaticFilter::setInstance(new ValueFilter(
             new ValidateLocator(),
             new SanitizeLocator()
         ));

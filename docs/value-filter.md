@@ -57,7 +57,7 @@ use Aura\Filter\ValueFilter;
 use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Locator\SanitizeLocator;
 
-MyStaticFilter::setSingleton(new ValueFilter(
+MyStaticFilter::setInstance(new ValueFilter(
     new ValidateLocator(),
     new SanitizeLocator()
 ));
