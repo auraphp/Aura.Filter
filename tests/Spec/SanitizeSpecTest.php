@@ -24,18 +24,18 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
 
     public function testFailureModes()
     {
-        $this->assertSame(Spec::HARD_RULE, $this->spec->getFailureMode());
+        $this->assertTrue($this->spec->isHardRule());
 
         $this->spec->asSoftRule('soft failure message');
-        $this->assertSame(Spec::SOFT_RULE, $this->spec->getFailureMode());
+        $this->assertTrue($this->spec->isSoftRule());
         $this->assertSame('soft failure message', $this->spec->getMessage());
 
         $this->spec->asHardRule('hard failure message');
-        $this->assertSame(Spec::HARD_RULE, $this->spec->getFailureMode());
+        $this->assertTrue($this->spec->isHardRule());
         $this->assertSame('hard failure message', $this->spec->getMessage());
 
         $this->spec->asStopRule('stop failure message');
-        $this->assertSame(Spec::STOP_RULE, $this->spec->getFailureMode());
+        $this->assertTrue($this->spec->isStopRule());
         $this->assertSame('stop failure message', $this->spec->getMessage());
     }
 

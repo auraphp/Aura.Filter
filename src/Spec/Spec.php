@@ -219,18 +219,6 @@ class Spec
         return $this;
     }
 
-    /**
-     *
-     * Returns the failure mode for this rule specification.
-     *
-     * @return string
-     *
-     */
-    public function getFailureMode()
-    {
-        return $this->failure_mode;
-    }
-
     public function isStopRule()
     {
         return $this->failure_mode === self::STOP_RULE;
