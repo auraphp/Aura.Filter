@@ -16,31 +16,13 @@ use Aura\Filter\Spec\ValidateSpec;
 
 /**
  *
- * Container to create and retain Filter objects.
+ * Factory to create Filter objects.
  *
  * @package Aura.Filter
  *
  */
-class FilterContainer
+class FilterFactory
 {
-    /**
-     *
-     * A locator for "validate" rules.
-     *
-     * @var ValidateLocator
-     *
-     */
-    protected $validate_locator;
-
-    /**
-     *
-     * A locator for "sanitize" rules.
-     *
-     * @var SanitizeLocator
-     *
-     */
-    protected $sanitize_locator;
-
     /**
      *
      * Additional factories for the ValidateLocator.
@@ -106,8 +88,8 @@ class FilterContainer
     public function newValueFilter()
     {
         return new ValueFilter(
-            $this->getValidateLocator(),
-            $this->getSanitizeLocator()
+            $this->newValidateLocator(),
+            $this->newSanitizeLocator()
         );
     }
 
@@ -120,7 +102,7 @@ class FilterContainer
      */
     public function newValidateSpec()
     {
-        return new ValidateSpec($this->getValidateLocator());
+        return new ValidateSpec($this->newValidateLocator());
     }
 
     /**
@@ -132,37 +114,7 @@ class FilterContainer
      */
     public function newSanitizeSpec()
     {
-        return new SanitizeSpec($this->getSanitizeLocator());
-    }
-
-    /**
-     *
-     * Returns a shared ValidateLocator instance.
-     *
-     * @return ValidateLocator
-     *
-     */
-    public function getValidateLocator()
-    {
-        if (! $this->validate_locator) {
-            $this->validate_locator = $this->newValidateLocator();
-        }
-        return $this->validate_locator;
-    }
-
-    /**
-     *
-     * Returns a shared SanitizeLocator instance.
-     *
-     * @return SanitizeLocator
-     *
-     */
-    public function getSanitizeLocator()
-    {
-        if (! $this->sanitize_locator) {
-            $this->sanitize_locator = $this->newSanitizeLocator();
-        }
-        return $this->sanitize_locator;
+        return new SanitizeSpec($this->newSanitizeLocator());
     }
 
     /**

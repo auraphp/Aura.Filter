@@ -18,14 +18,14 @@ This library also makes a distinction between a "value" filter and a "subject" f
 
 ## Filter Container
 
-The easiest way to interact with the filter system is via the _FilterContainer_. Instantiate it first; you can then get filter objects from it:
+The easiest way to interact with the filter system is via the _FilterFactory_. Instantiate it first; you can then get filter objects from it:
 
 ```php
-use Aura\Filter\FilterContainer;
+use Aura\Filter\FilterFactory;
 
-$filter_container = new FilterContainer();
+$filter_factory = new FilterFactory();
 
-$filter = $filter_container->newValueFilter();
-$filter = $filter_container->newSubjectFilter();
+$filter = $filter_factory->newValueFilter();
+$filter = $filter_factory->newSubjectFilter();
 
 ```

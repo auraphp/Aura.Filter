@@ -4,12 +4,12 @@ You can filter an entire object or array (herein called a "subject") by specifyi
 
 ## Creating A Subject Filter
 
-First, create a _SubjectFilter_ via the _FilterContainer_:
+First, create a _SubjectFilter_ via the _FilterFactory_:
 
 ```php
-$filter_container = new FilterContainer();
+$filter_factory = new FilterFactory();
 
-$filter = $filter_container->newSubjectFilter();
+$filter = $filter_factory->newSubjectFilter();
 ```
 
 Next, add rule specifications to validate and/or sanitize each subject field:
@@ -206,10 +206,10 @@ class EntityFilter extends SubjectFilter
 }
 ```
 
-You can then create a new instance of your extended filter class through the _FilterContainer_:
+You can then create a new instance of your extended filter class through the _FilterFactory_:
 
 ```php
-$entity_filter = $filter_container->newSubjectFilter('Vendor\Package\EntityFilter');
+$entity_filter = $filter_factory->newSubjectFilter('Vendor\Package\EntityFilter');
 $success = $entity_filter->apply($entity);
 ```
 

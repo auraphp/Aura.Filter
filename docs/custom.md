@@ -87,33 +87,12 @@ class SanitizeHex
 }
 ```
 
-## Set A Factory In The Locator
+## Set Locator Factories
 
-Now we set a factory for the rule into the appropriate locator from the
-_FilterContainer_. Validate rules should go in the _ValidateLocator_, and
-sanitize rules should go in the _SanitizeLocator_. Wrap the rule instantiation
-logic in a closure so that it is lazy-loaded only when the rule is called.
+Now we set a factory for the rule into the appropriate locator from the _FilterFactory_.  Pass additional `$validate_factories` and `$sanitize_factories` to the _FilterFactory_ at construction time; Wrap the rule instantiation logic in a closure so that it is lazy-loaded only when the rule is called:
 
 ```php
-use Aura\Filter\FilterContainer;
-
-$filter_container = new FilterContainer();
-
-$validate_locator = $filter_container->getValidateLocator();
-$validate_locator->set('hex', function () {
-    return new Vendor\Package\Filter\Rule\Validate\ValidateHex();
-});
-
-$sanitize_locator = $filter_container->getSanitizeLocator();
-$sanitize_locator->set('hex', function () {
-    return new Vendor\Package\Filter\Rule\Sanitize\SanitizeHex();
-});
-```
-
-Alternatively, you can pass additional `$validate_factories` and `$sanitize_factories` at _FilterContainer_ construction time:
-
-```php
-use Aura\Filter\FilterContainer;
+use Aura\Filter\FilterFactory;
 
 $validate_factories = array(
     'hex' => function () { return new Vendor\Package\Filter\Rule\Validate\ValidateHex(); },
@@ -123,7 +102,7 @@ $sanitize_factories = array(
     'hex' => function () { return new Vendor\Package\Filter\Rule\Sanitize\SanitizeHex(); },
 );
 
-$filter_container = new FilterContainer(
+$filter_factory = new FilterFactory(
     $validate_factories,
     $sanitize_factories
 );
@@ -134,7 +113,7 @@ $filter_container = new FilterContainer(
 Finally, we can use the rule in our filters:
 
 ```php
-$filter = $filter_container->newSubjectFilter();
+$filter = $filter_factory->newSubjectFilter();
 
 // the 'color' field must be a hex value of no more than 6 digits
 $filter->validate('color')->is('hex', 6);

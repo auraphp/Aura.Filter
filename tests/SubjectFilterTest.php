@@ -7,8 +7,8 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filter_container = new FilterContainer();
-        $this->filter = $filter_container->newSubjectFilter();
+        $filter_factory = new FilterFactory();
+        $this->filter = $filter_factory->newSubjectFilter();
     }
 
     protected function assertFailureMessages($expect, $field = null)
