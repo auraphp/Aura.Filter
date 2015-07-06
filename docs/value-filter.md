@@ -54,8 +54,8 @@ Then pass a manually-created _ValueFilter_ with its own locator objects into you
 
 ```php
 use Aura\Filter\ValueFilter;
-use Aura\Filter\Rule\Locator\ValidateLocator;
-use Aura\Filter\Rule\Locator\SanitizeLocator;
+use Aura\Filter\Locator\ValidateLocator;
+use Aura\Filter\Locator\SanitizeLocator;
 
 MyStaticFilter::setSingleton(new ValueFilter(
     new ValidateLocator(),

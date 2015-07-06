@@ -9,8 +9,8 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Failure\FailureCollection;
-use Aura\Filter\Rule\Locator\SanitizeLocator;
-use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Locator\SanitizeLocator;
+use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Rule\Sanitize;
 use Aura\Filter\Rule\Validate;
 use Aura\Filter\Spec\SanitizeSpec;

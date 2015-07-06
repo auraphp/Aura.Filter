@@ -2,7 +2,7 @@
 namespace Aura\Filter\Spec;
 
 use Aura\Filter\Filter;
-use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Rule\Validate;
 
 class ValidateSpecTest extends \PHPUnit_Framework_TestCase

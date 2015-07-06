@@ -1,8 +1,8 @@
 <?php
 namespace Aura\Filter;
 
-use Aura\Filter\Rule\Locator\ValidateLocator;
-use Aura\Filter\Rule\Locator\SanitizeLocator;
+use Aura\Filter\Locator\ValidateLocator;
+use Aura\Filter\Locator\SanitizeLocator;
 
 class StaticFilterTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Locator\ValidateLocator;
 
 /**
  *

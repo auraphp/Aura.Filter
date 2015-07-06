@@ -1,5 +1,5 @@
 <?php
-namespace Aura\Filter\Rule\Locator;
+namespace Aura\Filter\Locator;
 
 use Aura\Filter\Rule\Validate;
 

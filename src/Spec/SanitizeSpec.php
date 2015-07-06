@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\Rule\Locator\SanitizeLocator;
+use Aura\Filter\Locator\SanitizeLocator;
 
 /**
  *

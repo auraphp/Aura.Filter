@@ -8,9 +8,9 @@
  */
 namespace Aura\Filter;
 
-use Aura\Filter\Rule\Locator\Locator;
-use Aura\Filter\Rule\Locator\SanitizeLocator;
-use Aura\Filter\Rule\Locator\ValidateLocator;
+use Aura\Filter\Locator\Locator;
+use Aura\Filter\Locator\SanitizeLocator;
+use Aura\Filter\Locator\ValidateLocator;
 
 /**
  *

@@ -2,7 +2,7 @@
 namespace Aura\Filter\Spec;
 
 use Aura\Filter\Filter;
-use Aura\Filter\Rule\Locator\SanitizeLocator;
+use Aura\Filter\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Sanitize;
 
 class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
