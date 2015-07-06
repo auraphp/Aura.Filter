@@ -21,7 +21,7 @@ use InvalidArgumentException;
  * @package Aura.Filter
  *
  */
-class Filter
+class SubjectFilter
 {
     /**
      *

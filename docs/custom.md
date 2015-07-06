@@ -134,7 +134,7 @@ $filter_container = new FilterContainer(
 Finally, we can use the rule in our filters:
 
 ```php
-$filter = $filter_container->newFilter();
+$filter = $filter_container->newSubjectFilter();
 
 // the 'color' field must be a hex value of no more than 6 digits
 $filter->validate('color')->is('hex', 6);

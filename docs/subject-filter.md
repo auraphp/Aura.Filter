@@ -4,12 +4,12 @@ You can filter an entire object or array (herein called a "subject") by specifyi
 
 ## Creating A Subject Filter
 
-First, create a _Filter_ object from the _FilterContainer_:
+First, create a _SubjectFilter_ via the _FilterContainer_:
 
 ```php
 $filter_container = new FilterContainer();
 
-$filter = $filter_container->newFilter();
+$filter = $filter_container->newSubjectFilter();
 ```
 
 Next, add rule specifications to validate and/or sanitize each subject field:
@@ -190,9 +190,9 @@ To do so, override the the `init()` method on the extended _Filter_ class; the a
 ```php
 namespace Vendor\Package;
 
-use Aura\Filter\Filter;
+use Aura\Filter\SubjectFilter;
 
-class EntityFilter extends Filter
+class EntityFilter extends SubjectFilter
 {
     protected function init()
     {
@@ -209,7 +209,7 @@ class EntityFilter extends Filter
 You can then create a new instance of your extended filter class through the _FilterContainer_:
 
 ```php
-$entity_filter = $filter_container->newFilter('Vendor\Package\EntityFilter');
+$entity_filter = $filter_container->newSubjectFilter('Vendor\Package\EntityFilter');
 $success = $entity_filter->apply($entity);
 ```
 

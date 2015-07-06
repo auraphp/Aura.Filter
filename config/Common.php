@@ -23,9 +23,9 @@ class Common extends Config
         );
 
         /**
-         * Aura\Filter\Filter
+         * Aura\Filter\SubjectFilter
          */
-        $di->params['Aura\Filter\Filter'] = array(
+        $di->params['Aura\Filter\SubjectFilter'] = array(
             'validate_spec' => $di->lazyNew('Aura\Filter\Spec\ValidateSpec'),
             'sanitize_spec' => $di->lazyNew('Aura\Filter\Spec\SanitizeSpec'),
             'failures' => $di->lazyNew('Aura\Filter\Failure\FailureCollection'),

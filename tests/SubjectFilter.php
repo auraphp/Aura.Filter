@@ -1,20 +1,14 @@
 <?php
 namespace Aura\Filter;
 
-use Aura\Filter\Rule\RuleLocator;
-use Aura\Filter\Rule\Sanitize;
-use Aura\Filter\Rule\Validate;
-use Aura\Filter\Spec\SanitizeSpec;
-use Aura\Filter\Spec\ValidateSpec;
-
-class FilterTest extends \PHPUnit_Framework_TestCase
+class SubjectFilterTest extends \PHPUnit_Framework_TestCase
 {
     protected $filter;
 
     protected function setUp()
     {
         $filter_container = new FilterContainer();
-        $this->filter = $filter_container->newFilter();
+        $this->filter = $filter_container->newSubjectFilter();
     }
 
     protected function assertFailureMessages($expect, $field = null)
