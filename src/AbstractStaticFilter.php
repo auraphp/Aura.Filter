@@ -96,7 +96,8 @@ abstract class AbstractStaticFilter
     public static function sanitize(&$value, $rule)
     {
         if (! static::$instance) {
-            throw new Exception('StaticValueFilter::$instance not set.');
+            $class = get_called_class();
+            throw new Exception("{$class}::\$instance not set.");
         }
 
         $args = func_get_args();

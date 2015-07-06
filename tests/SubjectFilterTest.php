@@ -147,7 +147,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         } catch (Exception\FilterFailed $e) {
 
             $this->assertSame($subject, $e->getSubject());
-            $this->assertSame('Aura\Filter\Filter', $e->getFilterClass());
+            $this->assertSame('Aura\Filter\SubjectFilter', $e->getFilterClass());
             $expect = array(
                 'foo' => array(
                     'foo should have validated as alnum',

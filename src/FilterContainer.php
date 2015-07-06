@@ -87,7 +87,7 @@ class FilterContainer
      * @return Filter
      *
      */
-    public function newSubjectFilter($class = 'Aura\Filter\Filter')
+    public function newSubjectFilter($class = 'Aura\Filter\SubjectFilter')
     {
         return new $class(
             $this->newValidateSpec(),
