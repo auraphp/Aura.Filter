@@ -120,7 +120,7 @@ class FilterContainer
      * @return ValidateSpec
      *
      */
-    protected function newValidateSpec()
+    public function newValidateSpec()
     {
         return new ValidateSpec($this->getValidateLocator());
     }
@@ -132,7 +132,7 @@ class FilterContainer
      * @return SanitizeSpec
      *
      */
-    protected function newSanitizeSpec()
+    public function newSanitizeSpec()
     {
         return new SanitizeSpec($this->getSanitizeLocator());
     }
@@ -174,7 +174,7 @@ class FilterContainer
      * @return ValidateLocator
      *
      */
-    protected function newValidateLocator()
+    public function newValidateLocator()
     {
         return new ValidateLocator($this->validate_factories);
     }
@@ -186,7 +186,7 @@ class FilterContainer
      * @return SanitizeLocator
      *
      */
-    protected function newSanitizeLocator()
+    public function newSanitizeLocator()
     {
         return new SanitizeLocator($this->sanitize_factories);
     }
@@ -198,7 +198,7 @@ class FilterContainer
      * @return FailureCollection
      *
      */
-    protected function newFailureCollection()
+    public function newFailureCollection()
     {
         return new FailureCollection();
     }
