@@ -219,16 +219,37 @@ class Spec
         return $this;
     }
 
+    /**
+     *
+     * On failure, should the subject filter stop processing all fields?
+     *
+     * @return bool
+     *
+     */
     public function isStopRule()
     {
         return $this->failure_mode === self::STOP_RULE;
     }
 
+    /**
+     *
+     * On failure, should the subject filter stop processing the current field?
+     *
+     * @return bool
+     *
+     */
     public function isHardRule()
     {
         return $this->failure_mode === self::HARD_RULE;
     }
 
+    /**
+     *
+     * On failure, should the subject filter keep processing the current field?
+     *
+     * @return bool
+     *
+     */
     public function isSoftRule()
     {
         return $this->failure_mode === self::SOFT_RULE;
