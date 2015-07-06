@@ -63,7 +63,7 @@ MyStaticFilter::setInstance(new ValueFilter(
 ));
 ```
 
-You can set the singleton only once; further calls will throw an exception.
+You can set the instance only once; further calls will throw an exception.
 
 > **WARNING:** Do not use the _FilterContainer_ objects to populate your static proxy. The _FilterContainer_ reuses its contained _ValidateLocator_ and _SanitizeLocator_ objects, so modifications to them in one place will be reflected elsewhere, possibly leading to hard-to-track bugs.
 
