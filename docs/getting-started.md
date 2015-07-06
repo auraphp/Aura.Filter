@@ -4,15 +4,15 @@
 
 Unfortunately, there are not many common terms shared between filtering/validating/etc. libraries. To clear up misconception, this library uses the following definitions:
 
+- "subject": the array or object being filtered
+
 - "field": an array element or object property
+
+- "filter": validate and/or sanitize one or more fields
 
 - "validate": determine if a field value conforms to a particular format, but do not modify the field value
 
 - "sanitize": modify, transform, or otherwise force a field value to conform to a particular format
-
-- "filter": validate and/or sanitize one or more fields
-
-- "subject": the array or object being filtered
 
 ## Instantiation
 
@@ -74,7 +74,7 @@ means all the rules passed, while `false` means one or more failed.
 $subject = array(
     'username' => 'bolivar',
     'password' => 'p@55w0rd',
-    'password_confirm' => 'p@55word', // not the same!
+    'password_confirm' => 'p@sword', // not the same!
 );
 
 // filter the object and see if there were failures
