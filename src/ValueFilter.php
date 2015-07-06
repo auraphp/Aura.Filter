@@ -32,15 +32,6 @@ class ValueFilter
 
     /**
      *
-     * The exception class to use when assert() fails.
-     *
-     * @var string
-     *
-     */
-    protected $exception_class = 'Aura\Filter\Exception\ValueFailed';
-
-    /**
-     *
      * Constructor.
      *
      * @param ValidateLocator $validate_locator A locator for "validate" rules.
@@ -57,21 +48,6 @@ class ValueFilter
         $this->validate_locator = $validate_locator;
         $this->sanitize_locator = $sanitize_locator;
         $this->subject = (object) array('value' => null);
-    }
-
-    /**
-     *
-     * Sets the exception class to use when assert() fails.
-     *
-     * @param string $exception_class The exception class to use when filtering
-     * fails.
-     *
-     * @return null
-     *
-     */
-    public function setExceptionClass($exception_class)
-    {
-        $this->exception_class = $exception_class;
     }
 
     /**
@@ -110,28 +86,6 @@ class ValueFilter
     {
         $this->subject->value =& $value;
         return $this->apply($this->sanitize_locator, func_get_args());
-    }
-
-    /**
-     *
-     * Asserts that a result is true; throws an exception with a message and
-     * code if not.
-     *
-     * @param bool $result A filter result, usually from validate() or sanitize().
-     *
-     * @param string $message The exception message to use if the assertion fails.
-     *
-     * @param int $code The exception code to use if the assertion fails.
-     *
-     * @return null
-     *
-     */
-    public function assert($result, $message, $code = null)
-    {
-        if (! $result) {
-            $exception = $this->exception_class;
-            throw new $exception($message, $code);
-        }
     }
 
     /**
