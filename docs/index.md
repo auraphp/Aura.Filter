@@ -1,6 +1,6 @@
 # Aura.Filter
 
-- [Terminology](terminology.md)
+- [Getting Started](getting-started.md)
 - [Filtering Individual Values](value-filter.md)
 - [Filtering Objects And Arrays](subject-filter.md)
 - [Rules To Validate Fields](validate.md)
