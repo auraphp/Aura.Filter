@@ -74,6 +74,9 @@ use MyStaticFilter as Filter;
 
 class CreateUserCommand
 {
+    protected $username;
+    protected $password;
+
     public function __construct($username, $password, $password_confirm)
     {
         $ok = Filter::validate($username, 'alnum')
@@ -90,6 +93,9 @@ class CreateUserCommand
         if (! $ok) {
             throw new Exception("The password is not valid.");
         }
+
+        $this->username = $username;
+        $this->password = $password;
     }
 }
 ```
