@@ -30,6 +30,8 @@ abstract class AbstractStaticFilter
      *
      * Prevents construction of the static proxy as an instance.
      *
+     * @codeCoverageIgnore
+     *
      */
     private function __construct()
     {
