@@ -12,14 +12,14 @@ class Common extends Config
          * Aura\Filter\Spec\SanitizeSpec
          */
         $di->params['Aura\Filter\Spec\SanitizeSpec'] = array(
-            'rule_locator' => $di->lazyNew('Aura\Filter\Locator\SanitizeLocator'),
+            'locator' => $di->lazyNew('Aura\Filter\Locator\SanitizeLocator'),
         );
 
         /**
          * Aura\Filter\Spec\ValidateSpec
          */
         $di->params['Aura\Filter\Spec\ValidateSpec'] = array(
-            'rule_locator' => $di->lazyNew('Aura\Filter\Locator\ValidateLocator'),
+            'locator' => $di->lazyNew('Aura\Filter\Locator\ValidateLocator'),
         );
 
         /**

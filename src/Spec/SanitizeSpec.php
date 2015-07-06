@@ -8,8 +8,6 @@
  */
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\Locator\SanitizeLocator;
-
 /**
  *
  * A "sanitize" rule specification.
@@ -27,20 +25,6 @@ class SanitizeSpec extends Spec
      *
      */
     protected $blank_value;
-
-    /**
-     *
-     * Constructor.
-     *
-     * @param SanitizeLocator $rule_locator The "sanitize" rules.
-     *
-     * @return self
-     *
-     */
-    public function __construct(SanitizeLocator $rule_locator)
-    {
-        $this->rule_locator = $rule_locator;
-    }
 
     /**
      *

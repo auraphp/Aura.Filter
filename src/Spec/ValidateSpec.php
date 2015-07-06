@@ -8,8 +8,6 @@
  */
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\Locator\ValidateLocator;
-
 /**
  *
  * A "validate" rule specification.
@@ -27,20 +25,6 @@ class ValidateSpec extends Spec
      *
      */
     protected $reverse = false;
-
-    /**
-     *
-     * Constructor.
-     *
-     * @param ValidateLocator $rule_locator The "validate" rules.
-     *
-     * @return self
-     *
-     */
-    public function __construct(ValidateLocator $rule_locator)
-    {
-        $this->rule_locator = $rule_locator;
-    }
 
     /**
      *

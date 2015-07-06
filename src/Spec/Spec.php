@@ -8,8 +8,8 @@
  */
 namespace Aura\Filter\Spec;
 
+use Aura\Filter\Locator\Locator;
 use Exception;
-use Aura\Filter\Filter;
 
 /**
  *
@@ -96,7 +96,21 @@ class Spec
      * @var Locator
      *
      */
-    protected $rule_locator;
+    protected $locator;
+
+    /**
+     *
+     * Constructor.
+     *
+     * @param Locator $locator The "sanitize" rules.
+     *
+     * @return self
+     *
+     */
+    public function __construct(Locator $locator)
+    {
+        $this->locator = $locator;
+    }
 
     /**
      *
@@ -346,7 +360,7 @@ class Spec
      */
     protected function applyRule($subject)
     {
-        $rule = $this->rule_locator->get($this->rule);
+        $rule = $this->locator->get($this->rule);
         $args = $this->args;
         array_unshift($args, $this->field);
         array_unshift($args, $subject);
