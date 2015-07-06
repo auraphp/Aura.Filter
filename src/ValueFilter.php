@@ -71,7 +71,7 @@ class ValueFilter
 
     /**
      *
-     * Sanitized a value in place using a rule.
+     * Sanitizes a value in place using a rule.
      *
      * @param mixed $value The value to sanitize.
      *
