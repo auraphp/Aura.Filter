@@ -11,17 +11,6 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->filter = $filter_factory->newSubjectFilter();
     }
 
-    protected function assertFailureMessages($expect, $field = null)
-    {
-        $failures = $this->filter->getFailures();
-        if ($field) {
-            $actual = $failures->getMessagesForField($field);
-        } else {
-            $actual = $failures->getMessages();
-        }
-        $this->assertSame($expect, $actual);
-    }
-
     public function testApply_softRule()
     {
         $this->filter->sanitize('foo')->to('string');
@@ -32,7 +21,8 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $result = $this->filter->apply($subject);
         $this->assertTrue($result);
         $expect = array();
-        $this->assertFailureMessages($expect);
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
 
         $subject = (object) array('foo' => '!@#');
         $result = $this->filter->apply($subject);
@@ -43,7 +33,8 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
                 'foo should have validated as strlenMin(6)',
             ),
         );
-        $this->assertFailureMessages($expect);
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
     }
 
     public function testApply_notAnObject()
@@ -67,15 +58,18 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
                 'foo should have validated as alnum',
             ),
         );
-        $this->assertFailureMessages($expect);
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
 
         $expect = array(
             'foo should have validated as alnum',
         );
-        $this->assertFailureMessages($expect, 'foo');
+        $actual = $this->filter->getFailures()->getMessagesForField('foo');
+        $this->assertSame($expect, $actual);
 
         $expect = array();
-        $this->assertFailureMessages($expect, 'no-such-field');
+        $actual = $this->filter->getFailures()->getMessagesForField('no-such-field');
+        $this->assertSame($expect, $actual);
     }
 
     public function testApply_stopRule()
@@ -95,7 +89,8 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
                 'foo1 should have validated as strlenMin(6)',
             ),
         );
-        $this->assertFailureMessages($expect);
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
     }
 
     public function testUseFieldMessage()
@@ -114,7 +109,8 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
                 'foo should have validated as strlenMin(6)',
             ),
         );
-        $this->assertFailureMessages($expect);
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
 
         $this->filter->useFieldMessage('foo', 'Please use 6-12 alphanumeric characters.');
         $result = $this->filter->apply($subject);
@@ -124,7 +120,8 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
                 'Please use 6-12 alphanumeric characters.',
             ),
         );
-        $this->assertFailureMessages($expect);
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
     }
 
     public function test__invoke()

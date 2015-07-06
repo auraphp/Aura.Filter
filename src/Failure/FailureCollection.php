@@ -191,12 +191,8 @@ class FailureCollection extends ArrayObject
      */
     public function getMessagesForFieldAsString($field, $prefix = '')
     {
-        if (! isset($this[$field])) {
-            return '';
-        }
-
         $string = '';
-        foreach ($this[$field] as $failure) {
+        foreach ($this->forField($field) as $failure) {
             $message = $failure->getMessage();
             $string .= "{$prefix}{$message}" . PHP_EOL;
         }
