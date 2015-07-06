@@ -215,7 +215,7 @@ $success = $entity_filter->apply($entity);
 
 ## Asserting or Invoking the Filter
 
-Whereas calling `$filter->apply($subject)` returns a boolean, calling `$filter->assert($subject)` will returns nothing on success and throws an exception on failure. (Invoking the filter as a callable a la `$filter($subject)` works the same as `assert()`.)
+Whereas calling `$filter->apply($subject)` returns a boolean, calling `$filter->assert($subject)` returns `null` on success, and throws an exception on failure. (Invoking the filter as a callable a la `$filter($subject)` works the same as `assert()`.)
 
 ```php
 use Aura\Filter\Exception\FilterFailed;
