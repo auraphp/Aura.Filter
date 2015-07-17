@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -14,11 +12,9 @@ use Aura\Filter\Rule\AbstractUuid;
 
 /**
  *
- * Rule for hex-only Universally Unique Identifier (UUID).
+ * Forces the value to a hex-only UUID.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class UuidHexonly extends AbstractUuid
@@ -26,6 +22,10 @@ class UuidHexonly extends AbstractUuid
     /**
      *
      * Forces the value to a hex-only UUID.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool True if the value was sanitized, false if not.
      *

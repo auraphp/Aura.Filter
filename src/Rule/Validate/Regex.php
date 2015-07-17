@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,12 +10,9 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates a value using preg_match(), and sanitizes a value to a string
- * using preg_replace().
+ * Validates the value against a regular expression.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Regex
@@ -26,8 +21,9 @@ class Regex
      *
      * Validates the value against a regular expression.
      *
-     * Uses `preg_match()` to compare the value against the given
-     * regular expression.
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param string $expr The regular expression to validate against.
      *

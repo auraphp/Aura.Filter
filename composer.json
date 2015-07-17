@@ -1,7 +1,7 @@
 {
     "name": "aura/filter",
     "type": "library",
-    "description": "Validate and sanitize objects and arrays.",
+    "description": "Filters to validate and sanitize objects and arrays.",
     "keywords": [
         "filter",
         "validate",
@@ -9,11 +9,11 @@
         "validator",
         "validation"
     ],
-    "homepage": "http://auraphp.github.com/Aura.Filter",
+    "homepage": "https://github.com/auraphp/Aura.Filter",
     "license": "BSD-2-Clause",
     "authors": [
         {
-            "name": "Aura Contributors",
+            "name": "Aura.Filter Contributors",
             "homepage": "https://github.com/auraphp/Aura.Filter/contributors"
         }
     ],
@@ -22,13 +22,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Aura\\Filter\\_Config\\": "config/",
-            "Aura\\Filter\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Aura\\Filter\\": "tests"
+            "Aura\\Filter\\": "src/",
+            "Aura\\Filter\\_Config\\": "config/"
         }
     },
     "extra": {
@@ -37,6 +32,15 @@
             "config": {
                 "common": "Aura\\Filter\\_Config\\Common"
             }
+        }
+    },
+    "require-dev": {
+        "aura/di": "~2.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aura\\Filter\\": "tests/",
+            "Aura\\Di\\": "vendor/aura/di/tests/"
         }
     }
 }

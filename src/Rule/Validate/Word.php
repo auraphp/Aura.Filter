@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,11 +10,9 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a value to a string with only word characters.
+ * Validates that the value is composed only of word characters.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Word
@@ -27,6 +23,10 @@ class Word
      *
      * These include a-z, A-Z, 0-9, and underscore, indicated by a
      * regular expression "\w".
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool True if valid, false if not.
      *

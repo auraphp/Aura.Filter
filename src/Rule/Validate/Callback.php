@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,11 +10,9 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule to apply a callable/callback to the data.
+ * Validates the value against a callable/callback.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Callback
@@ -24,6 +20,10 @@ class Callback
     /**
      *
      * Validates the value against a callable/callback.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param callable $callable A PHP callable/callback.
      *

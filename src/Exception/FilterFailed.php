@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -11,6 +9,7 @@
 namespace Aura\Filter\Exception;
 
 use Aura\Filter\Exception;
+use Aura\Filter\Failure\FailureCollection;
 
 /**
  *
@@ -21,39 +20,108 @@ use Aura\Filter\Exception;
  */
 class FilterFailed extends Exception
 {
-    protected $filter_messages;
+    /**
+     *
+     * Failures from the filter.
+     *
+     * @var FailureCollection
+     *
+     */
+    protected $failures;
 
-    protected $filter_subject;
+    /**
+     *
+     * The subject being filtered.
+     *
+     * @var mixed
+     *
+     */
+    protected $subject;
 
+    /**
+     *
+     * The class of the filter being applied.
+     *
+     * @var string
+     *
+     */
     protected $filter_class;
 
+    /**
+     *
+     * Sets the class of the filter being applied.
+     *
+     * @param string $filter_class The filter class.
+     *
+     * @return null
+     *
+     */
     public function setFilterClass($filter_class)
     {
         $this->filter_class = $filter_class;
     }
 
+    /**
+     *
+     * Gets the class of the filter being applied.
+     *
+     * @return string
+     *
+     */
     public function getFilterClass()
     {
         return $this->filter_class;
     }
 
-    public function setFilterMessages(array $filter_messages)
+    /**
+     *
+     * Sets the failures from the filter.
+     *
+     * @param FailureCollection $failures The filter failures.
+     *
+     * @return null
+     *
+     */
+    public function setFailures(FailureCollection $failures)
     {
-        $this->filter_messages = $filter_messages;
+        $this->failures = $failures;
     }
 
-    public function getFilterMessages()
+    /**
+     *
+     * Gets the failures from the filter.
+     *
+     * @return FailureCollection
+     *
+     */
+    public function getFailures()
     {
-        return $this->filter_messages;
+        return $this->failures;
     }
 
-    public function setFilterSubject($subject)
+    /**
+     *
+     * Sets the subject of the filter.
+     *
+     * @param mixed $subject The subject being filtered.
+     *
+     * @return null
+     *
+     */
+    public function setSubject($subject)
     {
-        $this->filter_subject = $subject;
+        $this->subject = $subject;
     }
 
-    public function getFilterSubject()
+    /**
+     *
+     * Gets the subject of the filter.
+     *
+     * @return mixed
+     *
+     */
+    public function getSubject()
     {
-        return $this->filter_subject;
+        return $this->subject;
     }
 }

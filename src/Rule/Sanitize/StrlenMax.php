@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,20 +10,22 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that a value is no longer than a certain length.
+ * Sanitizes a string to a maximum length by chopping it at the right.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class StrlenMax
 {
     /**
      *
-     * If the value is greater than max, set to max value
+     * Sanitizes a string to a maximum length by chopping it at the right.
      *
-     * @param int $max
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param int $max The maximum length.
      *
      * @return bool True if the value was sanitized, false if not.
      *

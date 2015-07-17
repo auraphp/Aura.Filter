@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,20 +10,20 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Rule for International Standard Book Numbers (ISBN).
+ * Validates that the value represents an ISBN.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Isbn
 {
     /**
      *
-     * Validates that the value is a ISBN.
+     * Validates that the value represents an ISBN.
      *
-     * All values will be sanitized before tested!
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool True if valid, false if not.
      *
@@ -41,9 +39,13 @@ class Isbn
 
     /**
      *
-     * Removes all non numeric values to test if it is a valid ISBN.
+     * Removes all non-ISBN characters to test if it is a valid ISBN.
      *
-     * @return mixed
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @return string|false The normalized string, or false on failure.
      *
      */
     public function normalize($subject, $field)
@@ -59,7 +61,7 @@ class Isbn
      *
      * Tests if a 13 digit ISBN is correct.
      *
-     * @param $value
+     * @param $value The value to test.
      *
      * @return bool
      *
@@ -89,7 +91,7 @@ class Isbn
      *
      * Tests if a 10 digit ISBN is correct.
      *
-     * @param $value
+     * @param $value The value to test.
      *
      * @return bool
      *

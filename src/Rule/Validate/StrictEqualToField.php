@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,23 +10,23 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that this value is equal to some other element in the filter
- * chain (note that equality is not strict, so type does not matter).
+ * Validates that this value is strictly equal to some other subject field.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class StrictEqualToField
 {
     /**
      *
-     * Validates that this value is equal in value and type to some other
-     * element in the filter chain.
+     * Validates that this value is strictly equal to some other subject field.
      *
      * If the other element does not exist in $subject, or is null, the
      * validation will fail.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param string $other_field Check against the value of this element in
      * $subject.

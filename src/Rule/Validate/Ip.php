@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -16,27 +14,30 @@ namespace Aura\Filter\Rule\Validate;
  *
  * @package Aura.Filter
  *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- *
  */
 class Ip
 {
     /**
      *
-     * Validates that the value is a legal IP address.
+     * Validates that the value is an IP address.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param mixed $flags `FILTER_VALIDATE_IP` flags to pass to filter_var();
+     * cf. <http://php.net/manual/en/filter.filters.flags.php>.
      *
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke($subject, $field, $flags = null)
     {
-        $value = $subject->$field;
-
-        // This validates without regard to reserved or private ranges in both v4 and v6
-        if (filter_var($value, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6) === false) {
-            return false;
-        } else {
-            return true;
+        if ($flags === null) {
+            $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;
         }
+
+        $value = $subject->$field;
+        return filter_var($value, FILTER_VALIDATE_IP, $flags) !== false;
     }
 }

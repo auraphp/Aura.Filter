@@ -1,0 +1,11 @@
+{
+    "title": "Aura.Filter 2.x",
+    "content": [
+        "getting-started.md",
+        "value-filter.md",
+        "subject-filter.md",
+        "validate.md",
+        "sanitize.md",
+        "custom.md"
+    ]
+}

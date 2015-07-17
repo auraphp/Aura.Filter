@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,21 +10,22 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Validates that this value is equal to some other element in the filter
- * chain (note that equality is not strict, so type does not matter).
+ * Validates that this value is loosely equal to another value.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class EqualToValue
 {
     /**
      *
-     * Check whether the value is equal
+     * Validates that this value is loosely equal to another value.
      *
-     * @param mixed $other_value
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param mixed $other_value The other value.
      *
      * @return bool True if the values are equal, false if not equal.
      *

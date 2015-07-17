@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,11 +10,9 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for alphanumeric characters.
+ * Strips non-alphanumeric characters from the value.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Alnum
@@ -24,6 +20,10 @@ class Alnum
     /**
      *
      * Strips non-alphanumeric characters from the value.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool Always true.
      *

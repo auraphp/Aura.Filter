@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,18 +10,20 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Rule for International Standard Book Numbers (ISBN).
+ * Forces the value to an ISBN.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Isbn
 {
     /**
      *
-     * Removes all non numeric values to test if it is a valid ISBN.
+     * Forces the value to an ISBN.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @return bool True if the value was sanitized, false if not.
      *

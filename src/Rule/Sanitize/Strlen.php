@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,24 +10,26 @@ namespace Aura\Filter\Rule\Sanitize;
 
 /**
  *
- * Validates that a value's length is within a given range.
+ * Sanitizes a string to an exact length by padding or chopping it.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Strlen
 {
     /**
      *
-     * Sanitize to the length given
+     * Sanitizes a string to an exact length by padding or chopping it.
      *
-     * @param int $len
+     * @param object $subject The subject to be filtered.
      *
-     * @param string $pad_string
+     * @param string $field The subject field name.
      *
-     * @param int $pad_type
+     * @param int $len The string length.
+     *
+     * @param string $pad_string Pad using this string.
+     *
+     * @param int $pad_type A `STR_PAD_*` constant.
      *
      * @return bool True if the value was sanitized, false if not.
      *

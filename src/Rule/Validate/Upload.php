@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,11 +10,10 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a file-upload information array.
+ * Validates that the value is an array of file-upload information, and
+ * if a file is referred to, that is actually an uploaded file.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Upload
@@ -29,6 +26,10 @@ class Upload
      * The required keys are 'error', 'name', 'size', 'tmp_name', 'type'. More
      * or fewer or different keys than this will return a "malformed" error.
      *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
      * @return bool True if valid, false if not.
      *
      */
@@ -36,26 +37,19 @@ class Upload
     {
         $value = $subject->$field;
 
-        $success = $this->preCheck($value);
-        if (! $success) {
+        $well_formed = $this->preCheck($value);
+        if (! $well_formed) {
             return false;
         }
 
         // was the upload explicitly ok?
         $err = $value['error'];
         if ($err != UPLOAD_ERR_OK) {
-            // if (isset($this->message_map[$err])) {
-            //     $this->setMessageKey($err);
-            // } else {
-            //     $this->setMessageKey('err_unknown');
-            // }
             return false;
         }
 
         // is it actually an uploaded file?
         if (! $this->isUploadedFile($value['tmp_name'])) {
-            // // nefarious happenings are afoot.
-            // $this->setMessageKey('err_is_uploaded_file');
             return false;
         }
 
@@ -65,9 +59,9 @@ class Upload
 
     /**
      *
-     * Check before the file is uploaded
+     * Check that the file-upload array is well-formed.
      *
-     * @param string $value
+     * @param array $value The file-upload array.
      *
      * @return bool
      *
@@ -95,7 +89,6 @@ class Upload
 
         // make sure the expected and actual keys match up
         if ($expect != $actual) {
-            // $this->setMessageKey('err_array_keys');
             return false;
         }
 
@@ -105,9 +98,9 @@ class Upload
 
     /**
      *
-     * Check whether the file was uploaded via HTTP POST
+     * Check whether the file was uploaded via HTTP POST.
      *
-     * @param string $file
+     * @param string $file The file to check.
      *
      * @return bool True if the file was uploaded via HTTP POST, false if not.
      *

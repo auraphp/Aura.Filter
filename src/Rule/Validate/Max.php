@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -16,14 +14,16 @@ namespace Aura\Filter\Rule\Validate;
  *
  * @package Aura.Filter
  *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- *
  */
 class Max
 {
     /**
      *
      * Validates that the value is less than than or equal to a maximum.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param mixed $max The maximum valid value.
      *

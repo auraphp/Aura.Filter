@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -18,16 +16,18 @@ use Aura\Filter\Rule\AbstractDateTime;
  *
  * @package Aura.Filter
  *
- * @license http://opensource.org/licenses/bsd-license.php BSD
- *
  */
 class DateTime extends AbstractDateTime
 {
     /**
      *
-     * Sanitize datetime to a specified format, default "Y-m-d H:i:s".
+     * Sanitize a datetime to a specified format, default "Y-m-d H:i:s".
      *
-     * @param string $format
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
+     *
+     * @param string $format The date format to use.
      *
      * @return bool True if the value was sanitized, false if not.
      *

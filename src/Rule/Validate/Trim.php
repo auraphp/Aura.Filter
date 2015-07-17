@@ -1,9 +1,7 @@
 <?php
 /**
  *
- * This file is part of the Aura project for PHP.
- *
- * @package Aura.Filter
+ * This file is part of Aura for PHP.
  *
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
@@ -12,18 +10,20 @@ namespace Aura\Filter\Rule\Validate;
 
 /**
  *
- * Sanitizes a value to a string using trim().
+ * Validates that a value is already trimmed.
  *
  * @package Aura.Filter
- *
- * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
 class Trim
 {
     /**
      *
-     * Is the value already trimmed?
+     * Validates that a value is already trimmed.
+     *
+     * @param object $subject The subject to be filtered.
+     *
+     * @param string $field The subject field name.
      *
      * @param string $chars The characters to strip.
      *
