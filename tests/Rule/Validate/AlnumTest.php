@@ -16,7 +16,6 @@ class AlnumTest extends AbstractValidateTest
             array('5'),
             array('alphaonly'),
             array('AlphaOnLy'),
-            array('ффф'),
             array('someThing8else'),
         );
     }

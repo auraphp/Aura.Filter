@@ -8,7 +8,6 @@ class WordTest extends AbstractSanitizeTest
         return array(
             array(array(), false, array()),
             array('abc _ 123 - ,./', true, 'abc_123'),
-            array('абв _ 123 - ,./', true, 'абв_123'),
         );
     }
 }

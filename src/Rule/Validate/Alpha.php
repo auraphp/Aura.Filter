@@ -21,6 +21,9 @@ class Alpha
      *
      * Validates that the value is letters only (upper or lower case).
      *
+     * Note that valid letters depend on the locale; cf.
+     * <http://php.net/setlocale>.
+     *
      * @param object $subject The subject to be filtered.
      *
      * @param string $field The subject field name.

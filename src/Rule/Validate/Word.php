@@ -21,8 +21,14 @@ class Word
      *
      * Validates that the value is composed only of word characters.
      *
-     * These include a-z, A-Z, 0-9, and underscore, indicated by a
-     * regular expression "\w".
+     * Cf. <http://php.net/manual/en/regexp.reference.escape.php>:
+     *
+     * > A "word" character is any letter or digit or the underscore character,
+     * > that is, any character which can be part of a Perl "word". The
+     * > definition of letters and digits is controlled by PCRE's character
+     * > tables, and may vary if locale-specific matching is taking place. For
+     * > example, in the "fr" (French) locale, some character codes greater than
+     * > 128 are used for accented letters, and these are matched by \w.
      *
      * @param object $subject The subject to be filtered.
      *
