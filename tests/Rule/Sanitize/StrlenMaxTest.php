@@ -18,7 +18,7 @@ class StrlenMaxTest extends AbstractSanitizeTest
             array('abc',     true, 'abc'),
             array('abcd',    true, 'abc'),
             array('abcdefg', true, 'abc'),
-            array('а',       true, 'а'),
+            array('ж',       true, 'ж'),
             array('абв',     true, 'абв'),
             array('абвг',    true, 'абв'),
             array('абвгдеж', true, 'абв'),

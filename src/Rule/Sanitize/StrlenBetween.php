@@ -45,7 +45,7 @@ class StrlenBetween extends AbstractStrlen
             return false;
         }
         if ($this->strlen($value) < $min) {
-            $subject->$field = str_pad($value, $min, $pad_string, $pad_type);
+            $subject->$field = $this->str_pad($value, $min, $pad_string, $pad_type);
         }
         if ($this->strlen($value) > $max) {
             $subject->$field = $this->substr($value, 0, $max);
