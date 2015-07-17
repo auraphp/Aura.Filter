@@ -4,7 +4,6 @@ namespace Aura\Filter\Rule\Sanitize;
 
 class StrlenTest extends AbstractSanitizeTest
 {
-
     protected $len = 4;
 
     protected function getArgs()
@@ -21,7 +20,7 @@ class StrlenTest extends AbstractSanitizeTest
             array('abcdef', true, 'abcd'),
             array('а', true, 'а   '),
             array('абвг', true, 'абвг'),
-            array('абвгде', true, 'абвгде'),
+            array('абвгде', true, 'абвг'),
         );
     }
 }
