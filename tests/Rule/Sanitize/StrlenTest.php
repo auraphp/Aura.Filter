@@ -2,15 +2,18 @@
 
 namespace Aura\Filter\Rule\Sanitize;
 
-class StrlenTest extends AbstractSanitizeTest {
+class StrlenTest extends AbstractSanitizeTest
+{
 
     protected $len = 4;
 
-    protected function getArgs() {
+    protected function getArgs()
+    {
         return array($this->len);
     }
 
-    public function providerTo() {
+    public function providerTo()
+    {
         return array(
             array(array(), false, array()),
             array('a', true, 'a   '),
@@ -21,5 +24,4 @@ class StrlenTest extends AbstractSanitizeTest {
             array('абвгде', true, 'абвгде'),
         );
     }
-
 }

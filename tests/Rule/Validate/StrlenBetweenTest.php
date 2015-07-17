@@ -2,16 +2,18 @@
 
 namespace Aura\Filter\Rule\Validate;
 
-class StrlenBetweenTest extends AbstractValidateTest {
-
+class StrlenBetweenTest extends AbstractValidateTest
+{
     protected $min = 4;
     protected $max = 6;
 
-    protected function getArgs() {
+    protected function getArgs()
+    {
         return array($this->min, $this->max);
     }
 
-    public function providerIs() {
+    public function providerIs()
+    {
         return array(
             array('abcd'),
             array('efghi'),
@@ -22,7 +24,8 @@ class StrlenBetweenTest extends AbstractValidateTest {
         );
     }
 
-    public function providerIsNot() {
+    public function providerIsNot()
+    {
         return array(
             array(array()),
             array('abc'),
@@ -31,5 +34,4 @@ class StrlenBetweenTest extends AbstractValidateTest {
             array('абвддгг'),
         );
     }
-
 }

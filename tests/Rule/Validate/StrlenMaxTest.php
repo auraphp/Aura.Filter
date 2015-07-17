@@ -2,15 +2,17 @@
 
 namespace Aura\Filter\Rule\Validate;
 
-class StrlenMaxTest extends AbstractValidateTest {
-
+class StrlenMaxTest extends AbstractValidateTest
+{
     protected $max = 3;
 
-    protected function getArgs() {
+    protected function getArgs()
+    {
         return array($this->max);
     }
 
-    public function providerIs() {
+    public function providerIs()
+    {
         return array(
             array('a'),
             array('ab'),
@@ -21,12 +23,12 @@ class StrlenMaxTest extends AbstractValidateTest {
         );
     }
 
-    public function providerIsNot() {
+    public function providerIsNot()
+    {
         return array(
             array(array()),
             array('абвг'),
             array('абвгдеж'),
         );
     }
-
 }

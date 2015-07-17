@@ -2,15 +2,17 @@
 
 namespace Aura\Filter\Rule\Sanitize;
 
-class StrlenMinTest extends AbstractSanitizeTest {
-
+class StrlenMinTest extends AbstractSanitizeTest
+{
     protected $min = 4;
 
-    protected function getArgs() {
+    protected function getArgs()
+    {
         return array($this->min);
     }
 
-    public function providerTo() {
+    public function providerTo()
+    {
         return array(
             array(array(), false, array()),
             array('a', true, 'a   '),

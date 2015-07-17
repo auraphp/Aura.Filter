@@ -2,15 +2,17 @@
 
 namespace Aura\Filter\Rule\Validate;
 
-class StrlenMinTest extends AbstractValidateTest {
-
+class StrlenMinTest extends AbstractValidateTest
+{
     protected $min = 4;
 
-    protected function getArgs() {
+    protected function getArgs()
+    {
         return array($this->min);
     }
 
-    public function providerIs() {
+    public function providerIs()
+    {
         return array(
             array('abcd'),
             array('efghijkl'),
@@ -30,5 +32,4 @@ class StrlenMinTest extends AbstractValidateTest {
             array('абв'),
         );
     }
-
 }
