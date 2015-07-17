@@ -7,7 +7,7 @@ class AlnumTest extends AbstractSanitizeTest
     {
         return array(
             // value, result, expect
-            array('$#% abc () 123 ,./', true, 'abc123'),
+            array('$#% abc абв () 123 ,./', true, 'abcабв123'),
         );
     }
 }

@@ -7,6 +7,7 @@ class TrimTest extends AbstractValidateTest
     {
         return array(
             array('abc'),
+            array('абв'),
         );
     }
 
@@ -15,6 +16,7 @@ class TrimTest extends AbstractValidateTest
         return array(
             array(array()),
             array(' abc '),
+            array(' абв '),
         );
     }
 }

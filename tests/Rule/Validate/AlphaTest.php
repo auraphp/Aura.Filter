@@ -8,6 +8,7 @@ class AlphaTest extends AbstractValidateTest
         return array(
             array('alphaonly'),
             array('AlphaOnly'),
+            array('фффф'),
         );
     }
 

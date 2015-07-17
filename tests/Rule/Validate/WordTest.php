@@ -11,6 +11,7 @@ class WordTest extends AbstractValidateTest
             array('ghi'),
             array('abc_def'),
             array('A1s_2Sd'),
+            array('егге_2Sd'),
         );
     }
 
