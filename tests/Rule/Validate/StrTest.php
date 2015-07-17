@@ -21,6 +21,7 @@ class StrTest extends AbstractValidateTest
             array(true),
             array(false),
             array('string'),
+            array('абвдеж'),
         );
     }
 

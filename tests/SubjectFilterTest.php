@@ -24,7 +24,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $actual = $this->filter->getFailures()->getMessages();
         $this->assertSame($expect, $actual);
 
-        $subject = (object) array('foo' => '!@#');
+        $subject = (object) array('foo' => '!@#аб');
         $result = $this->filter->apply($subject);
         $this->assertFalse($result);
         $expect = array(
@@ -49,7 +49,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo')->is('alnum')->asHardRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $subject = (object) array('foo' => '!@#');
+        $subject = (object) array('foo' => '!@#аб');
         $result = $this->filter->apply($subject);
         $this->assertFalse($result);
 
@@ -79,7 +79,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo2')->is('alnum');
         $this->filter->validate('foo2')->is('strlenMin', 6);
 
-        $subject = (object) array('foo1' => '!@#', 'foo2' => 'abcdef');
+        $subject = (object) array('foo1' => '!@#а', 'foo2' => 'abcдеф');
         $result = $this->filter->apply($subject);
         $this->assertFalse($result);
 
