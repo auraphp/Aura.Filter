@@ -17,6 +17,15 @@ namespace Aura\Filter\Rule;
  */
 abstract class AbstractStrlen
 {
+    /**
+     *
+     * Proxy to `mb_strlen()` when it exists, otherwise to `strlen()`.
+     *
+     * @param string $str Returns the length of this string.
+     *
+     * @return int
+     *
+     */
     protected function strlen($str)
     {
         if (function_exists('mb_strlen')) {
@@ -25,6 +34,19 @@ abstract class AbstractStrlen
         return strlen($str);
     }
 
+    /**
+     *
+     * Proxy to `mb_substr()` when it exists, otherwise to `substr()`.
+     *
+     * @param string $str The string to work with.
+     *
+     * @param int $start Start at this position.
+     *
+     * @param int $length End after this many characters.
+     *
+     * @return string
+     *
+     */
     protected function substr($str, $start, $length = null)
     {
         if (function_exists('mb_substr')) {
