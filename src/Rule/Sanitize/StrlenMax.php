@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Sanitizes a string to a maximum length by chopping it at the right.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Sanitize;
  * @package Aura.Filter
  *
  */
-class StrlenMax
+class StrlenMax extends AbstractStrlen
 {
     /**
      *
@@ -36,8 +38,8 @@ class StrlenMax
         if (! is_scalar($value)) {
             return false;
         }
-        if (strlen($value) > $max) {
-            $subject->$field = substr($value, 0, $max);
+        if ($this->strlen($value) > $max) {
+            $subject->$field = $this->substr($value, 0, $max);
         }
         return true;
     }

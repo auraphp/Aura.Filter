@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Sanitizes a string to a minimum length by padding it.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Sanitize;
  * @package Aura.Filter
  *
  */
-class StrlenMin
+class StrlenMin extends AbstractStrlen
 {
     /**
      *
@@ -40,7 +42,7 @@ class StrlenMin
         if (! is_scalar($value)) {
             return false;
         }
-        if (strlen($value) < $min) {
+        if ($this->strlen($value) < $min) {
             $subject->$field = str_pad($value, $min, $pad_string, $pad_type);
         }
         return true;

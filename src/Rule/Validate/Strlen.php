@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Validates that the length of the value is within a given range.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class Strlen
+class Strlen extends AbstractStrlen
 {
     /**
      *
@@ -37,6 +39,6 @@ class Strlen
             return false;
         }
 
-        return strlen($value) == $len;
+        return $this->strlen($value) == $len;
     }
 }

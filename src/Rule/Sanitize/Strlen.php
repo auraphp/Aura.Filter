@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Sanitizes a string to an exact length by padding or chopping it.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Sanitize;
  * @package Aura.Filter
  *
  */
-class Strlen
+class Strlen extends AbstractStrlen
 {
     /**
      *
@@ -40,11 +42,11 @@ class Strlen
         if (! is_scalar($value)) {
             return false;
         }
-        if (strlen($value) < $len) {
+        if ($this->strlen($value) < $len) {
             $subject->$field = str_pad($value, $len, $pad_string, $pad_type);
         }
-        if (strlen($value) > $len) {
-            $subject->$field = substr($value, 0, $len);
+        if ($this->strlen($value) > $len) {
+            $subject->$field = $this->substr($value, 0, $len);
         }
         return true;
     }

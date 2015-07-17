@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Validates that the length of the value is within a given range.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class StrlenBetween
+class StrlenBetween extends AbstractStrlen
 {
     /**
      *
@@ -38,7 +40,7 @@ class StrlenBetween
         if (! is_scalar($value)) {
             return false;
         }
-        $len = strlen($value);
+        $len = $this->strlen($value);
 
         return ($len >= $min && $len <= $max);
     }
