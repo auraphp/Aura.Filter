@@ -29,12 +29,13 @@ abstract class AbstractStrlen
      */
     protected function strlen($str)
     {
-        if (extension_loaded('mbstring')) {
-            $encoding = $this->detectEncoding($str);
-            $str = $this->convertToUtf8($str, $encoding);
-            return mb_strlen($str, 'UTF-8');
+        if (! extension_loaded('mbstring')) {
+            return strlen($str);
         }
-        return strlen($str);
+
+        $encoding = $this->detectEncoding($str);
+        $str = $this->convertToUtf8($str, $encoding);
+        return mb_strlen($str, 'UTF-8');
     }
 
     /**
@@ -53,13 +54,14 @@ abstract class AbstractStrlen
      */
     protected function substr($str, $start, $length = null)
     {
-        if (extension_loaded('mbstring')) {
-            $encoding = $this->detectEncoding($str);
-            $str = $this->convertToUtf8($str, $encoding);
-            $result = mb_substr($str, $start, $length, 'UTF-8');
-            return $this->convertFromUtf8($result, $encoding);
+        if (! extension_loaded('mbstring')) {
+            return substr($str, $start, $length);
         }
-        return substr($str, $start, $length);
+
+        $encoding = $this->detectEncoding($str);
+        $str = $this->convertToUtf8($str, $encoding);
+        $result = mb_substr($str, $start, $length, 'UTF-8');
+        return $this->convertFromUtf8($result, $encoding);
     }
 
     /**
@@ -85,16 +87,16 @@ abstract class AbstractStrlen
      */
     protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
     {
-        if (extension_loaded('mbstring')) {
-            $input_encoding = $this->detectEncoding($input);
-            $input = $this->convertToUtf8($input, $input_encoding);
-            $pad_str_encoding = $this->detectEncoding($pad_str);
-            $pad_str = $this->convertToUtf8($pad_str, $pad_str_encoding);
-            $result = $this->mbstrpad($input, $length, $pad_str, $type, 'UTF-8');
-            return $this->convertFromUtf8($result, $input_encoding);
+        if (! extension_loaded('mbstring')) {
+            return str_pad($input, $length, $pad_str, $type);
         }
 
-        return str_pad($input, $length, $pad_str, $type);
+        $input_encoding = $this->detectEncoding($input);
+        $input = $this->convertToUtf8($input, $input_encoding);
+        $pad_str_encoding = $this->detectEncoding($pad_str);
+        $pad_str = $this->convertToUtf8($pad_str, $pad_str_encoding);
+        $result = $this->mbstrpad($input, $length, $pad_str, $type, 'UTF-8');
+        return $this->convertFromUtf8($result, $input_encoding);
     }
 
     /**
