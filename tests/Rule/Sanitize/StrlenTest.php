@@ -19,9 +19,9 @@ class StrlenTest extends AbstractSanitizeTest
             array('a', true, 'a   '),
             array('abcd', true, 'abcd'),
             array('abcdef', true, 'abcd'),
-            array('а', true, 'а   '),
+            array('ж', true, 'ж   '),
             array('абвг', true, 'абвг'),
-            array('абвгде', true, 'абвгде'),
+            array('абвгде', true, 'абвг'),
         );
     }
 }
