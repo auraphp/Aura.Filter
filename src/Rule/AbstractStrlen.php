@@ -139,12 +139,14 @@ abstract class AbstractStrlen
 
         if ($type == STR_PAD_RIGHT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
-            return mb_substr($input . str_repeat($pad_str, $repeat_times), 0, $length, $encoding);
+            $input .= str_repeat($pad_str, $repeat_times);
+            return mb_substr($input, 0, $length, $encoding);
         }
 
         if ($type == STR_PAD_LEFT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
-            return mb_substr(str_repeat($pad_str, $repeat_times), 0, floor($pad_len), $encoding) . $input;
+            $prefix = str_repeat($pad_str, $repeat_times);
+            return mb_substr($prefix, 0, floor($pad_len), $encoding) . $input;
         }
 
         if ($type == STR_PAD_BOTH) {
@@ -153,8 +155,13 @@ abstract class AbstractStrlen
             $pad_amount_right = ceil($pad_len);
             $repeat_times_left = ceil($pad_amount_left / $pad_str_len);
             $repeat_times_right = ceil($pad_amount_right / $pad_str_len);
-            $padding_left = mb_substr(str_repeat($pad_str, $repeat_times_left), 0, $pad_amount_left, $encoding);
-            $padding_right = mb_substr(str_repeat($pad_str, $repeat_times_right), 0, $pad_amount_right, $encoding);
+
+            $prefix = str_repeat($pad_str, $repeat_times_left);
+            $padding_left = mb_substr($prefix, 0, $pad_amount_left, $encoding);
+
+            $suffix = str_repeat($pad_str, $repeat_times_right);
+            $padding_right = mb_substr($suffix, 0, $pad_amount_right, $encoding);
+
             return $padding_left . $input . $padding_right;
         }
     }
