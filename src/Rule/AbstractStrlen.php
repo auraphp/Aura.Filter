@@ -28,8 +28,9 @@ abstract class AbstractStrlen
      * @return int
      *
      */
-    protected function strlen($str, $encoding = "UTF-8") {
+    protected function strlen($str) {
         if (function_exists('mb_strlen')) {
+            $encoding = mb_internal_encoding();
             return mb_strlen($str, $encoding);
         }
         return strlen($str);
@@ -50,8 +51,9 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function substr($str, $start, $length = null, $encoding = "UTF-8") {
+    protected function substr($str, $start, $length = null) {
         if (function_exists('mb_substr')) {
+            $encoding = mb_internal_encoding();
             return mb_substr($str, $start, $length, $encoding);
         }
         return substr($str, $start, $length);
@@ -74,8 +76,9 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = "UTF-8")
+    protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
     {
+        $encoding = mb_internal_encoding();
         $input_len = $this->strlen($input,$encoding);
         if ($length <= $input_len) {
             return $input;
