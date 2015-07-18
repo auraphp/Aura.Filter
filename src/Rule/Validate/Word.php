@@ -44,6 +44,6 @@ class Word
             return false;
         }
 
-        return (bool) preg_match('/^[\p{L}\p{Nd}_]+$/', $value);
+        return (bool) preg_match('/^[\p{L}\p{Nd}_]+$/u', $value);
     }
 }

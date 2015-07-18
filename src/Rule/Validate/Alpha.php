@@ -35,6 +35,6 @@ class Alpha
             return false;
         }
 
-        return (bool) preg_match('/^[\p{L}]+$/', $value);
+        return (bool) preg_match('/^[\p{L}]+$/u', $value);
     }
 }

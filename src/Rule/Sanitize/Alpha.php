@@ -30,7 +30,7 @@ class Alpha
      */
     public function __invoke($subject, $field)
     {
-        $subject->$field = preg_replace('/[\P{L}]/', '', $subject->$field);
+        $subject->$field = preg_replace('/[\P{L}]/u', '', $subject->$field);
         return true;
     }
 }

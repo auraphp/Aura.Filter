@@ -30,7 +30,7 @@ class Alnum
      */
     public function __invoke($subject, $field)
     {
-        $subject->$field = preg_replace('/[^\p{L}\p{Nd}]/', '', $subject->$field);
+        $subject->$field = preg_replace('/[^\p{L}\p{Nd}]/u', '', $subject->$field);
         return true;
     }
 }
