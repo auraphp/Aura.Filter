@@ -17,6 +17,16 @@ namespace Aura\Filter\Rule;
  */
 abstract class AbstractStrlen
 {
+    protected function convertToUtf8($str)
+    {
+        return mb_convert_encoding($str, 'UTF-8');
+    }
+
+    protected function convertToInternal($str)
+    {
+        return mb_convert_encoding($str, mb_internal_encoding(), 'UTF-8');
+    }
+
     /**
      *
      * Proxy to `mb_strlen()` when it exists, otherwise to `strlen()`.
@@ -30,8 +40,9 @@ abstract class AbstractStrlen
      */
     protected function strlen($str) {
         if (function_exists('mb_strlen')) {
-            $encoding = mb_internal_encoding();
-            return mb_strlen($str, $encoding);
+            return $this->convertToInternal(
+                mb_strlen($this->convertToUtf8($str))
+            );
         }
         return strlen($str);
     }
@@ -53,15 +64,17 @@ abstract class AbstractStrlen
      */
     protected function substr($str, $start, $length = null) {
         if (function_exists('mb_substr')) {
-            $encoding = mb_internal_encoding();
-            return mb_substr($str, $start, $length, $encoding);
+            return $this->convertToInternal(
+                mb_substr($this->convertToUtf8($str), $start, $length)
+            );
         }
         return substr($str, $start, $length);
     }
 
     /**
      *
-     * We need another function for str_padding
+     * Userland implmementation of multibyte `str_pad()` when multibyte exists;
+     * otherwise proxies to `str_pad()`.
      *
      * @param string $input The string to work with.
      *
@@ -71,36 +84,54 @@ abstract class AbstractStrlen
      *
      * @param int $type Where should it be padded - left,right or both
      *
-     * @param string $encoding The encoding used, UTF-8 by default
-     *
      * @return string
      *
      */
     protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
     {
-        $encoding = mb_internal_encoding();
-        $input_len = $this->strlen($input,$encoding);
+        if (function_exists('mb_strlen')) {
+            return $this->convertToInternal(
+                $this->mbstrpad(
+                    $this->convertToUtf8($input),
+                    $length,
+                    $this->convertToUtf8($pad_str),
+                    $type
+                )
+            );
+        }
+
+        return str_pad($input, $length, $pad_str, $type);
+    }
+
+    protected function mbstrpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
+    {
+        $encoding = 'UTF-8';
+
+        $input_len = mb_strlen($input, $encoding);
         if ($length <= $input_len) {
             return $input;
         }
-        $pad_str_len = $this->strlen($pad_str,$encoding);
+
+        $pad_str_len = mb_strlen($pad_str, $encoding);
         $pad_len = $length - $input_len;
         if ($type == STR_PAD_RIGHT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
-            return $this->substr($input . str_repeat($pad_str, $repeat_times), 0, $length,$encoding);
+            return mb_substr($input . str_repeat($pad_str, $repeat_times), 0, $length, $encoding);
         }
+
         if ($type == STR_PAD_LEFT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
-            return $this->substr(str_repeat($pad_str, $repeat_times), 0, floor($pad_len),$encoding) . $input;
+            return mb_substr(str_repeat($pad_str, $repeat_times), 0, floor($pad_len), $encoding) . $input;
         }
+
         if ($type == STR_PAD_BOTH) {
             $pad_len /= 2;
             $pad_amount_left = floor($pad_len);
             $pad_amount_right = ceil($pad_len);
             $repeat_times_left = ceil($pad_amount_left / $pad_str_len);
             $repeat_times_right = ceil($pad_amount_right / $pad_str_len);
-            $padding_left = $this->substr(str_repeat($pad_str, $repeat_times_left), 0, $pad_amount_left,$encoding);
-            $padding_right = $this->substr(str_repeat($pad_str, $repeat_times_right), 0, $pad_amount_right,$encoding);
+            $padding_left = mb_substr(str_repeat($pad_str, $repeat_times_left), 0, $pad_amount_left, $encoding);
+            $padding_right = mb_substr(str_repeat($pad_str, $repeat_times_right), 0, $pad_amount_right, $encoding);
             return $padding_left . $input . $padding_right;
         }
     }
