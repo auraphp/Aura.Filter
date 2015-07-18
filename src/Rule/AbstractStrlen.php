@@ -76,11 +76,10 @@ abstract class AbstractStrlen
      */
     protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = "UTF-8")
     {
-        //return str_pad($str, strlen($str)-$this->strlen($str,$encoding)+$pad_length, $pad_string, $pad_type);
-
         $input_len = $this->strlen($input,$encoding);
-        if ($length <= $input_len)
+        if ($length <= $input_len) {
             return $input;
+        }
         $pad_str_len = $this->strlen($pad_str,$encoding);
         $pad_len = $length - $input_len;
         if ($type == STR_PAD_RIGHT) {
