@@ -1,5 +1,4 @@
 <?php
-
 /**
  *
  * This file is part of Aura for PHP.
@@ -7,7 +6,6 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-
 namespace Aura\Filter\Rule;
 
 /**
@@ -25,16 +23,16 @@ abstract class AbstractStrlen
      *
      * @param string $str Returns the length of this string.
      *
+     * @param string $encoding The encoding used, UTF-8 by default
+     *
      * @return int
      *
      */
-    protected function strlen($str)
-    {
-        if (! function_exists('mb_strlen')) {
-            return strlen($str);
+    protected function strlen($str, $encoding = "UTF-8") {
+        if (function_exists('mb_strlen')) {
+            return mb_strlen($str, $encoding);
         }
-
-        return mb_strlen($str);
+        return strlen($str);
     }
 
     /**
@@ -52,64 +50,32 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function substr($str, $start, $length = null)
-    {
-        if (! function_exists('mb_substr')) {
-            return substr($str, $start, $length);
+    protected function substr($str, $start, $length = null, $encoding = "UTF-8") {
+        if (function_exists('mb_substr')) {
+            return mb_substr($str, $start, $length, $encoding);
         }
-
-        if ($length === null) {
-            $length = mb_strlen($str);
-        }
-
-        return mb_substr($str, $start, $length);
+        return substr($str, $start, $length);
     }
 
-    protected function strpad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    /**
+     *
+     * We need another function for str_padding
+     *
+     * @param string $input The string to work with.
+     *
+     * @param int $length How much symbols do we want it to be
+     *
+     * @param string $pad_str What are we going to pad it with
+     *
+     * @param int $type Where should it be padded - left,right or both
+     *
+     * @param string $encoding The encoding used, UTF-8 by default
+     *
+     * @return string
+     *
+     */
+    protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = "UTF-8")
     {
-        if (! function_exists('mb_strlen')) {
-            return str_pad($input, $pad_length, $pad_string, $pad_type);
-        }
-
-        return $this->ivanov_str_pad($input, $pad_length, $pad_string, $pad_type);
-    }
-
-    // http://php.net/manual/en/function.str-pad.php#111147
-    protected function mbstrpad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
-    {
-        $encoding = mb_internal_encoding();
-        mb_internal_encoding('utf-8');
-
-        $input_length = mb_strlen($input);
-        if (! $input_length && ($pad_type == STR_PAD_RIGHT || $pad_type == STR_PAD_LEFT)) {
-            $input_length = 1;
-        }
-
-        $pad_string_length = mb_strlen($pad_string);
-        $result = null;
-        $repeat = ceil($input_length - $pad_string_length + $pad_length);
-
-        if (! $pad_length || ! $pad_string_length || $pad_length <= $input_length) {
-            $result = $input;
-        } elseif ($pad_type == STR_PAD_RIGHT) {
-            $result = $input . str_repeat($pad_string, $repeat);
-            $result = mb_substr($result, 0, $pad_length);
-        } elseif ($pad_type == STR_PAD_LEFT) {
-            $result = str_repeat($pad_string, $repeat) . $input;
-            $result = mb_substr($result, -$pad_length);
-        } elseif ($pad_type == STR_PAD_BOTH) {
-            $length = ($pad_length - $input_length) / 2;
-            $repeat = ceil($length / $pad_string_length);
-            $result = mb_substr(str_repeat($pad_string, $repeat), 0, floor($length))
-                    . $input
-                    . mb_substr(str_repeat($pad_string, $repeat), 0, ceil($length));
-        }
-
-        mb_internal_encoding($encoding);
-        return $result;
-    }
-
-    protected function ivanov_str_pad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = "UTF-8") {
         //return str_pad($str, strlen($str)-$this->strlen($str,$encoding)+$pad_length, $pad_string, $pad_type);
 
         $input_len = $this->strlen($input,$encoding);
