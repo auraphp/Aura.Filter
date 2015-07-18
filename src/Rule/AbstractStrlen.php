@@ -34,11 +34,10 @@ abstract class AbstractStrlen
 
     /**
      *
-     * Proxy to `mb_strlen()` when it exists, otherwise to `strlen()`.
+     * Proxy to `mb_strlen()` when the `mbstring` extension is loaded,
+     * otherwise to `strlen()`.
      *
      * @param string $str Returns the length of this string.
-     *
-     * @param string $encoding The encoding used, UTF-8 by default
      *
      * @return int
      *
@@ -55,15 +54,14 @@ abstract class AbstractStrlen
 
     /**
      *
-     * Proxy to `mb_substr()` when it exists, otherwise to `substr()`.
+     * Proxy to `mb_substr()` when the `mbstring` extension is loaded,
+     * otherwise to `substr()`.
      *
      * @param string $str The string to work with.
      *
      * @param int $start Start at this position.
      *
      * @param int $length End after this many characters.
-     *
-     * @param string $encoding The encoding used, UTF-8 by default
      *
      * @return string
      *
@@ -81,16 +79,21 @@ abstract class AbstractStrlen
 
     /**
      *
-     * Userland implmementation of multibyte `str_pad()` when multibyte exists;
-     * otherwise proxies to `str_pad()`.
+     * Proxy to `$this->mbsubstr()` when the `mbstring` extension is loaded,
+     * otherwise to `substr()`.
      *
-     * @param string $input The string to work with.
+     * @param string $input The input string.
      *
-     * @param int $length How much symbols do we want it to be
+     * @param int $length If the value of length is negative, less than, or
+     * equal to the length of the input string, no padding takes place.
      *
-     * @param string $pad_str What are we going to pad it with
+     * @param string $pad_str The pad_str may be truncated if the required
+     * number of padding characters can't be evenly divided by the pad_string's
+     * length.
      *
-     * @param int $type Where should it be padded - left,right or both
+     * @param int $type Optional argument pad_type can be STR_PAD_RIGHT,
+     * STR_PAD_LEFT, or STR_PAD_BOTH. If pad_type is not specified it is
+     * assumed to be STR_PAD_RIGHT.
      *
      * @return string
      *
@@ -109,8 +112,36 @@ abstract class AbstractStrlen
         return str_pad($input, $length, $pad_str, $type);
     }
 
-    protected function mbstrpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = 'UTF-8')
-    {
+    /**
+     *
+     * Userland implmementation of multibyte `str_pad()`.
+     *
+     * @param string $input The input string.
+     *
+     * @param int $length If the value of length is negative, less than, or
+     * equal to the length of the input string, no padding takes place.
+     *
+     * @param string $pad_str The pad_str may be truncated if the required
+     * number of padding characters can't be evenly divided by the pad_string's
+     * length.
+     *
+     * @param int $type Optional argument pad_type can be STR_PAD_RIGHT,
+     * STR_PAD_LEFT, or STR_PAD_BOTH. If pad_type is not specified it is
+     * assumed to be STR_PAD_RIGHT.
+     *
+     * @param string $encoding The encoding of *both* $input string *and*
+     * $pad_str.
+     *
+     * @return string
+     *
+     */
+    protected function mbstrpad(
+        $input,
+        $length,
+        $pad_str = ' ',
+        $type = STR_PAD_RIGHT,
+        $encoding = 'UTF-8'
+    ) {
         $input_len = mb_strlen($input, $encoding);
         if ($length <= $input_len) {
             return $input;
@@ -118,6 +149,7 @@ abstract class AbstractStrlen
 
         $pad_str_len = mb_strlen($pad_str, $encoding);
         $pad_len = $length - $input_len;
+
         if ($type == STR_PAD_RIGHT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
             return mb_substr($input . str_repeat($pad_str, $repeat_times), 0, $length, $encoding);
