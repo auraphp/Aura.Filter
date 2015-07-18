@@ -21,9 +21,6 @@ class Alnum
      *
      * Validates that the value is only letters (upper/lower case) and digits.
      *
-     * Note that valid letters and digits depend on the locale; cf.
-     * <http://php.net/setlocale>.
-     *
      * @param object $subject The subject to be filtered.
      *
      * @param string $field The subject field name.
@@ -38,6 +35,6 @@ class Alnum
             return false;
         }
 
-        return ctype_alnum((string) $value);
+        return (bool) preg_match('/^[\p{L}\p{Nd}]+$/', $value);
     }
 }

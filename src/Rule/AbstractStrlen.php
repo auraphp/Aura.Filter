@@ -211,5 +211,4 @@ abstract class AbstractStrlen
     {
         return mb_convert_encoding($str, $to, 'UTF-8');
     }
-
 }
