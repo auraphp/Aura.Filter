@@ -17,6 +17,7 @@ class AlnumTest extends AbstractValidateTest
             array('alphaonly'),
             array('AlphaOnLy'),
             array('someThing8else'),
+            array('soЗѝЦЯng8else'),
         );
     }
 
@@ -27,6 +28,7 @@ class AlnumTest extends AbstractValidateTest
             array(' '),
             array("Seven 8 nine"),
             array("non:alpha-numeric's"),
+            array('ЕФГ35%-№'),
             array(array()),
         );
     }

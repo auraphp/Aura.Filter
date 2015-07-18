@@ -7,6 +7,7 @@ class AlphaTest extends AbstractSanitizeTest
     {
         return array(
             array('^&* abc 123 ,./', true, 'abc'),
+            array('^&* abc гдб 123 ,./', true, 'abcгдб'),
         );
     }
 }

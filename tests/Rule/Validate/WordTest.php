@@ -11,6 +11,7 @@ class WordTest extends AbstractValidateTest
             array('ghi'),
             array('abc_def'),
             array('A1s_2Sd'),
+            array('хмA1s_2Sd_дума'),
         );
     }
 
@@ -23,6 +24,7 @@ class WordTest extends AbstractValidateTest
             array('^b'),
             array('%'),
             array('ab-db cd-ef'),
+            array('тест-тест')
         );
     }
 }
