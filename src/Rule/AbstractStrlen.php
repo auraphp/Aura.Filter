@@ -17,14 +17,19 @@ namespace Aura\Filter\Rule;
  */
 abstract class AbstractStrlen
 {
-    protected function convertToUtf8($str)
+    protected function detectEncoding($str)
     {
-        return mb_convert_encoding($str, 'UTF-8');
+        return mb_detect_encoding($str, mb_detect_order(), true);
     }
 
-    protected function convertToInternal($str)
+    protected function convertToUtf8($str, $from)
     {
-        return mb_convert_encoding($str, mb_internal_encoding(), 'UTF-8');
+        return mb_convert_encoding($str, 'UTF-8', $from);
+    }
+
+    protected function convertFromUtf8($str, $to)
+    {
+        return mb_convert_encoding($str, $to, 'UTF-8');
     }
 
     /**
@@ -38,11 +43,12 @@ abstract class AbstractStrlen
      * @return int
      *
      */
-    protected function strlen($str) {
-        if (function_exists('mb_strlen')) {
-            return $this->convertToInternal(
-                mb_strlen($this->convertToUtf8($str))
-            );
+    protected function strlen($str)
+    {
+        if (extension_loaded('mbstring')) {
+            $encoding = $this->detectEncoding($str);
+            $str = $this->convertToUtf8($str, $encoding);
+            return mb_strlen($str, 'UTF-8');
         }
         return strlen($str);
     }
@@ -62,11 +68,13 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function substr($str, $start, $length = null) {
-        if (function_exists('mb_substr')) {
-            return $this->convertToInternal(
-                mb_substr($this->convertToUtf8($str), $start, $length)
-            );
+    protected function substr($str, $start, $length = null)
+    {
+        if (extension_loaded('mbstring')) {
+            $encoding = $this->detectEncoding($str);
+            $str = $this->convertToUtf8($str, $encoding);
+            $result = mb_substr($str, $start, $length, 'UTF-8');
+            return $this->convertFromUtf8($result, $encoding);
         }
         return substr($str, $start, $length);
     }
@@ -89,24 +97,20 @@ abstract class AbstractStrlen
      */
     protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
     {
-        if (function_exists('mb_strlen')) {
-            return $this->convertToInternal(
-                $this->mbstrpad(
-                    $this->convertToUtf8($input),
-                    $length,
-                    $this->convertToUtf8($pad_str),
-                    $type
-                )
-            );
+        if (extension_loaded('mbstring')) {
+            $input_encoding = $this->detectEncoding($input);
+            $input = $this->convertToUtf8($input, $input_encoding);
+            $pad_str_encoding = $this->detectEncoding($pad_str);
+            $pad_str = $this->convertToUtf8($pad_str, $pad_str_encoding);
+            $result = $this->mbstrpad($input, $length, $pad_str, $type, 'UTF-8');
+            return $this->convertFromUtf8($result, $input_encoding);
         }
 
         return str_pad($input, $length, $pad_str, $type);
     }
 
-    protected function mbstrpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
+    protected function mbstrpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = 'UTF-8')
     {
-        $encoding = 'UTF-8';
-
         $input_len = mb_strlen($input, $encoding);
         if ($length <= $input_len) {
             return $input;
