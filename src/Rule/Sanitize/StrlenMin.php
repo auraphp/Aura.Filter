@@ -43,7 +43,7 @@ class StrlenMin extends AbstractStrlen
             return false;
         }
         if ($this->strlen($value) < $min) {
-            $subject->$field = $this->str_pad($value, $min, $pad_string, $pad_type);
+            $subject->$field = $this->strpad($value, $min, $pad_string, $pad_type);
         }
         return true;
     }

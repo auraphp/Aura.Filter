@@ -43,7 +43,7 @@ class Strlen extends AbstractStrlen
             return false;
         }
         if ($this->strlen($value) < $len) {
-            $subject->$field = $this->str_pad($value, $len, $pad_string, $pad_type);
+            $subject->$field = $this->strpad($value, $len, $pad_string, $pad_type);
         }
         if ($this->strlen($value) > $len) {
             $subject->$field = $this->substr($value, 0, $len);

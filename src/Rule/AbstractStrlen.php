@@ -17,24 +17,24 @@ namespace Aura\Filter\Rule;
  * @package Aura.Filter
  *
  */
-abstract class AbstractStrlen {
-
+abstract class AbstractStrlen
+{
     /**
      *
      * Proxy to `mb_strlen()` when it exists, otherwise to `strlen()`.
      *
      * @param string $str Returns the length of this string.
      *
-     * @param string $encoding The encoding used, UTF-8 by default
-     *
      * @return int
      *
      */
-    protected function strlen($str, $encoding = "UTF-8") {
-        if (function_exists('mb_strlen')) {
-            return mb_strlen($str, $encoding);
+    protected function strlen($str)
+    {
+        if (! function_exists('mb_strlen')) {
+            return strlen($str);
         }
-        return strlen($str);
+
+        return mb_strlen($str);
     }
 
     /**
@@ -52,56 +52,55 @@ abstract class AbstractStrlen {
      * @return string
      *
      */
-    protected function substr($str, $start, $length = null, $encoding = "UTF-8") {
-        if (function_exists('mb_substr')) {
-            return mb_substr($str, $start, $length, $encoding);
+    protected function substr($str, $start, $length = null)
+    {
+        if (! function_exists('mb_substr')) {
+            return substr($str, $start, $length);
         }
-        return substr($str, $start, $length);
+
+        if ($length === null) {
+            $length = mb_strlen($str);
+        }
+
+        return mb_substr($str, $start, $length);
     }
 
-    /**
-     *
-     * We need another function for str_padding
-     *
-     * @param string $input The string to work with.
-     *
-     * @param int $length How much symbols do we want it to be
-     *
-     * @param string $pad_str What are we going to pad it with
-     *
-     * @param int $type Where should it be padded - left,right or both
-     *
-     * @param string $encoding The encoding used, UTF-8 by default
-     *
-     * @return string
-     *
-     */
-    protected function str_pad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT, $encoding = "UTF-8") {
-        //return str_pad($str, strlen($str)-$this->strlen($str,$encoding)+$pad_length, $pad_string, $pad_type);
+    // http://php.net/manual/en/function.str-pad.php#111147
+    protected function strpad($input, $pad_length, $pad_string = ' ', $pad_type = STR_PAD_RIGHT)
+    {
+        if (! function_exists('mb_strlen')) {
+            return str_pad($input, $pad_length, $pad_string, $pad_type);
+        }
 
-        $input_len = $this->strlen($input,$encoding);
-        if ($length <= $input_len)
-            return $input;
-        $pad_str_len = $this->strlen($pad_str,$encoding);
-        $pad_len = $length - $input_len;
-        if ($type == STR_PAD_RIGHT) {
-            $repeat_times = ceil($pad_len / $pad_str_len);
-            return $this->substr($input . str_repeat($pad_str, $repeat_times), 0, $length,$encoding);
+        $encoding = mb_internal_encoding();
+        mb_internal_encoding('utf-8');
+
+        $input_length = mb_strlen($input);
+        if (! $input_length && ($pad_type == STR_PAD_RIGHT || $pad_type == STR_PAD_LEFT)) {
+            $input_length = 1;
         }
-        if ($type == STR_PAD_LEFT) {
-            $repeat_times = ceil($pad_len / $pad_str_len);
-            return $this->substr(str_repeat($pad_str, $repeat_times), 0, floor($pad_len),$encoding) . $input;
+
+        $pad_string_length = mb_strlen($pad_string);
+        $result = null;
+        $repeat = ceil($input_length - $pad_string_length + $pad_length);
+
+        if (! $pad_length || ! $pad_string_length || $pad_length <= $input_length) {
+            $result = $input;
+        } elseif ($pad_type == STR_PAD_RIGHT) {
+            $result = $input . str_repeat($pad_string, $repeat);
+            $result = mb_substr($result, 0, $pad_length);
+        } elseif ($pad_type == STR_PAD_LEFT) {
+            $result = str_repeat($pad_string, $repeat) . $input;
+            $result = mb_substr($result, -$pad_length);
+        } elseif ($pad_type == STR_PAD_BOTH) {
+            $length = ($pad_length - $input_length) / 2;
+            $repeat = ceil($length / $pad_string_length);
+            $result = mb_substr(str_repeat($pad_string, $repeat), 0, floor($length))
+                    . $input
+                    . mb_substr(str_repeat($pad_string, $repeat), 0, ceil($length));
         }
-        if ($type == STR_PAD_BOTH) {
-            $pad_len /= 2;
-            $pad_amount_left = floor($pad_len);
-            $pad_amount_right = ceil($pad_len);
-            $repeat_times_left = ceil($pad_amount_left / $pad_str_len);
-            $repeat_times_right = ceil($pad_amount_right / $pad_str_len);
-            $padding_left = $this->substr(str_repeat($pad_str, $repeat_times_left), 0, $pad_amount_left,$encoding);
-            $padding_right = $this->substr(str_repeat($pad_str, $repeat_times_right), 0, $pad_amount_right,$encoding);
-            return $padding_left . $input . $padding_right;
-        }
+
+        mb_internal_encoding($encoding);
+        return $result;
     }
-
 }
