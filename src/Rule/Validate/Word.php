@@ -43,8 +43,7 @@ class Word
         if (! is_scalar($value)) {
             return false;
         }
-        $expr = '/^\w+$/D';
 
-        return (bool) preg_match($expr, $value);
+        return (bool) preg_match('/^[\p{L}\p{Nd}_]+$/', $value);
     }
 }
