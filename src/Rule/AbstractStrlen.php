@@ -17,21 +17,6 @@ namespace Aura\Filter\Rule;
  */
 abstract class AbstractStrlen
 {
-    protected function detectEncoding($str)
-    {
-        return mb_detect_encoding($str, mb_detect_order(), true);
-    }
-
-    protected function convertToUtf8($str, $from)
-    {
-        return mb_convert_encoding($str, 'UTF-8', $from);
-    }
-
-    protected function convertFromUtf8($str, $to)
-    {
-        return mb_convert_encoding($str, $to, 'UTF-8');
-    }
-
     /**
      *
      * Proxy to `mb_strlen()` when the `mbstring` extension is loaded,
@@ -171,4 +156,51 @@ abstract class AbstractStrlen
             return $padding_left . $input . $padding_right;
         }
     }
+
+    /**
+     *
+     * Detects the string encoding.
+     *
+     * @param string $str The string.
+     *
+     * @return string
+     *
+     */
+    protected function detectEncoding($str)
+    {
+        return mb_detect_encoding($str, mb_detect_order(), true);
+    }
+
+    /**
+     *
+     * Converts a string to UTF-8 from another encoding.
+     *
+     * @param string $str The string.
+     *
+     * @param string $from Convert from this encoding.
+     *
+     * @return string
+     *
+     */
+    protected function convertToUtf8($str, $from)
+    {
+        return mb_convert_encoding($str, 'UTF-8', $from);
+    }
+
+    /**
+     *
+     * Converts a string from UTF-8 to another encoding.
+     *
+     * @param string $str The string.
+     *
+     * @param string $to Convert to this encoding.
+     *
+     * @return string
+     *
+     */
+    protected function convertFromUtf8($str, $to)
+    {
+        return mb_convert_encoding($str, $to, 'UTF-8');
+    }
+
 }
