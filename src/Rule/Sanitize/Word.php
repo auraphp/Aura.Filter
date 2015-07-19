@@ -35,7 +35,7 @@ class Word
         if (! is_scalar($value)) {
             return false;
         }
-        $subject->$field = preg_replace('/[^\p{L}\p{Nd}_]/', '', $value);
+        $subject->$field = preg_replace('/[^\p{L}\p{Nd}_]/u', '', $value);
         return true;
     }
 }
