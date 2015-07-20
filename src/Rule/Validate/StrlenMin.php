@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Aura\Filter\Rule\AbstractStrlen;
+use Aura\Filter\Rule\AbstractString;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class StrlenMin extends AbstractStrlen
+class StrlenMin extends AbstractString
 {
     /**
      *

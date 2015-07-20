@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Rule\AbstractString;
+
 /**
  *
  * Validates that the value is letters only (upper or lower case).
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class Alpha
+class Alpha extends AbstractString
 {
     /**
      *
@@ -30,11 +32,10 @@ class Alpha
      */
     public function __invoke($subject, $field)
     {
-        $value = $subject->$field;
-        if (! is_scalar($value)) {
-            return false;
-        }
-
-        return (bool) preg_match('/^[\p{L}]+$/u', $value);
+        return (bool) $this->pregValidate(
+            '/^[a-z]+/i',
+            '/^[\p{L}]+$/u',
+            $subject->$field
+        );
     }
 }

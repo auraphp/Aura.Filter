@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\Exception;
+
 /**
  *
  * Abstract rule for string-length filters; supports the `mbstring` extension.
@@ -15,8 +17,40 @@ namespace Aura\Filter\Rule;
  * @package Aura.Filter
  *
  */
-abstract class AbstractStrlen
+abstract class AbstractString
 {
+    protected function mbstring()
+    {
+        return extension_loaded('mbstring');
+    }
+
+    protected function pregValidate($pattern, $utf8pattern, $subject)
+    {
+        if (! is_scalar($subject)) {
+            return false;
+        }
+
+        if (! $this->mbstring()) {
+            return preg_match($pattern, $subject);
+        }
+
+        $encoding = $this->detectEncoding($subject);
+        $subject = $this->convertToUtf8($subject, $encoding);
+        return preg_match($utf8pattern, $subject, $matches);
+    }
+
+    protected function pregSanitize($pattern, $utf8pattern, $subject)
+    {
+        if (! $this->mbstring()) {
+            return preg_replace($pattern, '', $subject);
+        }
+
+        $encoding = $this->detectEncoding($subject);
+        $subject = $this->convertToUtf8($subject, $encoding);
+        $subject = preg_replace($utf8pattern, '', $subject);
+        return $this->convertFromUtf8($subject, $encoding);
+    }
+
     /**
      *
      * Proxy to `mb_strlen()` when the `mbstring` extension is loaded,
@@ -29,7 +63,7 @@ abstract class AbstractStrlen
      */
     protected function strlen($str)
     {
-        if (! extension_loaded('mbstring')) {
+        if (! $this->mbstring()) {
             return strlen($str);
         }
 
@@ -54,7 +88,7 @@ abstract class AbstractStrlen
      */
     protected function substr($str, $start, $length = null)
     {
-        if (! extension_loaded('mbstring')) {
+        if (! $this->mbstring()) {
             return substr($str, $start, $length);
         }
 
@@ -87,7 +121,7 @@ abstract class AbstractStrlen
      */
     protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
     {
-        if (! extension_loaded('mbstring')) {
+        if (! $this->mbstring()) {
             return str_pad($input, $length, $pad_str, $type);
         }
 
@@ -177,7 +211,12 @@ abstract class AbstractStrlen
      */
     protected function detectEncoding($str)
     {
-        return mb_detect_encoding($str, mb_detect_order(), true);
+        $encoding = mb_detect_encoding($str, mb_detect_order(), true);
+        if ($encoding) {
+            return $encoding;
+        }
+
+        throw new Exception\EncodingDetectionFailed();
     }
 
     /**

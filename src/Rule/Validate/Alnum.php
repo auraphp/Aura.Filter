@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Rule\AbstractString;
+
 /**
  *
  * Validates that the value is only letters (upper/lower case) and digits.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class Alnum
+class Alnum extends AbstractString
 {
     /**
      *
@@ -30,11 +32,10 @@ class Alnum
      */
     public function __invoke($subject, $field)
     {
-        $value = $subject->$field;
-        if (! is_scalar($value)) {
-            return false;
-        }
-
-        return (bool) preg_match('/^[\p{L}\p{Nd}]+$/u', $value);
+        return (bool) $this->pregValidate(
+            '/^[a-z0-9]+$/i',
+            '/^[\p{L}\p{Nd}]+$/u',
+            $subject->$field
+        );
     }
 }

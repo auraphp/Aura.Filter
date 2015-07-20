@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Rule\AbstractString;
+
 /**
  *
  * Validates that the value is composed only of word characters.
@@ -15,20 +17,12 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class Word
+class Word extends AbstractString
 {
     /**
      *
-     * Validates that the value is composed only of word characters.
-     *
-     * Cf. <http://php.net/manual/en/regexp.reference.escape.php>:
-     *
-     * > A "word" character is any letter or digit or the underscore character,
-     * > that is, any character which can be part of a Perl "word". The
-     * > definition of letters and digits is controlled by PCRE's character
-     * > tables, and may vary if locale-specific matching is taking place. For
-     * > example, in the "fr" (French) locale, some character codes greater than
-     * > 128 are used for accented letters, and these are matched by \w.
+     * Validates that the value is composed only of word characters (letters,
+     * numbers, and underscores).
      *
      * @param object $subject The subject to be filtered.
      *
@@ -39,11 +33,10 @@ class Word
      */
     public function __invoke($subject, $field)
     {
-        $value = $subject->$field;
-        if (! is_scalar($value)) {
-            return false;
-        }
-
-        return (bool) preg_match('/^[\p{L}\p{Nd}_]+$/u', $value);
+        return (bool) $this->pregValidate(
+            '/^[a-z0-9_]$/i',
+            '/^[\p{L}\p{Nd}_]+$/u',
+            $subject->$field
+        );
     }
 }

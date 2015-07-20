@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
+use Aura\Filter\Rule\AbstractString;
+
 /**
  *
  * Strips non-word characters within the value.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Sanitize;
  * @package Aura.Filter
  *
  */
-class Word
+class Word extends AbstractString
 {
     /**
      *
@@ -35,7 +37,12 @@ class Word
         if (! is_scalar($value)) {
             return false;
         }
-        $subject->$field = preg_replace('/[^\p{L}\p{Nd}_]/u', '', $value);
+
+        $subject->$field = $this->pregSanitize(
+            '/[^a-z0-9_]/i',
+            '/[^\p{L}\p{Nd}_]/u',
+            $value
+        );
         return true;
     }
 }

@@ -8,7 +8,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
-use Aura\Filter\Rule\AbstractStrlen;
+use Aura\Filter\Rule\AbstractString;
+
 /**
  *
  * Strips non-alphabetic characters from the value.
@@ -16,7 +17,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class Alpha extends AbstractStrlen
+class Alpha extends AbstractString
 {
     /**
      *
@@ -31,10 +32,11 @@ class Alpha extends AbstractStrlen
      */
     public function __invoke($subject, $field)
     {
-        $input_encoding = $this->detectEncoding($subject->$field);
-        $subject->$field = $this->convertToUtf8($subject->$field, $input_encoding);
-        $subject->$field = preg_replace('/[\P{L}]/u', '', $subject->$field);
-        $subject->$field = $this->convertFromUtf8($subject->$field, $input_encoding);
+        $subject->$field = $this->pregSanitize(
+            '/[^a-z]/i',
+            '/[^\p{L}]/u',
+            $subject->$field
+        );
         return true;
     }
 }

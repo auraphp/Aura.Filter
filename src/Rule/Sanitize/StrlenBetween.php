@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
-use Aura\Filter\Rule\AbstractStrlen;
+use Aura\Filter\Rule\AbstractString;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class StrlenBetween extends AbstractStrlen
+class StrlenBetween extends AbstractString
 {
     /**
      *
