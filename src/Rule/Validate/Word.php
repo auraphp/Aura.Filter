@@ -8,8 +8,6 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Aura\Filter\Rule\AbstractStrlen;
-
 /**
  *
  * Validates that the value is composed only of word characters.
@@ -17,7 +15,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class Word extends AbstractStrlen
+class Word
 {
     /**
      *

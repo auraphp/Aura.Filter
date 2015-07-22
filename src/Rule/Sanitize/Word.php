@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class Word extends AbstractStrlen
+class Word
 {
     /**
      *
@@ -37,12 +37,7 @@ class Word extends AbstractStrlen
         if (! is_scalar($value)) {
             return false;
         }
-
-        $subject->$field = preg_replace(
-            '/[^\p{L}\p{Nd}_]/u',
-            '',
-            $value
-        );
+        $subject->$field = preg_replace('/[^\p{L}\p{Nd}_]/u', '', $value);
         return true;
     }
 }

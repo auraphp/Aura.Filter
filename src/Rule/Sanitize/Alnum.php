@@ -8,8 +8,6 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
-use Aura\Filter\Rule\AbstractStrlen;
-
 /**
  *
  * Strips non-alphanumeric characters from the value.
@@ -17,7 +15,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class Alnum extends AbstractStrlen
+class Alnum
 {
     /**
      *
@@ -32,11 +30,7 @@ class Alnum extends AbstractStrlen
      */
     public function __invoke($subject, $field)
     {
-        $subject->$field = preg_replace(
-            '/[^\p{L}\p{Nd}]/u',
-            '',
-            $subject->$field
-        );
+        $subject->$field = preg_replace('/[^\p{L}\p{Nd}]/u', '', $subject->$field);
         return true;
     }
 }

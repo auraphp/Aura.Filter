@@ -36,7 +36,6 @@ class Trim
         if (! is_scalar($value)) {
             return false;
         }
-
         return trim($value, $chars) == $value;
     }
 }

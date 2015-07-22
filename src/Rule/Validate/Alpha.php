@@ -8,8 +8,6 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Aura\Filter\Rule\AbstractStrlen;
-
 /**
  *
  * Validates that the value is letters only (upper or lower case).
@@ -17,7 +15,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class Alpha extends AbstractStrlen
+class Alpha
 {
     /**
      *

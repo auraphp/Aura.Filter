@@ -8,8 +8,6 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Aura\Filter\Rule\AbstractStrlen;
-
 /**
  *
  * Validates that the value is only letters (upper/lower case) and digits.
@@ -17,7 +15,7 @@ use Aura\Filter\Rule\AbstractStrlen;
  * @package Aura.Filter
  *
  */
-class Alnum extends AbstractStrlen
+class Alnum
 {
     /**
      *
