@@ -27,12 +27,17 @@ abstract class AbstractStrlen
         return extension_loaded('iconv');
     }
 
+    protected function libxml()
+    {
+        return extension_loaded('libxml');
+    }
+
     /**
      *
-     * Proxy to `mb_strlen()` when the `mbstring` extension is loaded,
-     * otherwise to `strlen()`.
+     * Proxy to `iconv_strlen()` or `mb_strlen()` when available; fall back to
+     * `utf8_decode()` and `strlen()` otherwise.
      *
-     * @param string $str Returns the length of this string.
+     * @param string $str Return the number of characters in this string.
      *
      * @return int
      *
@@ -40,16 +45,31 @@ abstract class AbstractStrlen
     protected function strlen($str)
     {
         if ($this->iconv()) {
-            //the @ is needed since we're getting warning notice with invalid UTF-8.
-            //on error we get FALSE, so we need the (int) too
-            return (int)@iconv_strlen($str, 'UTF-8');
+            return $this->strlenIconv($str);
         }
 
         if ($this->mbstring()) {
             return mb_strlen($str, 'UTF-8');
         }
 
-        return strlen(utf8_decode($str));
+        if ($this->libxml()) {
+            return strlen(utf8_decode($str));
+        }
+
+        return strlen($str);
+    }
+
+    protected function strlenIconv($str)
+    {
+        $level = error_reporting(0);
+        $strlen = iconv_strlen($str, 'UTF-8');
+        error_reporting($level);
+
+        if ($strlen !== false) {
+            return $strlen;
+        }
+
+        throw new Exception\MalformedUtf8();
     }
 
     /**
