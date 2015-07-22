@@ -8,28 +8,40 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\Exception;
+
 /**
  *
- * Abstract rule for string-length filters; supports the `mbstring` extension.
+ * Abstract rule for string-length filters; supports the `iconv` and `mbstring`
+ * extensions.
  *
  * @package Aura.Filter
  *
  */
 abstract class AbstractStrlen
 {
+    /**
+     *
+     * Is the `mbstring` extension loaded?
+     *
+     * @return bool
+     *
+     */
     protected function mbstring()
     {
         return extension_loaded('mbstring');
     }
 
+    /**
+     *
+     * Is the `iconv` extension loaded?
+     *
+     * @return bool
+     *
+     */
     protected function iconv()
     {
         return extension_loaded('iconv');
-    }
-
-    protected function libxml()
-    {
-        return extension_loaded('libxml');
     }
 
     /**
@@ -52,13 +64,20 @@ abstract class AbstractStrlen
             return mb_strlen($str, 'UTF-8');
         }
 
-        if ($this->libxml()) {
-            return strlen(utf8_decode($str));
-        }
-
-        return strlen($str);
+        return strlen(utf8_decode($str));
     }
 
+    /**
+     *
+     * Wrapper for `iconv_strlen()` to throw an exception on malformed UTF-8.
+     *
+     * @param string $str Return the number of characters in this string.
+     *
+     * @return int
+     *
+     * @throws Exception\MalformedUtf8
+     *
+     */
     protected function strlenIconv($str)
     {
         $level = error_reporting(0);
@@ -74,9 +93,8 @@ abstract class AbstractStrlen
 
     /**
      *
-     *  Proxy to `iconv_substr()` when the `iconv` extension is loaded,
-     * else to `mb_substr()` when the `mbstring` extension is loaded,
-     * otherwise to `substr polyfill`.
+     * Proxy to `iconv_substr()` or `mb_substr()` when the `mbstring` available;
+     * polyfill via `preg_split()` and `array_slice()` otherwise.
      *
      * @param string $str The string to work with.
      *
@@ -98,33 +116,46 @@ abstract class AbstractStrlen
         }
 
         $split = preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
-        return join('', array_slice($split, $start, $length));
+        return implode('', array_slice($split, $start, $length));
     }
 
-
-    protected function strpad($input, $length, $pad_str = ' ', $type = STR_PAD_RIGHT)
+    /**
+     *
+     * Userland UTF-8-aware implementation of `str_pad()`.
+     *
+     * @param string $input The input string.
+     *
+     * @param int $pad_length If the value of pad_length is negative, less than,
+     * or equal to the length of the input string, no padding takes place.
+     *
+     * @param string $pad_str Pad with this string. The pad_string may be
+     * truncated if the required number of padding characters can't be evenly
+     * divided by the pad_string's length.
+     *
+     * @param int $pad_type Optional argument pad_type can be STR_PAD_RIGHT,
+     * STR_PAD_LEFT, or STR_PAD_BOTH. If pad_type is not specified it is
+     * assumed to be STR_PAD_RIGHT.
+     *
+     * @return string
+     *
+     */
+    protected function strpad($input, $pad_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
     {
         $input_len = $this->strlen($input);
-        if ($length <= $input_len) {
+        if ($pad_length <= $input_len) {
             return $input;
         }
 
         $pad_str_len = $this->strlen($pad_str);
-        $pad_len = $length - $input_len;
+        $pad_len = $pad_length - $input_len;
 
-        if ($type == STR_PAD_RIGHT) {
-            $repeat_times = ceil($pad_len / $pad_str_len);
-            $input .= str_repeat($pad_str, $repeat_times);
-            return $this->substr($input, 0, $length);
-        }
-
-        if ($type == STR_PAD_LEFT) {
+        if ($pad_type == STR_PAD_LEFT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
             $prefix = str_repeat($pad_str, $repeat_times);
             return $this->substr($prefix, 0, floor($pad_len)) . $input;
         }
 
-        if ($type == STR_PAD_BOTH) {
+        if ($pad_type == STR_PAD_BOTH) {
             $pad_len /= 2;
             $pad_amount_left = floor($pad_len);
             $pad_amount_right = ceil($pad_len);
@@ -139,5 +170,10 @@ abstract class AbstractStrlen
 
             return $padding_left . $input . $padding_right;
         }
+
+        // STR_PAD_RIGHT
+        $repeat_times = ceil($pad_len / $pad_str_len);
+        $input .= str_repeat($pad_str, $repeat_times);
+        return $this->substr($input, 0, $pad_length);
     }
 }
