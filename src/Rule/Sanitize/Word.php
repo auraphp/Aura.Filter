@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
-use Aura\Filter\Rule\AbstractString;
+use Aura\Filter\Rule\AbstractStrlen;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractString;
  * @package Aura.Filter
  *
  */
-class Word extends AbstractString
+class Word extends AbstractStrlen
 {
     /**
      *
@@ -38,9 +38,9 @@ class Word extends AbstractString
             return false;
         }
 
-        $subject->$field = $this->pregSanitize(
-            '/[^a-z0-9_]/i',
+        $subject->$field = preg_replace(
             '/[^\p{L}\p{Nd}_]/u',
+            '',
             $value
         );
         return true;

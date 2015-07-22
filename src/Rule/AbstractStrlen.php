@@ -15,7 +15,7 @@ namespace Aura\Filter\Rule;
  * @package Aura.Filter
  *
  */
-abstract class AbstractString
+abstract class AbstractStrlen
 {
     protected function mbstring()
     {
@@ -25,28 +25,6 @@ abstract class AbstractString
     protected function iconv()
     {
         return extension_loaded('iconv');
-    }
-
-    protected function pregValidate($pattern, $utf8pattern, $subject)
-    {
-        if (! is_scalar($subject)) {
-            return false;
-        }
-
-        //if ($this->iconv() || $this->mbstring()) {
-            return preg_match($utf8pattern, $subject);
-        //}
-
-        //return preg_match($pattern, $subject);
-    }
-
-    protected function pregSanitize($pattern, $utf8pattern, $subject)
-    {
-        //if ($this->iconv() || $this->mbstring()) {
-            return preg_replace($utf8pattern, '', $subject);
-        //}
-
-        //return preg_replace($pattern, '', $subject);
     }
 
     /**
@@ -98,38 +76,32 @@ abstract class AbstractString
         if ($this->mbstring()) {
             return mb_substr($str, $start, $length, 'UTF-8');
         }
-        
-         return join("", array_slice(
-        preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY), $start, $length));
-        //return substr($str, $start, $length);
+
+        $split = preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY);
+        return join('', array_slice($split, $start, $length));
     }
 
 
-    protected function strpad($input,
-        $length,
-        $pad_str = ' ',
-        $type = STR_PAD_RIGHT
-    ) {
-        $encoding = 'UTF-8';
-
-        $input_len = $this->strlen($input, $encoding);
+    protected function strpad($input, $length, $pad_str = ' ', $type = STR_PAD_RIGHT)
+    {
+        $input_len = $this->strlen($input);
         if ($length <= $input_len) {
             return $input;
         }
 
-        $pad_str_len = $this->strlen($pad_str, $encoding);
+        $pad_str_len = $this->strlen($pad_str);
         $pad_len = $length - $input_len;
 
         if ($type == STR_PAD_RIGHT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
             $input .= str_repeat($pad_str, $repeat_times);
-            return $this->substr($input, 0, $length, $encoding);
+            return $this->substr($input, 0, $length);
         }
 
         if ($type == STR_PAD_LEFT) {
             $repeat_times = ceil($pad_len / $pad_str_len);
             $prefix = str_repeat($pad_str, $repeat_times);
-            return $this->substr($prefix, 0, floor($pad_len), $encoding) . $input;
+            return $this->substr($prefix, 0, floor($pad_len)) . $input;
         }
 
         if ($type == STR_PAD_BOTH) {
@@ -140,10 +112,10 @@ abstract class AbstractString
             $repeat_times_right = ceil($pad_amount_right / $pad_str_len);
 
             $prefix = str_repeat($pad_str, $repeat_times_left);
-            $padding_left = $this->substr($prefix, 0, $pad_amount_left, $encoding);
+            $padding_left = $this->substr($prefix, 0, $pad_amount_left);
 
             $suffix = str_repeat($pad_str, $repeat_times_right);
-            $padding_right = $this->substr($suffix, 0, $pad_amount_right, $encoding);
+            $padding_right = $this->substr($suffix, 0, $pad_amount_right);
 
             return $padding_left . $input . $padding_right;
         }

@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
-use Aura\Filter\Rule\AbstractString;
+use Aura\Filter\Rule\AbstractStrlen;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractString;
  * @package Aura.Filter
  *
  */
-class Word extends AbstractString
+class Word extends AbstractStrlen
 {
     /**
      *
@@ -33,10 +33,11 @@ class Word extends AbstractString
      */
     public function __invoke($subject, $field)
     {
-        return (bool) $this->pregValidate(
-            '/^[a-z0-9_]$/i',
-            '/^[\p{L}\p{Nd}_]+$/u',
-            $subject->$field
-        );
+        $value = $subject->$field;
+        if (! is_scalar($value)) {
+            return false;
+        }
+
+        return (bool) preg_match('/^[\p{L}\p{Nd}_]+$/u', $value);
     }
 }

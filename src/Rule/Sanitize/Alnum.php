@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
-use Aura\Filter\Rule\AbstractString;
+use Aura\Filter\Rule\AbstractStrlen;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractString;
  * @package Aura.Filter
  *
  */
-class Alnum extends AbstractString
+class Alnum extends AbstractStrlen
 {
     /**
      *
@@ -32,9 +32,9 @@ class Alnum extends AbstractString
      */
     public function __invoke($subject, $field)
     {
-        $subject->$field = $this->pregSanitize(
-            '/[^a-z0-9]/i',
+        $subject->$field = preg_replace(
             '/[^\p{L}\p{Nd}]/u',
+            '',
             $subject->$field
         );
         return true;

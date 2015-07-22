@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
-use Aura\Filter\Rule\AbstractString;
+use Aura\Filter\Rule\AbstractStrlen;
 
 /**
  *
@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractString;
  * @package Aura.Filter
  *
  */
-class Strlen extends AbstractString
+class Strlen extends AbstractStrlen
 {
     /**
      *
