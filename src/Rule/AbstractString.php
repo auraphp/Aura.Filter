@@ -24,31 +24,31 @@ abstract class AbstractString
         return extension_loaded('mbstring');
     }
 
+    protected function iconv()
+    {
+        return extension_loaded('iconv');
+    }
+
     protected function pregValidate($pattern, $utf8pattern, $subject)
     {
         if (! is_scalar($subject)) {
             return false;
         }
 
-        if (! $this->mbstring()) {
-            return preg_match($pattern, $subject);
+        if ($this->iconv() || $this->mbstring()) {
+            return preg_match($utf8pattern, $subject, $matches);
         }
 
-        $encoding = $this->detectEncoding($subject);
-        $subject = $this->convertToUtf8($subject, $encoding);
-        return preg_match($utf8pattern, $subject, $matches);
+        return preg_match($pattern, $subject);
     }
 
     protected function pregSanitize($pattern, $utf8pattern, $subject)
     {
-        if (! $this->mbstring()) {
-            return preg_replace($pattern, '', $subject);
+        if ($this->iconv() || $this->mbstring()) {
+            return preg_replace($utf8pattern, '', $subject);
         }
 
-        $encoding = $this->detectEncoding($subject);
-        $subject = $this->convertToUtf8($subject, $encoding);
-        $subject = preg_replace($utf8pattern, '', $subject);
-        return $this->convertFromUtf8($subject, $encoding);
+        return preg_replace($pattern, '', $subject);
     }
 
     /**
@@ -63,13 +63,15 @@ abstract class AbstractString
      */
     protected function strlen($str)
     {
-        if (! $this->mbstring()) {
-            return strlen($str);
+        if ($this->iconv()) {
+            return iconv_strlen($str, 'UTF-8');
         }
 
-        $encoding = $this->detectEncoding($str);
-        $str = $this->convertToUtf8($str, $encoding);
-        return mb_strlen($str, 'UTF-8');
+        if ($this->mbstring()) {
+            return mb_strlen($str, 'UTF-8');
+        }
+
+        return strlen($str);
     }
 
     /**
@@ -88,14 +90,15 @@ abstract class AbstractString
      */
     protected function substr($str, $start, $length = null)
     {
-        if (! $this->mbstring()) {
-            return substr($str, $start, $length);
+        if ($this->iconv()) {
+            return iconv_substr($str, $start, $length, 'UTF-8');
         }
 
-        $encoding = $this->detectEncoding($str);
-        $str = $this->convertToUtf8($str, $encoding);
-        $result = mb_substr($str, $start, $length, 'UTF-8');
-        return $this->convertFromUtf8($result, $encoding);
+        if ($this->mbstring()) {
+            return mb_substr($str, $start, $length, 'UTF-8');
+        }
+
+        return substr($str, $start, $length);
     }
 
     /**
@@ -121,16 +124,15 @@ abstract class AbstractString
      */
     protected function strpad($input, $length, $pad_str = " ", $type = STR_PAD_RIGHT)
     {
-        if (! $this->mbstring()) {
-            return str_pad($input, $length, $pad_str, $type);
+        if ($this->mbstring()) {
+            return $this->mbStrPad($input, $length, $pad_str, $type, 'UTF-8');
         }
 
-        $input_encoding = $this->detectEncoding($input);
-        $input = $this->convertToUtf8($input, $input_encoding);
-        $pad_str_encoding = $this->detectEncoding($pad_str);
-        $pad_str = $this->convertToUtf8($pad_str, $pad_str_encoding);
-        $result = $this->mbstrpad($input, $length, $pad_str, $type, 'UTF-8');
-        return $this->convertFromUtf8($result, $input_encoding);
+        if ($this->iconv()) {
+            return $this->iconvStrPad($input, $length, $pad_str, $type, 'UTF-8');
+        }
+
+        return str_pad($input, $length, $pad_str, $type);
     }
 
     /**
@@ -156,13 +158,14 @@ abstract class AbstractString
      * @return string
      *
      */
-    protected function mbstrpad(
+    protected function mbStrPad(
         $input,
         $length,
         $pad_str = ' ',
-        $type = STR_PAD_RIGHT,
-        $encoding = 'UTF-8'
+        $type = STR_PAD_RIGHT
     ) {
+        $encoding = 'UTF-8';
+
         $input_len = mb_strlen($input, $encoding);
         if ($length <= $input_len) {
             return $input;
@@ -202,52 +205,69 @@ abstract class AbstractString
 
     /**
      *
-     * Detects the string encoding.
+     * Userland implmementation of multibyte `str_pad()`.
      *
-     * @param string $str The string.
+     * @param string $input The input string.
+     *
+     * @param int $length If the value of length is negative, less than, or
+     * equal to the length of the input string, no padding takes place.
+     *
+     * @param string $pad_str The pad_str may be truncated if the required
+     * number of padding characters can't be evenly divided by the pad_string's
+     * length.
+     *
+     * @param int $type Optional argument pad_type can be STR_PAD_RIGHT,
+     * STR_PAD_LEFT, or STR_PAD_BOTH. If pad_type is not specified it is
+     * assumed to be STR_PAD_RIGHT.
+     *
+     * @param string $encoding The encoding of *both* $input string *and*
+     * $pad_str.
      *
      * @return string
      *
      */
-    protected function detectEncoding($str)
-    {
-        $encoding = mb_detect_encoding($str, mb_detect_order(), true);
-        if ($encoding) {
-            return $encoding;
+    protected function iconvStrPad(
+        $input,
+        $length,
+        $pad_str = ' ',
+        $type = STR_PAD_RIGHT
+    ) {
+        $encoding = 'UTF-8';
+
+        $input_len = iconv_strlen($input, $encoding);
+        if ($length <= $input_len) {
+            return $input;
         }
 
-        throw new Exception\EncodingDetectionFailed();
-    }
+        $pad_str_len = iconv_strlen($pad_str, $encoding);
+        $pad_len = $length - $input_len;
 
-    /**
-     *
-     * Converts a string to UTF-8 from another encoding.
-     *
-     * @param string $str The string.
-     *
-     * @param string $from Convert from this encoding.
-     *
-     * @return string
-     *
-     */
-    protected function convertToUtf8($str, $from)
-    {
-        return mb_convert_encoding($str, 'UTF-8', $from);
-    }
+        if ($type == STR_PAD_RIGHT) {
+            $repeat_times = ceil($pad_len / $pad_str_len);
+            $input .= str_repeat($pad_str, $repeat_times);
+            return iconv_substr($input, 0, $length, $encoding);
+        }
 
-    /**
-     *
-     * Converts a string from UTF-8 to another encoding.
-     *
-     * @param string $str The string.
-     *
-     * @param string $to Convert to this encoding.
-     *
-     * @return string
-     *
-     */
-    protected function convertFromUtf8($str, $to)
-    {
-        return mb_convert_encoding($str, $to, 'UTF-8');
+        if ($type == STR_PAD_LEFT) {
+            $repeat_times = ceil($pad_len / $pad_str_len);
+            $prefix = str_repeat($pad_str, $repeat_times);
+            return iconv_substr($prefix, 0, floor($pad_len), $encoding) . $input;
+        }
+
+        if ($type == STR_PAD_BOTH) {
+            $pad_len /= 2;
+            $pad_amount_left = floor($pad_len);
+            $pad_amount_right = ceil($pad_len);
+            $repeat_times_left = ceil($pad_amount_left / $pad_str_len);
+            $repeat_times_right = ceil($pad_amount_right / $pad_str_len);
+
+            $prefix = str_repeat($pad_str, $repeat_times_left);
+            $padding_left = iconv_substr($prefix, 0, $pad_amount_left, $encoding);
+
+            $suffix = str_repeat($pad_str, $repeat_times_right);
+            $padding_right = iconv_substr($suffix, 0, $pad_amount_right, $encoding);
+
+            return $padding_left . $input . $padding_right;
+        }
     }
 }
