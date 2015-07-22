@@ -1,5 +1,4 @@
 <?php
-
 namespace Aura\Filter\Rule\Validate;
 
 class StrlenMinTest extends AbstractValidateTest

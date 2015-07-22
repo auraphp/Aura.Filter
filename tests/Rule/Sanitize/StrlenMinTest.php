@@ -1,5 +1,4 @@
 <?php
-
 namespace Aura\Filter\Rule\Sanitize;
 
 class StrlenMinTest extends AbstractSanitizeTest
