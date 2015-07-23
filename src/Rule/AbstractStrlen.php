@@ -77,7 +77,7 @@ abstract class AbstractStrlen
      *
      * @param int $length End after this many characters.
      *
-     * @return int
+     * @return string
      *
      * @throws Exception\MalformedUtf8
      *
