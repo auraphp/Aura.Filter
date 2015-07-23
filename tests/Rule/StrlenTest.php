@@ -48,7 +48,10 @@ class StrlenTest extends \PHPUnit_Framework_TestCase
 
     public function testIconvMalformedUtf8()
     {
-        $this->markTestIncomplete(__METHOD__);
+        $bad = "\xFF\xFE";
+        $fake = new FakeStrlenIconv();
+        $this->setExpectedException('Aura\Filter\Exception\MalformedUtf8');
+        $fake->strlen($bad);
     }
 
     public function fakeProvider()
