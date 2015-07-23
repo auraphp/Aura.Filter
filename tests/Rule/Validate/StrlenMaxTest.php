@@ -26,6 +26,8 @@ class StrlenMaxTest extends AbstractValidateTest
     {
         return array(
             array(array()),
+            array('abcd'),
+            array('abcdefg'),
             array('абвг'),
             array('абвгдеж'),
         );

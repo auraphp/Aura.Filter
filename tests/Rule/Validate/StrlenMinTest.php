@@ -20,7 +20,8 @@ class StrlenMinTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot() {
+    public function providerIsNot()
+    {
         return array(
             array(array()),
             array('a'),

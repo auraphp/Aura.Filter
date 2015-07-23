@@ -4,6 +4,7 @@ namespace Aura\Filter\Rule\Validate;
 class StrlenBetweenTest extends AbstractValidateTest
 {
     protected $min = 4;
+
     protected $max = 6;
 
     protected function getArgs()
