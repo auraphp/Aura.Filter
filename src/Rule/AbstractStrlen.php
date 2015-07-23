@@ -67,6 +67,34 @@ abstract class AbstractStrlen
         return strlen(utf8_decode($str));
     }
 
+     /**
+     *
+     * Wrapper for `iconv_substr()` to throw an exception on malformed UTF-8.
+     *
+     * @param string $str The string to work with.
+     *
+     * @param int $start Start at this position.
+     *
+     * @param int $length End after this many characters.
+     *
+     * @return int
+     *
+     * @throws Exception\MalformedUtf8
+     *
+     */
+    protected function substrIconv($str,$start,$length)
+    {
+        $level = error_reporting(0);
+        $substr = iconv_substr($str,$start,$length, 'UTF-8');
+        error_reporting($level);
+
+        if ($substr !== false) {
+            return $substr;
+        }
+
+        throw new Exception\MalformedUtf8();
+    }
+    
     /**
      *
      * Wrapper for `iconv_strlen()` to throw an exception on malformed UTF-8.
@@ -108,7 +136,7 @@ abstract class AbstractStrlen
     protected function substr($str, $start, $length = null)
     {
         if ($this->iconv()) {
-            return iconv_substr($str, $start, $length, 'UTF-8');
+            return $this->substrIconv($str, $start, $length);
         }
 
         if ($this->mbstring()) {
