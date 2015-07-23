@@ -26,8 +26,8 @@ abstract class AbstractDateTime
      * @param mixed $value The incoming date/time value.
      *
      * @return mixed If the value is already a DateTime then it is returned
-     *               as-is; if the value is invalid as a date/time then `false` is returned;
-     *               otherwise, a new DateTime is constructed from the value and returned.
+     * as-is; if the value is invalid as a date/time then `false` is returned;
+     * otherwise, a new DateTime is constructed from the value and returned.
      *
      */
     protected function newDateTime($value)

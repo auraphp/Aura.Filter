@@ -15,6 +15,7 @@ class StrTest extends AbstractSanitizeTest
     {
         return array(
             array('abc 123 ,./', true, 'abc@123@,./'),
+            array('abc 123 ,./ абв', true, 'abc@123@,./@абв'),
             array(12345, true, '12345'),
         );
     }

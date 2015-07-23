@@ -35,6 +35,6 @@ class Alnum
             return false;
         }
 
-        return ctype_alnum((string) $value);
+        return (bool) preg_match('/^[\p{L}\p{Nd}]+$/u', $value);
     }
 }

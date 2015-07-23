@@ -8,6 +8,7 @@ class TrimTest extends AbstractSanitizeTest
         return array(
             array(array(), false, array()),
             array(' abc ', true, 'abc'),
+            array(' абв ', true, 'абв'),
         );
     }
 }

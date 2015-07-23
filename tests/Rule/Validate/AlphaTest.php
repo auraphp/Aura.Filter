@@ -8,6 +8,8 @@ class AlphaTest extends AbstractValidateTest
         return array(
             array('alphaonly'),
             array('AlphaOnly'),
+            array('AlphaOnlyБуква'),
+            array('самоБуква'),
         );
     }
 
@@ -27,6 +29,7 @@ class AlphaTest extends AbstractValidateTest
             array("Seven 8 nine"),
             array("non:alpha-numeric's"),
             array('someThing8else'),
+            array('Буква88'),
             array(array()),
         );
     }

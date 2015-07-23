@@ -19,10 +19,8 @@ class Word
 {
     /**
      *
-     * Validates that the value is composed only of word characters.
-     *
-     * These include a-z, A-Z, 0-9, and underscore, indicated by a
-     * regular expression "\w".
+     * Validates that the value is composed only of word characters (letters,
+     * numbers, and underscores).
      *
      * @param object $subject The subject to be filtered.
      *
@@ -37,8 +35,7 @@ class Word
         if (! is_scalar($value)) {
             return false;
         }
-        $expr = '/^\w+$/D';
 
-        return (bool) preg_match($expr, $value);
+        return (bool) preg_match('/^[\p{L}\p{Nd}_]+$/u', $value);
     }
 }

@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Sanitize;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Strips non-word characters within the value.
@@ -19,7 +21,8 @@ class Word
 {
     /**
      *
-     * Strips non-word characters within the value.
+     * Strips non-word characters within the value (letters, numbers, and
+     * underscores).
      *
      * @param object $subject The subject to be filtered.
      *
@@ -34,7 +37,7 @@ class Word
         if (! is_scalar($value)) {
             return false;
         }
-        $subject->$field = preg_replace('/\W/', '', $value);
+        $subject->$field = preg_replace('/[^\p{L}\p{Nd}_]/u', '', $value);
         return true;
     }
 }

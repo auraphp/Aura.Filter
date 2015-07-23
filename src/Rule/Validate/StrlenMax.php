@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Rule\AbstractStrlen;
+
 /**
  *
  * Validates that a value is no longer than a certain length.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Rule\Validate;
  * @package Aura.Filter
  *
  */
-class StrlenMax
+class StrlenMax extends AbstractStrlen
 {
     /**
      *
@@ -38,6 +40,6 @@ class StrlenMax
             return false;
         }
 
-        return strlen($value) <= $max;
+        return $this->strlen($value) <= $max;
     }
 }

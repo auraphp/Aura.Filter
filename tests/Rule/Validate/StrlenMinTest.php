@@ -15,6 +15,8 @@ class StrlenMinTest extends AbstractValidateTest
         return array(
             array('abcd'),
             array('efghijkl'),
+            array('абвг'),
+            array('абвгабав'),
         );
     }
 
@@ -25,6 +27,9 @@ class StrlenMinTest extends AbstractValidateTest
             array('a'),
             array('ab'),
             array('abc'),
+            array('а'),
+            array('аб'),
+            array('абв'),
         );
     }
 }

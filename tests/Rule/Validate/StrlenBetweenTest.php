@@ -18,6 +18,9 @@ class StrlenBetweenTest extends AbstractValidateTest
             array('abcd'),
             array('efghi'),
             array('jklmno'),
+            array('абвг'),
+            array('ефхев'),
+            array('вдгзас'),
         );
     }
 
@@ -27,6 +30,8 @@ class StrlenBetweenTest extends AbstractValidateTest
             array(array()),
             array('abc'),
             array('defghij'),
+            array('абв'),
+            array('абвддгг'),
         );
     }
 }

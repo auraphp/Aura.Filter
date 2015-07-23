@@ -22,6 +22,12 @@ class StrlenBetweenTest extends AbstractSanitizeTest
             array('abcdef',      true, 'abcdef'),
             array('abcdefg',     true, 'abcdef'),
             array('abcdefgh',    true, 'abcdef'),
+            array('абв',         true, 'абв '),
+            array('абвг',        true, 'абвг'),
+            array('абвгд',       true, 'абвгд'),
+            array('абвгде',      true, 'абвгде'),
+            array('абвгдеж',     true, 'абвгде'),
+            array('абвгдежз',    true, 'абвгде'),
         );
     }
 }

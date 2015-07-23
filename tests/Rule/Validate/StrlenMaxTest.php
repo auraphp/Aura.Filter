@@ -16,6 +16,9 @@ class StrlenMaxTest extends AbstractValidateTest
             array('a'),
             array('ab'),
             array('abc'),
+            array('а'),
+            array('аб'),
+            array('абв'),
         );
     }
 
@@ -25,6 +28,8 @@ class StrlenMaxTest extends AbstractValidateTest
             array(array()),
             array('abcd'),
             array('abcdefg'),
+            array('абвг'),
+            array('абвгдеж'),
         );
     }
 }

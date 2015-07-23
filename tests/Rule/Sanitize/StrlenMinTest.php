@@ -14,9 +14,13 @@ class StrlenMinTest extends AbstractSanitizeTest
     {
         return array(
             array(array(), false, array()),
-            array('a',       true, 'a   '),
-            array('abcd',    true, 'abcd'),
+            array('a', true, 'a   '),
+            array('abcd', true, 'abcd'),
             array('abcdefg', true, 'abcdefg'),
+            array('г', true, 'г   '),
+            array('абвг', true, 'абвг'),
+            array('абвгдеж', true, 'абвгдеж'),
         );
     }
+
 }
