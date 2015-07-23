@@ -46,12 +46,20 @@ class StrlenTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
-    public function testIconvMalformedUtf8()
+    public function testIconvStrlenMalformedUtf8()
     {
         $bad = "\xFF\xFE";
         $fake = new FakeStrlenIconv();
         $this->setExpectedException('Aura\Filter\Exception\MalformedUtf8');
-        $fake->strlen($bad);
+        $fake->strlen($bad); 
+    }
+    
+    public function testIconvSubstrMalformedUtf8()
+    {
+        $bad = "\xFF\xFE";
+        $fake = new FakeStrlenIconv();
+        $this->setExpectedException('Aura\Filter\Exception\MalformedUtf8');
+        $fake->substr($bad,0,1); 
     }
 
     public function fakeProvider()
