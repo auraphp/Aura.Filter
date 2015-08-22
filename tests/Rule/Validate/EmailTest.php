@@ -3,10 +3,6 @@ namespace Aura\Filter\Rule\Validate;
 
 class EmailTest extends AbstractValidateTest
 {
-    protected $providerIs = array();
-
-    protected $providerIsNot = array();
-
     public function providerIs()
     {
         $xml = simplexml_load_string($this->xml);
