@@ -12,18 +12,6 @@ namespace Aura\Filter\Rule\Validate;
  *
  * Validates that the value is an email address.
  *
- * To validate an email address according to RFCs 5321, 5322 and others
- *
- * Copyright © 2008-2011, Dominic Sayers
- * Test schema documentation Copyright © 2011, Daniel Marschall
- * All rights reserved.
- *
- * @author  Dominic Sayers <dominic@sayers.cc>
- * @copyright   2008-2011 Dominic Sayers
- * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link    http://www.dominicsayers.com/isemail
- * @version 3.04.1 - Changed my link to http://isemail.info throughout
- * 
  * @package Aura.Filter
  *
  */
@@ -160,6 +148,16 @@ class Email
      * RFC 5321 Mailbox specification is more restrictive (comments, white space
      * and obsolete forms are not allowed)
      *
+     * Copyright © 2008-2011, Dominic Sayers
+     * Test schema documentation Copyright © 2011, Daniel Marschall
+     * All rights reserved.
+     *
+     * @author  Dominic Sayers <dominic@sayers.cc>
+     * @copyright   2008-2011 Dominic Sayers
+     * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+     * @link    http://www.dominicsayers.com/isemail
+     * @version 3.04.1 - Changed my link to http://isemail.info throughout
+     * 
      * @param string    $email      The email address to check
      * @param boolean   $checkDNS   If true then a DNS check for MX records will be made
      * @param mixed     $errorlevel Determines the boundary between valid and invalid addresses.
@@ -177,7 +175,7 @@ class Email
      *                  $errorlevel = 0
      * @param array     $parsedata  If passed, returns the parsed address components
      */
-    function isEmail($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
+    protected function isEmail($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
         // Check that $email is a valid address. Read the following RFCs to understand the constraints:
         //  (http://tools.ietf.org/html/rfc5321)
         //  (http://tools.ietf.org/html/rfc5322)
