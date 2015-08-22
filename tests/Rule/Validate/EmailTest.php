@@ -1,6 +1,16 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
+/**
+ * Copyright © 2008-2011, Dominic Sayers
+ * Test schema documentation Copyright © 2011, Daniel Marschall
+ * All rights reserved.
+ * @author  Dominic Sayers <dominic@sayers.cc>
+ * @copyright   2008-2011 Dominic Sayers
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ * @link    http://www.dominicsayers.com/isemail
+ * @version 3.04.1 - Changed my link to http://isemail.info throughout
+ */
 class EmailTest extends AbstractValidateTest
 {
     public function providerIs()
