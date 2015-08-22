@@ -134,7 +134,7 @@ class Email
 
     // US-ASCII visible characters not valid for atext (http://tools.ietf.org/html/rfc5322#section-3.2.3)
     const STRING_SPECIALS = '()<>[]:;@\\,."';
-    
+
     /**
      *
      * Validates that the value is an email address.
@@ -148,10 +148,8 @@ class Email
      */
     public function __invoke($subject, $field)
     {
-        return is_email($subject->$field);
+        return $this->isEmail($subject->$field);
     }
-}
-
 
 /**
  * Check that an email address conforms to RFCs 5321, 5322 and others
@@ -179,7 +177,7 @@ class Email
  *                  $errorlevel = 0
  * @param array     $parsedata  If passed, returns the parsed address components
  */
-function is_email($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
+function isEmail($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
     // Check that $email is a valid address. Read the following RFCs to understand the constraints:
     //  (http://tools.ietf.org/html/rfc5321)
     //  (http://tools.ietf.org/html/rfc5322)
@@ -1175,4 +1173,6 @@ function is_email($email, $checkDNS = false, $errorlevel = false, &$parsedata = 
 
     return ($diagnose) ? $final_status : ($final_status < Email::THRESHOLD);
 }
-?>
+
+}
+
