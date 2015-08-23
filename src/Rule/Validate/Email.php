@@ -223,10 +223,8 @@ class Email
         $hyphen_flag = false; // Hyphen cannot occur at the end of a subdomain
         $end_or_die = false; // CFWS can only appear at the end of the element
 
-    //-echo "<table style = \"clear:left;\">"; // debug
         for ($i = 0; $i < $raw_length; $i++) {
             $token = $email[$i];
-    //-echo "<tr><td><strong>$context|",(($end_or_die) ? 'true' : 'false'),"|$token|" . max($return_status) . "</strong></td>"; // debug
 
             switch ($context) {
             //-------------------------------------------------------------
@@ -1094,7 +1092,6 @@ class Email
                 die("Unknown context: $context");
             }
 
-    //-echo "<td>$context|",(($end_or_die) ? 'true' : 'false'),"|$token|" . max($return_status) . "</td></tr>"; // debug
             if ((int) max($return_status) > Email::RFC5322) {
                 break;
             } // No point going on if we've got a fatal error
