@@ -218,7 +218,6 @@ class Email
         $end_or_die = false; // CFWS can only appear at the end of the element
 
         for ($i = 0; $i < $raw_length; $i++) {
-
             $token = $email[$i];
 
             switch ($context) {
@@ -1169,7 +1168,6 @@ class Email
 
         // Some simple final tests
         if ((int) max($return_status) < Email::RFC5322) {
-
             if ($context === Email::CONTEXT_QUOTEDSTRING) {
                 // Fatal error
                 $return_status[] = Email::ERR_UNCLOSEDQUOTEDSTR;
@@ -1337,6 +1335,7 @@ class Email
             $this->threshold = Email::VALID;
             $this->diagnose = (bool) $errorlevel;
             return;
+        }
 
         $this->diagnose = true;
 
@@ -1351,7 +1350,6 @@ class Email
 
             default:
                 $this->threshold = (int) $errorlevel;
-            }
         }
     }
 }
