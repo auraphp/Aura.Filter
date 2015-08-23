@@ -987,11 +987,13 @@ class Email
                     // Comment
                     //-------------------------------------------------------------
                     case Email::CONTEXT_COMMENT:
+
                         // http://tools.ietf.org/html/rfc5322#section-3.2.2
                         //   comment = "(" *([FWS] ccontent) [FWS] ")"
                         //
                         //   ccontent = ctext / quoted-pair / comment
                         switch ($token) {
+
                             // Nested comment
                             case Email::STRING_OPENPARENTHESIS:
                                 // Nested comments are OK
@@ -1109,9 +1111,9 @@ class Email
                         switch ($token) {
                             case Email::STRING_CR:
                                 if ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF)) {
+                                     // Fatal error
                                     $return_status[] = Email::ERR_CR_NO_LF;
-                                } // Fatal error
-
+                                }
                                 break;
 
                             case Email::STRING_SP:
@@ -1120,7 +1122,8 @@ class Email
 
                             default:
                                 if ($token_prior === Email::STRING_CR) {
-                                    $return_status[] = Email::ERR_FWS_CRLF_END; // Fatal error
+                                    // Fatal error
+                                    $return_status[] = Email::ERR_FWS_CRLF_END;
                                     break;
                                 }
 
