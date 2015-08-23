@@ -1341,13 +1341,13 @@ class Email
 
         switch ((int) $errorlevel) {
             case E_WARNING:
+                // For backward compatibility
                 $this->threshold = Email::THRESHOLD;
-                break; // For backward compatibility
-
+                break;
             case E_ERROR:
+                // For backward compatibility
                 $this->threshold = Email::VALID;
-                break; // For backward compatibility
-
+                break;
             default:
                 $this->threshold = (int) $errorlevel;
         }
