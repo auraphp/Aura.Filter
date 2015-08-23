@@ -123,6 +123,9 @@ class Email
     // US-ASCII visible characters not valid for atext (http://tools.ietf.org/html/rfc5322#section-3.2.3)
     const STRING_SPECIALS = '()<>[]:;@\\,."';
 
+    protected $threshold;
+    protected $diagnose;
+
     /**
      *
      * Validates that the value is an email address.
@@ -183,22 +186,11 @@ class Email
         //  (http://tools.ietf.org/html/rfc4291#section-2.2)
         //  (http://tools.ietf.org/html/rfc1123#section-2.1)
         //  (http://tools.ietf.org/html/rfc3696) (guidance only)
-        // version 2.0: Enhance $diagnose parameter to $errorlevel
+        // version 2.0: Enhance $this->diagnose parameter to $errorlevel
         // version 3.0: Introduced status categories
         // revision 3.1: BUG: $parsedata was passed by value instead of by reference
 
-        if (is_bool($errorlevel)) {
-            $threshold = Email::VALID;
-            $diagnose = (bool) $errorlevel;
-        } else {
-            $diagnose = true;
-
-            switch ((int) $errorlevel) {
-                case E_WARNING: $threshold = Email::THRESHOLD;    break; // For backward compatibility
-                case E_ERROR:   $threshold = Email::VALID;    break; // For backward compatibility
-                default:    $threshold = (int) $errorlevel;
-            }
-        }
+        $this->setThresholdDiagnose($errorlevel);
 
         $return_status = array(Email::VALID);
 
@@ -1296,10 +1288,34 @@ class Email
 
         $parsedata['status'] = $return_status;
 
-        if ($final_status < $threshold) {
+        if ($final_status < $this->threshold) {
             $final_status = Email::VALID;
         }
 
-        return ($diagnose) ? $final_status : ($final_status < Email::THRESHOLD);
+        return ($this->diagnose) ? $final_status : ($final_status < Email::THRESHOLD);
+    }
+
+    protected function setThresholdDiagnose($errorlevel)
+    {
+        if (is_bool($errorlevel)) {
+            $this->threshold = Email::VALID;
+            $this->diagnose = (bool) $errorlevel;
+            return;
+
+        $this->diagnose = true;
+
+        switch ((int) $errorlevel) {
+            case E_WARNING:
+                $this->threshold = Email::THRESHOLD;
+                break; // For backward compatibility
+
+            case E_ERROR:
+                $this->threshold = Email::VALID;
+                break; // For backward compatibility
+
+            default:
+                $this->threshold = (int) $errorlevel;
+            }
+        }
     }
 }
