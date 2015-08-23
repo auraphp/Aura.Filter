@@ -193,30 +193,45 @@ class Email
         $this->setThresholdDiagnose($errorlevel);
 
         $return_status = array(Email::VALID);
-
-        // Parse the address into components, character by character
         $raw_length = strlen($email);
-        $context = Email::COMPONENT_LOCALPART; // Where we are
-        $context_stack = array($context); // Where we have been
-        $context_prior = Email::COMPONENT_LOCALPART; // Where we just came from
-        $token = ''; // The current character
-        $token_prior = ''; // The previous character
 
+        // Where we are
+        $context = Email::COMPONENT_LOCALPART;
+
+        // Where we have been
+        $context_stack = array($context);
+
+        // Where we just came from
+        $context_prior = Email::COMPONENT_LOCALPART;
+
+        // The current character
+        $token = '';
+
+        // The previous character
+        $token_prior = '';
+
+        // For the components of the address
         $parsedata = array(
             Email::COMPONENT_LOCALPART => '',
             Email::COMPONENT_DOMAIN => ''
-        ); // For the components of the address
+        );
 
+        // For the dot-atom elements of the address
         $atomlist = array(
             Email::COMPONENT_LOCALPART => array(''),
             Email::COMPONENT_DOMAIN => array('')
-        ); // For the dot-atom elements of the address
+        );
 
         $element_count = 0;
         $element_len = 0;
-        $hyphen_flag = false; // Hyphen cannot occur at the end of a subdomain
-        $end_or_die = false; // CFWS can only appear at the end of the element
 
+        // Hyphen cannot occur at the end of a subdomain
+        $hyphen_flag = false;
+
+        // CFWS can only appear at the end of the element
+        $end_or_die = false;
+
+        // Parse the address into components, character by character
         for ($i = 0; $i < $raw_length; $i++) {
             $token = $email[$i];
 
