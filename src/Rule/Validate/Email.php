@@ -175,7 +175,8 @@ class Email
      *                  $errorlevel = 0
      * @param array     $parsedata  If passed, returns the parsed address components
      */
-    protected function isEmail($email, $checkDNS = false, $errorlevel = false, &$parsedata = array()) {
+    protected function isEmail($email, $checkDNS = false, $errorlevel = false, &$parsedata = array())
+    {
         // Check that $email is a valid address. Read the following RFCs to understand the constraints:
         //  (http://tools.ietf.org/html/rfc5321)
         //  (http://tools.ietf.org/html/rfc5322)
@@ -251,10 +252,10 @@ class Email
                 switch ($token) {
                 // Comment
                 case Email::STRING_OPENPARENTHESIS:
-                    if ($element_len === 0)
+                    if ($element_len === 0) {
                         // Comments are OK at the beginning of an element
                         $return_status[]    = ($element_count === 0) ? Email::CFWS_COMMENT : Email::DEPREC_COMMENT;
-                    else {
+                    } else {
                         $return_status[]    = Email::CFWS_COMMENT;
                         $end_or_die     = true; // We can't start a comment in the middle of an element, so this better be the end
                     }
@@ -264,13 +265,17 @@ class Email
                     break;
                 // Next dot-atom element
                 case Email::STRING_DOT:
-                    if ($element_len === 0)
+                    if ($element_len === 0) {
                         // Another dot, already?
-                        $return_status[] = ($element_count === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;    // Fatal error
-                    else
+                        $return_status[] = ($element_count === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;
+                    }    // Fatal error
+                    else {
                         // The entire local-part can be a quoted string for RFC 5321
                         // If it's just one atom that is quoted then it's an RFC 5322 obsolete form
-                        if ($end_or_die) $return_status[] = Email::DEPREC_LOCALPART;
+                        if ($end_or_die) {
+                            $return_status[] = Email::DEPREC_LOCALPART;
+                        }
+                    }
 
                         $end_or_die = false;    // CFWS & quoted strings are OK again now we're at the beginning of an element (although they are obsolete forms)
                         $element_len    = 0;
@@ -301,12 +306,16 @@ class Email
                 case Email::STRING_CR:
                 case Email::STRING_SP:
                 case Email::STRING_HTAB:
-                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {$return_status[] = Email::ERR_CR_NO_LF; break;} // Fatal error
+                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
+                        $return_status[] = Email::ERR_CR_NO_LF;
+                        break;
+                    } // Fatal error
 
-                    if ($element_len === 0)
+                    if ($element_len === 0) {
                         $return_status[] = ($element_count === 0) ? Email::CFWS_FWS : Email::DEPREC_FWS;
-                    else
-                        $end_or_die = true; // We can't start FWS in the middle of an element, so this better be the end
+                    } else {
+                        $end_or_die = true;
+                    } // We can't start FWS in the middle of an element, so this better be the end
 
                     $context_stack[]    = $context;
                     $context        = Email::CONTEXT_FWS;
@@ -316,16 +325,22 @@ class Email
                 // @
                 case Email::STRING_AT:
                     // At this point we should have a valid local-part
-                    if (count($context_stack) !== 1) die('Unexpected item on context stack');
+                    if (count($context_stack) !== 1) {
+                        die('Unexpected item on context stack');
+                    }
 
-                    if  ($parsedata[Email::COMPONENT_LOCALPART] === '')
-                                    $return_status[]    = Email::ERR_NOLOCALPART;  // Fatal error
-                    elseif  ($element_len === 0)    $return_status[]    = Email::ERR_DOT_END;  // Fatal error
+                    if ($parsedata[Email::COMPONENT_LOCALPART] === '') {
+                        $return_status[]    = Email::ERR_NOLOCALPART;
+                    }  // Fatal error
+                    elseif ($element_len === 0) {
+                        $return_status[]    = Email::ERR_DOT_END;
+                    }  // Fatal error
                     // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
                     //   The maximum total length of a user name or other local-part is 64
                     //   octets.
-                    elseif  (strlen($parsedata[Email::COMPONENT_LOCALPART]) > 64)
-                                    $return_status[]    = Email::RFC5322_LOCAL_TOOLONG;
+                    elseif (strlen($parsedata[Email::COMPONENT_LOCALPART]) > 64) {
+                        $return_status[]    = Email::RFC5322_LOCAL_TOOLONG;
+                    }
                     // http://tools.ietf.org/html/rfc5322#section-3.4.1
                     //   Comments and folding white space
                     //   SHOULD NOT be used around the "@" in the addr-spec.
@@ -336,8 +351,9 @@ class Email
                     //    particular behavior is acceptable or even useful, but the full
                     //    implications should be understood and the case carefully weighed
                     //    before implementing any behavior described with this label.
-                    elseif  (($context_prior === Email::CONTEXT_COMMENT) || ($context_prior === Email::CONTEXT_FWS))
-                                    $return_status[]    = Email::DEPREC_CFWS_NEAR_AT;
+                    elseif (($context_prior === Email::CONTEXT_COMMENT) || ($context_prior === Email::CONTEXT_FWS)) {
+                        $return_status[]    = Email::DEPREC_CFWS_NEAR_AT;
+                    }
 
                     // Clear everything down for the domain parsing
                     $context    = Email::COMPONENT_DOMAIN; // Where we are
@@ -372,14 +388,15 @@ class Email
                             $return_status[]    = Email::ERR_ATEXT_AFTER_QS;
                             break;
                         default:
-                            die ("More atext found where none is allowed, but unrecognised prior context: $context_prior");
+                            die("More atext found where none is allowed, but unrecognised prior context: $context_prior");
                         }
                     } else {
                         $context_prior  = $context;
                         $ord        = ord($token);
 
-                        if (($ord < 33) || ($ord > 126) || ($ord === 10) || (!is_bool(strpos(Email::STRING_SPECIALS, $token))))
-                            $return_status[]    = Email::ERR_EXPECTING_ATEXT;  // Fatal error
+                        if (($ord < 33) || ($ord > 126) || ($ord === 10) || (!is_bool(strpos(Email::STRING_SPECIALS, $token)))) {
+                            $return_status[]    = Email::ERR_EXPECTING_ATEXT;
+                        }  // Fatal error
 
                         $parsedata[Email::COMPONENT_LOCALPART]         .= $token;
                         $atomlist[Email::COMPONENT_LOCALPART][$element_count]  .= $token;
@@ -435,12 +452,12 @@ class Email
                 switch ($token) {
                 // Comment
                 case Email::STRING_OPENPARENTHESIS:
-                    if ($element_len === 0)
+                    if ($element_len === 0) {
                         // Comments at the start of the domain are deprecated in the text
                         // Comments at the start of a subdomain are obs-domain
                         // (http://tools.ietf.org/html/rfc5322#section-3.4.1)
                         $return_status[]    = ($element_count === 0) ? Email::DEPREC_CFWS_NEAR_AT : Email::DEPREC_COMMENT;
-                    else {
+                    } else {
                         $return_status[]    = Email::CFWS_COMMENT;
                         $end_or_die     = true; // We can't start a comment in the middle of an element, so this better be the end
                     }
@@ -450,13 +467,15 @@ class Email
                     break;
                 // Next dot-atom element
                 case Email::STRING_DOT:
-                    if ($element_len === 0)
+                    if ($element_len === 0) {
                         // Another dot, already?
-                        $return_status[]    = ($element_count === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS; // Fatal error
-                    elseif ($hyphen_flag)
+                        $return_status[]    = ($element_count === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;
+                    } // Fatal error
+                    elseif ($hyphen_flag) {
                         // Previous subdomain ended in a hyphen
-                        $return_status[]    = Email::ERR_DOMAINHYPHENEND;  // Fatal error
-                    else
+                        $return_status[]    = Email::ERR_DOMAINHYPHENEND;
+                    }  // Fatal error
+                    else {
                         // Nowhere in RFC 5321 does it say explicitly that the
                         // domain part of a Mailbox must be a valid domain according
                         // to the DNS standards set out in RFC 1035, but this *is*
@@ -469,7 +488,10 @@ class Email
                         //
                         // http://tools.ietf.org/html/rfc1035#section-2.3.4
                         // labels          63 octets or less
-                        if ($element_len > 63) $return_status[] = Email::RFC5322_LABEL_TOOLONG;
+                        if ($element_len > 63) {
+                            $return_status[] = Email::RFC5322_LABEL_TOOLONG;
+                        }
+                    }
 
                         $end_or_die     = false;    // CFWS is OK again now we're at the beginning of an element (although it may be obsolete CFWS)
                         $element_len        = 0;
@@ -497,11 +519,14 @@ class Email
                 case Email::STRING_CR:
                 case Email::STRING_SP:
                 case Email::STRING_HTAB:
-                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {$return_status[] = Email::ERR_CR_NO_LF; break;} // Fatal error
+                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
+                        $return_status[] = Email::ERR_CR_NO_LF;
+                        break;
+                    } // Fatal error
 
-                    if ($element_len === 0)
+                    if ($element_len === 0) {
                         $return_status[]    = ($element_count === 0) ? Email::DEPREC_CFWS_NEAR_AT : Email::DEPREC_FWS;
-                    else {
+                    } else {
                         $return_status[]    = Email::CFWS_FWS;
                         $end_or_die = true; // We can't start FWS in the middle of an element, so this better be the end
                     }
@@ -545,7 +570,7 @@ class Email
                             $return_status[]    = Email::ERR_ATEXT_AFTER_DOMLIT;
                             break;
                         default:
-                            die ("More atext found where none is allowed, but unrecognised prior context: $context_prior");
+                            die("More atext found where none is allowed, but unrecognised prior context: $context_prior");
                         }
                     }
 
@@ -648,7 +673,9 @@ class Email
                         // Extract IPv4 part from the end of the address-literal (if there is one)
                         if (preg_match('/\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $addressliteral, $matchesIP) > 0) {
                             $index = strrpos($addressliteral, $matchesIP[0]);
-                            if ($index !== 0) $addressliteral = substr($addressliteral, 0, $index) . '0:0'; // Convert IPv4 part to IPv6 format for further testing
+                            if ($index !== 0) {
+                                $addressliteral = substr($addressliteral, 0, $index) . '0:0';
+                            } // Convert IPv4 part to IPv6 format for further testing
                         }
 
                         if ($index === 0) {
@@ -660,37 +687,46 @@ class Email
                             $IPv6       = substr($addressliteral, 5);
                             $matchesIP  = explode(Email::STRING_COLON, $IPv6); // Revision 2.7: Daniel Marschall's new IPv6 testing strategy
                             $groupCount = count($matchesIP);
-                            $index      = strpos($IPv6,Email::STRING_DOUBLECOLON);
+                            $index      = strpos($IPv6, Email::STRING_DOUBLECOLON);
 
                             if ($index === false) {
                                 // We need exactly the right number of groups
-                                if ($groupCount !== $max_groups)
+                                if ($groupCount !== $max_groups) {
                                     $return_status[]    = Email::RFC5322_IPV6_GRPCOUNT;
+                                }
                             } else {
-                                if ($index !== strrpos($IPv6,Email::STRING_DOUBLECOLON))
+                                if ($index !== strrpos($IPv6, Email::STRING_DOUBLECOLON)) {
                                     $return_status[]    = Email::RFC5322_IPV6_2X2XCOLON;
-                                else {
-                                    if ($index === 0 || $index === (strlen($IPv6) - 2)) $max_groups++;  // RFC 4291 allows :: at the start or end of an address with 7 other groups in addition
+                                } else {
+                                    if ($index === 0 || $index === (strlen($IPv6) - 2)) {
+                                        $max_groups++;
+                                    }  // RFC 4291 allows :: at the start or end of an address with 7 other groups in addition
 
-                                    if ($groupCount > $max_groups)
+                                    if ($groupCount > $max_groups) {
                                         $return_status[]    = Email::RFC5322_IPV6_MAXGRPS;
-                                    elseif ($groupCount === $max_groups)
-                                        $return_status[]    = Email::RFC5321_IPV6DEPRECATED;   // Eliding a single "::"
+                                    } elseif ($groupCount === $max_groups) {
+                                        $return_status[]    = Email::RFC5321_IPV6DEPRECATED;
+                                    }   // Eliding a single "::"
                                 }
                             }
 
                             // Revision 2.7: Daniel Marschall's new IPv6 testing strategy
-                            if ((substr($IPv6, 0,  1) === Email::STRING_COLON) && (substr($IPv6, 1,  1) !== Email::STRING_COLON))
-                                $return_status[]    = Email::RFC5322_IPV6_COLONSTRT;   // Address starts with a single colon
-                            elseif ((substr($IPv6, -1) === Email::STRING_COLON) && (substr($IPv6, -2, 1) !== Email::STRING_COLON))
-                                $return_status[]    = Email::RFC5322_IPV6_COLONEND;    // Address ends with a single colon
-                            elseif (count(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) !== 0)
-                                $return_status[]    = Email::RFC5322_IPV6_BADCHAR; // Check for unmatched characters
-                            else
+                            if ((substr($IPv6, 0,  1) === Email::STRING_COLON) && (substr($IPv6, 1,  1) !== Email::STRING_COLON)) {
+                                $return_status[]    = Email::RFC5322_IPV6_COLONSTRT;
+                            }   // Address starts with a single colon
+                            elseif ((substr($IPv6, -1) === Email::STRING_COLON) && (substr($IPv6, -2, 1) !== Email::STRING_COLON)) {
+                                $return_status[]    = Email::RFC5322_IPV6_COLONEND;
+                            }    // Address ends with a single colon
+                            elseif (count(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) !== 0) {
+                                $return_status[]    = Email::RFC5322_IPV6_BADCHAR;
+                            } // Check for unmatched characters
+                            else {
                                 $return_status[]    = Email::RFC5321_ADDRESSLITERAL;
+                            }
                         }
-                    } else
+                    } else {
                         $return_status[]    = Email::RFC5322_DOMAINLITERAL;
+                    }
 
 
                     $parsedata[Email::COMPONENT_DOMAIN]            .= $token;
@@ -708,7 +744,10 @@ class Email
                 case Email::STRING_CR:
                 case Email::STRING_SP:
                 case Email::STRING_HTAB:
-                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {$return_status[] = Email::ERR_CR_NO_LF; break;} // Fatal error
+                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
+                        $return_status[] = Email::ERR_CR_NO_LF;
+                        break;
+                    } // Fatal error
 
                     $return_status[]    = Email::CFWS_FWS;
 
@@ -768,7 +807,10 @@ class Email
                 // It's only FWS if we include HTAB or CRLF
                 case Email::STRING_CR:
                 case Email::STRING_HTAB:
-                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {$return_status[] = Email::ERR_CR_NO_LF; break;} // Fatal error
+                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
+                        $return_status[] = Email::ERR_CR_NO_LF;
+                        break;
+                    } // Fatal error
 
                     // http://tools.ietf.org/html/rfc5322#section-3.2.2
                     //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
@@ -814,8 +856,9 @@ class Email
 
                     if (($ord > 127) || ($ord === 0) || ($ord === 10)) {
                         $return_status[]    = Email::ERR_EXPECTING_QTEXT;  // Fatal error
-                    } elseif (($ord < 32) || ($ord === 127))
+                    } elseif (($ord < 32) || ($ord === 127)) {
                         $return_status[]    = Email::DEPREC_QTEXT;
+                    }
 
                     $parsedata[Email::COMPONENT_LOCALPART]         .= $token;
                     $atomlist[Email::COMPONENT_LOCALPART][$element_count]  .= $token;
@@ -851,10 +894,12 @@ class Email
                 // i.e. obs-qp       =  "\" (%d0-8, %d10-31 / %d127)
                 $ord = ord($token);
 
-                if  ($ord > 127)
-                        $return_status[]    = Email::ERR_EXPECTING_QPAIR;  // Fatal error
-                elseif  ((($ord < 31) && ($ord !== 9)) || ($ord === 127))   // SP & HTAB are allowed
+                if ($ord > 127) {
+                    $return_status[]    = Email::ERR_EXPECTING_QPAIR;
+                }  // Fatal error
+                elseif ((($ord < 31) && ($ord !== 9)) || ($ord === 127)) {   // SP & HTAB are allowed
                         $return_status[]    = Email::DEPREC_QP;
+                }
 
                 // At this point we know where this qpair occurred so
                 // we could check to see if the character actually
@@ -930,7 +975,10 @@ class Email
                 case Email::STRING_CR:
                 case Email::STRING_SP:
                 case Email::STRING_HTAB:
-                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {$return_status[] = Email::ERR_CR_NO_LF; break;} // Fatal error
+                    if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
+                        $return_status[] = Email::ERR_CR_NO_LF;
+                        break;
+                    } // Fatal error
 
                     $return_status[]    = Email::CFWS_FWS;
 
@@ -988,15 +1036,19 @@ class Email
                     }
 
                     if (isset($crlf_count)) {
-                        if (++$crlf_count > 1)
-                            $return_status[]    = Email::DEPREC_FWS;   // Multiple folds = obsolete FWS
-                    } else $crlf_count = 1;
+                        if (++$crlf_count > 1) {
+                            $return_status[]    = Email::DEPREC_FWS;
+                        }   // Multiple folds = obsolete FWS
+                    } else {
+                        $crlf_count = 1;
+                    }
                 }
 
                 switch ($token) {
                 case Email::STRING_CR:
-                    if ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))
-                        $return_status[]    = Email::ERR_CR_NO_LF; // Fatal error
+                    if ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF)) {
+                        $return_status[]    = Email::ERR_CR_NO_LF;
+                    } // Fatal error
 
                     break;
                 case Email::STRING_SP:
@@ -1008,7 +1060,9 @@ class Email
                         break;
                     }
 
-                    if (isset($crlf_count)) unset($crlf_count);
+                    if (isset($crlf_count)) {
+                        unset($crlf_count);
+                    }
 
                     $context_prior                  = $context;
                     $context                    = (int) array_pop($context_stack);  // End of FWS
@@ -1041,23 +1095,42 @@ class Email
             }
 
     //-echo "<td>$context|",(($end_or_die) ? 'true' : 'false'),"|$token|" . max($return_status) . "</td></tr>"; // debug
-            if ((int) max($return_status) > Email::RFC5322) break; // No point going on if we've got a fatal error
+            if ((int) max($return_status) > Email::RFC5322) {
+                break;
+            } // No point going on if we've got a fatal error
         }
 
         // Some simple final tests
         if ((int) max($return_status) < Email::RFC5322) {
-            if  ($context   === Email::CONTEXT_QUOTEDSTRING)   $return_status[]    = Email::ERR_UNCLOSEDQUOTEDSTR;    // Fatal error
-            elseif  ($context   === Email::CONTEXT_QUOTEDPAIR)     $return_status[]    = Email::ERR_BACKSLASHEND;     // Fatal error
-            elseif  ($context   === Email::CONTEXT_COMMENT)        $return_status[]    = Email::ERR_UNCLOSEDCOMMENT;      // Fatal error
-            elseif  ($context   === Email::COMPONENT_LITERAL)      $return_status[]    = Email::ERR_UNCLOSEDDOMLIT;       // Fatal error
-            elseif  ($token     === Email::STRING_CR)          $return_status[]    = Email::ERR_FWS_CRLF_END;     // Fatal error
-            elseif  ($parsedata[Email::COMPONENT_DOMAIN]   === '')     $return_status[]    = Email::ERR_NODOMAIN;         // Fatal error
-            elseif  ($element_len   === 0)                  $return_status[]    = Email::ERR_DOT_END;          // Fatal error
-            elseif  ($hyphen_flag)                      $return_status[]    = Email::ERR_DOMAINHYPHENEND;      // Fatal error
+            if ($context   === Email::CONTEXT_QUOTEDSTRING) {
+                $return_status[]    = Email::ERR_UNCLOSEDQUOTEDSTR;
+            }    // Fatal error
+            elseif ($context   === Email::CONTEXT_QUOTEDPAIR) {
+                $return_status[]    = Email::ERR_BACKSLASHEND;
+            }     // Fatal error
+            elseif ($context   === Email::CONTEXT_COMMENT) {
+                $return_status[]    = Email::ERR_UNCLOSEDCOMMENT;
+            }      // Fatal error
+            elseif ($context   === Email::COMPONENT_LITERAL) {
+                $return_status[]    = Email::ERR_UNCLOSEDDOMLIT;
+            }       // Fatal error
+            elseif ($token     === Email::STRING_CR) {
+                $return_status[]    = Email::ERR_FWS_CRLF_END;
+            }     // Fatal error
+            elseif ($parsedata[Email::COMPONENT_DOMAIN]   === '') {
+                $return_status[]    = Email::ERR_NODOMAIN;
+            }         // Fatal error
+            elseif ($element_len   === 0) {
+                $return_status[]    = Email::ERR_DOT_END;
+            }          // Fatal error
+            elseif ($hyphen_flag) {
+                $return_status[]    = Email::ERR_DOMAINHYPHENEND;
+            }      // Fatal error
             // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.2
             //   The maximum total length of a domain name or number is 255 octets.
-            elseif  (strlen($parsedata[Email::COMPONENT_DOMAIN]) > 255)
-                                            $return_status[]    = Email::RFC5322_DOMAIN_TOOLONG;
+            elseif (strlen($parsedata[Email::COMPONENT_DOMAIN]) > 255) {
+                $return_status[]    = Email::RFC5322_DOMAIN_TOOLONG;
+            }
             // http://tools.ietf.org/html/rfc5321#section-4.1.2
             //   Forward-path   = Path
             //
@@ -1076,11 +1149,14 @@ class Email
             //   address in MAIL and RCPT commands of 254 characters.  Since addresses
             //   that do not fit in those fields are not normally useful, the upper
             //   limit on address lengths should normally be considered to be 254.
-            elseif  (strlen($parsedata[Email::COMPONENT_LOCALPART] . Email::STRING_AT . $parsedata[Email::COMPONENT_DOMAIN]) > 254)
-                                            $return_status[]    = Email::RFC5322_TOOLONG;
+            elseif (strlen($parsedata[Email::COMPONENT_LOCALPART] . Email::STRING_AT . $parsedata[Email::COMPONENT_DOMAIN]) > 254) {
+                $return_status[]    = Email::RFC5322_TOOLONG;
+            }
             // http://tools.ietf.org/html/rfc1035#section-2.3.4
             // labels          63 octets or less
-            elseif ($element_len > 63)                  $return_status[]    = Email::RFC5322_LABEL_TOOLONG;
+            elseif ($element_len > 63) {
+                $return_status[]    = Email::RFC5322_LABEL_TOOLONG;
+            }
         }
 
         // Check DNS?
@@ -1104,20 +1180,26 @@ class Email
             // sufficient evidence of the domain's existence. For performance reasons
             // we will not repeat the DNS lookup for the CNAME's target, but we will
             // raise a warning because we didn't immediately find an MX record.
-            if ($element_count === 0) $parsedata[Email::COMPONENT_DOMAIN] .= '.';      // Checking TLD DNS seems to work only if you explicitly check from the root
+            if ($element_count === 0) {
+                $parsedata[Email::COMPONENT_DOMAIN] .= '.';
+            }      // Checking TLD DNS seems to work only if you explicitly check from the root
 
             $result = @dns_get_record($parsedata[Email::COMPONENT_DOMAIN], DNS_MX);    // Not using checkdnsrr because of a suspected bug in PHP 5.3 (http://bugs.php.net/bug.php?id=51844)
 
-            if ((is_bool($result) && !(bool) $result))
-                $return_status[] = Email::DNSWARN_NO_RECORD;           // Domain can't be found in DNS
+            if ((is_bool($result) && !(bool) $result)) {
+                $return_status[] = Email::DNSWARN_NO_RECORD;
+            }           // Domain can't be found in DNS
             else {
                 if (count($result) === 0) {
                     $return_status[]    = Email::DNSWARN_NO_MX_RECORD;     // MX-record for domain can't be found
                     $result         = @dns_get_record($parsedata[Email::COMPONENT_DOMAIN], DNS_A + DNS_CNAME);
 
-                    if (count($result) === 0)
-                        $return_status[] = Email::DNSWARN_NO_RECORD;       // No usable records for the domain can be found
-                } else $dns_checked = true;
+                    if (count($result) === 0) {
+                        $return_status[] = Email::DNSWARN_NO_RECORD;
+                    }       // No usable records for the domain can be found
+                } else {
+                    $dns_checked = true;
+                }
             }
         }
 
@@ -1154,23 +1236,28 @@ class Email
         //   form #.#.#.#, since this change does not permit the highest-level
         //   component label to start with a digit even if it is not all-numeric.
         if (!$dns_checked && ((int) max($return_status) < Email::DNSWARN)) {
-            if  ($element_count === 0)  $return_status[]    = Email::RFC5321_TLD;
+            if ($element_count === 0) {
+                $return_status[]    = Email::RFC5321_TLD;
+            }
 
-            if  (is_numeric($atomlist[Email::COMPONENT_DOMAIN][$element_count][0]))
-                            $return_status[]    = Email::RFC5321_TLDNUMERIC;
+            if (is_numeric($atomlist[Email::COMPONENT_DOMAIN][$element_count][0])) {
+                $return_status[]    = Email::RFC5321_TLDNUMERIC;
+            }
         }
 
         $return_status      = array_unique($return_status);
         $final_status       = (int) max($return_status);
 
-        if (count($return_status) !== 1) array_shift($return_status); // remove redundant Email::VALID
+        if (count($return_status) !== 1) {
+            array_shift($return_status);
+        } // remove redundant Email::VALID
 
         $parsedata['status']    = $return_status;
 
-        if ($final_status < $threshold) $final_status = Email::VALID;
+        if ($final_status < $threshold) {
+            $final_status = Email::VALID;
+        }
 
         return ($diagnose) ? $final_status : ($final_status < Email::THRESHOLD);
     }
-
 }
-
