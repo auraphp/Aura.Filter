@@ -194,9 +194,9 @@ class Email
             $diagnose = true;
 
             switch ((int) $errorlevel) {
-            case E_WARNING: $threshold = Email::THRESHOLD;    break; // For backward compatibility
-            case E_ERROR:   $threshold = Email::VALID;    break; // For backward compatibility
-            default:    $threshold = (int) $errorlevel;
+                case E_WARNING: $threshold = Email::THRESHOLD;    break; // For backward compatibility
+                case E_ERROR:   $threshold = Email::VALID;    break; // For backward compatibility
+                default:    $threshold = (int) $errorlevel;
             }
         }
 
@@ -232,7 +232,7 @@ class Email
             //-------------------------------------------------------------
             // local-part
             //-------------------------------------------------------------
-            case Email::COMPONENT_LOCALPART:
+                case Email::COMPONENT_LOCALPART:
                 // http://tools.ietf.org/html/rfc5322#section-3.4.1
                 //   local-part = dot-atom / quoted-string / obs-local-part
                 //
@@ -251,7 +251,7 @@ class Email
                 //   atom = [CFWS] 1*atext [CFWS]
                 switch ($token) {
                 // Comment
-                case Email::STRING_OPENPARENTHESIS:
+                    case Email::STRING_OPENPARENTHESIS:
                     if ($element_len === 0) {
                         // Comments are OK at the beginning of an element
                         $return_status[] = ($element_count === 0) ? Email::CFWS_COMMENT : Email::DEPREC_COMMENT;
@@ -264,7 +264,7 @@ class Email
                     $context = Email::CONTEXT_COMMENT;
                     break;
                 // Next dot-atom element
-                case Email::STRING_DOT:
+                    case Email::STRING_DOT:
                     if ($element_len === 0) {
                         // Another dot, already?
                         $return_status[] = ($element_count === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;
@@ -285,7 +285,7 @@ class Email
 
                     break;
                 // Quoted string
-                case Email::STRING_DQUOTE:
+                    case Email::STRING_DQUOTE:
                     if ($element_len === 0) {
                         // The entire local-part can be a quoted string for RFC 5321
                         // If it's just one atom that is quoted then it's an RFC 5322 obsolete form
@@ -303,9 +303,9 @@ class Email
 
                     break;
                 // Folding White Space
-                case Email::STRING_CR:
-                case Email::STRING_SP:
-                case Email::STRING_HTAB:
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
                     if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
                         $return_status[] = Email::ERR_CR_NO_LF;
                         break;
@@ -323,7 +323,7 @@ class Email
 
                     break;
                 // @
-                case Email::STRING_AT:
+                    case Email::STRING_AT:
                     // At this point we should have a valid local-part
                     if (count($context_stack) !== 1) {
                         die('Unexpected item on context stack');
@@ -364,7 +364,7 @@ class Email
 
                     break;
                 // atext
-                default:
+                    default:
                     // http://tools.ietf.org/html/rfc5322#section-3.2.3
                     //    atext = ALPHA / DIGIT /    ; Printable US-ASCII
                     //                        "!" / "#" /        ;  characters not including
@@ -380,14 +380,14 @@ class Email
                     if ($end_or_die) {
                         // We have encountered atext where it is no longer valid
                         switch ($context_prior) {
-                        case Email::CONTEXT_COMMENT:
-                        case Email::CONTEXT_FWS:
+                            case Email::CONTEXT_COMMENT:
+                            case Email::CONTEXT_FWS:
                             $return_status[] = Email::ERR_ATEXT_AFTER_CFWS;
                             break;
-                        case Email::CONTEXT_QUOTEDSTRING:
+                            case Email::CONTEXT_QUOTEDSTRING:
                             $return_status[] = Email::ERR_ATEXT_AFTER_QS;
                             break;
-                        default:
+                            default:
                             die("More atext found where none is allowed, but unrecognised prior context: $context_prior");
                         }
                     } else {
@@ -408,7 +408,7 @@ class Email
             //-------------------------------------------------------------
             // Domain
             //-------------------------------------------------------------
-            case Email::COMPONENT_DOMAIN:
+                case Email::COMPONENT_DOMAIN:
                 // http://tools.ietf.org/html/rfc5322#section-3.4.1
                 //   domain = dot-atom / domain-literal / obs-domain
                 //
@@ -451,7 +451,7 @@ class Email
                 // invisible" must comply only with RFC 5322.
                 switch ($token) {
                 // Comment
-                case Email::STRING_OPENPARENTHESIS:
+                    case Email::STRING_OPENPARENTHESIS:
                     if ($element_len === 0) {
                         // Comments at the start of the domain are deprecated in the text
                         // Comments at the start of a subdomain are obs-domain
@@ -466,7 +466,7 @@ class Email
                     $context = Email::CONTEXT_COMMENT;
                     break;
                 // Next dot-atom element
-                case Email::STRING_DOT:
+                    case Email::STRING_DOT:
                     if ($element_len === 0) {
                         // Another dot, already?
                         $return_status[] = ($element_count === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;
@@ -501,7 +501,7 @@ class Email
 
                     break;
                 // Domain literal
-                case Email::STRING_OPENSQBRACKET:
+                    case Email::STRING_OPENSQBRACKET:
                     if ($parsedata[Email::COMPONENT_DOMAIN] === '') {
                         $end_or_die = true; // Domain literal must be the only component
                         $element_len++;
@@ -516,9 +516,9 @@ class Email
 
                     break;
                 // Folding White Space
-                case Email::STRING_CR:
-                case Email::STRING_SP:
-                case Email::STRING_HTAB:
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
                     if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
                         $return_status[] = Email::ERR_CR_NO_LF;
                         break;
@@ -536,7 +536,7 @@ class Email
                     $token_prior = $token;
                     break;
                 // atext
-                default:
+                    default:
                     // RFC 5322 allows any atext...
                     // http://tools.ietf.org/html/rfc5322#section-3.2.3
                     //    atext = ALPHA / DIGIT /    ; Printable US-ASCII
@@ -562,14 +562,14 @@ class Email
                     if ($end_or_die) {
                         // We have encountered atext where it is no longer valid
                         switch ($context_prior) {
-                        case Email::CONTEXT_COMMENT:
-                        case Email::CONTEXT_FWS:
+                            case Email::CONTEXT_COMMENT:
+                            case Email::CONTEXT_FWS:
                             $return_status[] = Email::ERR_ATEXT_AFTER_CFWS;
                             break;
-                        case Email::COMPONENT_LITERAL:
+                            case Email::COMPONENT_LITERAL:
                             $return_status[] = Email::ERR_ATEXT_AFTER_DOMLIT;
                             break;
-                        default:
+                            default:
                             die("More atext found where none is allowed, but unrecognised prior context: $context_prior");
                         }
                     }
@@ -600,7 +600,7 @@ class Email
             //-------------------------------------------------------------
             // Domain literal
             //-------------------------------------------------------------
-            case Email::COMPONENT_LITERAL:
+                case Email::COMPONENT_LITERAL:
                 // http://tools.ietf.org/html/rfc5322#section-3.4.1
                 //   domain-literal = [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
                 //
@@ -611,7 +611,7 @@ class Email
                 //   obs-dtext = obs-NO-WS-CTL / quoted-pair
                 switch ($token) {
                 // End of domain literal
-                case Email::STRING_CLOSESQBRACKET:
+                    case Email::STRING_CLOSESQBRACKET:
                     if ((int) max($return_status) < Email::DEPREC) {
                         // Could be a valid RFC 5321 address literal, so let's check
 
@@ -735,15 +735,15 @@ class Email
                     $context_prior = $context;
                     $context = (int) array_pop($context_stack);
                     break;
-                case Email::STRING_BACKSLASH:
+                    case Email::STRING_BACKSLASH:
                     $return_status[] = Email::RFC5322_DOMLIT_OBSDTEXT;
                     $context_stack[] = $context;
                     $context = Email::CONTEXT_QUOTEDPAIR;
                     break;
                 // Folding White Space
-                case Email::STRING_CR:
-                case Email::STRING_SP:
-                case Email::STRING_HTAB:
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
                     if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
                         $return_status[] = Email::ERR_CR_NO_LF;
                         break;
@@ -756,7 +756,7 @@ class Email
                     $token_prior = $token;
                     break;
                 // dtext
-                default:
+                    default:
                     // http://tools.ietf.org/html/rfc5322#section-3.4.1
                     //   dtext = %d33-90 /          ; Printable US-ASCII
                     //                       %d94-126 /         ;  characters not including
@@ -789,7 +789,7 @@ class Email
             //-------------------------------------------------------------
             // Quoted string
             //-------------------------------------------------------------
-            case Email::CONTEXT_QUOTEDSTRING:
+                case Email::CONTEXT_QUOTEDSTRING:
                 // http://tools.ietf.org/html/rfc5322#section-3.2.4
                 //   quoted-string = [CFWS]
                 //                       DQUOTE *([FWS] qcontent) [FWS] DQUOTE
@@ -798,15 +798,15 @@ class Email
                 //   qcontent = qtext / quoted-pair
                 switch ($token) {
                 // Quoted pair
-                case Email::STRING_BACKSLASH:
+                    case Email::STRING_BACKSLASH:
                     $context_stack[] = $context;
                     $context = Email::CONTEXT_QUOTEDPAIR;
                     break;
                 // Folding White Space
                 // Inside a quoted string, spaces are allowed as regular characters.
                 // It's only FWS if we include HTAB or CRLF
-                case Email::STRING_CR:
-                case Email::STRING_HTAB:
+                    case Email::STRING_CR:
+                    case Email::STRING_HTAB:
                     if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
                         $return_status[] = Email::ERR_CR_NO_LF;
                         break;
@@ -830,7 +830,7 @@ class Email
                     $token_prior = $token;
                     break;
                 // End of quoted string
-                case Email::STRING_DQUOTE:
+                    case Email::STRING_DQUOTE:
                     $parsedata[Email::COMPONENT_LOCALPART] .= $token;
                     $atomlist[Email::COMPONENT_LOCALPART][$element_count] .= $token;
                     $element_len++;
@@ -838,7 +838,7 @@ class Email
                     $context = (int) array_pop($context_stack);
                     break;
                 // qtext
-                default:
+                    default:
                     // http://tools.ietf.org/html/rfc5322#section-3.2.4
                     //   qtext = %d33 /             ; Printable US-ASCII
                     //                       %d35-91 /          ;  characters not including
@@ -876,7 +876,7 @@ class Email
             //-------------------------------------------------------------
             // Quoted pair
             //-------------------------------------------------------------
-            case Email::CONTEXT_QUOTEDPAIR:
+                case Email::CONTEXT_QUOTEDPAIR:
                 // http://tools.ietf.org/html/rfc5322#section-3.2.1
                 //   quoted-pair = ("\" (VCHAR / WSP)) / obs-qp
                 //
@@ -913,19 +913,19 @@ class Email
                 $token = Email::STRING_BACKSLASH . $token;
 
                 switch ($context) {
-                case Email::CONTEXT_COMMENT:
+                    case Email::CONTEXT_COMMENT:
                     break;
-                case Email::CONTEXT_QUOTEDSTRING:
+                    case Email::CONTEXT_QUOTEDSTRING:
                     $parsedata[Email::COMPONENT_LOCALPART] .= $token;
                     $atomlist[Email::COMPONENT_LOCALPART][$element_count] .= $token;
                     $element_len += 2; // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
                     break;
-                case Email::COMPONENT_LITERAL:
+                    case Email::COMPONENT_LITERAL:
                     $parsedata[Email::COMPONENT_DOMAIN] .= $token;
                     $atomlist[Email::COMPONENT_DOMAIN][$element_count] .= $token;
                     $element_len += 2; // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
                     break;
-                default:
+                    default:
                     die("Quoted pair logic invoked in an invalid context: $context");
                 }
 
@@ -933,20 +933,20 @@ class Email
             //-------------------------------------------------------------
             // Comment
             //-------------------------------------------------------------
-            case Email::CONTEXT_COMMENT:
+                case Email::CONTEXT_COMMENT:
                 // http://tools.ietf.org/html/rfc5322#section-3.2.2
                 //   comment = "(" *([FWS] ccontent) [FWS] ")"
                 //
                 //   ccontent = ctext / quoted-pair / comment
                 switch ($token) {
                 // Nested comment
-                case Email::STRING_OPENPARENTHESIS:
+                    case Email::STRING_OPENPARENTHESIS:
                     // Nested comments are OK
                     $context_stack[] = $context;
                     $context = Email::CONTEXT_COMMENT;
                     break;
                 // End of comment
-                case Email::STRING_CLOSEPARENTHESIS:
+                    case Email::STRING_CLOSEPARENTHESIS:
                     $context_prior = $context;
                     $context = (int) array_pop($context_stack);
 
@@ -967,14 +967,14 @@ class Email
 
                     break;
                 // Quoted pair
-                case Email::STRING_BACKSLASH:
+                    case Email::STRING_BACKSLASH:
                     $context_stack[] = $context;
                     $context = Email::CONTEXT_QUOTEDPAIR;
                     break;
                 // Folding White Space
-                case Email::STRING_CR:
-                case Email::STRING_SP:
-                case Email::STRING_HTAB:
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
                     if (($token === Email::STRING_CR) && ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF))) {
                         $return_status[] = Email::ERR_CR_NO_LF;
                         break;
@@ -987,7 +987,7 @@ class Email
                     $token_prior = $token;
                     break;
                 // ctext
-                default:
+                    default:
                     // http://tools.ietf.org/html/rfc5322#section-3.2.3
                     //   ctext = %d33-39 /          ; Printable US-ASCII
                     //                       %d42-91 /          ;  characters not including
@@ -1015,7 +1015,7 @@ class Email
             //-------------------------------------------------------------
             // Folding White Space
             //-------------------------------------------------------------
-            case Email::CONTEXT_FWS:
+                case Email::CONTEXT_FWS:
                 // http://tools.ietf.org/html/rfc5322#section-3.2.2
                 //   FWS = ([*WSP CRLF] 1*WSP) /  obs-FWS
                 //                                          ; Folding white space
@@ -1045,16 +1045,16 @@ class Email
                 }
 
                 switch ($token) {
-                case Email::STRING_CR:
+                    case Email::STRING_CR:
                     if ((++$i === $raw_length) || ($email[$i] !== Email::STRING_LF)) {
                         $return_status[] = Email::ERR_CR_NO_LF;
                     } // Fatal error
 
                     break;
-                case Email::STRING_SP:
-                case Email::STRING_HTAB:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
                     break;
-                default:
+                    default:
                     if ($token_prior === Email::STRING_CR) {
                         $return_status[] = Email::ERR_FWS_CRLF_END; // Fatal error
                         break;
@@ -1090,7 +1090,7 @@ class Email
             //-------------------------------------------------------------
             // A context we aren't expecting
             //-------------------------------------------------------------
-            default:
+                default:
                 die("Unknown context: $context");
             }
 
