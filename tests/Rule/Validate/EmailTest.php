@@ -40,6 +40,7 @@ class EmailTest extends AbstractValidateTest
     protected function isValidAddressRegardlessOfDns($test)
     {
         return $test->diagnosis == 'ISEMAIL_VALID'
+            || $test->diagnosis == 'ISEMAIL_RFC5321_IPV6DEPRECATED'
             || $test->category == 'ISEMAIL_RFC5321'
             || $test->category == 'ISEMAIL_DNSWARN';
     }
