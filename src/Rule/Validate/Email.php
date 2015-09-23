@@ -1189,7 +1189,7 @@ class Email
             if ($this->token === Email::STRING_CR) {
                 // Fatal error
                 $this->returnStatus[] = Email::ERR_FWS_CRLF_X2;
-                break;
+                return;
             }
 
             if (isset($this->crlfCount)) {
