@@ -125,6 +125,7 @@ class Email
     // US-ASCII visible characters not valid for atext (http://tools.ietf.org/html/rfc5322#section-3.2.3)
     const STRING_SPECIALS = '()<>[]:;@\\,."';
 
+    protected $email;
     protected $threshold;
     protected $diagnose;
     protected $dnsChecked;
@@ -167,6 +168,16 @@ class Email
      * RFC 5321 Mailbox specification is more restrictive (comments, white space
      * and obsolete forms are not allowed)
      *
+     * Check that $this->email is a valid address. Read the following RFCs to understand the constraints:
+     *  (http://tools.ietf.org/html/rfc5321)
+     *  (http://tools.ietf.org/html/rfc5322)
+     *  (http://tools.ietf.org/html/rfc4291#section-2.2)
+     *  (http://tools.ietf.org/html/rfc1123#section-2.1)
+     *  (http://tools.ietf.org/html/rfc3696) (guidance only)
+     * version 2.0: Enhance $this->diagnose parameter to $errorlevel
+     * version 3.0: Introduced status categories
+     * revision 3.1: BUG: $this->parsedata was passed by value instead of by reference
+     * 
      * Copyright © 2008-2011, Dominic Sayers
      * Test schema documentation Copyright © 2011, Daniel Marschall
      * All rights reserved.
@@ -178,7 +189,7 @@ class Email
      * @version 3.04.1 - Changed my link to http://isemail.info throughout
      *
      * @param string    $email      The email address to check
-     * @param boolean   $checkDNS   If true then a DNS check for MX records will be made
+     * @param boolean   $checkDns   If true then a DNS check for MX records will be made
      * @param mixed     $errorlevel Determines the boundary between valid and invalid addresses.
      *                  Status codes above this number will be returned as-is,
      *                  status codes below will be returned as Email::VALID. Thus the
@@ -193,22 +204,29 @@ class Email
      *                  NB Note the difference between $errorlevel = false and
      *                  $errorlevel = 0
      */
-    protected function isEmail($email, $checkDNS = false, $errorlevel = false)
+    protected function isEmail($email, $checkDns = false, $errorlevel = false)
     {
-        // Check that $email is a valid address. Read the following RFCs to understand the constraints:
-        //  (http://tools.ietf.org/html/rfc5321)
-        //  (http://tools.ietf.org/html/rfc5322)
-        //  (http://tools.ietf.org/html/rfc4291#section-2.2)
-        //  (http://tools.ietf.org/html/rfc1123#section-2.1)
-        //  (http://tools.ietf.org/html/rfc3696) (guidance only)
-        // version 2.0: Enhance $this->diagnose parameter to $errorlevel
-        // version 3.0: Introduced status categories
-        // revision 3.1: BUG: $this->parsedata was passed by value instead of by reference
+        $this->reset($email, $checkDns, $errorlevel);
+        $this->parse();
+        $this->checkDns();
+        $this->checkTld();
+        $this->finalStatus();
+        return ($this->diagnose)
+            ? $this->finalStatus
+            : ($this->finalStatus < Email::THRESHOLD);
+    }
+
+    protected function reset($email, $checkDns, $errorlevel)
+    {
+        $this->email = $email;
+
+        $this->checkDns = $checkDns;
+        $this->dnsChecked = false;
 
         $this->setThresholdDiagnose($errorlevel);
 
         $this->returnStatus = array(Email::VALID);
-        $this->rawLength = strlen($email);
+        $this->rawLength = strlen($this->email);
 
         // Where we are
         $this->context = Email::COMPONENT_LOCALPART;
@@ -246,9 +264,38 @@ class Email
         // CFWS can only appear at the end of the element
         $this->endOrDie = false;
 
+        $this->finalStatus = null;
+    }
+
+    protected function setThresholdDiagnose($errorlevel)
+    {
+        if (is_bool($errorlevel)) {
+            $this->threshold = Email::VALID;
+            $this->diagnose = (bool) $errorlevel;
+            return;
+        }
+
+        $this->diagnose = true;
+
+        switch ((int) $errorlevel) {
+            case E_WARNING:
+                // For backward compatibility
+                $this->threshold = Email::THRESHOLD;
+                break;
+            case E_ERROR:
+                // For backward compatibility
+                $this->threshold = Email::VALID;
+                break;
+            default:
+                $this->threshold = (int) $errorlevel;
+        }
+    }
+
+    protected function parse()
+    {
         // Parse the address into components, character by character
         for ($i = 0; $i < $this->rawLength; $i++) {
-            $this->token = $email[$i];
+            $this->token = $this->email[$i];
 
             switch ($this->context) {
 
@@ -344,7 +391,7 @@ class Email
                         case Email::STRING_CR:
                         case Email::STRING_SP:
                         case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($email[$i] !== Email::STRING_LF))) {
+                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
                                 // Fatal error
                                 $this->returnStatus[] = Email::ERR_CR_NO_LF;
                                 break;
@@ -571,7 +618,7 @@ class Email
                         case Email::STRING_CR:
                         case Email::STRING_SP:
                         case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($email[$i] !== Email::STRING_LF))) {
+                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
                                 // Fatal error
                                 $this->returnStatus[] = Email::ERR_CR_NO_LF;
                                 break;
@@ -810,7 +857,7 @@ class Email
                         case Email::STRING_CR:
                         case Email::STRING_SP:
                         case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($email[$i] !== Email::STRING_LF))) {
+                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
                                 // Fatal error
                                 $this->returnStatus[] = Email::ERR_CR_NO_LF;
                                 break;
@@ -878,7 +925,7 @@ class Email
                         // It's only FWS if we include HTAB or CRLF
                         case Email::STRING_CR:
                         case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($email[$i] !== Email::STRING_LF))) {
+                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
                                 // Fatal error
                                 $this->returnStatus[] = Email::ERR_CR_NO_LF;
                                 break;
@@ -1064,7 +1111,7 @@ class Email
                             case Email::STRING_CR:
                             case Email::STRING_SP:
                             case Email::STRING_HTAB:
-                                if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($email[$i] !== Email::STRING_LF))) {
+                                if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
                                     // Fatal error
                                     $this->returnStatus[] = Email::ERR_CR_NO_LF;
                                     break;
@@ -1140,7 +1187,7 @@ class Email
 
                         switch ($this->token) {
                             case Email::STRING_CR:
-                                if ((++$i === $this->rawLength) || ($email[$i] !== Email::STRING_LF)) {
+                                if ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF)) {
                                      // Fatal error
                                     $this->returnStatus[] = Email::ERR_CR_NO_LF;
                                 }
@@ -1255,10 +1302,12 @@ class Email
                 $this->returnStatus[] = Email::RFC5322_LABEL_TOOLONG;
             }
         }
+    }
 
+    protected function checkDns()
+    {
         // Check DNS?
-        $this->dnsChecked = false;
-        if ($checkDNS && ((int) max($this->returnStatus) < Email::DNSWARN) && function_exists('dns_get_record')) {
+        if ($this->checkDns && ((int) max($this->returnStatus) < Email::DNSWARN) && function_exists('dns_get_record')) {
             // http://tools.ietf.org/html/rfc5321#section-2.3.5
             //   Names that can
             //   be resolved to MX RRs or address (i.e., A or AAAA) RRs (as discussed
@@ -1300,7 +1349,10 @@ class Email
                 }
             }
         }
+    }
 
+    protected function checkTld()
+    {
         // Check for TLD addresses
         // -----------------------
         // TLD addresses are specifically allowed in RFC 5321 but they are
@@ -1342,9 +1394,12 @@ class Email
                 $this->returnStatus[] = Email::RFC5321_TLDNUMERIC;
             }
         }
+    }
 
+    protected function finalStatus()
+    {
         $this->returnStatus = array_unique($this->returnStatus);
-        $final_status = (int) max($this->returnStatus);
+        $this->finalStatus = (int) max($this->returnStatus);
 
         if (count($this->returnStatus) !== 1) {
             // remove redundant Email::VALID
@@ -1353,41 +1408,8 @@ class Email
 
         $this->parsedata['status'] = $this->returnStatus;
 
-        if ($final_status < $this->threshold) {
-            $final_status = Email::VALID;
+        if ($this->finalStatus < $this->threshold) {
+            $this->finalStatus = Email::VALID;
         }
-
-        return ($this->diagnose)
-            ? $final_status
-            : ($final_status < Email::THRESHOLD);
-    }
-
-    protected function setThresholdDiagnose($errorlevel)
-    {
-        if (is_bool($errorlevel)) {
-            $this->threshold = Email::VALID;
-            $this->diagnose = (bool) $errorlevel;
-            return;
-        }
-
-        $this->diagnose = true;
-
-        switch ((int) $errorlevel) {
-            case E_WARNING:
-                // For backward compatibility
-                $this->threshold = Email::THRESHOLD;
-                break;
-            case E_ERROR:
-                // For backward compatibility
-                $this->threshold = Email::VALID;
-                break;
-            default:
-                $this->threshold = (int) $errorlevel;
-        }
-    }
-
-    protected function checkDns()
-    {
-
     }
 }
