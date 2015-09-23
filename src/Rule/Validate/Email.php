@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Rule\Validate;
 
+use Aura\Filter\Exception;
+
 /**
  *
  * Validates that the value is an email address.
@@ -1175,7 +1177,7 @@ class Email
                 // A context we aren't expecting
                 //-------------------------------------------------------------
                 default:
-                    die("Unknown context: $context");
+                    throw new Exception("Unknown context: $context");
             }
 
             if ((int) max($return_status) > Email::RFC5322) {
