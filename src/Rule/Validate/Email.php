@@ -145,6 +145,7 @@ class Email
     protected $endOrDie;
     protected $pos;
     protected $crlfCount;
+    protected $finalStatus;
 
     /**
      *
