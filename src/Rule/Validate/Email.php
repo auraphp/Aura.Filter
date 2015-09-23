@@ -451,7 +451,7 @@ class Email
             case Email::STRING_AT:
                 // At this point we should have a valid local-part
                 if (count($this->contextStack) !== 1) {
-                    die('Unexpected item on context stack');
+                    throw new Exception('Unexpected item on context stack');
                 }
 
                 if ($this->parsedata[Email::COMPONENT_LOCALPART] === '') {
@@ -513,7 +513,7 @@ class Email
                             $this->returnStatus[] = Email::ERR_ATEXT_AFTER_QS;
                             break;
                         default:
-                            die("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
+                            throw new Exception("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
                     }
                 } else {
                     $this->contextPrior = $this->context;
@@ -705,7 +705,7 @@ class Email
                             $this->returnStatus[] = Email::ERR_ATEXT_AFTER_DOMLIT;
                             break;
                         default:
-                            die("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
+                            throw new Exception("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
                     }
                 }
 
@@ -1079,7 +1079,7 @@ class Email
                 $this->elementLen += 2;
                 break;
             default:
-                die("Quoted pair logic invoked in an invalid context: $this->context");
+                throw new Exception("Quoted pair logic invoked in an invalid context: $this->context");
         }
     }
 
