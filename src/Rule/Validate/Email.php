@@ -126,6 +126,7 @@ class Email
     const STRING_SPECIALS = '()<>[]:;@\\,."';
 
     protected $email;
+    protected $checkDns;
     protected $threshold;
     protected $diagnose;
     protected $dnsChecked;
@@ -296,623 +297,820 @@ class Email
         // Parse the address into components, character by character
         for ($i = 0; $i < $this->rawLength; $i++) {
             $this->token = $this->email[$i];
+            $this->parseContext($i);
+            if ((int) max($this->returnStatus) > Email::RFC5322) {
+                // No point going on if we've got a fatal error
+                break;
+            }
+        }
+        $this->parseFinal();
+    }
 
-            switch ($this->context) {
+    protected function parseContext(&$i)
+    {
+        switch ($this->context) {
 
-                //-------------------------------------------------------------
-                // local-part
-                //-------------------------------------------------------------
-                case Email::COMPONENT_LOCALPART:
+            //-------------------------------------------------------------
+            // local-part
+            //-------------------------------------------------------------
+            case Email::COMPONENT_LOCALPART:
 
-                    // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                    //   local-part = dot-atom / quoted-string / obs-local-part
-                    //
-                    //   dot-atom = [CFWS] dot-atom-text [CFWS]
-                    //
-                    //   dot-atom-text = 1*atext *("." 1*atext)
-                    //
-                    //   quoted-string = [CFWS]
-                    //                       DQUOTE *([FWS] qcontent) [FWS] DQUOTE
-                    //                       [CFWS]
-                    //
-                    //   obs-local-part = word *("." word)
-                    //
-                    //   word = atom / quoted-string
-                    //
-                    //   atom = [CFWS] 1*atext [CFWS]
-                    switch ($this->token) {
+                // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                //   local-part = dot-atom / quoted-string / obs-local-part
+                //
+                //   dot-atom = [CFWS] dot-atom-text [CFWS]
+                //
+                //   dot-atom-text = 1*atext *("." 1*atext)
+                //
+                //   quoted-string = [CFWS]
+                //                       DQUOTE *([FWS] qcontent) [FWS] DQUOTE
+                //                       [CFWS]
+                //
+                //   obs-local-part = word *("." word)
+                //
+                //   word = atom / quoted-string
+                //
+                //   atom = [CFWS] 1*atext [CFWS]
+                switch ($this->token) {
 
-                        // Comment
-                        case Email::STRING_OPENPARENTHESIS:
-                            if ($this->elementLen === 0) {
-                                // Comments are OK at the beginning of an element
-                                $this->returnStatus[] = ($this->elementCount === 0)
-                                    ? Email::CFWS_COMMENT
-                                    : Email::DEPREC_COMMENT;
-                            } else {
-                                // We can't start a comment in the middle of an element, so this better be the end
-                                $this->returnStatus[] = Email::CFWS_COMMENT;
-                                $this->endOrDie = true;
+                    // Comment
+                    case Email::STRING_OPENPARENTHESIS:
+                        if ($this->elementLen === 0) {
+                            // Comments are OK at the beginning of an element
+                            $this->returnStatus[] = ($this->elementCount === 0)
+                                ? Email::CFWS_COMMENT
+                                : Email::DEPREC_COMMENT;
+                        } else {
+                            // We can't start a comment in the middle of an element, so this better be the end
+                            $this->returnStatus[] = Email::CFWS_COMMENT;
+                            $this->endOrDie = true;
+                        }
+
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_COMMENT;
+                        break;
+
+                    // Next dot-atom element
+                    case Email::STRING_DOT:
+                        if ($this->elementLen === 0) {
+                            // Another dot, already?
+                            // Fatal error
+                            $this->returnStatus[] = ($this->elementCount === 0)
+                                ? Email::ERR_DOT_START
+                                : Email::ERR_CONSECUTIVEDOTS;
+                        } else {
+                            // The entire local-part can be a quoted string for RFC 5321
+                            // If it's just one atom that is quoted then it's an RFC 5322 obsolete form
+                            if ($this->endOrDie) {
+                                $this->returnStatus[] = Email::DEPREC_LOCALPART;
                             }
+                        }
 
-                            $this->contextStack[] = $this->context;
-                            $this->context = Email::CONTEXT_COMMENT;
-                            break;
+                        // CFWS & quoted strings are OK again now we're at the beginning of an element (although they are obsolete forms)
+                        $this->endOrDie = false;
+                        $this->elementLen = 0;
+                        $this->elementCount++;
+                        $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] = '';
 
-                        // Next dot-atom element
-                        case Email::STRING_DOT:
-                            if ($this->elementLen === 0) {
-                                // Another dot, already?
-                                // Fatal error
-                                $this->returnStatus[] = ($this->elementCount === 0)
-                                    ? Email::ERR_DOT_START
-                                    : Email::ERR_CONSECUTIVEDOTS;
-                            } else {
-                                // The entire local-part can be a quoted string for RFC 5321
-                                // If it's just one atom that is quoted then it's an RFC 5322 obsolete form
-                                if ($this->endOrDie) {
-                                    $this->returnStatus[] = Email::DEPREC_LOCALPART;
-                                }
-                            }
+                        break;
 
-                            // CFWS & quoted strings are OK again now we're at the beginning of an element (although they are obsolete forms)
-                            $this->endOrDie = false;
-                            $this->elementLen = 0;
-                            $this->elementCount++;
+                    // Quoted string
+                    case Email::STRING_DQUOTE:
+                        if ($this->elementLen === 0) {
+                            // The entire local-part can be a quoted string for RFC 5321
+                            // If it's just one atom that is quoted then it's an RFC 5322 obsolete form
+                            $this->returnStatus[] = ($this->elementCount === 0)
+                                ? Email::RFC5321_QUOTEDSTRING
+                                : Email::DEPREC_LOCALPART;
+
                             $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] = '';
-
-                            break;
-
-                        // Quoted string
-                        case Email::STRING_DQUOTE:
-                            if ($this->elementLen === 0) {
-                                // The entire local-part can be a quoted string for RFC 5321
-                                // If it's just one atom that is quoted then it's an RFC 5322 obsolete form
-                                $this->returnStatus[] = ($this->elementCount === 0)
-                                    ? Email::RFC5321_QUOTEDSTRING
-                                    : Email::DEPREC_LOCALPART;
-
-                                $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
-                                $this->elementLen++;
-                                // Quoted string must be the entire element
-                                $this->endOrDie = true;
-                                $this->contextStack[] = $this->context;
-                                $this->context = Email::CONTEXT_QUOTEDSTRING;
-                            } else {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
-                            }
-
-                            break;
-
-                        // Folding White Space
-                        case Email::STRING_CR:
-                        case Email::STRING_SP:
-                        case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_CR_NO_LF;
-                                break;
-                            }
-
-                            if ($this->elementLen === 0) {
-                                $this->returnStatus[] = ($this->elementCount === 0) ? Email::CFWS_FWS : Email::DEPREC_FWS;
-                            } else {
-                                // We can't start FWS in the middle of an element, so this better be the end
-                                $this->endOrDie = true;
-                            }
-
+                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                            $this->elementLen++;
+                            // Quoted string must be the entire element
+                            $this->endOrDie = true;
                             $this->contextStack[] = $this->context;
-                            $this->context = Email::CONTEXT_FWS;
-                            $this->tokenPrior = $this->token;
+                            $this->context = Email::CONTEXT_QUOTEDSTRING;
+                        } else {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
+                        }
 
+                        break;
+
+                    // Folding White Space
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
+                        if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_CR_NO_LF;
                             break;
+                        }
 
-                        // @
-                        case Email::STRING_AT:
-                            // At this point we should have a valid local-part
-                            if (count($this->contextStack) !== 1) {
-                                die('Unexpected item on context stack');
-                            }
+                        if ($this->elementLen === 0) {
+                            $this->returnStatus[] = ($this->elementCount === 0) ? Email::CFWS_FWS : Email::DEPREC_FWS;
+                        } else {
+                            // We can't start FWS in the middle of an element, so this better be the end
+                            $this->endOrDie = true;
+                        }
 
-                            if ($this->parsedata[Email::COMPONENT_LOCALPART] === '') {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_NOLOCALPART;
-                            } elseif ($this->elementLen === 0) {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_DOT_END;
-                            } elseif (strlen($this->parsedata[Email::COMPONENT_LOCALPART]) > 64) {
-                                // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
-                                //   The maximum total length of a user name or other local-part is 64
-                                //   octets.
-                                $this->returnStatus[] = Email::RFC5322_LOCAL_TOOLONG;
-                            } elseif (($this->contextPrior === Email::CONTEXT_COMMENT) || ($this->contextPrior === Email::CONTEXT_FWS)) {
-                                // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                                //   Comments and folding white space
-                                //   SHOULD NOT be used around the "@" in the addr-spec.
-                                //
-                                // http://tools.ietf.org/html/rfc2119
-                                // 4. SHOULD NOT   This phrase, or the phrase "NOT RECOMMENDED" mean that
-                                //    there may exist valid reasons in particular circumstances when the
-                                //    particular behavior is acceptable or even useful, but the full
-                                //    implications should be understood and the case carefully weighed
-                                //    before implementing any behavior described with this label.
-                                $this->returnStatus[] = Email::DEPREC_CFWS_NEAR_AT;
-                            }
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_FWS;
+                        $this->tokenPrior = $this->token;
 
-                            // Clear everything down for the domain parsing
-                            $this->context = Email::COMPONENT_DOMAIN; // Where we are
-                            $this->contextStack = array($this->context); // Where we have been
-                            $this->elementCount = 0;
-                            $this->elementLen = 0;
-                            $this->endOrDie = false; // CFWS can only appear at the end of the element
+                        break;
 
-                            break;
+                    // @
+                    case Email::STRING_AT:
+                        // At this point we should have a valid local-part
+                        if (count($this->contextStack) !== 1) {
+                            die('Unexpected item on context stack');
+                        }
 
-                        // atext
-                        default:
-                            // http://tools.ietf.org/html/rfc5322#section-3.2.3
-                            //    atext = ALPHA / DIGIT /    ; Printable US-ASCII
-                            //                        "!" / "#" /        ;  characters not including
-                            //                        "$" / "%" /        ;  specials.  Used for atoms.
-                            //                        "&" / "'" /
-                            //                        "*" / "+" /
-                            //                        "-" / "/" /
-                            //                        " = " / "?" /
-                            //                        "^" / "_" /
-                            //                        "`" / "{" /
-                            //                        "|" / "}" /
-                            //                        "~"
-                            if ($this->endOrDie) {
-                                // We have encountered atext where it is no longer valid
-                                switch ($this->contextPrior) {
-                                    case Email::CONTEXT_COMMENT:
-                                    case Email::CONTEXT_FWS:
-                                        $this->returnStatus[] = Email::ERR_ATEXT_AFTER_CFWS;
-                                        break;
-                                    case Email::CONTEXT_QUOTEDSTRING:
-                                        $this->returnStatus[] = Email::ERR_ATEXT_AFTER_QS;
-                                        break;
-                                    default:
-                                        die("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
-                                }
-                            } else {
-                                $this->contextPrior = $this->context;
-                                $ord = ord($this->token);
-
-                                if (($ord < 33) || ($ord > 126) || ($ord === 10) || (!is_bool(strpos(Email::STRING_SPECIALS, $this->token)))) {
-                                    // Fatal error
-                                    $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
-                                }
-
-                                $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
-                                $this->elementLen++;
-                            }
-                    }
-
-                    break;
-
-                //-------------------------------------------------------------
-                // Domain
-                //-------------------------------------------------------------
-                case Email::COMPONENT_DOMAIN:
-
-                    // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                    //   domain = dot-atom / domain-literal / obs-domain
-                    //
-                    //   dot-atom = [CFWS] dot-atom-text [CFWS]
-                    //
-                    //   dot-atom-text = 1*atext *("." 1*atext)
-                    //
-                    //   domain-literal = [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
-                    //
-                    //   dtext = %d33-90 /          ; Printable US-ASCII
-                    //                       %d94-126 /         ;  characters not including
-                    //                       obs-dtext          ;  "[", "]", or "\"
-                    //
-                    //   obs-domain = atom *("." atom)
-                    //
-                    //   atom = [CFWS] 1*atext [CFWS]
-
-                    // http://tools.ietf.org/html/rfc5321#section-4.1.2
-                    //   Mailbox = Local-part "@" ( Domain / address-literal )
-                    //
-                    //   Domain = sub-domain *("." sub-domain)
-                    //
-                    //   address-literal = "[" ( IPv4-address-literal /
-                    //                    IPv6-address-literal /
-                    //                    General-address-literal ) "]"
-                    //                    ; See Section 4.1.3
-
-                    // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                    //      Note: A liberal syntax for the domain portion of addr-spec is
-                    //      given here.  However, the domain portion contains addressing
-                    //      information specified by and used in other protocols (e.g.,
-                    //      [RFC1034], [RFC1035], [RFC1123], [RFC5321]).  It is therefore
-                    //      incumbent upon implementations to conform to the syntax of
-                    //      addresses for the context in which they are used.
-                    // is_email() author's note: it's not clear how to interpret this in
-                    // the context of a general email address validator. The conclusion I
-                    // have reached is this: "addressing information" must comply with
-                    // RFC 5321 (and in turn RFC 1035), anything that is "semantically
-                    // invisible" must comply only with RFC 5322.
-                    switch ($this->token) {
-
-                        // Comment
-                        case Email::STRING_OPENPARENTHESIS:
-                            if ($this->elementLen === 0) {
-                                // Comments at the start of the domain are deprecated in the text
-                                // Comments at the start of a subdomain are obs-domain
-                                // (http://tools.ietf.org/html/rfc5322#section-3.4.1)
-                                $this->returnStatus[] = ($this->elementCount === 0) ? Email::DEPREC_CFWS_NEAR_AT : Email::DEPREC_COMMENT;
-                            } else {
-                                $this->returnStatus[] = Email::CFWS_COMMENT;
-                                // We can't start a comment in the middle of an element, so this better be the end
-                                $this->endOrDie = true;
-                            }
-
-                            $this->contextStack[] = $this->context;
-                            $this->context = Email::CONTEXT_COMMENT;
-                            break;
-
-                        // Next dot-atom element
-                        case Email::STRING_DOT:
-                            if ($this->elementLen === 0) {
-                                // Another dot, already?
-                                // Fatal error
-                                $this->returnStatus[] = ($this->elementCount === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;
-                            } elseif ($this->hyphenFlag) {
-                                // Previous subdomain ended in a hyphen
-                                $this->returnStatus[] = Email::ERR_DOMAINHYPHENEND;
-                            } else {
-                                // Fatal error
-                                //
-                                // Nowhere in RFC 5321 does it say explicitly that the
-                                // domain part of a Mailbox must be a valid domain according
-                                // to the DNS standards set out in RFC 1035, but this *is*
-                                // implied in several places. For instance, wherever the idea
-                                // of host routing is discussed the RFC says that the domain
-                                // must be looked up in the DNS. This would be nonsense unless
-                                // the domain was designed to be a valid DNS domain. Hence we
-                                // must conclude that the RFC 1035 restriction on label length
-                                // also applies to RFC 5321 domains.
-                                //
-                                // http://tools.ietf.org/html/rfc1035#section-2.3.4
-                                // labels          63 octets or less
-                                if ($this->elementLen > 63) {
-                                    $this->returnStatus[] = Email::RFC5322_LABEL_TOOLONG;
-                                }
-                            }
-
-                            // CFWS is OK again now we're at the beginning of an element (although it may be obsolete CFWS)
-                            $this->endOrDie = false;
-                            $this->elementLen = 0;
-                            $this->elementCount++;
-                            $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] = '';
-                            $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-
-                            break;
-
-                        // Domain literal
-                        case Email::STRING_OPENSQBRACKET:
-                            if ($this->parsedata[Email::COMPONENT_DOMAIN] === '') {
-                                // Domain literal must be the only component
-                                $this->endOrDie = true;
-                                $this->elementLen++;
-                                $this->contextStack[] = $this->context;
-                                $this->context = Email::COMPONENT_LITERAL;
-                                $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                                $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
-                                $this->parsedata[Email::COMPONENT_LITERAL] = '';
-                            } else {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
-                            }
-
-                            break;
-
-                        // Folding White Space
-                        case Email::STRING_CR:
-                        case Email::STRING_SP:
-                        case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_CR_NO_LF;
-                                break;
-                            }
-
-                            if ($this->elementLen === 0) {
-                                $this->returnStatus[] = ($this->elementCount === 0) ? Email::DEPREC_CFWS_NEAR_AT : Email::DEPREC_FWS;
-                            } else {
-                                $this->returnStatus[] = Email::CFWS_FWS;
-                                // We can't start FWS in the middle of an element, so this better be the end
-                                $this->endOrDie = true;
-                            }
-
-                            $this->contextStack[] = $this->context;
-                            $this->context = Email::CONTEXT_FWS;
-                            $this->tokenPrior = $this->token;
-                            break;
-
-                        // atext
-                        default:
-                            // RFC 5322 allows any atext...
-                            // http://tools.ietf.org/html/rfc5322#section-3.2.3
-                            //    atext = ALPHA / DIGIT /    ; Printable US-ASCII
-                            //                        "!" / "#" /        ;  characters not including
-                            //                        "$" / "%" /        ;  specials.  Used for atoms.
-                            //                        "&" / "'" /
-                            //                        "*" / "+" /
-                            //                        "-" / "/" /
-                            //                        " = " / "?" /
-                            //                        "^" / "_" /
-                            //                        "`" / "{" /
-                            //                        "|" / "}" /
-                            //                        "~"
-
-                            // But RFC 5321 only allows letter-digit-hyphen to comply with DNS rules (RFCs 1034 & 1123)
-                            // http://tools.ietf.org/html/rfc5321#section-4.1.2
-                            //   sub-domain = Let-dig [Ldh-str]
+                        if ($this->parsedata[Email::COMPONENT_LOCALPART] === '') {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_NOLOCALPART;
+                        } elseif ($this->elementLen === 0) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_DOT_END;
+                        } elseif (strlen($this->parsedata[Email::COMPONENT_LOCALPART]) > 64) {
+                            // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
+                            //   The maximum total length of a user name or other local-part is 64
+                            //   octets.
+                            $this->returnStatus[] = Email::RFC5322_LOCAL_TOOLONG;
+                        } elseif (($this->contextPrior === Email::CONTEXT_COMMENT) || ($this->contextPrior === Email::CONTEXT_FWS)) {
+                            // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                            //   Comments and folding white space
+                            //   SHOULD NOT be used around the "@" in the addr-spec.
                             //
-                            //   Let-dig = ALPHA / DIGIT
-                            //
-                            //   Ldh-str = *( ALPHA / DIGIT / "-" ) Let-dig
-                            //
-                            if ($this->endOrDie) {
-                                // We have encountered atext where it is no longer valid
-                                switch ($this->contextPrior) {
-                                    case Email::CONTEXT_COMMENT:
-                                    case Email::CONTEXT_FWS:
-                                        $this->returnStatus[] = Email::ERR_ATEXT_AFTER_CFWS;
-                                        break;
-                                    case Email::COMPONENT_LITERAL:
-                                        $this->returnStatus[] = Email::ERR_ATEXT_AFTER_DOMLIT;
-                                        break;
-                                    default:
-                                        die("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
-                                }
-                            }
+                            // http://tools.ietf.org/html/rfc2119
+                            // 4. SHOULD NOT   This phrase, or the phrase "NOT RECOMMENDED" mean that
+                            //    there may exist valid reasons in particular circumstances when the
+                            //    particular behavior is acceptable or even useful, but the full
+                            //    implications should be understood and the case carefully weighed
+                            //    before implementing any behavior described with this label.
+                            $this->returnStatus[] = Email::DEPREC_CFWS_NEAR_AT;
+                        }
 
+                        // Clear everything down for the domain parsing
+                        $this->context = Email::COMPONENT_DOMAIN; // Where we are
+                        $this->contextStack = array($this->context); // Where we have been
+                        $this->elementCount = 0;
+                        $this->elementLen = 0;
+                        $this->endOrDie = false; // CFWS can only appear at the end of the element
+
+                        break;
+
+                    // atext
+                    default:
+                        // http://tools.ietf.org/html/rfc5322#section-3.2.3
+                        //    atext = ALPHA / DIGIT /    ; Printable US-ASCII
+                        //                        "!" / "#" /        ;  characters not including
+                        //                        "$" / "%" /        ;  specials.  Used for atoms.
+                        //                        "&" / "'" /
+                        //                        "*" / "+" /
+                        //                        "-" / "/" /
+                        //                        " = " / "?" /
+                        //                        "^" / "_" /
+                        //                        "`" / "{" /
+                        //                        "|" / "}" /
+                        //                        "~"
+                        if ($this->endOrDie) {
+                            // We have encountered atext where it is no longer valid
+                            switch ($this->contextPrior) {
+                                case Email::CONTEXT_COMMENT:
+                                case Email::CONTEXT_FWS:
+                                    $this->returnStatus[] = Email::ERR_ATEXT_AFTER_CFWS;
+                                    break;
+                                case Email::CONTEXT_QUOTEDSTRING:
+                                    $this->returnStatus[] = Email::ERR_ATEXT_AFTER_QS;
+                                    break;
+                                default:
+                                    die("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
+                            }
+                        } else {
+                            $this->contextPrior = $this->context;
                             $ord = ord($this->token);
 
-                            // Assume this token isn't a hyphen unless we discover it is
-                            $this->hyphenFlag = false;
-
-                            if (($ord < 33) || ($ord > 126) || (!is_bool(strpos(Email::STRING_SPECIALS, $this->token)))) {
+                            if (($ord < 33) || ($ord > 126) || ($ord === 10) || (!is_bool(strpos(Email::STRING_SPECIALS, $this->token)))) {
                                 // Fatal error
                                 $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
-                            } elseif ($this->token === Email::STRING_HYPHEN) {
-                                if ($this->elementLen === 0) {
-                                    // Hyphens can't be at the beginning of a subdomain
-                                    // Fatal error
-                                    $this->returnStatus[] = Email::ERR_DOMAINHYPHENSTART;
-                                }
-                                $this->hyphenFlag = true;
-                            } elseif (!(($ord > 47 && $ord < 58) || ($ord > 64 && $ord < 91) || ($ord > 96 && $ord < 123))) {
-                                // Not an RFC 5321 subdomain, but still OK by RFC 5322
-                                $this->returnStatus[] = Email::RFC5322_DOMAIN;
                             }
 
+                            $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
+                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                            $this->elementLen++;
+                        }
+                }
+
+                break;
+
+            //-------------------------------------------------------------
+            // Domain
+            //-------------------------------------------------------------
+            case Email::COMPONENT_DOMAIN:
+
+                // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                //   domain = dot-atom / domain-literal / obs-domain
+                //
+                //   dot-atom = [CFWS] dot-atom-text [CFWS]
+                //
+                //   dot-atom-text = 1*atext *("." 1*atext)
+                //
+                //   domain-literal = [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
+                //
+                //   dtext = %d33-90 /          ; Printable US-ASCII
+                //                       %d94-126 /         ;  characters not including
+                //                       obs-dtext          ;  "[", "]", or "\"
+                //
+                //   obs-domain = atom *("." atom)
+                //
+                //   atom = [CFWS] 1*atext [CFWS]
+
+                // http://tools.ietf.org/html/rfc5321#section-4.1.2
+                //   Mailbox = Local-part "@" ( Domain / address-literal )
+                //
+                //   Domain = sub-domain *("." sub-domain)
+                //
+                //   address-literal = "[" ( IPv4-address-literal /
+                //                    IPv6-address-literal /
+                //                    General-address-literal ) "]"
+                //                    ; See Section 4.1.3
+
+                // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                //      Note: A liberal syntax for the domain portion of addr-spec is
+                //      given here.  However, the domain portion contains addressing
+                //      information specified by and used in other protocols (e.g.,
+                //      [RFC1034], [RFC1035], [RFC1123], [RFC5321]).  It is therefore
+                //      incumbent upon implementations to conform to the syntax of
+                //      addresses for the context in which they are used.
+                // is_email() author's note: it's not clear how to interpret this in
+                // the context of a general email address validator. The conclusion I
+                // have reached is this: "addressing information" must comply with
+                // RFC 5321 (and in turn RFC 1035), anything that is "semantically
+                // invisible" must comply only with RFC 5322.
+                switch ($this->token) {
+
+                    // Comment
+                    case Email::STRING_OPENPARENTHESIS:
+                        if ($this->elementLen === 0) {
+                            // Comments at the start of the domain are deprecated in the text
+                            // Comments at the start of a subdomain are obs-domain
+                            // (http://tools.ietf.org/html/rfc5322#section-3.4.1)
+                            $this->returnStatus[] = ($this->elementCount === 0) ? Email::DEPREC_CFWS_NEAR_AT : Email::DEPREC_COMMENT;
+                        } else {
+                            $this->returnStatus[] = Email::CFWS_COMMENT;
+                            // We can't start a comment in the middle of an element, so this better be the end
+                            $this->endOrDie = true;
+                        }
+
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_COMMENT;
+                        break;
+
+                    // Next dot-atom element
+                    case Email::STRING_DOT:
+                        if ($this->elementLen === 0) {
+                            // Another dot, already?
+                            // Fatal error
+                            $this->returnStatus[] = ($this->elementCount === 0) ? Email::ERR_DOT_START : Email::ERR_CONSECUTIVEDOTS;
+                        } elseif ($this->hyphenFlag) {
+                            // Previous subdomain ended in a hyphen
+                            $this->returnStatus[] = Email::ERR_DOMAINHYPHENEND;
+                        } else {
+                            // Fatal error
+                            //
+                            // Nowhere in RFC 5321 does it say explicitly that the
+                            // domain part of a Mailbox must be a valid domain according
+                            // to the DNS standards set out in RFC 1035, but this *is*
+                            // implied in several places. For instance, wherever the idea
+                            // of host routing is discussed the RFC says that the domain
+                            // must be looked up in the DNS. This would be nonsense unless
+                            // the domain was designed to be a valid DNS domain. Hence we
+                            // must conclude that the RFC 1035 restriction on label length
+                            // also applies to RFC 5321 domains.
+                            //
+                            // http://tools.ietf.org/html/rfc1035#section-2.3.4
+                            // labels          63 octets or less
+                            if ($this->elementLen > 63) {
+                                $this->returnStatus[] = Email::RFC5322_LABEL_TOOLONG;
+                            }
+                        }
+
+                        // CFWS is OK again now we're at the beginning of an element (although it may be obsolete CFWS)
+                        $this->endOrDie = false;
+                        $this->elementLen = 0;
+                        $this->elementCount++;
+                        $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] = '';
+                        $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
+
+                        break;
+
+                    // Domain literal
+                    case Email::STRING_OPENSQBRACKET:
+                        if ($this->parsedata[Email::COMPONENT_DOMAIN] === '') {
+                            // Domain literal must be the only component
+                            $this->endOrDie = true;
+                            $this->elementLen++;
+                            $this->contextStack[] = $this->context;
+                            $this->context = Email::COMPONENT_LITERAL;
                             $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
                             $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
-                            $this->elementLen++;
-                    }
+                            $this->parsedata[Email::COMPONENT_LITERAL] = '';
+                        } else {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
+                        }
 
-                    break;
+                        break;
+
+                    // Folding White Space
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
+                        if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_CR_NO_LF;
+                            break;
+                        }
+
+                        if ($this->elementLen === 0) {
+                            $this->returnStatus[] = ($this->elementCount === 0) ? Email::DEPREC_CFWS_NEAR_AT : Email::DEPREC_FWS;
+                        } else {
+                            $this->returnStatus[] = Email::CFWS_FWS;
+                            // We can't start FWS in the middle of an element, so this better be the end
+                            $this->endOrDie = true;
+                        }
+
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_FWS;
+                        $this->tokenPrior = $this->token;
+                        break;
+
+                    // atext
+                    default:
+                        // RFC 5322 allows any atext...
+                        // http://tools.ietf.org/html/rfc5322#section-3.2.3
+                        //    atext = ALPHA / DIGIT /    ; Printable US-ASCII
+                        //                        "!" / "#" /        ;  characters not including
+                        //                        "$" / "%" /        ;  specials.  Used for atoms.
+                        //                        "&" / "'" /
+                        //                        "*" / "+" /
+                        //                        "-" / "/" /
+                        //                        " = " / "?" /
+                        //                        "^" / "_" /
+                        //                        "`" / "{" /
+                        //                        "|" / "}" /
+                        //                        "~"
+
+                        // But RFC 5321 only allows letter-digit-hyphen to comply with DNS rules (RFCs 1034 & 1123)
+                        // http://tools.ietf.org/html/rfc5321#section-4.1.2
+                        //   sub-domain = Let-dig [Ldh-str]
+                        //
+                        //   Let-dig = ALPHA / DIGIT
+                        //
+                        //   Ldh-str = *( ALPHA / DIGIT / "-" ) Let-dig
+                        //
+                        if ($this->endOrDie) {
+                            // We have encountered atext where it is no longer valid
+                            switch ($this->contextPrior) {
+                                case Email::CONTEXT_COMMENT:
+                                case Email::CONTEXT_FWS:
+                                    $this->returnStatus[] = Email::ERR_ATEXT_AFTER_CFWS;
+                                    break;
+                                case Email::COMPONENT_LITERAL:
+                                    $this->returnStatus[] = Email::ERR_ATEXT_AFTER_DOMLIT;
+                                    break;
+                                default:
+                                    die("More atext found where none is allowed, but unrecognised prior context: $this->contextPrior");
+                            }
+                        }
+
+                        $ord = ord($this->token);
+
+                        // Assume this token isn't a hyphen unless we discover it is
+                        $this->hyphenFlag = false;
+
+                        if (($ord < 33) || ($ord > 126) || (!is_bool(strpos(Email::STRING_SPECIALS, $this->token)))) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
+                        } elseif ($this->token === Email::STRING_HYPHEN) {
+                            if ($this->elementLen === 0) {
+                                // Hyphens can't be at the beginning of a subdomain
+                                // Fatal error
+                                $this->returnStatus[] = Email::ERR_DOMAINHYPHENSTART;
+                            }
+                            $this->hyphenFlag = true;
+                        } elseif (!(($ord > 47 && $ord < 58) || ($ord > 64 && $ord < 91) || ($ord > 96 && $ord < 123))) {
+                            // Not an RFC 5321 subdomain, but still OK by RFC 5322
+                            $this->returnStatus[] = Email::RFC5322_DOMAIN;
+                        }
+
+                        $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                        $this->elementLen++;
+                }
+
+                break;
+
+            //-------------------------------------------------------------
+            // Domain literal
+            //-------------------------------------------------------------
+            case Email::COMPONENT_LITERAL:
+
+                // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                //   domain-literal = [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
+                //
+                //   dtext = %d33-90 /          ; Printable US-ASCII
+                //                       %d94-126 /         ;  characters not including
+                //                       obs-dtext          ;  "[", "]", or "\"
+                //
+                //   obs-dtext = obs-NO-WS-CTL / quoted-pair
+                switch ($this->token) {
+
+                    // End of domain literal
+                    case Email::STRING_CLOSESQBRACKET:
+                        if ((int) max($this->returnStatus) < Email::DEPREC) {
+                            // Could be a valid RFC 5321 address literal, so let's check
+
+                            // http://tools.ietf.org/html/rfc5321#section-4.1.2
+                            //   address-literal = "[" ( IPv4-address-literal /
+                            //                    IPv6-address-literal /
+                            //                    General-address-literal ) "]"
+                            //                    ; See Section 4.1.3
+                            //
+                            // http://tools.ietf.org/html/rfc5321#section-4.1.3
+                            //   IPv4-address-literal = Snum 3("."  Snum)
+                            //
+                            //   IPv6-address-literal = "IPv6:" IPv6-addr
+                            //
+                            //   General-address-literal = Standardized-tag ":" 1*dcontent
+                            //
+                            //   Standardized-tag = Ldh-str
+                            //                     ; Standardized-tag MUST be specified in a
+                            //                     ; Standards-Track RFC and registered with IANA
+                            //
+                            //   dcontent = %d33-90 / ; Printable US-ASCII
+                            //                  %d94-126 ; excl. "[", "\", "]"
+                            //
+                            //   Snum = 1*3DIGIT
+                            //                  ; representing a decimal integer
+                            //                  ; value in the range 0 through 255
+                            //
+                            //   IPv6-addr = IPv6-full / IPv6-comp / IPv6v4-full / IPv6v4-comp
+                            //
+                            //   IPv6-hex = 1*4HEXDIG
+                            //
+                            //   IPv6-full = IPv6-hex 7(":" IPv6-hex)
+                            //
+                            //   IPv6-comp = [IPv6-hex *5(":" IPv6-hex)] "::"
+                            //                  [IPv6-hex *5(":" IPv6-hex)]
+                            //                  ; The "::" represents at least 2 16-bit groups of
+                            //                  ; zeros.  No more than 6 groups in addition to the
+                            //                  ; "::" may be present.
+                            //
+                            //   IPv6v4-full = IPv6-hex 5(":" IPv6-hex) ":" IPv4-address-literal
+                            //
+                            //   IPv6v4-comp = [IPv6-hex *3(":" IPv6-hex)] "::"
+                            //                  [IPv6-hex *3(":" IPv6-hex) ":"]
+                            //                  IPv4-address-literal
+                            //                  ; The "::" represents at least 2 16-bit groups of
+                            //                  ; zeros.  No more than 4 groups in addition to the
+                            //                  ; "::" and IPv4-address-literal may be present.
+                            //
+                            // is_email() author's note: We can't use ip2long() to validate
+                            // IPv4 addresses because it accepts abbreviated addresses
+                            // (xxx.xxx.xxx), expanding the last group to complete the address.
+                            // filter_var() validates IPv6 address inconsistently (up to PHP 5.3.3
+                            // at least) -- see http://bugs.php.net/bug.php?id = 53236 for example
+                            $max_groups = 8;
+                            $matchesIP = array();
+                            $index = false;
+                            $addressliteral = $this->parsedata[Email::COMPONENT_LITERAL];
+
+                            // Extract IPv4 part from the end of the address-literal (if there is one)
+                            if (preg_match('/\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $addressliteral, $matchesIP) > 0) {
+                                $index = strrpos($addressliteral, $matchesIP[0]);
+                                if ($index !== 0) {
+                                    // Convert IPv4 part to IPv6 format for further testing
+                                    $addressliteral = substr($addressliteral, 0, $index) . '0:0';
+                                }
+                            }
+
+                            if ($index === 0) {
+                                // Nothing there except a valid IPv4 address, so...
+                                $this->returnStatus[] = Email::RFC5321_ADDRESSLITERAL;
+                            } elseif (strncasecmp($addressliteral, Email::STRING_IPV6TAG, 5) !== 0) {
+                                $this->returnStatus[] = Email::RFC5322_DOMAINLITERAL;
+                            } else {
+                                $IPv6 = substr($addressliteral, 5);
+                                // Revision 2.7: Daniel Marschall's new IPv6 testing strategy
+                                $matchesIP = explode(Email::STRING_COLON, $IPv6);
+                                $groupCount = count($matchesIP);
+                                $index = strpos($IPv6, Email::STRING_DOUBLECOLON);
+
+                                if ($index === false) {
+                                    // We need exactly the right number of groups
+                                    if ($groupCount !== $max_groups) {
+                                        $this->returnStatus[] = Email::RFC5322_IPV6_GRPCOUNT;
+                                    }
+                                } else {
+                                    if ($index !== strrpos($IPv6, Email::STRING_DOUBLECOLON)) {
+                                        $this->returnStatus[] = Email::RFC5322_IPV6_2X2XCOLON;
+                                    } else {
+                                        if ($index === 0 || $index === (strlen($IPv6) - 2)) {
+                                            // RFC 4291 allows :: at the start or end of an address with 7 other groups in addition
+                                            $max_groups++;
+                                        }
+
+                                        if ($groupCount > $max_groups) {
+                                            $this->returnStatus[] = Email::RFC5322_IPV6_MAXGRPS;
+                                        } elseif ($groupCount === $max_groups) {
+                                            // Eliding a single "::"
+                                            $this->returnStatus[] = Email::RFC5321_IPV6DEPRECATED;
+                                        }
+                                    }
+                                }
+
+                                // Revision 2.7: Daniel Marschall's new IPv6 testing strategy
+                                if ((substr($IPv6, 0,  1) === Email::STRING_COLON) && (substr($IPv6, 1,  1) !== Email::STRING_COLON)) {
+                                    // Address starts with a single colon
+                                    $this->returnStatus[] = Email::RFC5322_IPV6_COLONSTRT;
+                                } elseif ((substr($IPv6, -1) === Email::STRING_COLON) && (substr($IPv6, -2, 1) !== Email::STRING_COLON)) {
+                                    // Address ends with a single colon
+                                    $this->returnStatus[] = Email::RFC5322_IPV6_COLONEND;
+                                } elseif (count(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) !== 0) {
+                                    // Check for unmatched characters
+                                    $this->returnStatus[] = Email::RFC5322_IPV6_BADCHAR;
+                                } else {
+                                    $this->returnStatus[] = Email::RFC5321_ADDRESSLITERAL;
+                                }
+                            }
+                        } else {
+                            $this->returnStatus[] = Email::RFC5322_DOMAINLITERAL;
+                        }
+
+                        $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                        $this->elementLen++;
+                        $this->contextPrior = $this->context;
+                        $this->context = (int) array_pop($this->contextStack);
+                        break;
+
+                    case Email::STRING_BACKSLASH:
+                        $this->returnStatus[] = Email::RFC5322_DOMLIT_OBSDTEXT;
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_QUOTEDPAIR;
+                        break;
+
+                    // Folding White Space
+                    case Email::STRING_CR:
+                    case Email::STRING_SP:
+                    case Email::STRING_HTAB:
+                        if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_CR_NO_LF;
+                            break;
+                        }
+
+                        $this->returnStatus[] = Email::CFWS_FWS;
+
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_FWS;
+                        $this->tokenPrior = $this->token;
+                        break;
+
+                    // dtext
+                    default:
+                        // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                        //   dtext = %d33-90 /          ; Printable US-ASCII
+                        //                       %d94-126 /         ;  characters not including
+                        //                       obs-dtext          ;  "[", "]", or "\"
+                        //
+                        //   obs-dtext = obs-NO-WS-CTL / quoted-pair
+                        //
+                        //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
+                        //                       %d11 /             ;  characters that do not
+                        //                       %d12 /             ;  include the carriage
+                        //                       %d14-31 /          ;  return, line feed, and
+                        //                       %d127              ;  white space characters
+                        $ord = ord($this->token);
+
+                        // CR, LF, SP & HTAB have already been parsed above
+                        if (($ord > 127) || ($ord === 0) || ($this->token === Email::STRING_OPENSQBRACKET)) {
+                            $this->returnStatus[] = Email::ERR_EXPECTING_DTEXT; // Fatal error
+                            break;
+                        } elseif (($ord < 33) || ($ord === 127)) {
+                            $this->returnStatus[] = Email::RFC5322_DOMLIT_OBSDTEXT;
+                        }
+
+                        $this->parsedata[Email::COMPONENT_LITERAL] .= $this->token;
+                        $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                        $this->elementLen++;
+                }
+
+                break;
+
+            //-------------------------------------------------------------
+            // Quoted string
+            //-------------------------------------------------------------
+            case Email::CONTEXT_QUOTEDSTRING:
+                // http://tools.ietf.org/html/rfc5322#section-3.2.4
+                //   quoted-string = [CFWS]
+                //                       DQUOTE *([FWS] qcontent) [FWS] DQUOTE
+                //                       [CFWS]
+                //
+                //   qcontent = qtext / quoted-pair
+                switch ($this->token) {
+
+                    // Quoted pair
+                    case Email::STRING_BACKSLASH:
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_QUOTEDPAIR;
+                        break;
+
+                    // Folding White Space
+                    // Inside a quoted string, spaces are allowed as regular characters.
+                    // It's only FWS if we include HTAB or CRLF
+                    case Email::STRING_CR:
+                    case Email::STRING_HTAB:
+                        if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_CR_NO_LF;
+                            break;
+                        }
+
+                        // http://tools.ietf.org/html/rfc5322#section-3.2.2
+                        //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
+                        //   structured header field are semantically interpreted as a single
+                        //   space character.
+
+                        // http://tools.ietf.org/html/rfc5322#section-3.2.4
+                        //   the CRLF in any FWS/CFWS that appears within the quoted-string [is]
+                        //   semantically "invisible" and therefore not part of the quoted-string
+                        $this->parsedata[Email::COMPONENT_LOCALPART] .= Email::STRING_SP;
+                        $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= Email::STRING_SP;
+                        $this->elementLen++;
+
+                        $this->returnStatus[] = Email::CFWS_FWS;
+                        $this->contextStack[] = $this->context;
+                        $this->context = Email::CONTEXT_FWS;
+                        $this->tokenPrior = $this->token;
+                        break;
+
+                    // End of quoted string
+                    case Email::STRING_DQUOTE:
+                        $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                        $this->elementLen++;
+                        $this->contextPrior = $this->context;
+                        $this->context = (int) array_pop($this->contextStack);
+                        break;
+
+                    // qtext
+                    default:
+                        // http://tools.ietf.org/html/rfc5322#section-3.2.4
+                        //   qtext = %d33 /             ; Printable US-ASCII
+                        //                       %d35-91 /          ;  characters not including
+                        //                       %d93-126 /         ;  "\" or the quote character
+                        //                       obs-qtext
+                        //
+                        //   obs-qtext = obs-NO-WS-CTL
+                        //
+                        //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
+                        //                       %d11 /             ;  characters that do not
+                        //                       %d12 /             ;  include the carriage
+                        //                       %d14-31 /          ;  return, line feed, and
+                        //                       %d127              ;  white space characters
+                        $ord = ord($this->token);
+
+                        if (($ord > 127) || ($ord === 0) || ($ord === 10)) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_EXPECTING_QTEXT;
+                        } elseif (($ord < 32) || ($ord === 127)) {
+                            $this->returnStatus[] = Email::DEPREC_QTEXT;
+                        }
+
+                        $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                        $this->elementLen++;
+                }
+
+                // http://tools.ietf.org/html/rfc5322#section-3.4.1
+                //   If the string can be represented as a dot-atom (that is, it contains
+                //   no characters other than atext characters or "." surrounded by atext
+                //   characters), then the dot-atom form SHOULD be used and the quoted-
+                //   string form SHOULD NOT be used.
+                //
+                // TODO
+                //
+                break;
+
+            //-------------------------------------------------------------
+            // Quoted pair
+            //-------------------------------------------------------------
+            case Email::CONTEXT_QUOTEDPAIR:
+                // http://tools.ietf.org/html/rfc5322#section-3.2.1
+                //   quoted-pair = ("\" (VCHAR / WSP)) / obs-qp
+                //
+                //   VCHAR = %d33-126            ; visible (printing) characters
+                //   WSP = SP / HTAB           ; white space
+                //
+                //   obs-qp = "\" (%d0 / obs-NO-WS-CTL / LF / CR)
+                //
+                //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
+                //                       %d11 /             ;  characters that do not
+                //                       %d12 /             ;  include the carriage
+                //                       %d14-31 /          ;  return, line feed, and
+                //                       %d127              ;  white space characters
+                //
+                // i.e. obs-qp = "\" (%d0-8, %d10-31 / %d127)
+                $ord = ord($this->token);
+
+                if ($ord > 127) {
+                    $this->returnStatus[] = Email::ERR_EXPECTING_QPAIR;
+                } elseif ((($ord < 31) && ($ord !== 9)) || ($ord === 127)) {
+                    // SP & HTAB are allowed
+                    // Fatal error
+                    $this->returnStatus[] = Email::DEPREC_QP;
+                }
+
+                // At this point we know where this qpair occurred so
+                // we could check to see if the character actually
+                // needed to be quoted at all.
+                // http://tools.ietf.org/html/rfc5321#section-4.1.2
+                //   the sending system SHOULD transmit the
+                //   form that uses the minimum quoting possible.
+                //
+                // TODO: check whether the character needs to be quoted (escaped) in this context
+                //
+                $this->contextPrior = $this->context;
+                $this->context = (int) array_pop($this->contextStack); // End of qpair
+                $this->token = Email::STRING_BACKSLASH . $this->token;
+
+                switch ($this->context) {
+                    case Email::CONTEXT_COMMENT:
+                        break;
+                    case Email::CONTEXT_QUOTEDSTRING:
+                        $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                        // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
+                        $this->elementLen += 2;
+                        break;
+                    case Email::COMPONENT_LITERAL:
+                        $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
+                        $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                        // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
+                        $this->elementLen += 2;
+                        break;
+                    default:
+                        die("Quoted pair logic invoked in an invalid context: $this->context");
+                }
+
+                break;
 
                 //-------------------------------------------------------------
-                // Domain literal
+                // Comment
                 //-------------------------------------------------------------
-                case Email::COMPONENT_LITERAL:
+                case Email::CONTEXT_COMMENT:
 
-                    // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                    //   domain-literal = [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
+                    // http://tools.ietf.org/html/rfc5322#section-3.2.2
+                    //   comment = "(" *([FWS] ccontent) [FWS] ")"
                     //
-                    //   dtext = %d33-90 /          ; Printable US-ASCII
-                    //                       %d94-126 /         ;  characters not including
-                    //                       obs-dtext          ;  "[", "]", or "\"
-                    //
-                    //   obs-dtext = obs-NO-WS-CTL / quoted-pair
+                    //   ccontent = ctext / quoted-pair / comment
                     switch ($this->token) {
 
-                        // End of domain literal
-                        case Email::STRING_CLOSESQBRACKET:
-                            if ((int) max($this->returnStatus) < Email::DEPREC) {
-                                // Could be a valid RFC 5321 address literal, so let's check
+                        // Nested comment
+                        case Email::STRING_OPENPARENTHESIS:
+                            // Nested comments are OK
+                            $this->contextStack[] = $this->context;
+                            $this->context = Email::CONTEXT_COMMENT;
+                            break;
 
-                                // http://tools.ietf.org/html/rfc5321#section-4.1.2
-                                //   address-literal = "[" ( IPv4-address-literal /
-                                //                    IPv6-address-literal /
-                                //                    General-address-literal ) "]"
-                                //                    ; See Section 4.1.3
-                                //
-                                // http://tools.ietf.org/html/rfc5321#section-4.1.3
-                                //   IPv4-address-literal = Snum 3("."  Snum)
-                                //
-                                //   IPv6-address-literal = "IPv6:" IPv6-addr
-                                //
-                                //   General-address-literal = Standardized-tag ":" 1*dcontent
-                                //
-                                //   Standardized-tag = Ldh-str
-                                //                     ; Standardized-tag MUST be specified in a
-                                //                     ; Standards-Track RFC and registered with IANA
-                                //
-                                //   dcontent = %d33-90 / ; Printable US-ASCII
-                                //                  %d94-126 ; excl. "[", "\", "]"
-                                //
-                                //   Snum = 1*3DIGIT
-                                //                  ; representing a decimal integer
-                                //                  ; value in the range 0 through 255
-                                //
-                                //   IPv6-addr = IPv6-full / IPv6-comp / IPv6v4-full / IPv6v4-comp
-                                //
-                                //   IPv6-hex = 1*4HEXDIG
-                                //
-                                //   IPv6-full = IPv6-hex 7(":" IPv6-hex)
-                                //
-                                //   IPv6-comp = [IPv6-hex *5(":" IPv6-hex)] "::"
-                                //                  [IPv6-hex *5(":" IPv6-hex)]
-                                //                  ; The "::" represents at least 2 16-bit groups of
-                                //                  ; zeros.  No more than 6 groups in addition to the
-                                //                  ; "::" may be present.
-                                //
-                                //   IPv6v4-full = IPv6-hex 5(":" IPv6-hex) ":" IPv4-address-literal
-                                //
-                                //   IPv6v4-comp = [IPv6-hex *3(":" IPv6-hex)] "::"
-                                //                  [IPv6-hex *3(":" IPv6-hex) ":"]
-                                //                  IPv4-address-literal
-                                //                  ; The "::" represents at least 2 16-bit groups of
-                                //                  ; zeros.  No more than 4 groups in addition to the
-                                //                  ; "::" and IPv4-address-literal may be present.
-                                //
-                                // is_email() author's note: We can't use ip2long() to validate
-                                // IPv4 addresses because it accepts abbreviated addresses
-                                // (xxx.xxx.xxx), expanding the last group to complete the address.
-                                // filter_var() validates IPv6 address inconsistently (up to PHP 5.3.3
-                                // at least) -- see http://bugs.php.net/bug.php?id = 53236 for example
-                                $max_groups = 8;
-                                $matchesIP = array();
-                                $index = false;
-                                $addressliteral = $this->parsedata[Email::COMPONENT_LITERAL];
-
-                                // Extract IPv4 part from the end of the address-literal (if there is one)
-                                if (preg_match('/\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $addressliteral, $matchesIP) > 0) {
-                                    $index = strrpos($addressliteral, $matchesIP[0]);
-                                    if ($index !== 0) {
-                                        // Convert IPv4 part to IPv6 format for further testing
-                                        $addressliteral = substr($addressliteral, 0, $index) . '0:0';
-                                    }
-                                }
-
-                                if ($index === 0) {
-                                    // Nothing there except a valid IPv4 address, so...
-                                    $this->returnStatus[] = Email::RFC5321_ADDRESSLITERAL;
-                                } elseif (strncasecmp($addressliteral, Email::STRING_IPV6TAG, 5) !== 0) {
-                                    $this->returnStatus[] = Email::RFC5322_DOMAINLITERAL;
-                                } else {
-                                    $IPv6 = substr($addressliteral, 5);
-                                    // Revision 2.7: Daniel Marschall's new IPv6 testing strategy
-                                    $matchesIP = explode(Email::STRING_COLON, $IPv6);
-                                    $groupCount = count($matchesIP);
-                                    $index = strpos($IPv6, Email::STRING_DOUBLECOLON);
-
-                                    if ($index === false) {
-                                        // We need exactly the right number of groups
-                                        if ($groupCount !== $max_groups) {
-                                            $this->returnStatus[] = Email::RFC5322_IPV6_GRPCOUNT;
-                                        }
-                                    } else {
-                                        if ($index !== strrpos($IPv6, Email::STRING_DOUBLECOLON)) {
-                                            $this->returnStatus[] = Email::RFC5322_IPV6_2X2XCOLON;
-                                        } else {
-                                            if ($index === 0 || $index === (strlen($IPv6) - 2)) {
-                                                // RFC 4291 allows :: at the start or end of an address with 7 other groups in addition
-                                                $max_groups++;
-                                            }
-
-                                            if ($groupCount > $max_groups) {
-                                                $this->returnStatus[] = Email::RFC5322_IPV6_MAXGRPS;
-                                            } elseif ($groupCount === $max_groups) {
-                                                // Eliding a single "::"
-                                                $this->returnStatus[] = Email::RFC5321_IPV6DEPRECATED;
-                                            }
-                                        }
-                                    }
-
-                                    // Revision 2.7: Daniel Marschall's new IPv6 testing strategy
-                                    if ((substr($IPv6, 0,  1) === Email::STRING_COLON) && (substr($IPv6, 1,  1) !== Email::STRING_COLON)) {
-                                        // Address starts with a single colon
-                                        $this->returnStatus[] = Email::RFC5322_IPV6_COLONSTRT;
-                                    } elseif ((substr($IPv6, -1) === Email::STRING_COLON) && (substr($IPv6, -2, 1) !== Email::STRING_COLON)) {
-                                        // Address ends with a single colon
-                                        $this->returnStatus[] = Email::RFC5322_IPV6_COLONEND;
-                                    } elseif (count(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) !== 0) {
-                                        // Check for unmatched characters
-                                        $this->returnStatus[] = Email::RFC5322_IPV6_BADCHAR;
-                                    } else {
-                                        $this->returnStatus[] = Email::RFC5321_ADDRESSLITERAL;
-                                    }
-                                }
-                            } else {
-                                $this->returnStatus[] = Email::RFC5322_DOMAINLITERAL;
-                            }
-
-                            $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
-                            $this->elementLen++;
+                        // End of comment
+                        case Email::STRING_CLOSEPARENTHESIS:
                             $this->contextPrior = $this->context;
                             $this->context = (int) array_pop($this->contextStack);
-                            break;
 
-                        case Email::STRING_BACKSLASH:
-                            $this->returnStatus[] = Email::RFC5322_DOMLIT_OBSDTEXT;
-                            $this->contextStack[] = $this->context;
-                            $this->context = Email::CONTEXT_QUOTEDPAIR;
-                            break;
-
-                        // Folding White Space
-                        case Email::STRING_CR:
-                        case Email::STRING_SP:
-                        case Email::STRING_HTAB:
-                            if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_CR_NO_LF;
-                                break;
-                            }
-
-                            $this->returnStatus[] = Email::CFWS_FWS;
-
-                            $this->contextStack[] = $this->context;
-                            $this->context = Email::CONTEXT_FWS;
-                            $this->tokenPrior = $this->token;
-                            break;
-
-                        // dtext
-                        default:
-                            // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                            //   dtext = %d33-90 /          ; Printable US-ASCII
-                            //                       %d94-126 /         ;  characters not including
-                            //                       obs-dtext          ;  "[", "]", or "\"
+                            // http://tools.ietf.org/html/rfc5322#section-3.2.2
+                            //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
+                            //   structured header field are semantically interpreted as a single
+                            //   space character.
                             //
-                            //   obs-dtext = obs-NO-WS-CTL / quoted-pair
+                            // is_email() author's note: This *cannot* mean that we must add a
+                            // space to the address wherever CFWS appears. This would result in
+                            // any addr-spec that had CFWS outside a quoted string being invalid
+                            // for RFC 5321.
                             //
-                            //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
-                            //                       %d11 /             ;  characters that do not
-                            //                       %d12 /             ;  include the carriage
-                            //                       %d14-31 /          ;  return, line feed, and
-                            //                       %d127              ;  white space characters
-                            $ord = ord($this->token);
+                            // if (($this->context === Email::COMPONENT_LOCALPART) || ($this->context === Email::COMPONENT_DOMAIN)) {
+                            //     $this->parsedata[$this->context] .= Email::STRING_SP;
+                            //     $this->atomlist[$this->context][$this->elementCount] .= Email::STRING_SP;
+                            //     $this->elementLen++;
+                            // }
 
-                            // CR, LF, SP & HTAB have already been parsed above
-                            if (($ord > 127) || ($ord === 0) || ($this->token === Email::STRING_OPENSQBRACKET)) {
-                                $this->returnStatus[] = Email::ERR_EXPECTING_DTEXT; // Fatal error
-                                break;
-                            } elseif (($ord < 33) || ($ord === 127)) {
-                                $this->returnStatus[] = Email::RFC5322_DOMLIT_OBSDTEXT;
-                            }
-
-                            $this->parsedata[Email::COMPONENT_LITERAL] .= $this->token;
-                            $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
-                            $this->elementLen++;
-                    }
-
-                    break;
-
-                //-------------------------------------------------------------
-                // Quoted string
-                //-------------------------------------------------------------
-                case Email::CONTEXT_QUOTEDSTRING:
-                    // http://tools.ietf.org/html/rfc5322#section-3.2.4
-                    //   quoted-string = [CFWS]
-                    //                       DQUOTE *([FWS] qcontent) [FWS] DQUOTE
-                    //                       [CFWS]
-                    //
-                    //   qcontent = qtext / quoted-pair
-                    switch ($this->token) {
+                            break;
 
                         // Quoted pair
                         case Email::STRING_BACKSLASH:
@@ -921,9 +1119,8 @@ class Email
                             break;
 
                         // Folding White Space
-                        // Inside a quoted string, spaces are allowed as regular characters.
-                        // It's only FWS if we include HTAB or CRLF
                         case Email::STRING_CR:
+                        case Email::STRING_SP:
                         case Email::STRING_HTAB:
                             if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
                                 // Fatal error
@@ -931,42 +1128,22 @@ class Email
                                 break;
                             }
 
-                            // http://tools.ietf.org/html/rfc5322#section-3.2.2
-                            //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
-                            //   structured header field are semantically interpreted as a single
-                            //   space character.
-
-                            // http://tools.ietf.org/html/rfc5322#section-3.2.4
-                            //   the CRLF in any FWS/CFWS that appears within the quoted-string [is]
-                            //   semantically "invisible" and therefore not part of the quoted-string
-                            $this->parsedata[Email::COMPONENT_LOCALPART] .= Email::STRING_SP;
-                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= Email::STRING_SP;
-                            $this->elementLen++;
-
                             $this->returnStatus[] = Email::CFWS_FWS;
+
                             $this->contextStack[] = $this->context;
                             $this->context = Email::CONTEXT_FWS;
                             $this->tokenPrior = $this->token;
                             break;
 
-                        // End of quoted string
-                        case Email::STRING_DQUOTE:
-                            $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
-                            $this->elementLen++;
-                            $this->contextPrior = $this->context;
-                            $this->context = (int) array_pop($this->contextStack);
-                            break;
-
-                        // qtext
+                        // ctext
                         default:
-                            // http://tools.ietf.org/html/rfc5322#section-3.2.4
-                            //   qtext = %d33 /             ; Printable US-ASCII
-                            //                       %d35-91 /          ;  characters not including
-                            //                       %d93-126 /         ;  "\" or the quote character
-                            //                       obs-qtext
+                            // http://tools.ietf.org/html/rfc5322#section-3.2.3
+                            //   ctext = %d33-39 /          ; Printable US-ASCII
+                            //                       %d42-91 /          ;  characters not including
+                            //                       %d93-126 /         ;  "(", ")", or "\"
+                            //                       obs-ctext
                             //
-                            //   obs-qtext = obs-NO-WS-CTL
+                            //   obs-ctext = obs-NO-WS-CTL
                             //
                             //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
                             //                       %d11 /             ;  characters that do not
@@ -976,276 +1153,107 @@ class Email
                             $ord = ord($this->token);
 
                             if (($ord > 127) || ($ord === 0) || ($ord === 10)) {
-                                // Fatal error
-                                $this->returnStatus[] = Email::ERR_EXPECTING_QTEXT;
+                                $this->returnStatus[] = Email::ERR_EXPECTING_CTEXT; // Fatal error
+                                break;
                             } elseif (($ord < 32) || ($ord === 127)) {
-                                $this->returnStatus[] = Email::DEPREC_QTEXT;
+                                $this->returnStatus[] = Email::DEPREC_CTEXT;
                             }
-
-                            $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
-                            $this->elementLen++;
-                    }
-
-                    // http://tools.ietf.org/html/rfc5322#section-3.4.1
-                    //   If the string can be represented as a dot-atom (that is, it contains
-                    //   no characters other than atext characters or "." surrounded by atext
-                    //   characters), then the dot-atom form SHOULD be used and the quoted-
-                    //   string form SHOULD NOT be used.
-                    //
-                    // TODO
-                    //
-                    break;
-
-                //-------------------------------------------------------------
-                // Quoted pair
-                //-------------------------------------------------------------
-                case Email::CONTEXT_QUOTEDPAIR:
-                    // http://tools.ietf.org/html/rfc5322#section-3.2.1
-                    //   quoted-pair = ("\" (VCHAR / WSP)) / obs-qp
-                    //
-                    //   VCHAR = %d33-126            ; visible (printing) characters
-                    //   WSP = SP / HTAB           ; white space
-                    //
-                    //   obs-qp = "\" (%d0 / obs-NO-WS-CTL / LF / CR)
-                    //
-                    //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
-                    //                       %d11 /             ;  characters that do not
-                    //                       %d12 /             ;  include the carriage
-                    //                       %d14-31 /          ;  return, line feed, and
-                    //                       %d127              ;  white space characters
-                    //
-                    // i.e. obs-qp = "\" (%d0-8, %d10-31 / %d127)
-                    $ord = ord($this->token);
-
-                    if ($ord > 127) {
-                        $this->returnStatus[] = Email::ERR_EXPECTING_QPAIR;
-                    } elseif ((($ord < 31) && ($ord !== 9)) || ($ord === 127)) {
-                        // SP & HTAB are allowed
-                        // Fatal error
-                        $this->returnStatus[] = Email::DEPREC_QP;
-                    }
-
-                    // At this point we know where this qpair occurred so
-                    // we could check to see if the character actually
-                    // needed to be quoted at all.
-                    // http://tools.ietf.org/html/rfc5321#section-4.1.2
-                    //   the sending system SHOULD transmit the
-                    //   form that uses the minimum quoting possible.
-                    //
-                    // TODO: check whether the character needs to be quoted (escaped) in this context
-                    //
-                    $this->contextPrior = $this->context;
-                    $this->context = (int) array_pop($this->contextStack); // End of qpair
-                    $this->token = Email::STRING_BACKSLASH . $this->token;
-
-                    switch ($this->context) {
-                        case Email::CONTEXT_COMMENT:
-                            break;
-                        case Email::CONTEXT_QUOTEDSTRING:
-                            $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
-                            // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
-                            $this->elementLen += 2;
-                            break;
-                        case Email::COMPONENT_LITERAL:
-                            $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                            $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
-                            // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
-                            $this->elementLen += 2;
-                            break;
-                        default:
-                            die("Quoted pair logic invoked in an invalid context: $this->context");
                     }
 
                     break;
 
-                    //-------------------------------------------------------------
-                    // Comment
-                    //-------------------------------------------------------------
-                    case Email::CONTEXT_COMMENT:
+                //-------------------------------------------------------------
+                // Folding White Space
+                //-------------------------------------------------------------
 
-                        // http://tools.ietf.org/html/rfc5322#section-3.2.2
-                        //   comment = "(" *([FWS] ccontent) [FWS] ")"
-                        //
-                        //   ccontent = ctext / quoted-pair / comment
-                        switch ($this->token) {
+                case Email::CONTEXT_FWS:
+                    // http://tools.ietf.org/html/rfc5322#section-3.2.2
+                    //   FWS = ([*WSP CRLF] 1*WSP) /  obs-FWS
+                    //                                          ; Folding white space
 
-                            // Nested comment
-                            case Email::STRING_OPENPARENTHESIS:
-                                // Nested comments are OK
-                                $this->contextStack[] = $this->context;
-                                $this->context = Email::CONTEXT_COMMENT;
-                                break;
-
-                            // End of comment
-                            case Email::STRING_CLOSEPARENTHESIS:
-                                $this->contextPrior = $this->context;
-                                $this->context = (int) array_pop($this->contextStack);
-
-                                // http://tools.ietf.org/html/rfc5322#section-3.2.2
-                                //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
-                                //   structured header field are semantically interpreted as a single
-                                //   space character.
-                                //
-                                // is_email() author's note: This *cannot* mean that we must add a
-                                // space to the address wherever CFWS appears. This would result in
-                                // any addr-spec that had CFWS outside a quoted string being invalid
-                                // for RFC 5321.
-                                //
-                                // if (($this->context === Email::COMPONENT_LOCALPART) || ($this->context === Email::COMPONENT_DOMAIN)) {
-                                //     $this->parsedata[$this->context] .= Email::STRING_SP;
-                                //     $this->atomlist[$this->context][$this->elementCount] .= Email::STRING_SP;
-                                //     $this->elementLen++;
-                                // }
-
-                                break;
-
-                            // Quoted pair
-                            case Email::STRING_BACKSLASH:
-                                $this->contextStack[] = $this->context;
-                                $this->context = Email::CONTEXT_QUOTEDPAIR;
-                                break;
-
-                            // Folding White Space
-                            case Email::STRING_CR:
-                            case Email::STRING_SP:
-                            case Email::STRING_HTAB:
-                                if (($this->token === Email::STRING_CR) && ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF))) {
-                                    // Fatal error
-                                    $this->returnStatus[] = Email::ERR_CR_NO_LF;
-                                    break;
-                                }
-
-                                $this->returnStatus[] = Email::CFWS_FWS;
-
-                                $this->contextStack[] = $this->context;
-                                $this->context = Email::CONTEXT_FWS;
-                                $this->tokenPrior = $this->token;
-                                break;
-
-                            // ctext
-                            default:
-                                // http://tools.ietf.org/html/rfc5322#section-3.2.3
-                                //   ctext = %d33-39 /          ; Printable US-ASCII
-                                //                       %d42-91 /          ;  characters not including
-                                //                       %d93-126 /         ;  "(", ")", or "\"
-                                //                       obs-ctext
-                                //
-                                //   obs-ctext = obs-NO-WS-CTL
-                                //
-                                //   obs-NO-WS-CTL = %d1-8 /            ; US-ASCII control
-                                //                       %d11 /             ;  characters that do not
-                                //                       %d12 /             ;  include the carriage
-                                //                       %d14-31 /          ;  return, line feed, and
-                                //                       %d127              ;  white space characters
-                                $ord = ord($this->token);
-
-                                if (($ord > 127) || ($ord === 0) || ($ord === 10)) {
-                                    $this->returnStatus[] = Email::ERR_EXPECTING_CTEXT; // Fatal error
-                                    break;
-                                } elseif (($ord < 32) || ($ord === 127)) {
-                                    $this->returnStatus[] = Email::DEPREC_CTEXT;
-                                }
+                    // But note the erratum:
+                    // http://www.rfc-editor.org/errata_search.php?rfc = 5322&eid = 1908:
+                    //   In the obsolete syntax, any amount of folding white space MAY be
+                    //   inserted where the obs-FWS rule is allowed.  This creates the
+                    //   possibility of having two consecutive "folds" in a line, and
+                    //   therefore the possibility that a line which makes up a folded header
+                    //   field could be composed entirely of white space.
+                    //
+                    //   obs-FWS = 1*([CRLF] WSP)
+                    if ($this->tokenPrior === Email::STRING_CR) {
+                        if ($this->token === Email::STRING_CR) {
+                            // Fatal error
+                            $this->returnStatus[] = Email::ERR_FWS_CRLF_X2;
+                            break;
                         }
 
-                        break;
+                        if (isset($crlf_count)) {
+                            if (++$crlf_count > 1) {
+                                $this->returnStatus[] = Email::DEPREC_FWS;
+                            } // Multiple folds = obsolete FWS
+                        } else {
+                            $crlf_count = 1;
+                        }
+                    }
 
-                    //-------------------------------------------------------------
-                    // Folding White Space
-                    //-------------------------------------------------------------
+                    switch ($this->token) {
+                        case Email::STRING_CR:
+                            if ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF)) {
+                                 // Fatal error
+                                $this->returnStatus[] = Email::ERR_CR_NO_LF;
+                            }
+                            break;
 
-                    case Email::CONTEXT_FWS:
-                        // http://tools.ietf.org/html/rfc5322#section-3.2.2
-                        //   FWS = ([*WSP CRLF] 1*WSP) /  obs-FWS
-                        //                                          ; Folding white space
+                        case Email::STRING_SP:
+                        case Email::STRING_HTAB:
+                            break;
 
-                        // But note the erratum:
-                        // http://www.rfc-editor.org/errata_search.php?rfc = 5322&eid = 1908:
-                        //   In the obsolete syntax, any amount of folding white space MAY be
-                        //   inserted where the obs-FWS rule is allowed.  This creates the
-                        //   possibility of having two consecutive "folds" in a line, and
-                        //   therefore the possibility that a line which makes up a folded header
-                        //   field could be composed entirely of white space.
-                        //
-                        //   obs-FWS = 1*([CRLF] WSP)
-                        if ($this->tokenPrior === Email::STRING_CR) {
-                            if ($this->token === Email::STRING_CR) {
+                        default:
+                            if ($this->tokenPrior === Email::STRING_CR) {
                                 // Fatal error
-                                $this->returnStatus[] = Email::ERR_FWS_CRLF_X2;
+                                $this->returnStatus[] = Email::ERR_FWS_CRLF_END;
                                 break;
                             }
 
                             if (isset($crlf_count)) {
-                                if (++$crlf_count > 1) {
-                                    $this->returnStatus[] = Email::DEPREC_FWS;
-                                } // Multiple folds = obsolete FWS
-                            } else {
-                                $crlf_count = 1;
+                                unset($crlf_count);
                             }
-                        }
 
-                        switch ($this->token) {
-                            case Email::STRING_CR:
-                                if ((++$i === $this->rawLength) || ($this->email[$i] !== Email::STRING_LF)) {
-                                     // Fatal error
-                                    $this->returnStatus[] = Email::ERR_CR_NO_LF;
-                                }
-                                break;
+                            $this->contextPrior = $this->context;
+                            $this->context = (int) array_pop($this->contextStack); // End of FWS
 
-                            case Email::STRING_SP:
-                            case Email::STRING_HTAB:
-                                break;
+                            // http://tools.ietf.org/html/rfc5322#section-3.2.2
+                            //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
+                            //   structured header field are semantically interpreted as a single
+                            //   space character.
+                            //
+                            // is_email() author's note: This *cannot* mean that we must add a
+                            // space to the address wherever CFWS appears. This would result in
+                            // any addr-spec that had CFWS outside a quoted string being invalid
+                            // for RFC 5321.
+                            //
+                            // if (($this->context === Email::COMPONENT_LOCALPART) || ($this->context === Email::COMPONENT_DOMAIN)) {
+                            //     $this->parsedata[$this->context] .= Email::STRING_SP;
+                            //     $this->atomlist[$this->context][$this->elementCount] .= Email::STRING_SP;
+                            //     $this->elementLen++;
+                            // }
 
-                            default:
-                                if ($this->tokenPrior === Email::STRING_CR) {
-                                    // Fatal error
-                                    $this->returnStatus[] = Email::ERR_FWS_CRLF_END;
-                                    break;
-                                }
+                            $i--; // Look at this token again in the parent context
+                    }
 
-                                if (isset($crlf_count)) {
-                                    unset($crlf_count);
-                                }
+                    $this->tokenPrior = $this->token;
+                    break;
 
-                                $this->contextPrior = $this->context;
-                                $this->context = (int) array_pop($this->contextStack); // End of FWS
-
-                                // http://tools.ietf.org/html/rfc5322#section-3.2.2
-                                //   Runs of FWS, comment, or CFWS that occur between lexical tokens in a
-                                //   structured header field are semantically interpreted as a single
-                                //   space character.
-                                //
-                                // is_email() author's note: This *cannot* mean that we must add a
-                                // space to the address wherever CFWS appears. This would result in
-                                // any addr-spec that had CFWS outside a quoted string being invalid
-                                // for RFC 5321.
-                                //
-                                // if (($this->context === Email::COMPONENT_LOCALPART) || ($this->context === Email::COMPONENT_DOMAIN)) {
-                                //     $this->parsedata[$this->context] .= Email::STRING_SP;
-                                //     $this->atomlist[$this->context][$this->elementCount] .= Email::STRING_SP;
-                                //     $this->elementLen++;
-                                // }
-
-                                $i--; // Look at this token again in the parent context
-                        }
-
-                        $this->tokenPrior = $this->token;
-                        break;
-
-                //-------------------------------------------------------------
-                // A context we aren't expecting
-                //-------------------------------------------------------------
-                default:
-                    throw new Exception("Unknown context: $this->context");
-            }
-
-            if ((int) max($this->returnStatus) > Email::RFC5322) {
-                // No point going on if we've got a fatal error
-                break;
-            }
+            //-------------------------------------------------------------
+            // A context we aren't expecting
+            //-------------------------------------------------------------
+            default:
+                throw new Exception("Unknown context: $this->context");
         }
+    }
 
+    protected function parseFinal()
+    {
         // Some simple final tests
         if ((int) max($this->returnStatus) < Email::RFC5322) {
             if ($this->context === Email::CONTEXT_QUOTEDSTRING) {
