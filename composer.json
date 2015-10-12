@@ -35,6 +35,11 @@
             }
         }
     },
+    "suggest": {
+        "ext-iconv": "To support UTF-8 in string-length filters.",
+        "ext-intl": "To support IDNs in email filters.",
+        "ext-mbstring": "To support UTF-8 in string-length filters."
+    },
     "require-dev": {
         "aura/di": "~2.0"
     },
