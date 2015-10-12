@@ -19,7 +19,7 @@ class EmailTest extends AbstractValidateTest
         $provide = array();
         foreach ($xml->test as $test) {
             if ($this->isValidAddressRegardlessOfDns($test)) {
-                $provide[(string) $test['id']] = array((string) $test->address);
+                $this->appendToProvide($provide, $test);
             }
         }
         return $provide;
@@ -31,7 +31,7 @@ class EmailTest extends AbstractValidateTest
         $provide = array();
         foreach ($xml->test as $test) {
             if (! $this->isValidAddressRegardlessOfDns($test)) {
-                $provide[(string) $test['id']] = array((string) $test->address);
+                $this->appendToProvide($provide, $test);
             }
         }
         return $provide;
@@ -43,5 +43,29 @@ class EmailTest extends AbstractValidateTest
             || $test->diagnosis == 'ISEMAIL_RFC5321_IPV6DEPRECATED'
             || $test->category == 'ISEMAIL_RFC5321'
             || $test->category == 'ISEMAIL_DNSWARN';
+    }
+
+    protected function appendToProvide(&$provide, $test)
+    {
+        $provide[(string) $test['id']] = array(
+            $this->convertSymbolsToControls((string) $test->address)
+        );
+    }
+
+    /**
+     * The XML test file uses text symbol strings to represent ASCII control
+     * codes. This converts the text symbols to the actual control characters.
+     */
+    protected function convertSymbolsToControls($address)
+    {
+        // &#x2407; => BEL 7 ␇
+        // &#x2409; => HT 9  ␉
+        // &#x240A; => LF 10 ␊
+        // &#x240D; => CR 13 ␍
+        return str_replace(
+            ['␇', '␉', '␊', '␍'],
+            [chr(7), chr(9), chr(10), chr(13)],
+            $address
+        );
     }
 }

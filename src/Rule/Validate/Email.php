@@ -160,7 +160,28 @@ class Email
      */
     public function __invoke($subject, $field)
     {
-        return $this->isEmail($subject->$field);
+        $email = $subject->$field;
+        if ($this->intl()) {
+            $email = $this->punymail($email);
+        }
+        return $this->isEmail($email);
+    }
+
+    protected function intl()
+    {
+        return extension_loaded('intl');
+    }
+
+    protected function punymail($email)
+    {
+        $parts = explode('@', $email);
+        if (count($parts) < 2) {
+            // no @ symbol
+            return $email;
+        }
+
+        $domain = array_pop($parts);
+        return implode('@', $parts) . '@' . idn_to_ascii($domain);
     }
 
     /**
