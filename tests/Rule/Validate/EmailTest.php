@@ -22,6 +22,11 @@ class EmailTest extends AbstractValidateTest
                 $this->appendToProvide($provide, $test);
             }
         }
+
+        // add IDN addresses here so we don't pollute the original XML file.
+        // addresses courtesy of David Grudl.
+        $provide['idn-1'] = array('test@háčkyčárky.cz');
+        $provide['idn-2'] = array('test@example.укр');
         return $provide;
     }
 

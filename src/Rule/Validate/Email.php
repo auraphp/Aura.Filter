@@ -12,9 +12,52 @@ use Aura\Filter\Exception;
 
 /**
  *
- * Validates that the value is an email address.
+ * Check that an email address conforms to RFCs 5321, 5322 and others.
+ *
+ * As of Version 3.0, we are now distinguishing clearly between a Mailbox
+ * as defined by RFC 5321 and an addr-spec as defined by RFC 5322. Depending
+ * on the context, either can be regarded as a valid email address. The
+ * RFC 5321 Mailbox specification is more restrictive (comments, white space
+ * and obsolete forms are not allowed).
+ *
+ * Read the following RFCs to understand the constraints:
+ *
+ * - <http://tools.ietf.org/html/rfc5321>
+ * - <http://tools.ietf.org/html/rfc5322>
+ * - <http://tools.ietf.org/html/rfc4291#section-2.2>
+ * - <http://tools.ietf.org/html/rfc1123#section-2.1>
+ * - <http://tools.ietf.org/html/rfc3696> (guidance only)
+ *
+ * Copyright © 2008-2011, Dominic Sayers
+ * Test schema documentation Copyright © 2011, Daniel Marschall
+ * All rights reserved.
+ *
+ * ---
+ *
+ * N.B.: Refactored by Paul M. Jones, from Dominic Sayers' is_email() function
+ * to methods and properties. Errors and omissions should be presumed to be a
+ * result of the refactoring, not of the original function.
+ *
+ * Further, this validation rule converts IDNs to ASCII, which is not required
+ * per se by any of the email RFCs.
+ *
+ * ---
  *
  * @package Aura.Filter
+ *
+ * @author Dominic Sayers <dominic@sayers.cc>
+ *
+ * @author Paul M. Jones <pmjones88@gmail.com>
+ *
+ * @copyright 2008-2011 Dominic Sayers
+ *
+ * @copyright 2015 Paul M. Jones
+ *
+ * @license http://www.opensource.org/licenses/bsd-license.php BSD License
+ *
+ * @link http://www.dominicsayers.com/isemail
+ *
+ * @version 3.04.1 - Changed my link to http://isemail.info throughout
  *
  */
 class Email
@@ -53,7 +96,8 @@ class Email
     const DEPREC_COMMENT = 37;
     const DEPREC_CTEXT = 38;
     const DEPREC_CFWS_NEAR_AT = 49;
-    // The address is only valid according to the broad definition of RFC 5322. It is otherwise invalid.
+    // The address is only valid according to the broad definition of RFC 5322.
+    // It is otherwise invalid.
     const RFC5322_DOMAIN = 65;
     const RFC5322_TOOLONG = 66;
     const RFC5322_LOCAL_TOOLONG = 67;
@@ -122,29 +166,197 @@ class Email
     const STRING_LF = "\n";
     const STRING_IPV6TAG = 'IPv6:';
 
-    // US-ASCII visible characters not valid for atext (http://tools.ietf.org/html/rfc5322#section-3.2.3)
+    // US-ASCII visible characters not valid for atext
+    // <http://tools.ietf.org/html/rfc5322#section-3.2.3>
     const STRING_SPECIALS = '()<>[]:;@\\,."';
 
+    /**
+     *
+     * The email address being checked.
+     *
+     * @var string
+     *
+     */
     protected $email;
+
+    /**
+     *
+     * Check DNS as part of validation?
+     *
+     * @var bool
+     *
+     */
     protected $checkDns;
+
+    /**
+     *
+     * The validation threshold level.
+     *
+     * @var int
+     *
+     */
     protected $threshold;
+
+    /**
+     *
+     * Diagnose errors?
+     *
+     * @var bool
+     *
+     */
     protected $diagnose;
+
+    /**
+     *
+     * Has DNS been checked?
+     *
+     * @var bool
+     *
+     */
     protected $dnsChecked;
+
+    /**
+     *
+     * The return status.
+     *
+     * @var int
+     *
+     */
     protected $returnStatus;
+
+    /**
+     *
+     * The length of the email address being checked.
+     *
+     * @var int
+     *
+     */
     protected $rawLength;
+
+    /**
+     *
+     * The current parser context.
+     *
+     * @var int
+     *
+     */
     protected $context;
+
+    /**
+     *
+     * Parser context stack.
+     *
+     * @var array
+     *
+     */
     protected $contextStack;
+
+    /**
+     *
+     * The prior parser context.
+     *
+     * @var int
+     *
+     */
     protected $contextPrior;
+
+    /**
+     *
+     * The current token being parsed.
+     *
+     * @var string
+     *
+     */
     protected $token;
+
+    /**
+     *
+     * The previous token being parsed.
+     *
+     * @var string
+     *
+     */
     protected $tokenPrior;
-    protected $parsedata;
-    protected $atomlist;
+
+    /**
+     *
+     * The components of the address.
+     *
+     * @var array
+     *
+     */
+    protected $parseData;
+
+    /**
+     *
+     * The dot-atom elements of the address.
+     *
+     * @var array
+     *
+     */
+    protected $atomList;
+
+    /**
+     *
+     * Element count.
+     *
+     * @var int
+     *
+     */
     protected $elementCount;
+
+    /**
+     *
+     * Element length.
+     *
+     * @var int
+     *
+     */
     protected $elementLen;
+
+    /**
+     *
+     * Is a hyphen allowed?
+     *
+     * @var bool
+     *
+     */
     protected $hyphenFlag;
+
+    /**
+     *
+     * CFWS can only appear at the end of the element
+     *
+     * @var bool
+     *
+     */
     protected $endOrDie;
+
+    /**
+     *
+     * Current position in the email string.
+     *
+     * @var int
+     *
+     */
     protected $pos;
+
+    /**
+     *
+     * Count of CRLF occurrences.
+     *
+     * @var null|int
+     *
+     */
     protected $crlfCount;
+
+    /**
+     *
+     * The final status of email validation.
+     *
+     * @var int
+     *
+     */
     protected $finalStatus;
 
     /**
@@ -162,72 +374,65 @@ class Email
     {
         $email = $subject->$field;
         if ($this->intl()) {
-            $email = $this->punymail($email);
+            $email = $this->idnToAscii($email);
         }
         return $this->isEmail($email);
     }
 
+    /**
+     *
+     * Is the intl extension loaded?
+     *
+     * @return bool
+     *
+     */
     protected function intl()
     {
         return extension_loaded('intl');
     }
 
-    protected function punymail($email)
+    /**
+     *
+     * Converts an international domain in the email address to ASCII.
+     *
+     * @param string $email The email address to check.
+     *
+     * @return string The email with the IDN converted to ASCII (if possible).
+     *
+     */
+    protected function idnToAscii($email)
     {
         $parts = explode('@', $email);
-        if (count($parts) < 2) {
-            // no @ symbol
+        $domain = array_pop($parts);
+        if (! $parts) {
+            // no parts remaining, so no @ symbol, so not valid to begin with
             return $email;
         }
 
-        $domain = array_pop($parts);
+        // put the parts back together, with the domain part converted to ascii
         return implode('@', $parts) . '@' . idn_to_ascii($domain);
     }
 
     /**
-     * Check that an email address conforms to RFCs 5321, 5322 and others
      *
-     * As of Version 3.0, we are now distinguishing clearly between a Mailbox
-     * as defined by RFC 5321 and an addr-spec as defined by RFC 5322. Depending
-     * on the context, either can be regarded as a valid email address. The
-     * RFC 5321 Mailbox specification is more restrictive (comments, white space
-     * and obsolete forms are not allowed)
+     * Checks that an email address conforms to RFCs 5321, 5322 and others,
+     * allowing for international domain names when the intl extension is
+     * loaded.
      *
-     * Check that $this->email is a valid address. Read the following RFCs to understand the constraints:
-     *  (http://tools.ietf.org/html/rfc5321)
-     *  (http://tools.ietf.org/html/rfc5322)
-     *  (http://tools.ietf.org/html/rfc4291#section-2.2)
-     *  (http://tools.ietf.org/html/rfc1123#section-2.1)
-     *  (http://tools.ietf.org/html/rfc3696) (guidance only)
-     * version 2.0: Enhance $this->diagnose parameter to $errorlevel
-     * version 3.0: Introduced status categories
-     * revision 3.1: BUG: $this->parsedata was passed by value instead of by reference
+     * @param string $email The email address to check.
      *
-     * Copyright © 2008-2011, Dominic Sayers
-     * Test schema documentation Copyright © 2011, Daniel Marschall
-     * All rights reserved.
+     * @param bool $checkDns Make a DNS check for MX records?
      *
-     * @author  Dominic Sayers <dominic@sayers.cc>
-     * @copyright   2008-2011 Dominic Sayers
-     * @license http://www.opensource.org/licenses/bsd-license.php BSD License
-     * @link    http://www.dominicsayers.com/isemail
-     * @version 3.04.1 - Changed my link to http://isemail.info throughout
+     * @param mixed $errorlevel Determines the boundary between valid and
+     * invalid addresses. Status codes above this number will be returned as-
+     * is, status codes below will be returned as Email::VALID. Thus the
+     * calling program can simply look for Email::VALID if it is only
+     * interested in whether an address is valid or not. The errorlevel will
+     * determine how "picky" is_email() is about the address. If omitted or
+     * passed as false then isEmail() will return true or false rather than
+     * an integer error or warning. N.B.: Note the difference between
+     * $errorlevel = false and $errorlevel = 0.
      *
-     * @param string    $email      The email address to check
-     * @param boolean   $checkDns   If true then a DNS check for MX records will be made
-     * @param mixed     $errorlevel Determines the boundary between valid and invalid addresses.
-     *                  Status codes above this number will be returned as-is,
-     *                  status codes below will be returned as Email::VALID. Thus the
-     *                  calling program can simply look for Email::VALID if it is
-     *                  only interested in whether an address is valid or not. The
-     *                  errorlevel will determine how "picky" is_email() is about
-     *                  the address.
-     *
-     *                  If omitted or passed as false then is_email() will return
-     *                  true or false rather than an integer error or warning.
-     *
-     *                  NB Note the difference between $errorlevel = false and
-     *                  $errorlevel = 0
      */
     protected function isEmail($email, $checkDns = false, $errorlevel = false)
     {
@@ -241,6 +446,20 @@ class Email
             : ($this->finalStatus < Email::THRESHOLD);
     }
 
+    /**
+     *
+     * Resets the validation rule for a new email address.
+     *
+     * @param string $email The email address to check.
+     *
+     * @param bool $checkDns Make a DNS check for MX records?
+     *
+     * @param mixed $errorlevel Determines the boundary between valid and
+     * invalid addresses.
+     *
+     * @return null
+     *
+     */
     protected function reset($email, $checkDns, $errorlevel)
     {
         $this->email = $email;
@@ -269,13 +488,13 @@ class Email
         $this->tokenPrior = '';
 
         // For the components of the address
-        $this->parsedata = array(
+        $this->parseData = array(
             Email::COMPONENT_LOCALPART => '',
             Email::COMPONENT_DOMAIN => ''
         );
 
         // For the dot-atom elements of the address
-        $this->atomlist = array(
+        $this->atomList = array(
             Email::COMPONENT_LOCALPART => array(''),
             Email::COMPONENT_DOMAIN => array('')
         );
@@ -294,6 +513,16 @@ class Email
         $this->crlfCount = null;
     }
 
+    /**
+     *
+     * Sets the $threshold and $diagnose properties.
+     *
+     * @param mixed $errorlevel Determines the boundary between valid and
+     * invalid addresses.
+     *
+     * @return null
+     *
+     */
     protected function setThresholdDiagnose($errorlevel)
     {
         if (is_bool($errorlevel)) {
@@ -318,9 +547,15 @@ class Email
         }
     }
 
+    /**
+     *
+     * Parse the address into components, character by character.
+     *
+     * @return null
+     *
+     */
     protected function parse()
     {
-        // Parse the address into components, character by character
         for ($this->pos = 0; $this->pos < $this->rawLength; $this->pos++) {
             $this->token = $this->email[$this->pos];
             $this->parseContext();
@@ -332,6 +567,13 @@ class Email
         $this->parseFinal();
     }
 
+    /**
+     *
+     * Parse for the current context.
+     *
+     * @return null
+     *
+     */
     protected function parseContext()
     {
         switch ($this->context) {
@@ -361,6 +603,13 @@ class Email
         }
     }
 
+    /**
+     *
+     * Parse for the local part component.
+     *
+     * @return null
+     *
+     */
     protected function parseComponentLocalPart()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.4.1
@@ -418,8 +667,8 @@ class Email
                 $this->endOrDie = false;
                 $this->elementLen = 0;
                 $this->elementCount++;
-                $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] = '';
+                $this->parseData[Email::COMPONENT_LOCALPART] .= $this->token;
+                $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] = '';
 
                 break;
 
@@ -432,8 +681,8 @@ class Email
                         ? Email::RFC5321_QUOTEDSTRING
                         : Email::DEPREC_LOCALPART;
 
-                    $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                    $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                    $this->parseData[Email::COMPONENT_LOCALPART] .= $this->token;
+                    $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
                     $this->elementLen++;
                     // Quoted string must be the entire element
                     $this->endOrDie = true;
@@ -476,13 +725,13 @@ class Email
                     throw new Exception('Unexpected item on context stack');
                 }
 
-                if ($this->parsedata[Email::COMPONENT_LOCALPART] === '') {
+                if ($this->parseData[Email::COMPONENT_LOCALPART] === '') {
                     // Fatal error
                     $this->returnStatus[] = Email::ERR_NOLOCALPART;
                 } elseif ($this->elementLen === 0) {
                     // Fatal error
                     $this->returnStatus[] = Email::ERR_DOT_END;
-                } elseif (strlen($this->parsedata[Email::COMPONENT_LOCALPART]) > 64) {
+                } elseif (strlen($this->parseData[Email::COMPONENT_LOCALPART]) > 64) {
                     // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.1
                     //   The maximum total length of a user name or other local-part is 64
                     //   octets.
@@ -546,13 +795,20 @@ class Email
                         $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
                     }
 
-                    $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                    $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                    $this->parseData[Email::COMPONENT_LOCALPART] .= $this->token;
+                    $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
                     $this->elementLen++;
                 }
         }
     }
 
+    /**
+     *
+     * Parse for the domain component.
+     *
+     * @return null
+     *
+     */
     protected function parseComponentDomain()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.4.1
@@ -646,22 +902,22 @@ class Email
                 $this->endOrDie = false;
                 $this->elementLen = 0;
                 $this->elementCount++;
-                $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] = '';
-                $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
+                $this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount] = '';
+                $this->parseData[Email::COMPONENT_DOMAIN] .= $this->token;
 
                 break;
 
             // Domain literal
             case Email::STRING_OPENSQBRACKET:
-                if ($this->parsedata[Email::COMPONENT_DOMAIN] === '') {
+                if ($this->parseData[Email::COMPONENT_DOMAIN] === '') {
                     // Domain literal must be the only component
                     $this->endOrDie = true;
                     $this->elementLen++;
                     $this->contextStack[] = $this->context;
                     $this->context = Email::COMPONENT_LITERAL;
-                    $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                    $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
-                    $this->parsedata[Email::COMPONENT_LITERAL] = '';
+                    $this->parseData[Email::COMPONENT_DOMAIN] .= $this->token;
+                    $this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                    $this->parseData[Email::COMPONENT_LITERAL] = '';
                 } else {
                     // Fatal error
                     $this->returnStatus[] = Email::ERR_EXPECTING_ATEXT;
@@ -751,12 +1007,19 @@ class Email
                     $this->returnStatus[] = Email::RFC5322_DOMAIN;
                 }
 
-                $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_DOMAIN] .= $this->token;
+                $this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
                 $this->elementLen++;
         }
     }
 
+    /**
+     *
+     * Parse for a literal component.
+     *
+     * @return null
+     *
+     */
     protected function parseComponentLiteral()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.4.1
@@ -827,7 +1090,7 @@ class Email
                     $max_groups = 8;
                     $matchesIP = array();
                     $index = false;
-                    $addressliteral = $this->parsedata[Email::COMPONENT_LITERAL];
+                    $addressliteral = $this->parseData[Email::COMPONENT_LITERAL];
 
                     // Extract IPv4 part from the end of the address-literal (if there is one)
                     if (preg_match('/\\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/', $addressliteral, $matchesIP) > 0) {
@@ -891,8 +1154,8 @@ class Email
                     $this->returnStatus[] = Email::RFC5322_DOMAINLITERAL;
                 }
 
-                $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_DOMAIN] .= $this->token;
+                $this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
                 $this->elementLen++;
                 $this->contextPrior = $this->context;
                 $this->context = (int) array_pop($this->contextStack);
@@ -945,13 +1208,20 @@ class Email
                     $this->returnStatus[] = Email::RFC5322_DOMLIT_OBSDTEXT;
                 }
 
-                $this->parsedata[Email::COMPONENT_LITERAL] .= $this->token;
-                $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_LITERAL] .= $this->token;
+                $this->parseData[Email::COMPONENT_DOMAIN] .= $this->token;
+                $this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
                 $this->elementLen++;
         }
     }
 
+    /**
+     *
+     * Parse for a quoted-string context.
+     *
+     * @return null
+     *
+     */
     protected function parseContextQuotedString()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.4
@@ -987,8 +1257,8 @@ class Email
                 // http://tools.ietf.org/html/rfc5322#section-3.2.4
                 //   the CRLF in any FWS/CFWS that appears within the quoted-string [is]
                 //   semantically "invisible" and therefore not part of the quoted-string
-                $this->parsedata[Email::COMPONENT_LOCALPART] .= Email::STRING_SP;
-                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= Email::STRING_SP;
+                $this->parseData[Email::COMPONENT_LOCALPART] .= Email::STRING_SP;
+                $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] .= Email::STRING_SP;
                 $this->elementLen++;
 
                 $this->returnStatus[] = Email::CFWS_FWS;
@@ -999,8 +1269,8 @@ class Email
 
             // End of quoted string
             case Email::STRING_DQUOTE:
-                $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_LOCALPART] .= $this->token;
+                $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
                 $this->elementLen++;
                 $this->contextPrior = $this->context;
                 $this->context = (int) array_pop($this->contextStack);
@@ -1030,8 +1300,8 @@ class Email
                     $this->returnStatus[] = Email::DEPREC_QTEXT;
                 }
 
-                $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_LOCALPART] .= $this->token;
+                $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
                 $this->elementLen++;
         }
 
@@ -1045,6 +1315,13 @@ class Email
         //
     }
 
+    /**
+     *
+     * Parse for a quoted-pair context.
+     *
+     * @return null
+     *
+     */
     protected function parseContextQuotedPair()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.1
@@ -1089,14 +1366,14 @@ class Email
             case Email::CONTEXT_COMMENT:
                 break;
             case Email::CONTEXT_QUOTEDSTRING:
-                $this->parsedata[Email::COMPONENT_LOCALPART] .= $this->token;
-                $this->atomlist[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_LOCALPART] .= $this->token;
+                $this->atomList[Email::COMPONENT_LOCALPART][$this->elementCount] .= $this->token;
                 // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
                 $this->elementLen += 2;
                 break;
             case Email::COMPONENT_LITERAL:
-                $this->parsedata[Email::COMPONENT_DOMAIN] .= $this->token;
-                $this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
+                $this->parseData[Email::COMPONENT_DOMAIN] .= $this->token;
+                $this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount] .= $this->token;
                 // The maximum sizes specified by RFC 5321 are octet counts, so we must include the backslash
                 $this->elementLen += 2;
                 break;
@@ -1105,6 +1382,13 @@ class Email
         }
     }
 
+    /**
+     *
+     * Parse for a comment context.
+     *
+     * @return null
+     *
+     */
     protected function parseContextComment()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.2
@@ -1136,8 +1420,8 @@ class Email
                 // for RFC 5321.
                 //
                 // if (($this->context === Email::COMPONENT_LOCALPART) || ($this->context === Email::COMPONENT_DOMAIN)) {
-                //     $this->parsedata[$this->context] .= Email::STRING_SP;
-                //     $this->atomlist[$this->context][$this->elementCount] .= Email::STRING_SP;
+                //     $this->parseData[$this->context] .= Email::STRING_SP;
+                //     $this->atomList[$this->context][$this->elementCount] .= Email::STRING_SP;
                 //     $this->elementLen++;
                 // }
 
@@ -1192,6 +1476,13 @@ class Email
         }
     }
 
+    /**
+     *
+     * Parse for a folding-white-space context.
+     *
+     * @return null
+     *
+     */
     protected function parseContextFws()
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.2
@@ -1260,8 +1551,8 @@ class Email
                 // for RFC 5321.
                 //
                 // if (($this->context === Email::COMPONENT_LOCALPART) || ($this->context === Email::COMPONENT_DOMAIN)) {
-                //     $this->parsedata[$this->context] .= Email::STRING_SP;
-                //     $this->atomlist[$this->context][$this->elementCount] .= Email::STRING_SP;
+                //     $this->parseData[$this->context] .= Email::STRING_SP;
+                //     $this->atomList[$this->context][$this->elementCount] .= Email::STRING_SP;
                 //     $this->elementLen++;
                 // }
 
@@ -1271,6 +1562,13 @@ class Email
         $this->tokenPrior = $this->token;
     }
 
+    /**
+     *
+     * Final wrap-up parsing.
+     *
+     * @return null
+     *
+     */
     protected function parseFinal()
     {
         // Some simple final tests
@@ -1290,7 +1588,7 @@ class Email
             } elseif ($this->token === Email::STRING_CR) {
                 // Fatal error
                 $this->returnStatus[] = Email::ERR_FWS_CRLF_END;
-            } elseif ($this->parsedata[Email::COMPONENT_DOMAIN] === '') {
+            } elseif ($this->parseData[Email::COMPONENT_DOMAIN] === '') {
                 // Fatal error
                 $this->returnStatus[] = Email::ERR_NODOMAIN;
             } elseif ($this->elementLen === 0) {
@@ -1299,11 +1597,11 @@ class Email
             } elseif ($this->hyphenFlag) {
                 // Fatal error
                 $this->returnStatus[] = Email::ERR_DOMAINHYPHENEND;
-            } elseif (strlen($this->parsedata[Email::COMPONENT_DOMAIN]) > 255) {
+            } elseif (strlen($this->parseData[Email::COMPONENT_DOMAIN]) > 255) {
                 // http://tools.ietf.org/html/rfc5321#section-4.5.3.1.2
                 //   The maximum total length of a domain name or number is 255 octets.
                 $this->returnStatus[] = Email::RFC5322_DOMAIN_TOOLONG;
-            } elseif (strlen($this->parsedata[Email::COMPONENT_LOCALPART] . Email::STRING_AT . $this->parsedata[Email::COMPONENT_DOMAIN]) > 254) {
+            } elseif (strlen($this->parseData[Email::COMPONENT_LOCALPART] . Email::STRING_AT . $this->parseData[Email::COMPONENT_DOMAIN]) > 254) {
                 // http://tools.ietf.org/html/rfc5321#section-4.1.2
                 //   Forward-path = Path
                 //
@@ -1331,6 +1629,13 @@ class Email
         }
     }
 
+    /**
+     *
+     * Make a DNS check on the MX record, if requested.
+     *
+     * @return null
+     *
+     */
     protected function checkDns()
     {
         // Check DNS?
@@ -1354,10 +1659,10 @@ class Email
             // raise a warning because we didn't immediately find an MX record.
             if ($this->elementCount === 0) {
                 // Checking TLD DNS seems to work only if you explicitly check from the root
-                $this->parsedata[Email::COMPONENT_DOMAIN] .= '.';
+                $this->parseData[Email::COMPONENT_DOMAIN] .= '.';
             }
 
-            $result = @dns_get_record($this->parsedata[Email::COMPONENT_DOMAIN], DNS_MX); // Not using checkdnsrr because of a suspected bug in PHP 5.3 (http://bugs.php.net/bug.php?id = 51844)
+            $result = @dns_get_record($this->parseData[Email::COMPONENT_DOMAIN], DNS_MX); // Not using checkdnsrr because of a suspected bug in PHP 5.3 (http://bugs.php.net/bug.php?id = 51844)
 
             if ((is_bool($result) && !(bool) $result)) {
                 // Domain can't be found in DNS
@@ -1366,7 +1671,7 @@ class Email
                 if (count($result) === 0) {
                     // MX-record for domain can't be found
                     $this->returnStatus[] = Email::DNSWARN_NO_MX_RECORD;
-                    $result = @dns_get_record($this->parsedata[Email::COMPONENT_DOMAIN], DNS_A + DNS_CNAME);
+                    $result = @dns_get_record($this->parseData[Email::COMPONENT_DOMAIN], DNS_A + DNS_CNAME);
                     if (count($result) === 0) {
                         // No usable records for the domain can be found
                         $this->returnStatus[] = Email::DNSWARN_NO_RECORD;
@@ -1378,6 +1683,13 @@ class Email
         }
     }
 
+    /**
+     *
+     * Check the top-level domain of the address.
+     *
+     * @return null
+     *
+     */
     protected function checkTld()
     {
         // Check for TLD addresses
@@ -1417,12 +1729,19 @@ class Email
                 $this->returnStatus[] = Email::RFC5321_TLD;
             }
 
-            if (is_numeric($this->atomlist[Email::COMPONENT_DOMAIN][$this->elementCount][0])) {
+            if (is_numeric($this->atomList[Email::COMPONENT_DOMAIN][$this->elementCount][0])) {
                 $this->returnStatus[] = Email::RFC5321_TLDNUMERIC;
             }
         }
     }
 
+    /**
+     *
+     * Sets the final status and return status.
+     *
+     * @return null
+     *
+     */
     protected function finalStatus()
     {
         $this->returnStatus = array_unique($this->returnStatus);
@@ -1433,7 +1752,7 @@ class Email
             array_shift($this->returnStatus);
         }
 
-        $this->parsedata['status'] = $this->returnStatus;
+        $this->parseData['status'] = $this->returnStatus;
 
         if ($this->finalStatus < $this->threshold) {
             $this->finalStatus = Email::VALID;
