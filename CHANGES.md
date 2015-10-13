@@ -1,26 +1,15 @@
-First 2.0 beta release.
+Second beta release.
 
-- BREAK: Renamed class Filter to SubjectFilter.
+- (ADD) Add UTF-8 support in Alpha, Alnum, Strlen*, and Word filters.
 
-- BREAK: Removed method SubjectFilter::strict() and all "strict" behavior, as get_object_vars() is not guaranteed in some objects (e.g. magic get/set vs public properties)
+    - All string-length filters are now multi-byte aware using either `mbstring` or `iconv` extensions.
 
-- BREAK: Replaced method SubjectFilter::getMessages() et al with getFailures(); failures are now reported as a FailureCollection instead of as an array of text messages.
+    - In alnum and alpha rules, use unicode letters and digits instead of ctype.
 
-- BREAK: Removed classes Rule\Validate\Ipv4 and Ipv6 in favor of allowing flags on
-  Rule\Validate\Ip.
+    - In word rules, use unicode letters and digits instead of \w and \W.
 
-- BREAK: Removed class Rule\Validate\InTableColumn entirely, as it requires a PDO connection. This is better implemented as part of a group of database-related filters, rather than as a special case herein.
+- (ADD) More robust email validation based on is_email() from @dominicsayers, plus IDN support as suggested by @dg via the `intl` extension.
 
-- BREAK: Moved namespace Rule\Locator to Locator.
+- (TEST) Update Travis-CI config to use containers.
 
-- BREAK: Renamed class Spec\AbstractSpec to Spec\Spec.
-
-- BREAK: Removed method Spec\Spec::getFailureMode().
-
-- BREAK: Moved constants from SubjectFilter to Spec\Spec.
-
-- BREAK: Removed methods ValueFilter::assert() and setExceptionClass().
-
-- ADD: Class FilterFactory now takes two constructor params, $validate_factories and $sanitize_factories, to allow injection of rule factories at construction time.
-
-- ADD: Class AbstractStaticFilter to allow users to create static value filters.
+- (DOCS) Update relevant documentation.
