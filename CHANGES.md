@@ -1,6 +1,6 @@
 Second beta release.
 
-- (ADD) Add UTF-8 support in Alpha, Alnum, Strlen*, and Word filters.
+- (ADD) Add UTF-8 support in Alpha, Alnum, Strlen*, and Word filters with help from @mivanov93.
 
     - All string-length filters are now multi-byte aware using either `mbstring` or `iconv` extensions.
 
