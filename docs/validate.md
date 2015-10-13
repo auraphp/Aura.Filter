@@ -73,7 +73,7 @@ $filter->validate('field')->is('dateTime');
 
 ## email
 
-Validates the value as being a properly-formed email address.
+Validates the value as being a properly-formed email address per the various relevant RFCs. If the `intl` extension is loaded, it will also allow for international domain names.
 
 ```php
 $filter->validate('field')->is('email');
