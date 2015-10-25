@@ -59,6 +59,23 @@ class SanitizeSpec extends Spec
         $this->allow_blank = true;
         return $this->init(func_get_args());
     }
+    
+        /**
+     *
+     * Sanitize the using this rule (null allowed).
+     *
+     * @param string $rule The rule name.
+     *
+     * @param ...$args Arguments for the rule.
+     *
+     * @return self
+     *
+     */
+    public function toNullOr($rule)
+    {
+        $this->allow_null = true;
+        return $this->init(func_get_args());
+    }
 
     /**
      *
@@ -74,6 +91,27 @@ class SanitizeSpec extends Spec
         $this->allow_blank = true;
         $this->blank_value = $blank_value;
         return $this;
+    }
+    
+    
+       /**
+     *
+     * Check if the field is allowed to be, and actually is, blank.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool
+     *
+     */
+    protected function applyNull($subject)
+    {
+        if (! parent::applyNull($subject)) {
+            return false;
+        }
+
+        $field = $this->field;
+        $subject->$field = null;
+        return true;
     }
 
     /**

@@ -58,6 +58,34 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
         $expect = 'foo should have sanitized to strlen(3)';
         $this->assertSame($expect, $this->spec->getMessage());
     }
+    
+    public function testToNullOr()
+    {
+        $this->spec->field('foo')->toNullOr('strlen', 3);
+
+        $subject = (object) array();
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = null;
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = 'zimgir';
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame('zim', $subject->foo);
+        
+        
+        $subject->foo = '   ';
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame('   ', $subject->foo);
+        
+         $subject->foo = '';
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame('   ', $subject->foo);
+
+
+        $subject->foo = array();
+        $this->assertFalse($this->spec->__invoke($subject));
+    }
 
     public function testToBlankOr()
     {
@@ -71,6 +99,14 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
 
         $subject->foo = 'zimgir';
         $this->assertTrue($this->spec->__invoke($subject));
+        
+        $subject->foo = '   ';
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame(null, $subject->foo);
+        
+         $subject->foo = '';
+        $this->assertTrue($this->spec->__invoke($subject));
+        $this->assertSame(null, $subject->foo);
 
         $subject->foo = array();
         $this->assertFalse($this->spec->__invoke($subject));
