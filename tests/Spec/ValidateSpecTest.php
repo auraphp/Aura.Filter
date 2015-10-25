@@ -90,12 +90,48 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
 
         $subject->foo = 'bar';
         $this->assertTrue($this->spec->__invoke($subject));
+        
+        $subject->foo = '';
+        $this->assertTrue($this->spec->__invoke($subject));
+        
+        $subject->foo = '   ';
+        $this->assertTrue($this->spec->__invoke($subject));
 
         $subject->foo = 'zimgir';
         $this->assertFalse($this->spec->__invoke($subject));
         $expect = 'foo should have been blank or have validated as strlen(3)';
         $actual = $this->spec->getMessage();
         $this->assertSame($expect, $actual);
+    }
+    
+    public function testIsNullOr()
+    {
+        $this->spec->field('foo')->isNullOr('strlen', 3);
+
+        $subject = (object) array();
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = null;
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = 123;
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = 'bar';
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = 'zimgir';
+        $this->assertFalse($this->spec->__invoke($subject));
+        $expect = 'foo should have been null or have validated as strlen(3)';
+        $actual = $this->spec->getMessage();
+        $this->assertSame($expect, $actual);
+        
+        $subject->foo = '';
+        $this->assertFalse($this->spec->__invoke($subject));
+        $expect = 'foo should have been null or have validated as strlen(3)';
+        $actual = $this->spec->getMessage();
+        $this->assertSame($expect, $actual);
+        
     }
 
 

@@ -61,6 +61,24 @@ class ValidateSpec extends Spec
         $this->reverse = false;
         return $this->init(func_get_args());
     }
+    
+        /**
+     *
+     * Validate the field matches this rule (blank allowed).
+     *
+     * @param string $rule The rule name.
+     *
+     * @param ...$args Arguments for the rule.
+     *
+     * @return self
+     *
+     */
+    public function isNullOr($rule)
+    {
+        $this->allow_null = true;
+        $this->reverse = false;
+        return $this->init(func_get_args());
+    }
 
     /**
      *
@@ -110,6 +128,9 @@ class ValidateSpec extends Spec
         $message = $this->field . ' should';
         if ($this->allow_blank) {
             $message .= ' have been blank or';
+        }  
+        if ($this->allow_null) {
+            $message .= ' have been null or';
         }
         if ($this->reverse) {
             $message .= ' not';
