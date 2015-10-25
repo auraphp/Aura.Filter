@@ -403,10 +403,21 @@ class Spec
      */
     protected function applyRule($subject)
     {
+        $added = false;
         $rule = $this->locator->get($this->rule);
         $args = $this->args;
         array_unshift($args, $this->field);
         array_unshift($args, $subject);
-        return call_user_func_array($rule, $args);
+        if(!isset($subject->{$this->field}) && !property_exists($subject,$this->field))
+        {
+                 $subject->{$this->field} = null;
+                 $added = true;
+        }
+       
+        $result = call_user_func_array($rule, $args);
+        if($added && property_exists($subject,$this->field) && $subject->{$this->field} === null) {
+            unset($subject->{$this->field});
+        }
+        return $result;
     }
 }

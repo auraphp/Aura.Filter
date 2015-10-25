@@ -156,14 +156,26 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($expect, $actual);
         }
     }
+    
+        public function testApply_onObject()
+    {
+        $this->filter->sanitize('foo')->to('strlenMax', 3);
+        $this->filter->sanitize('bar')->to('remove');
+        $this->filter->sanitize('qbar')->to('int');
+        $array = new \stdClass();
+        $array->foo='123456';
+        $result = $this->filter->apply($array);
+        $this->assertFalse($result);
+    }
 
     public function testApply_onArray()
     {
         $this->filter->sanitize('foo')->to('strlenMax', 3);
         $this->filter->sanitize('bar')->to('remove');
+        $this->filter->sanitize('qbar')->to('int');
         $array = array('foo' => '123456', 'bar' => 'remove-me');
         $result = $this->filter->apply($array);
-        $this->assertTrue($result);
+        $this->assertFalse($result);
         $expect = array('foo' => '123');
         $this->assertSame($expect, $array);
     }
