@@ -25,6 +25,15 @@ class SanitizeSpec extends Spec
      *
      */
     protected $blank_value;
+    
+        /**
+     *
+     * If the field is null, use this as the replacement value.
+     *
+     * @param mixed
+     *
+     */
+    protected $null_value;
 
     /**
      *
@@ -93,6 +102,22 @@ class SanitizeSpec extends Spec
         return $this;
     }
     
+        /**
+     *
+     * Use this value for null fields.
+     *
+     * @param mixed $null_value Replace the blank field with this value.
+     *
+     * @return self
+     *
+     */
+    public function useNullValue($null_value)
+    {
+        $this->allow_null = true;
+        $this->null_value = $null_value;
+        return $this;
+    }
+    
     
        /**
      *
@@ -110,7 +135,7 @@ class SanitizeSpec extends Spec
         }
 
         $field = $this->field;
-        $subject->$field = null;
+        $subject->$field =  $this->null_value;
         return true;
     }
 
