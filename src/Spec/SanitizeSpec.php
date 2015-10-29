@@ -49,6 +49,7 @@ class SanitizeSpec extends Spec
     public function to($rule)
     {
         $this->allow_blank = false;
+        $this->allow_null = false;
         return $this->init(func_get_args());
     }
 
@@ -66,6 +67,7 @@ class SanitizeSpec extends Spec
     public function toBlankOr($rule)
     {
         $this->allow_blank = true;
+        $this->allow_null = false;
         return $this->init(func_get_args());
     }
     
