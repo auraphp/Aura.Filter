@@ -25,7 +25,14 @@ class SanitizeSpec extends Spec
      *
      */
     protected $blank_value;
-    
+    /**
+     * 0 = no rand value
+     * 1 = unsafe rand value
+     * 2 = safe rand value
+     * @var int
+     */
+    protected $blank_rand_value=0;
+    protected $blank_rand_value_len=16;
         /**
      *
      * If the field is null, use this as the replacement value.
@@ -34,6 +41,14 @@ class SanitizeSpec extends Spec
      *
      */
     protected $null_value;
+    /**
+     * 0 = no rand value
+     * 1 = unsafe rand value
+     * 2 = safe rand value
+     * @var int
+     */
+    protected $null_rand_value=0;
+    protected $null_rand_value_len=16;
 
     /**
      *
@@ -97,10 +112,12 @@ class SanitizeSpec extends Spec
      * @return self
      *
      */
-    public function useBlankValue($blank_value)
+    public function useBlankValue($blank_value,$blank_rand_value=0,$blank_rand_value_len=16)
     {
         $this->allow_blank = true;
         $this->blank_value = $blank_value;
+        $this->blank_rand_value = (int)$blank_rand_value;
+        $this->blank_rand_value_len = (int)$blank_rand_value_len;
         return $this;
     }
     
@@ -113,17 +130,42 @@ class SanitizeSpec extends Spec
      * @return self
      *
      */
-    public function useNullValue($null_value)
+    public function useNullValue($null_value,$null_rand_value=0,$null_rand_value_len=16)
     {
         $this->allow_null = true;
         $this->null_value = $null_value;
+        $this->null_rand_value = (int)$null_rand_value;
+        $this->null_rand_value_len= (int)$null_rand_value_len;
         return $this;
     }
     
+    /**
+     * Generates a safe/non-safe random string of max length $len
+     * @param bool $safe_rand
+     * @param int $len
+     * @return string
+     */
+    protected function generateRandValue($safe_rand=2,$len=16) 
+    {
+        if($safe_rand === 2 && function_exists('openssl_random_pseudo_bytes')) 
+        {
+            $res_str = base64_encode(openssl_random_pseudo_bytes($len*16,true)) ;
+        }
+        else
+        {
+            $res_str = uniqid("",true);
+        }
+        $res_Len = strlen($res_str);
+        
+        if($len > $res_Len) {
+            return substr($res_str,0,$len);
+        }
+        return $res_str;
+    }
     
-       /**
+     /**
      *
-     * Check if the field is allowed to be, and actually is, blank.
+     * Check if the field is allowed to be, and actually is, null.
      *
      * @param mixed $subject The filter subject.
      *
@@ -137,9 +179,17 @@ class SanitizeSpec extends Spec
         }
 
         $field = $this->field;
-        $subject->$field =  $this->null_value;
+        if($this->null_rand_value === 0)
+        {
+            $subject->$field = $this->null_value;
+        }
+        else
+        {
+             $subject->$field=$this->generateRandValue($this->null_rand_value,$this->null_rand_value_len);
+        }
         return true;
     }
+
 
     /**
      *
@@ -157,7 +207,14 @@ class SanitizeSpec extends Spec
         }
 
         $field = $this->field;
-        $subject->$field = $this->blank_value;
+        if($this->blank_rand_value === 0)
+        {
+            $subject->$field = $this->blank_value;
+        }
+        else
+        {
+             $subject->$field=$this->generateRandValue($this->blank_rand_value,$this->blank_rand_value_len);
+        }
         return true;
     }
 
