@@ -149,7 +149,7 @@ class SanitizeSpec extends Spec
     {
         if($safe_rand === 2 && function_exists('openssl_random_pseudo_bytes')) 
         {
-            $res_str = base64_encode(openssl_random_pseudo_bytes($len*16,true)) ;
+            $res_str = base64_encode(openssl_random_pseudo_bytes($len*16)) ;
         }
         else
         {
