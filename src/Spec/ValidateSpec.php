@@ -128,6 +128,11 @@ class ValidateSpec extends Spec
      */
     protected function applyRule($subject)
     {
+        $field = $this->field;
+        if (! isset($subject->$field)) {
+            return false;
+        }
+        
         if ($this->reverse) {
             return ! parent::applyRule($subject);
         }

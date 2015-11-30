@@ -93,6 +93,30 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $actual);
     }
 
+    public function testApply_missingField()
+    {
+        $this->filter->validate('foo1')->is('alnum')->asSoftRule();
+        $this->filter->validate('foo1')->is('strlenMin', 6)->asSoftRule();
+        $this->filter->validate('foo2')->is('alnum');
+        $this->filter->validate('foo2')->is('strlenMin', 6);
+
+        $subject = (object) array('foo1' => '!@#');
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'foo1' => array(
+                'foo1 should have validated as alnum',
+                'foo1 should have validated as strlenMin(6)',
+            ),
+            'foo2' => array(
+                'foo2 should have validated as alnum'
+            ),
+        );
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
+    }
+
     public function testUseFieldMessage()
     {
         $this->filter->validate('foo')->isNot('blank')->asSoftRule();
