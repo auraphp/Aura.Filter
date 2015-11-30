@@ -75,6 +75,27 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expect, $this->spec->getMessage());
     }
 
+    public function testIsBlank()
+    {
+        $this->spec->field('foo')->isBlank();
+
+        $subject = (object) array();
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = null;
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = '  ';
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = 123;
+        $this->assertFalse($this->spec->__invoke($subject));
+
+        $expect = 'foo should have been blank';
+        $actual = $this->spec->getMessage();
+        $this->assertSame($expect, $actual);
+    }
+
     public function testIsBlankOr()
     {
         $this->spec->field('foo')->isBlankOr('strlen', 3);
@@ -97,7 +118,6 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $actual = $this->spec->getMessage();
         $this->assertSame($expect, $actual);
     }
-
 
     public function testIsBlankOrNot()
     {

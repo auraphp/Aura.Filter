@@ -35,7 +35,6 @@ class ValidateLocator extends Locator
             'alnum'                 => function () { return new Validate\Alnum(); },
             'alpha'                 => function () { return new Validate\Alpha(); },
             'between'               => function () { return new Validate\Between(); },
-            'blank'                 => function () { return new Validate\Blank(); },
             'bool'                  => function () { return new Validate\Boolean(); },
             'callback'              => function () { return new Validate\Callback(); },
             'creditCard'            => function () { return new Validate\CreditCard(); },

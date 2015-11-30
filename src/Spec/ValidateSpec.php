@@ -46,6 +46,20 @@ class ValidateSpec extends Spec
 
     /**
      *
+     * Validate the field is blank.
+     *
+     * @return self
+     *
+     */
+    public function isBlank()
+    {
+        $this->allow_blank = true;
+        $this->reverse = false;
+        return $this->init(array());
+    }
+
+    /**
+     *
      * Validate the field matches this rule (blank allowed).
      *
      * @param string $rule The rule name.
@@ -108,12 +122,19 @@ class ValidateSpec extends Spec
     protected function getDefaultMessage()
     {
         $message = $this->field . ' should';
+
+        if (! $this->rule) {
+            return $message . ' have been blank';
+        }
+
         if ($this->allow_blank) {
             $message .= ' have been blank or';
         }
+
         if ($this->reverse) {
             $message .= ' not';
         }
+
         return "{$message} have validated as " . parent::getDefaultMessage();
     }
 
@@ -128,11 +149,15 @@ class ValidateSpec extends Spec
      */
     protected function applyRule($subject)
     {
+        if (! $this->rule) {
+            return false;
+        }
+
         $field = $this->field;
         if (! isset($subject->$field)) {
             return false;
         }
-        
+
         if ($this->reverse) {
             return ! parent::applyRule($subject);
         }
