@@ -136,14 +136,14 @@ Validates the value as an IPv4 or IPv6 address, allowing reserved and private ad
 $filter->validate('field')->is('ip');
 ```
 
-To modify restrictions one the filter, pass the appropriate `FILTER_FLAG_*` constants (seen [here](http://php.net/manual/en/filter.filters.flags.php)) as a second parameter.
+To modify restrictions on the filter, pass the appropriate `FILTER_FLAG_*` constants (seen [here](http://php.net/manual/en/filter.filters.flags.php)) as a second parameter.
 
 ```php
 // only allow IPv4 addresses in the non-private range.
-$filter->validate('field')->is('ipv4', FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE);
+$filter->validate('field')->is('ip', FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE);
 
 // only allow IPv6 addresses in non-reserved range.
-$filter->validate('field')->is('ipv4', FILTER_FLAG_IPV6 | FILTER_FLAG_NO_RES_RANGE);
+$filter->validate('field')->is('ip', FILTER_FLAG_IPV6 | FILTER_FLAG_NO_RES_RANGE);
 ```
 
 ## isbn
