@@ -66,7 +66,7 @@ class FilterFactory
      *
      * @param string $class The filter class to instantiate.
      *
-     * @return Filter
+     * @return SubjectFilter
      *
      */
     public function newSubjectFilter($class = 'Aura\Filter\SubjectFilter')
