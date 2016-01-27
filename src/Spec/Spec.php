@@ -320,10 +320,37 @@ class Spec
     protected function getDefaultMessage()
     {
         $message = $this->rule;
-        if ($this->args) {
-            $message .= '(' . implode(', ', $this->args) . ')';
-        }
+        if (! $this->args) {
+            return $message;
+        };
+
+        $message .= $this->argsToString($this->args);
         return $message;
+    }
+
+    protected function argsToString($args)
+    {
+        $vals = array();
+        foreach ($args as $arg) {
+            $vals[] = $this->argToString($arg);
+        }
+        return '(' . implode(', ', $vals) . ')';
+    }
+
+    protected function argToString($arg)
+    {
+        switch (true) {
+            case is_object($arg):
+                return '*' . get_class($arg) . '*';
+            case is_array($arg):
+                return '*array*';
+            case is_resource($arg):
+                return '*resource*';
+            case is_null($arg):
+                return '*null*';
+            default:
+                return $arg;
+        }
     }
 
     /**

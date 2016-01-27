@@ -207,7 +207,11 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
 
         $array = array('foo' => '123456');
         $success = $this->filter->apply($array);
-        $failures = $filter->getFailures();
-        $failures->getMessages();
+        $actual = $this->filter->getFailures();
+        $expect = array(
+            'age' => array(
+                'age should have validated as callback(*Closure*)',
+            ),
+        );
     }
 }
