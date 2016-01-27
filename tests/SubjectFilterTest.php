@@ -176,4 +176,16 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($result);
         $this->assertSame('123', $array['foo']);
     }
+
+	public function testGetMessageOnClosure()
+	{
+		$this->filter->validate('age')->is('callback', function($s, $f) {
+		    return false;
+		});
+
+		$array = array('foo' => '123456');
+		$success = $this->filter->apply($array);
+		$failures = $filter->getFailures();
+		$failures->getMessages();
+	}
 }
