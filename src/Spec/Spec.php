@@ -319,24 +319,38 @@ class Spec
      */
     protected function getDefaultMessage()
     {
-        $message = $this->rule;
-        if (! $this->args) {
-            return $message;
-        };
-
-        $message .= $this->argsToString($this->args);
-        return $message;
+        return $this->rule . $this->argsToString();
     }
 
-    protected function argsToString($args)
+    /**
+     *
+     * Converts the args to a string.
+     *
+     * @return string
+     *
+     */
+    protected function argsToString()
     {
+        if (! $this->args) {
+            return '';
+        }
+
         $vals = array();
-        foreach ($args as $arg) {
+        foreach ($this->args as $arg) {
             $vals[] = $this->argToString($arg);
         }
         return '(' . implode(', ', $vals) . ')';
     }
 
+    /**
+     *
+     * Converts one arg to a string.
+     *
+     * @param mixed $arg The arg.
+     *
+     * @return string
+     *
+     */
     protected function argToString($arg)
     {
         switch (true) {
