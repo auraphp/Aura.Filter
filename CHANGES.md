@@ -1,15 +1,9 @@
-Second beta release.
+Third beta release.
 
-- (ADD) Add UTF-8 support in Alpha, Alnum, Strlen*, and Word filters with help from @mivanov93.
+- (BRK) Due to new blank-checking in ValidateSpec::applyRule(), remove 'blank' validation rule, and add 'isBlank()' validation spec method.
 
-    - All string-length filters are now multi-byte aware using either `mbstring` or `iconv` extensions.
+- (FIX) Filter arguments using arrays, resources, and objects (including closures) no longer cause errors when creating the default filter message.
 
-    - In alnum and alpha rules, use unicode letters and digits instead of ctype.
+- (ADD) Validation now fails on missing (unset or null) fields.
 
-    - In word rules, use unicode letters and digits instead of \w and \W.
-
-- (ADD) More robust email validation based on is_email() from @dominicsayers, plus IDN support as suggested by @dg via the `intl` extension.
-
-- (TEST) Update Travis-CI config to use containers.
-
-- (DOCS) Update relevant documentation.
+- (DOC) Update documentation.
