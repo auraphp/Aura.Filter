@@ -79,6 +79,15 @@ class Spec
      *
      */
     protected $allow_blank = false;
+    
+        /**
+     *
+     * Allow the field to be null?
+     *
+     * @var bool
+     *
+     */
+    protected $allow_null = false;
 
     /**
      *
@@ -123,7 +132,7 @@ class Spec
      */
     public function __invoke($subject)
     {
-        return $this->applyBlank($subject)
+        return $this->applyBlank($subject) || $this->applyNull($subject)
             || $this->applyRule($subject);
     }
 
@@ -326,6 +335,31 @@ class Spec
         return $message;
     }
 
+        /**
+     *
+     * Check if the field is allowed to be, and actually is, blank.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool
+     *
+     */
+    protected function applyNull($subject)
+    {
+        if (! $this->allow_null) {
+            return false;
+        }
+
+        // the field name
+        $field = $this->field;
+
+        // not set, or null, means it is blank
+        if (! isset($subject->$field) || $subject->$field === null) {
+            return true;
+        }
+        return false;
+    }
+    
     /**
      *
      * Check if the field is allowed to be, and actually is, blank.
@@ -369,10 +403,21 @@ class Spec
      */
     protected function applyRule($subject)
     {
+        $added = false;
         $rule = $this->locator->get($this->rule);
         $args = $this->args;
         array_unshift($args, $this->field);
         array_unshift($args, $subject);
-        return call_user_func_array($rule, $args);
+        if(!isset($subject->{$this->field}) && !property_exists($subject,$this->field))
+        {
+                 $subject->{$this->field} = null;
+                 $added = true;
+        }
+       
+        $result = call_user_func_array($rule, $args);
+        if($added && property_exists($subject,$this->field) && $subject->{$this->field} === null) {
+            unset($subject->{$this->field});
+        }
+        return $result;
     }
 }

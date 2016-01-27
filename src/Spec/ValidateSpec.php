@@ -40,6 +40,7 @@ class ValidateSpec extends Spec
     public function is($rule)
     {
         $this->allow_blank = false;
+        $this->allow_null = false;
         $this->reverse = false;
         return $this->init(func_get_args());
     }
@@ -72,6 +73,25 @@ class ValidateSpec extends Spec
     public function isBlankOr($rule)
     {
         $this->allow_blank = true;
+        $this->allow_null = false;
+        $this->reverse = false;
+        return $this->init(func_get_args());
+    }
+    
+        /**
+     *
+     * Validate the field matches this rule (blank allowed).
+     *
+     * @param string $rule The rule name.
+     *
+     * @param ...$args Arguments for the rule.
+     *
+     * @return self
+     *
+     */
+    public function isNullOr($rule)
+    {
+        $this->allow_null = true;
         $this->reverse = false;
         return $this->init(func_get_args());
     }
@@ -90,6 +110,7 @@ class ValidateSpec extends Spec
     public function isNot($rule)
     {
         $this->allow_blank = false;
+        $this->allow_null = false;
         $this->reverse = true;
         return $this->init(func_get_args());
     }
@@ -108,6 +129,7 @@ class ValidateSpec extends Spec
     public function isBlankOrNot($rule)
     {
         $this->allow_blank = true;
+        $this->allow_null = false;
         $this->reverse = true;
         return $this->init(func_get_args());
     }
@@ -129,6 +151,9 @@ class ValidateSpec extends Spec
 
         if ($this->allow_blank) {
             $message .= ' have been blank or';
+        }  
+        if ($this->allow_null) {
+            $message .= ' have been null or';
         }
 
         if ($this->reverse) {
