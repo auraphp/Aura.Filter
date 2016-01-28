@@ -355,10 +355,9 @@ class Spec
     protected function argToString($arg)
     {
         switch (true) {
+            case $arg instanceof Closure:
+                return '*Closure*';
             case is_object($arg):
-                if ($arg instanceof Closure) {
-                    return '*Closure*';
-                }
                 return '*' . get_class($arg) . '*';
             case is_array($arg):
                 return '*array*';
