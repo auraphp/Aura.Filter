@@ -10,6 +10,7 @@ namespace Aura\Filter\Spec;
 
 use Aura\Filter\Locator\Locator;
 use Exception;
+use Closure;
 
 /**
  *
@@ -355,6 +356,9 @@ class Spec
     {
         switch (true) {
             case is_object($arg):
+                if ($arg instanceof Closure) {
+                    return '*Closure*';
+                }
                 return '*' . get_class($arg) . '*';
             case is_array($arg):
                 return '*array*';
