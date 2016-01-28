@@ -203,15 +203,17 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->filter->validate('age')->is('callback', function($s, $f) {
             return false;
-		});
+        });
 
         $array = array('foo' => '123456');
         $success = $this->filter->apply($array);
-        $actual = $this->filter->getFailures();
+        $failures = $this->filter->getFailures();
+        $actual = $failures->getMessages();
         $expect = array(
             'age' => array(
                 'age should have validated as callback(*Closure*)',
             ),
         );
+        $this->assertSame($actual, $expect);
     }
 }
