@@ -18,20 +18,8 @@ use Aura\Filter\Exception;
  * @package Aura.Filter
  *
  */
-abstract class AbstractCharCase
+abstract class AbstractCharCase extends AbstractStrlen
 {
-    /**
-     *
-     * Is the `mbstring` extension loaded?
-     *
-     * @return bool
-     *
-     */
-    protected function mbstring()
-    {
-        return extension_loaded('mbstring');
-    }
-
     /**
      *
      * Proxy to `mb_convert_case()` when available; fall back to
@@ -88,4 +76,43 @@ abstract class AbstractCharCase
 
         return ucwords(utf8_decode($str));
     }
+
+    /**
+     *
+     * Proxy to `mb_convert_case()` when available; fall back to
+     * `utf8_decode()` and `strtoupper()` otherwise.
+     *
+     * @param string $str String to convert case.
+     *
+     * @return int
+     *
+     */
+    protected function ucfirst($str)
+    {
+        $len = $this->strlen($str);
+        $head = $this->substr($str, 0, 1);
+        $tail = $this->substr($str, 1, $len - 1);
+
+        return $this->strtoupper($head) . $tail;
+    }
+
+    /**
+     *
+     * Proxy to `mb_convert_case()` when available; fall back to
+     * `utf8_decode()` and `strtolower()` otherwise.
+     *
+     * @param string $str String to convert case.
+     *
+     * @return int
+     *
+     */
+    protected function lcfirst($str)
+    {
+        $len = $this->strlen($str);
+        $head = $this->substr($str, 0, 1);
+        $tail = $this->substr($str, 1, $len - 1);
+
+        return $this->strtolower($head) . $tail;
+    }
+
 }
