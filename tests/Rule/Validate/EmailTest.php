@@ -23,10 +23,6 @@ class EmailTest extends AbstractValidateTest
             }
         }
 
-        // add IDN addresses here so we don't pollute the original XML file.
-        // addresses courtesy of David Grudl.
-        $provide['idn-1'] = array('test@háčkyčárky.cz');
-        $provide['idn-2'] = array('test@example.укр');
         return $provide;
     }
 
@@ -72,5 +68,23 @@ class EmailTest extends AbstractValidateTest
             [chr(7), chr(9), chr(10), chr(13)],
             $address
         );
+    }
+
+    public function testIDN()
+    {
+        if (!extension_loaded('intl')) {
+            $this->markTestSkipped('The Intl extension is not available');
+        }
+
+        // add IDN addresses here so we don't pollute the original XML file.
+        // addresses courtesy of David Grudl.
+        $idn = array(
+            'test@háčkyčárky.cz',
+            'test@example.укр'
+        );
+
+        foreach ($idn as $value) {
+            $this->assertTrue($this->invoke($value));
+        }
     }
 }
