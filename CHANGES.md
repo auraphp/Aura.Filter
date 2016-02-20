@@ -1,9 +1,5 @@
-Third beta release.
+First stable release.
 
-- (BRK) Due to new blank-checking in ValidateSpec::applyRule(), remove 'blank' validation rule, and add 'isBlank()' validation spec method.
+- (FIX) The Spec class now reports failures better when closures are used in HHVM.
 
-- (FIX) Filter arguments using arrays, resources, and objects (including closures) no longer cause errors when creating the default filter message.
-
-- (ADD) Validation now fails on missing (unset or null) fields.
-
-- (DOC) Update documentation.
+- (TST) Improved testing.
