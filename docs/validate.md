@@ -10,7 +10,7 @@ $filter->validate('field')->is('alnum');
 
 ## alpha
 
-Validates the value as alphabetic only.ba
+Validates the value as alphabetic only.
 
 ```php
 $filter->validate('field')->is('alpha');
