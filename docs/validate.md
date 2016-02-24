@@ -10,7 +10,7 @@ $filter->validate('field')->is('alnum');
 
 ## alpha
 
-Validates the value as alphabetic only.
+Validates the value as alphabetic only.ba
 
 ```php
 $filter->validate('field')->is('alpha');
@@ -29,7 +29,9 @@ $filter->validate('field')->is('between', $min, $max);
 Validates the value as being blank.
 
 ```php
-$filter->validate('field')->is('blank');
+$filter->validate('field1')->isBlank();
+$filter->validate('field2')->isBlankOr('strlen', 3);
+$filter->validate('field3')->isBlankOrNot('strlen', 3);
 ```
 
 ## bool
