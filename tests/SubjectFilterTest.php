@@ -99,8 +99,9 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo1')->is('strlenMin', 6)->asSoftRule();
         $this->filter->validate('foo2')->is('alnum');
         $this->filter->validate('foo2')->is('strlenMin', 6);
+        $this->filter->validate('foo3')->is('extant');
 
-        $subject = (object) array('foo1' => '!@#');
+        $subject = (object) array('foo1' => '!@#', 'foo3' => null);
         $result = $this->filter->apply($subject);
         $this->assertFalse($result);
 
