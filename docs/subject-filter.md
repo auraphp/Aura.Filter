@@ -34,10 +34,12 @@ We can call one of the following methods after `validate()`:
 
 - `is(...)` to specify that the value **must** match the rule
 - `isNot(...)` to specify that the value **must not** match the rule
+- `isBlank()` to specify that the value **must** be blank (note that using other rules with `isBlank()` may not make sense)
 - `isBlankOr(...)` to specify that the value may be blank, or that it **must**
   match the rule
 - `isBlankOrNot(...)` to specify that the value may be blank, or that it
   **must not** match the rule
+- `isNotBlank()` to specifiy that the value **must not** be blank (note that this makes sense only if you don't care about other validations)
 
 We can call one of the following methods after `sanitize()`:
 
