@@ -42,7 +42,6 @@ class ValidateLocator extends Locator
             'email'                 => function () { return new Validate\Email(); },
             'equalToField'          => function () { return new Validate\EqualToField(); },
             'equalToValue'          => function () { return new Validate\EqualToValue(); },
-            'extant'                => function () { return new Validate\Extant(); },
             'float'                 => function () { return new Validate\Double(); },
             'inKeys'                => function () { return new Validate\InKeys(); },
             'int'                   => function () { return new Validate\Integer(); },

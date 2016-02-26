@@ -98,14 +98,6 @@ Validates the value as loosely equal (`==') to a specified value.
 $filter->validate('field')->is('equalToValue', $other_value);
 ```
 
-## extant
-
-Validates thhat the field exists in the subject, even if it is null or blank.
-
-```php
-$filter->validate('field')->is('extant');
-```
-
 ## float
 
 Validates the value as representing a float.

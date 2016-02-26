@@ -99,7 +99,6 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->filter->validate('foo1')->is('strlenMin', 6)->asSoftRule();
         $this->filter->validate('foo2')->is('alnum');
         $this->filter->validate('foo2')->is('strlenMin', 6);
-        $this->filter->validate('foo3')->is('extant');
 
         $subject = (object) array('foo1' => '!@#', 'foo3' => null);
         $result = $this->filter->apply($subject);
@@ -120,6 +119,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testUseFieldMessage()
     {
+        $this->filter->validate('foo')->isNotBlank()->asSoftRule();
         $this->filter->validate('foo')->is('alnum')->asSoftRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asSoftRule();
 
@@ -128,6 +128,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result);
         $expect = array(
             'foo' => array(
+                'foo should not have been blank',
                 'foo should have validated as alnum',
                 'foo should have validated as strlenMin(6)',
             ),

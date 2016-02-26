@@ -96,6 +96,20 @@ class ValidateSpec extends Spec
 
     /**
      *
+     * Validate the field is not blank.
+     *
+     * @return self
+     *
+     */
+    public function isNotBlank()
+    {
+        $this->allow_blank = false;
+        $this->reverse = true;
+        return $this->init(array());
+    }
+
+    /**
+     *
      * Validate the field does not match this rule (blank allowed).
      *
      * @param string $rule The rule name.
@@ -124,7 +138,9 @@ class ValidateSpec extends Spec
         $message = $this->field . ' should';
 
         if (! $this->rule) {
-            return $message . ' have been blank';
+            return $message
+                . (($this->reverse) ? ' not' : '')
+                . ' have been blank';
         }
 
         if ($this->allow_blank) {
@@ -153,7 +169,7 @@ class ValidateSpec extends Spec
             return false;
         }
 
-        if (! $this->fieldExists($subject)) {
+        if (! isset($subject->{$this->field})) {
             return false;
         }
 
@@ -162,43 +178,5 @@ class ValidateSpec extends Spec
         }
 
         return parent::applyRule($subject);
-    }
-
-    /**
-     *
-     * Does the field exist in the subject, even if it is null?
-     *
-     * @param mixed $subject The filter subject.
-     *
-     * @return bool
-     *
-     */
-    protected function fieldExists($subject)
-    {
-        $field = $this->field;
-        if (isset($subject->$field)) {
-            return true;
-        }
-
-        // still, the property might exist and be null. using property_exists()
-        // presumes that we have a non-magic-method object, which may not be the
-        // case, so we have this hackish approach.
-
-        // first, turn off error reporting entirely.
-        $level = error_reporting(0);
-
-        // now put error_get_last() into known state by addressing a nonexistent
-        // variable with an unlikely name.
-        $fake = __FILE__ . ':' . __CLASS__;
-        $value = $$fake;
-
-        // now get the value of the field and turn error reporting back on
-        $value = $subject->$field;
-        error_reporting($level);
-
-        // if the last error was on $field, then $field is nonexistent.
-        $error = error_get_last();
-        $property = substr($error['message'], -1 * strlen($field) - 1);
-        return $property !== "\$$field";
     }
 }
