@@ -34,6 +34,12 @@ $filter->validate('field2')->isBlankOr('strlen', 3);
 $filter->validate('field3')->isBlankOrNot('strlen', 3);
 ```
 
+To validate the value as not being blank.
+
+```php
+$filter->validate('field')->isNotBlank();
+```
+
 ## bool
 
 Validates the value as being a boolean, or a pseudo-boolean. Pseudo-true values include the strings '1', 'y', 'yes', and 'true'; pseudo-false values include the strings '0', 'n', 'no', and 'false'.
