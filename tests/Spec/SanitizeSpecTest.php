@@ -50,6 +50,13 @@ class SanitizeSpecTest extends \PHPUnit_Framework_TestCase
         $subject->foo = array();
         $this->assertFalse($this->spec->__invoke($subject));
         $this->assertSame($subject->foo, array());
+
+        $subject->foo = null;
+        $this->assertFalse($this->spec->__invoke($subject));
+        $this->assertSame($subject->foo, null);
+
+        $subject = (object) array();
+        $this->assertFalse($this->spec->__invoke($subject));
     }
 
     public function testGetMessage()

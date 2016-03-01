@@ -400,22 +400,4 @@ class Spec
         // strings that trim down to exactly nothing are blank
         return trim($subject->$field) === '';
     }
-
-    /**
-     *
-     * Check if the subject field passes the rule specification.
-     *
-     * @param mixed $subject The filter subject.
-     *
-     * @return bool
-     *
-     */
-    protected function applyRule($subject)
-    {
-        $rule = $this->locator->get($this->rule);
-        $args = $this->args;
-        array_unshift($args, $this->field);
-        array_unshift($args, $subject);
-        return call_user_func_array($rule, $args);
-    }
 }

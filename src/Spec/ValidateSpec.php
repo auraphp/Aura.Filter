@@ -46,10 +46,10 @@ class ValidateSpec extends Spec
         }
 
         if ($this->reverse) {
-            return ! parent::applyRule($subject);
+            return ! parent::__invoke($subject);
         }
 
-        return parent::applyRule($subject);
+        return parent::__invoke($subject);
     }
 
     /**

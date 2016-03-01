@@ -38,7 +38,7 @@ class SanitizeSpec extends Spec
     public function __invoke($subject)
     {
         if (! $this->subjectFieldIsBlank($subject)) {
-            return parent::applyRule($subject);
+            return parent::__invoke($subject);
         }
 
         if (! $this->allow_blank) {
