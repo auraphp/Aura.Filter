@@ -144,4 +144,37 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $subject->foo = 'zimgir';
         $this->assertTrue($this->spec->__invoke($subject));
     }
+
+    public function testIsNotBlank()
+    {
+        $this->spec->field('foo')->isNotBlank();
+
+        $subject = (object) array();
+
+        $subject->foo = 0;
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = '0';
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $subject->foo = 'bar';
+        $this->assertTrue($this->spec->__invoke($subject));
+
+        $expect = 'foo should not have been blank';
+
+        $subject = (object) array();
+        $this->assertFalse($this->spec->__invoke($subject));
+        $this->assertSame($expect, $this->spec->getMessage());
+
+        $subject->foo = null;
+        $this->assertFalse($this->spec->__invoke($subject));
+        $this->assertSame($expect, $this->spec->getMessage());
+
+        $subject->foo = '  ';
+        $this->assertFalse($this->spec->__invoke($subject));
+        $this->assertSame($expect, $this->spec->getMessage());
+
+        $subject->foo = 123;
+        $this->assertTrue($this->spec->__invoke($subject));
+    }
 }

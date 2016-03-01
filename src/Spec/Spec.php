@@ -385,6 +385,11 @@ class Spec
             return false;
         }
 
+        return $this->subjectFieldIsBlank($subject);
+    }
+
+    protected function subjectFieldIsBlank($subject)
+    {
         // the field name
         $field = $this->field;
 

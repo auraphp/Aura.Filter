@@ -165,12 +165,12 @@ class ValidateSpec extends Spec
      */
     protected function applyRule($subject)
     {
-        if (! $this->rule) {
-            return false;
+        if ($this->subjectFieldIsBlank($subject)) {
+            return $this->allow_blank;
         }
 
-        if (! isset($subject->{$this->field})) {
-            return false;
+        if (! $this->rule) {
+            return $this->reverse;
         }
 
         if ($this->reverse) {
