@@ -124,8 +124,11 @@ class Spec
      */
     public function __invoke($subject)
     {
-        return $this->applyBlank($subject)
-            || $this->applyRule($subject);
+        $rule = $this->locator->get($this->rule);
+        $args = $this->args;
+        array_unshift($args, $this->field);
+        array_unshift($args, $subject);
+        return call_user_func_array($rule, $args);
     }
 
     /**
@@ -372,22 +375,13 @@ class Spec
 
     /**
      *
-     * Check if the field is allowed to be, and actually is, blank.
+     * Is the subject field blank?
      *
      * @param mixed $subject The filter subject.
      *
      * @return bool
      *
      */
-    protected function applyBlank($subject)
-    {
-        if (! $this->allow_blank) {
-            return false;
-        }
-
-        return $this->subjectFieldIsBlank($subject);
-    }
-
     protected function subjectFieldIsBlank($subject)
     {
         // the field name

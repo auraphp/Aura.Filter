@@ -28,6 +28,32 @@ class ValidateSpec extends Spec
 
     /**
      *
+     * Applies the rule specification to a subject.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool True on success, false on failure.
+     *
+     */
+    public function __invoke($subject)
+    {
+        if ($this->subjectFieldIsBlank($subject)) {
+            return $this->allow_blank;
+        }
+
+        if (! $this->rule) {
+            return $this->reverse;
+        }
+
+        if ($this->reverse) {
+            return ! parent::applyRule($subject);
+        }
+
+        return parent::applyRule($subject);
+    }
+
+    /**
+     *
      * Validate the field matches this rule (blank not allowed).
      *
      * @param string $rule The rule name.
@@ -152,31 +178,5 @@ class ValidateSpec extends Spec
         }
 
         return "{$message} have validated as " . parent::getDefaultMessage();
-    }
-
-    /**
-     *
-     * Check if the subject field passes the rule specification.
-     *
-     * @param mixed $subject The filter subject.
-     *
-     * @return bool
-     *
-     */
-    protected function applyRule($subject)
-    {
-        if ($this->subjectFieldIsBlank($subject)) {
-            return $this->allow_blank;
-        }
-
-        if (! $this->rule) {
-            return $this->reverse;
-        }
-
-        if ($this->reverse) {
-            return ! parent::applyRule($subject);
-        }
-
-        return parent::applyRule($subject);
     }
 }

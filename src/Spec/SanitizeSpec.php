@@ -28,6 +28,30 @@ class SanitizeSpec extends Spec
 
     /**
      *
+     * Applies the rule specification to a subject.
+     *
+     * @param mixed $subject The filter subject.
+     *
+     * @return bool True on success, false on failure.
+     *
+     */
+    public function __invoke($subject)
+    {
+        if (! $this->subjectFieldIsBlank($subject)) {
+            return parent::applyRule($subject);
+        }
+
+        if (! $this->allow_blank) {
+            return false;
+        }
+
+        $field = $this->field;
+        $subject->$field = $this->blank_value;
+        return true;
+    }
+
+    /**
+     *
      * Sanitize the field using this rule (blank not allowed).
      *
      * @param string $rule The rule name.
@@ -74,26 +98,6 @@ class SanitizeSpec extends Spec
         $this->allow_blank = true;
         $this->blank_value = $blank_value;
         return $this;
-    }
-
-    /**
-     *
-     * Check if the field is allowed to be, and actually is, blank.
-     *
-     * @param mixed $subject The filter subject.
-     *
-     * @return bool
-     *
-     */
-    protected function applyBlank($subject)
-    {
-        if (! parent::applyBlank($subject)) {
-            return false;
-        }
-
-        $field = $this->field;
-        $subject->$field = $this->blank_value;
-        return true;
     }
 
     /**
