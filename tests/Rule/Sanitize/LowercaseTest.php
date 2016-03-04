@@ -7,6 +7,7 @@ class LowercaseTest extends AbstractSanitizeTest
     {
         return array(
             array(array(), false, array()),
+            array('', true, ''),
             array('A', true, 'a'),
             array('AbCd', true, 'abcd'),
             array('ABCDEF', true, 'abcdef'),

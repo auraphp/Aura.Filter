@@ -90,10 +90,15 @@ abstract class AbstractCharCase extends AbstractStrlen
     protected function ucfirst($str)
     {
         $len = $this->strlen($str);
-        $head = $this->substr($str, 0, 1);
-        $tail = $this->substr($str, 1, $len - 1);
-
-        return $this->strtoupper($head) . $tail;
+        if ($len == 0) {
+            return '';
+        }
+        if ($len > 1) {
+            $head = $this->substr($str, 0, 1);
+            $tail = $this->substr($str, 1, $len - 1);
+            return $this->strtoupper($head) . $tail;
+        }
+        return $this->strtoupper($str);
     }
 
     /**
@@ -109,10 +114,17 @@ abstract class AbstractCharCase extends AbstractStrlen
     protected function lcfirst($str)
     {
         $len = $this->strlen($str);
-        $head = $this->substr($str, 0, 1);
-        $tail = $this->substr($str, 1, $len - 1);
-
-        return $this->strtolower($head) . $tail;
+        if ($len == 0) {
+            // empty string
+            return '';
+        }
+        if ($len > 1) {
+            // more than a single character
+            $head = $this->substr($str, 0, 1);
+            $tail = $this->substr($str, 1, $len - 1);
+            return $this->strtolower($head) . $tail;
+        }
+        return $this->strtolower($str);
     }
 
 }

@@ -7,6 +7,7 @@ class UppercaseFirstTest extends AbstractSanitizeTest
     {
         return array(
             array(array(), false, array()),
+            array('', true, ''),
             array('a', true, 'A'),
             array('Ab cd', true, 'Ab cd'),
             array('ABC DEF', true, 'ABC DEF'),
