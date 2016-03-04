@@ -1,16 +1,15 @@
 <?php
-
 namespace Aura\Filter\Rule\Validate;
 
-class CaseTitleTest extends AbstractValidateTest
+class LowercaseTest extends AbstractValidateTest
 {
     public function providerIs()
     {
         return array(
-            array('Ab Cd'),
-            array('Efgh'),
-            array('Аб Вв'),
-            array('Фг Ег'),
+            array('abcd'),
+            array('efgh'),
+            array('абвв'),
+            array('фгег'),
         );
     }
 
@@ -19,10 +18,9 @@ class CaseTitleTest extends AbstractValidateTest
         return array(
             array(array()),
             array('aBcd'),
-            array('Ef gH'),
-            array('АБ ВВ'),
-            array('ФГ ег'),
+            array('Efgh'),
+            array('АБВВ'),
+            array('ФГег'),
         );
     }
 }
-

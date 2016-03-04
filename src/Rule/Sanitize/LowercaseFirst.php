@@ -6,28 +6,28 @@
  * @license http://opensource.org/licenses/bsd-license.php BSD
  *
  */
-namespace Aura\Filter\Rule\Validate;
+namespace Aura\Filter\Rule\Sanitize;
 
 use Aura\Filter\Rule\AbstractCharCase;
 
 /**
  *
- * Validates that the string is all uppercase.
+ * Sanitizes a string to begin with lowercase.
  *
  * @package Aura.Filter
  *
  */
-class CaseUpper extends AbstractCharCase
+class LowercaseFirst extends AbstractCharCase
 {
     /**
      *
-     * Validates that the string is uppercase.
+     * Sanitizes a string to begin with lowercase.
      *
      * @param object $subject The subject to be filtered.
      *
      * @param string $field The subject field name.
      *
-     * @return bool True if valid, false if not.
+     * @return bool True if the value was sanitized, false if not.
      *
      */
     public function __invoke($subject, $field)
@@ -36,7 +36,7 @@ class CaseUpper extends AbstractCharCase
         if (! is_scalar($value)) {
             return false;
         }
-
-        return $this->strtoupper($value) == $value;
+        $subject->$field = $this->lcfirst($value);
+        return true;
     }
 }

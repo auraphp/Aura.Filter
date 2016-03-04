@@ -12,16 +12,16 @@ use Aura\Filter\Rule\AbstractCharCase;
 
 /**
  *
- * Validates that the string is all title case.
+ * Validates that the string begins with lowercase.
  *
  * @package Aura.Filter
  *
  */
-class CaseTitle extends AbstractCharCase
+class LowercaseFirst extends AbstractCharCase
 {
     /**
      *
-     * Validates that the string is title case.
+     * Validates that the string begins with lowercase.
      *
      * @param object $subject The subject to be filtered.
      *
@@ -37,6 +37,6 @@ class CaseTitle extends AbstractCharCase
             return false;
         }
 
-        return $this->ucwords($value) == $value;
+        return $this->lcfirst($value) == $value;
     }
 }

@@ -17,7 +17,7 @@ use Aura\Filter\Rule\AbstractCharCase;
  * @package Aura.Filter
  *
  */
-class CaseUpper extends AbstractCharCase
+class Uppercase extends AbstractCharCase
 {
     /**
      *

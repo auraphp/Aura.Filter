@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class CaseLowerTest extends AbstractSanitizeTest
+class LowercaseTest extends AbstractSanitizeTest
 {
     public function providerTo()
     {

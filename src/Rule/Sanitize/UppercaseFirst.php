@@ -12,16 +12,16 @@ use Aura\Filter\Rule\AbstractCharCase;
 
 /**
  *
- * Sanitizes a string to title case.
+ * Sanitizes a string to begin with uppercase.
  *
  * @package Aura.Filter
  *
  */
-class CaseTitle extends AbstractCharCase
+class UppercaseFirst extends AbstractCharCase
 {
     /**
      *
-     * Sanitizes a string to title case.
+     * Sanitizes a string to begin with uppercase.
      *
      * @param object $subject The subject to be filtered.
      *
@@ -36,7 +36,7 @@ class CaseTitle extends AbstractCharCase
         if (! is_scalar($value)) {
             return false;
         }
-        $subject->$field = $this->ucwords($value);
+        $subject->$field = $this->ucfirst($value);
         return true;
     }
 }
