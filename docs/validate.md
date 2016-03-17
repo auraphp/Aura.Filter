@@ -266,6 +266,14 @@ Validates the value length as being no shorter than a minimum.
 $filter->validate('field')->is('strlenMin', $min);
 ```
 
+## titlecase
+
+Validates the value as title case
+
+```php
+$filter->validate('field')->is('titlecase');
+```
+
 ## trim
 
 Validates the value is `trim()`med. Optionally specify characters to trim.
