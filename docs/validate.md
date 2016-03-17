@@ -170,6 +170,22 @@ Validates the given value against a list of locale strings (internal to the rule
 $filter->validate('field')->is('locale');
 ```
 
+## lowercase
+
+Validates the value as all lowercase.
+
+```php
+$filter->validate('field')->is('lowercase');
+```
+
+## lowercaseFirst
+
+Validates the value begins with a lowercase character.
+
+```php
+$filter->validate('field')->is('lowercaseFirst');
+```
+
 ## max
 
 Validates the value as being less than or equal to a maximum.
@@ -250,6 +266,14 @@ Validates the value length as being no shorter than a minimum.
 $filter->validate('field')->is('strlenMin', $min);
 ```
 
+## titlecase
+
+Validates the value as title case
+
+```php
+$filter->validate('field')->is('titlecase');
+```
+
 ## trim
 
 Validates the value is `trim()`med. Optionally specify characters to trim.
@@ -264,6 +288,22 @@ Validates the value represents a PHP upload information array, and that the file
 
 ```php
 $filter->validate('field')->is('upload');
+```
+
+## uppercase
+
+Validates the value as all uppercase.
+
+```php
+$filter->validate('field')->is('uppercase');
+```
+
+## uppercaseFirst
+
+Validates the value begins with an uppercase character.
+
+```php
+$filter->validate('field')->is('uppercaseFirst');
 ```
 
 ## url
