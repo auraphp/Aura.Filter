@@ -94,6 +94,22 @@ Sanitizes the value to an ISBN (International Standard Book Number).
 $filter->sanitize('field')->to('isbn');
 ```
 
+## lowercase
+
+Sanitizes the value to all lowercase characters.
+
+```
+$filter->sanitize('field')->to('lowercase');
+```
+
+## lowercaseFirst
+
+Sanitizes the value to begin with a lowercase character.
+
+```
+$filter->sanitize('field')->to('lowercaseFirst');
+```
+
 ## max
 
 Sanitizes so that values higher than the maximum are forced down to the maximum.
@@ -175,12 +191,36 @@ Sanitizes the value to `str_pad()` values shorter than the minimum.
 $filter->sanitize('field')->to('strlenMin', $min[, $pad_string[, $pad_type]]);
 ```
 
+## titlecase
+
+Sanitizes the value to titlecase (eg. "Title Case").
+
+```php
+$filter->sanitize('field')->to('titlecase');
+```
+
 ## trim
 
 Sanitizes the value to `trim()` it. Optionally specify characters to trim.
 
 ```php
 $filter->sanitize('field')->to('trim', $chars);
+```
+
+## uppercase
+
+Sanitizes the value to all uppercase characters.
+
+```
+$filter->sanitize('field')->to('uppercase');
+```
+
+## uppercaseFirst
+
+Sanitizes the value to begin with an uppercase character.
+
+```
+$filter->sanitize('field')->to('uppercaseFirst');
 ```
 
 ## value
