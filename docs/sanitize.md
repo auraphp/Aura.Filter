@@ -207,6 +207,15 @@ Sanitizes the value to `trim()` it. Optionally specify characters to trim.
 $filter->sanitize('field')->to('trim', $chars);
 ```
 
+## uploadedFileOrNull
+
+Sanitizes the value to `null` if value is not an instance of PSR7
+UploadedFileInterface or file was not uploaded
+
+```php
+$filter->sanitize('field')->to('uploadedFileOrNull');
+```
+
 ## uppercase
 
 Sanitizes the value to all uppercase characters.
