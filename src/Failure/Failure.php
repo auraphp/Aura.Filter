@@ -8,6 +8,8 @@
  */
 namespace Aura\Filter\Failure;
 
+use JsonSerializable;
+
 /**
  *
  * Represents the failure of a rule specification.
@@ -15,7 +17,7 @@ namespace Aura\Filter\Failure;
  * @package Aura.Filter
  *
  */
-class Failure
+class Failure implements JsonSerializable
 {
     /**
      *
@@ -101,5 +103,21 @@ class Failure
     public function getArgs()
     {
         return $this->args;
+    }
+
+   /**
+    *
+    * Returns an array for json_encode.
+    *
+    * @return array
+    *
+    */
+    public function jsonSerialize()
+    {
+        return array(
+            'field' => $this->field,
+            'message' => $this->message,
+            'args' => $this->args,
+        );
     }
 }

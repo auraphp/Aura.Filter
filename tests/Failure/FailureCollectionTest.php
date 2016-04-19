@@ -1,4 +1,5 @@
 <?php
+
 namespace Aura\Filter\Failure;
 
 class FailureCollectionTest extends \PHPUnit_Framework_TestCase
@@ -26,8 +27,17 @@ class FailureCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('message 1', $failure->getMessage());
         $this->assertEquals(array('bar' => 'baz'), $failure->getArgs());
 
-        $expect = "message 1" . PHP_EOL . "message 2" . PHP_EOL;
+        $expect = 'message 1'.PHP_EOL.'message 2'.PHP_EOL;
         $actual = $this->failures->getMessagesForFieldAsString('foo');
         $this->assertSame($expect, $actual);
+    }
+
+    public function testIsJsonSerializable()
+    {
+        $this->failures->add('foo', 'message 1', array('bar' => 'baz'));
+        $this->failures->add('foo', 'message 2', array('zim' => 'dib'));
+
+        $json = json_encode($this->failures);
+        $this->assertEquals('{"foo":[{"field":"foo","message":"message 1","args":{"bar":"baz"}},{"field":"foo","message":"message 2","args":{"zim":"dib"}}]}', $json);
     }
 }
