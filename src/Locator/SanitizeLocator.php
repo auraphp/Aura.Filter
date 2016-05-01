@@ -49,8 +49,6 @@ class SanitizeLocator extends Locator
             'now'                   => function () { return new Sanitize\Now(); },
             'regex'                 => function () { return new Sanitize\Regex(); },
             'remove'                => function () { return new Sanitize\Remove(); },
-            'strictEqualToField'    => function () { return new Sanitize\StrictEqualToField(); },
-            'strictEqualToValue'    => function () { return new Sanitize\StrictEqualToValue(); },
             'string'                => function () { return new Sanitize\Str(); },
             'strlen'                => function () { return new Sanitize\Strlen(); },
             'strlenBetween'         => function () { return new Sanitize\StrlenBetween(); },
