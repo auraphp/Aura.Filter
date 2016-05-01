@@ -18,7 +18,7 @@ Then, to apply the filter, call its `validate()` and `sanitize()` methods. Suppl
 // between 6 and 10 characters long,
 // and cast it to a string
 $ok = $filter->validate($username, 'alnum')
-   && ! $filter->validate($username, 'numeric')
+   && ! $filter->validate($username, 'int')
    && $filter->validate($username, 'strlenBetween', 6, 10)
    && $filter->sanitize($username, 'string');
 if (! $ok) {
@@ -71,7 +71,7 @@ class CreateUserCommand
     public function __construct($username, $password, $password_confirm)
     {
         $ok = Filter::validate($username, 'alnum')
-           && ! Filter::validate($username, 'numeric')
+           && ! Filter::validate($username, 'int')
            && Filter::validate($username, 'strlenBetween', 6, 10)
            && Filter::sanitize($username, 'string');
 
