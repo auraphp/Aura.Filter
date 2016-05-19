@@ -10,7 +10,7 @@
         "validation"
     ],
     "homepage": "https://github.com/auraphp/Aura.Filter",
-    "license": "BSD-2-Clause",
+    "license": "MIT",
     "authors": [
         {
             "name": "Aura.Filter Contributors",
@@ -18,21 +18,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.0",
         "ext-libxml": "*"
     },
     "autoload": {
         "psr-4": {
-            "Aura\\Filter\\": "src/",
-            "Aura\\Filter\\_Config\\": "config/"
-        }
-    },
-    "extra": {
-        "aura": {
-            "type": "library",
-            "config": {
-                "common": "Aura\\Filter\\_Config\\Common"
-            }
+            "Aura\\Filter\\": "src/"
         }
     },
     "suggest": {
@@ -40,13 +31,9 @@
         "ext-intl": "To support IDNs in email filters.",
         "ext-mbstring": "To support UTF-8 in string-length filters."
     },
-    "require-dev": {
-        "aura/di": "~2.0"
-    },
     "autoload-dev": {
         "psr-4": {
-            "Aura\\Filter\\": "tests/",
-            "Aura\\Di\\": "vendor/aura/di/tests/"
+            "Aura\\Filter\\": "tests/"
         }
     }
 }
