@@ -20,7 +20,7 @@ Next, add rule specifications to validate and/or sanitize each subject field:
 // at least 6 characters long,
 // and cast it to a string
 $filter->validate('username')->is('alnum');
-$filter->validate('username')->isNot('numeric');
+$filter->validate('username')->isNot('int');
 $filter->validate('username')->is('strlenMin', 6);
 $filter->sanitize('username')->to('string');
 
