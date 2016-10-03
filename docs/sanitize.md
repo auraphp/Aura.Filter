@@ -147,7 +147,7 @@ $filter->sanitize('field')->to('remove');
 Sanitizes the value using `preg_replace()`.
 
 ```php
-$filter->sanitize('field')->to('regex', $expr);
+$filter->sanitize('field')->to('regex', $expr, $replace);
 ```
 
 ## string
