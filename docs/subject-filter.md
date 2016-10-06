@@ -68,7 +68,7 @@ $success = $filter->apply($subject);
 if (! $success) {
     // get the failures
     $failures = $filter->getFailures();
-    echo $failures->getMessages();
+    var_dump($failures->getMessages());
 }
 ```
 
