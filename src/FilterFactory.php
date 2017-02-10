@@ -13,6 +13,7 @@ use Aura\Filter\Locator\SanitizeLocator;
 use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
+use Aura\Filter\Spec\SubSpecFactory;
 
 /**
  *
@@ -74,6 +75,7 @@ class FilterFactory
         return new $class(
             $this->newValidateSpec(),
             $this->newSanitizeSpec(),
+            $this->newSubSpecFactory(),
             $this->newFailureCollection()
         );
     }
@@ -115,6 +117,18 @@ class FilterFactory
     public function newSanitizeSpec()
     {
         return new SanitizeSpec($this->newSanitizeLocator());
+    }
+
+    /**
+     *
+     * Returns a new SubSpecFactory instance.
+     *
+     * @return SubSpec
+     *
+     */
+    public function newSubSpecFactory()
+    {
+        return new SubSpecFactory($this);
     }
 
     /**

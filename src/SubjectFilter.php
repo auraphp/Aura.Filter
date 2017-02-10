@@ -12,6 +12,8 @@ use Aura\Filter\Exception;
 use Aura\Filter\Failure\FailureCollection;
 use Aura\Filter\Spec\SanitizeSpec;
 use Aura\Filter\Spec\ValidateSpec;
+use Aura\Filter\Spec\SubSpecFactory;
+use Aura\Filter\Spec\SubSpec;
 use InvalidArgumentException;
 
 /**
@@ -77,6 +79,16 @@ class SubjectFilter
      */
     protected $sanitize_spec;
 
+
+    /**
+     * Factory for Sub subject specifications
+     *
+     * @var SubSpecFactory
+     *
+     * @access protected
+     */
+    protected $sub_spec_factory;
+
     /**
      *
      * A prototype FailureCollection.
@@ -94,6 +106,8 @@ class SubjectFilter
      *
      * @param ValidateSpec $sanitize_spec A prototype SanitizeSpec.
      *
+     * @param SubSpecFactory $sub_spec_factory A factory for SubSpec
+     *
      * @param FailureCollection $failures A prototype FailureCollection.
      *
      * @return self
@@ -102,10 +116,12 @@ class SubjectFilter
     public function __construct(
         ValidateSpec $validate_spec,
         SanitizeSpec $sanitize_spec,
+        SubSpecFactory $sub_spec_factory,
         FailureCollection $failures
     ) {
         $this->validate_spec = $validate_spec;
         $this->sanitize_spec = $sanitize_spec;
+        $this->sub_spec_factory = $sub_spec_factory;
         $this->proto_failures = $failures;
         $this->init();
     }
@@ -194,6 +210,21 @@ class SubjectFilter
     public function sanitize($field)
     {
         return $this->addSpec(clone $this->sanitize_spec, $field);
+    }
+
+    /**
+     *
+     * Adds a "subfilter" specification for a subject field.
+     *
+     * @param string $field The subject field name.
+     *
+     * @return SubSpec
+     *
+     */
+    public function subfilter($field, $class = 'Aura\Filter\SubjectFilter')
+    {
+        $spec = $this->sub_spec_factory->newSubSpec($class);
+        return $this->addSpec($spec, $field);
     }
 
     /**
