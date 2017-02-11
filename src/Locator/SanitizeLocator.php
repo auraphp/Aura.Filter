@@ -56,6 +56,7 @@ class SanitizeLocator extends Locator
             'strlenMin'             => function () { return new Sanitize\StrlenMin(); },
             'titlecase'             => function () { return new Sanitize\Titlecase(); },
             'trim'                  => function () { return new Sanitize\Trim(); },
+            'uploadedFileOrNull'    => function () { return new Sanitize\UploadedFileOrNull(); },
             'uppercase'             => function () { return new Sanitize\Uppercase(); },
             'uppercaseFirst'        => function () { return new Sanitize\UppercaseFirst(); },
             'uuid'                  => function () { return new Sanitize\Uuid(); },

@@ -64,6 +64,7 @@ class ValidateLocator extends Locator
             'titlecase'             => function () { return new Validate\Titlecase(); },
             'trim'                  => function () { return new Validate\Trim(); },
             'upload'                => function () { return new Validate\Upload(); },
+            'uploadedFile'          => function () { return new Validate\UploadedFile(); },
             'uppercase'             => function () { return new Validate\Uppercase(); },
             'uppercaseFirst'        => function () { return new Validate\UppercaseFirst(); },
             'url'                   => function () { return new Validate\Url(); },

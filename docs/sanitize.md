@@ -98,7 +98,7 @@ $filter->sanitize('field')->to('isbn');
 
 Sanitizes the value to all lowercase characters.
 
-```
+```php
 $filter->sanitize('field')->to('lowercase');
 ```
 
@@ -106,7 +106,7 @@ $filter->sanitize('field')->to('lowercase');
 
 Sanitizes the value to begin with a lowercase character.
 
-```
+```php
 $filter->sanitize('field')->to('lowercaseFirst');
 ```
 
@@ -207,11 +207,20 @@ Sanitizes the value to `trim()` it. Optionally specify characters to trim.
 $filter->sanitize('field')->to('trim', $chars);
 ```
 
+## uploadedFileOrNull
+
+Sanitizes the value to `null` if value is not an instance of PSR7
+UploadedFileInterface or file was not uploaded
+
+```php
+$filter->sanitize('field')->to('uploadedFileOrNull');
+```
+
 ## uppercase
 
 Sanitizes the value to all uppercase characters.
 
-```
+```php
 $filter->sanitize('field')->to('uppercase');
 ```
 
@@ -219,7 +228,7 @@ $filter->sanitize('field')->to('uppercase');
 
 Sanitizes the value to begin with an uppercase character.
 
-```
+```php
 $filter->sanitize('field')->to('uppercaseFirst');
 ```
 

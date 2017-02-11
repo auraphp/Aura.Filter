@@ -290,6 +290,23 @@ Validates the value represents a PHP upload information array, and that the file
 $filter->validate('field')->is('upload');
 ```
 
+## uploadedFile
+
+Validates the presence and properites of a PSR7 UploadedFileInterface
+
+```php
+$filter->validate('field')->is(
+    'uploadedFile',
+    [
+        'required' => true, // require the file be uploaded
+        'fileExtension' => ['txt', 'pdf'], // string or array of acceptable extensions
+        'fileMedia' => ['text/plain', 'application/pdf'], // string or array of acceptable media types
+        'sizeMin' => 1024, // size as numeric bytes or human readable string with units: KB, MB, GB, TB, PB
+        'sizeMax' => '2MB', // size as numeric bytes or human readable string with units: KB, MB, GB, TB, PB
+    ]
+);
+```
+
 ## uppercase
 
 Validates the value as all uppercase.
