@@ -41,7 +41,8 @@
         "ext-mbstring": "To support UTF-8 in string-length filters."
     },
     "require-dev": {
-        "aura/di": "~2.0"
+        "aura/di": "~2.0",
+        "phpunit/phpunit": "~5.7 || ~4.8"
     },
     "autoload-dev": {
         "psr-4": {
