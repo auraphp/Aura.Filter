@@ -63,7 +63,7 @@ class Integer
         $value = rtrim($value, '-');
 
         // remove all minuses not at the front
-        $is_negative = ($value[0] == '-');
+        $is_negative = preg_match('/^-/', $value);
         $value = str_replace('-', '', $value);
         if ($is_negative) {
             $value = '-' . $value;
