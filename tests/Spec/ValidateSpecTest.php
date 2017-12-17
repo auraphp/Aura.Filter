@@ -177,4 +177,27 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
         $subject->foo = 123;
         $this->assertTrue($this->spec->__invoke($subject));
     }
+
+    public function testIssue134()
+    {
+        $spec = new ValidateSpec(new ValidateLocator(array(
+            'custom' => function () { return new \Aura\Filter\Rule\Custom; },
+        )));
+
+        $spec->field('foo')->is('custom');
+
+        $subject = (object) array(
+            'foo' => 'test',
+        );
+
+        // Make sure the custom validator is called.
+        $spec->__invoke($subject);
+        $this->assertTrue($spec->__invoke($subject));
+
+        $subject = (object) array(
+            'foo' => '',
+        );
+        // Custom validator always returns true, but this fails due to the foo is blank.
+        $this->assertTrue($spec->__invoke($subject));
+    }
 }
