@@ -184,7 +184,7 @@ class ValidateSpecTest extends \PHPUnit_Framework_TestCase
             'custom' => function () { return new \Aura\Filter\Rule\Custom; },
         )));
 
-        $spec->field('foo')->is('custom');
+        $spec->field('foo')->is('custom')->skipBlankRule();
 
         $subject = (object) array(
             'foo' => 'test',
