@@ -74,7 +74,7 @@ class Double
         $value = rtrim($value, '.-');
 
         // remove all minuses not at the front
-        $is_negative = ($value[0] == '-');
+        $is_negative = (substr($value, 0, 1) == '-');
         $value = str_replace('-', '', $value);
         if ($is_negative) {
             $value = '-' . $value;
