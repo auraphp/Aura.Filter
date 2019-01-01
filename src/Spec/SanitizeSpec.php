@@ -28,6 +28,15 @@ class SanitizeSpec extends Spec
 
     /**
      *
+     * If the field is blank, use value from this field as the replacement value.
+     *
+     * @param string
+     *
+     */
+    protected $blank_field;
+
+    /**
+     *
      * Applies the rule specification to a subject.
      *
      * @param mixed $subject The filter subject.
@@ -37,6 +46,13 @@ class SanitizeSpec extends Spec
      */
     public function __invoke($subject)
     {
+
+        if ($this->subjectFieldIsBlank($subject) && $this->blank_field) {
+            $field = $this->field;
+            $replace_with = $this->blank_field;
+            $subject->$field = $subject->$replace_with;
+        }
+
         if (! $this->subjectFieldIsBlank($subject)) {
             return parent::__invoke($subject);
         }
@@ -97,6 +113,21 @@ class SanitizeSpec extends Spec
     {
         $this->allow_blank = true;
         $this->blank_value = $blank_value;
+        return $this;
+    }
+
+    /**
+     *
+     * Use value from $field_name for blank field.
+     *
+     * @param string $field_name Replace the blank field with the value from field.
+     *
+     * @return self
+     *
+     */
+    public function useBlankField($field_name)
+    {
+        $this->blank_field = $field_name;
         return $this;
     }
 
