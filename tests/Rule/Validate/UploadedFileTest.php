@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-use Zend\Diactoros\UploadedFile as Psr7File;
+use GuzzleHttp\Psr7\UploadedFile as Psr7File;
 
 class UploadedFileTest extends AbstractValidateTest
 {

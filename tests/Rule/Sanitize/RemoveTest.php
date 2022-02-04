@@ -1,7 +1,9 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-class RemoveTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class RemoveTest extends TestCase
 {
     public function testTo()
     {

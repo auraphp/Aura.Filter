@@ -1,7 +1,9 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-abstract class AbstractSanitizeTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+abstract class AbstractSanitizeTest extends TestCase
 {
     protected function getClass()
     {

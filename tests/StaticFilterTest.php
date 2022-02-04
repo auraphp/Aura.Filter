@@ -3,15 +3,16 @@ namespace Aura\Filter;
 
 use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Locator\SanitizeLocator;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
-class StaticFilterTest extends \PHPUnit_Framework_TestCase
+class StaticFilterTest extends TestCase
 {
-    protected function setUp()
+    protected function set_up()
     {
         FakeStaticFilter::reset();
     }
 
-    protected function tearDown()
+    protected function tear_down()
     {
         FakeStaticFilter::reset();
     }
@@ -41,7 +42,7 @@ class StaticFilterTest extends \PHPUnit_Framework_TestCase
             new SanitizeLocator()
         ));
 
-        $this->setExpectedException(
+        $this->expectException(
             'Aura\Filter\Exception',
             'Aura\Filter\FakeStaticFilter::$instance is already set.'
         );
@@ -54,7 +55,7 @@ class StaticFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateWithoutInstance()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'Aura\Filter\Exception',
             'Aura\Filter\FakeStaticFilter::$instance not set.'
         );
@@ -64,7 +65,7 @@ class StaticFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testSanitizeWithoutInstance()
     {
-        $this->setExpectedException(
+        $this->expectException(
             'Aura\Filter\Exception',
             'Aura\Filter\FakeStaticFilter::$instance not set.'
         );

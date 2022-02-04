@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-use Zend\Diactoros\UploadedFile as Psr7File;
+use GuzzleHttp\Psr7\UploadedFile as Psr7File;
 
 class UploadedFileOrNullTest extends AbstractSanitizeTest
 {
