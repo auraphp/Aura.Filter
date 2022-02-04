@@ -72,11 +72,11 @@ class Isbn
             return false;
         }
 
-        $even = $value{0}  + $value{2}  + $value{4} + $value{6}
-               + $value{8} + $value{10} + $value{12};
+        $even = $value[0]  + $value[2]  + $value[4] + $value[6]
+               + $value[8] + $value[10] + $value[12];
 
-        $odd   = $value{1} + $value{3} + $value{5} + $value{7}
-               + $value{9} + $value{11};
+        $odd   = $value[1] + $value[3] + $value[5] + $value[7]
+               + $value[9] + $value[11];
 
         $sum   = $even + ($odd * 3);
 
@@ -102,20 +102,20 @@ class Isbn
             return false;
         }
 
-        $sum = $value{0}
-             + $value{1} * 2
-             + $value{2} * 3
-             + $value{3} * 4
-             + $value{4} * 5
-             + $value{5} * 6
-             + $value{6} * 7
-             + $value{7} * 8
-             + $value{8} * 9;
+        $sum = $value[0]
+             + $value[1] * 2
+             + $value[2] * 3
+             + $value[3] * 4
+             + $value[4] * 5
+             + $value[5] * 6
+             + $value[6] * 7
+             + $value[7] * 8
+             + $value[8] * 9;
 
-        if ($value{9} == 'X') {
+        if ($value[9] == 'X') {
             $sum += 100;
         } else {
-            $sum += $value{9} * 10;
+            $sum += $value[9] * 10;
         }
 
         if ($sum % 11) {

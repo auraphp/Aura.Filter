@@ -4,12 +4,13 @@ namespace Aura\Filter\Spec;
 use Aura\Filter\Filter;
 use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Rule\Validate;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
-class ValidateSpecTest extends \PHPUnit_Framework_TestCase
+class ValidateSpecTest extends TestCase
 {
     protected $spec;
 
-    protected function setUp()
+    protected function set_up()
     {
         $this->spec = new ValidateSpec(new ValidateLocator(array(
             'strlen' => function () { return new Validate\Strlen; },

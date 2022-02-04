@@ -1,7 +1,9 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-abstract class AbstractValidateTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+abstract class AbstractValidateTest extends TestCase
 {
     protected function getClass()
     {

@@ -6,7 +6,7 @@ This package provides tools to validate and sanitize objects and arrays.
 
 ### Installation
 
-This library requires PHP 5.4 or later; we recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
+This library requires PHP 5.6 or later; we recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
 
 It is installable and autoloadable via Composer as [aura/filter](https://packagist.org/packages/aura/filter).
 
@@ -14,9 +14,9 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/relea
 
 ### Quality
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/quality-score.png?b=2.x)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
-[![Code Coverage](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/coverage.png?b=2.x)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
-[![Build Status](https://travis-ci.org/auraphp/Aura.Filter.png?branch=2.x)](https://travis-ci.org/auraphp/Aura.Filter)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/badges/quality-score.png?b=3.x)](https://scrutinizer-ci.com/g/auraphp/Aura.Filter/)
+[![codecov](https://codecov.io/gh/auraphp/Aura.Filter/branch/3.x/graph/badge.svg?token=UASDouLxyc)](https://codecov.io/gh/auraphp/Aura.Filter)
+[![Continuous Integration](https://github.com/auraphp/Aura.Filter/actions/workflows/continuous-integration.yml/badge.svg?branch=3.x)](https://github.com/auraphp/Aura.Filter/actions/workflows/continuous-integration.yml)
 
 To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/manual/) to be available as `phpunit`.
 

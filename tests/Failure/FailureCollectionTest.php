@@ -2,11 +2,13 @@
 
 namespace Aura\Filter\Failure;
 
-class FailureCollectionTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class FailureCollectionTest extends TestCase
 {
     protected $failures;
 
-    protected function setUp()
+    protected function set_up()
     {
         $this->failures = new FailureCollection();
     }

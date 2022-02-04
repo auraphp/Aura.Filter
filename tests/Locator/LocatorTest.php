@@ -3,7 +3,9 @@ namespace Aura\Filter\Locator;
 
 use Aura\Filter\Rule\Validate;
 
-class LocatorTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class LocatorTest extends TestCase
 {
     public function test__constructAndGet()
     {
@@ -31,7 +33,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     public function testGet_noSuchHelper()
     {
         $fake_locator = new FakeLocator();
-        $this->setExpectedException('Aura\Filter\Exception\RuleNotMapped');
+        $this->expectException('Aura\Filter\Exception\RuleNotMapped');
         $fake_locator->get('noSuchHelper');
     }
 }

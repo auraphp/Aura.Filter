@@ -1,7 +1,9 @@
 <?php
 namespace Aura\Filter\Rule;
 
-class CharCaseTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class CharCaseTest extends TestCase
 {
     public function testLower()
     {

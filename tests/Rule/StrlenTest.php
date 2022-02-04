@@ -1,7 +1,9 @@
 <?php
 namespace Aura\Filter\Rule;
 
-class StrlenTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class StrlenTest extends TestCase
 {
     /**
      * @dataProvider fakeProvider
@@ -50,16 +52,16 @@ class StrlenTest extends \PHPUnit_Framework_TestCase
     {
         $bad = "\xFF\xFE";
         $fake = new FakeStrlenIconv();
-        $this->setExpectedException('Aura\Filter\Exception\MalformedUtf8');
-        $fake->strlen($bad); 
+        $this->expectException('Aura\Filter\Exception\MalformedUtf8');
+        $fake->strlen($bad);
     }
-    
+
     public function testIconvSubstrMalformedUtf8()
     {
         $bad = "\xFF\xFE";
         $fake = new FakeStrlenIconv();
-        $this->setExpectedException('Aura\Filter\Exception\MalformedUtf8');
-        $fake->substr($bad,0,1); 
+        $this->expectException('Aura\Filter\Exception\MalformedUtf8');
+        $fake->substr($bad,0,1);
     }
 
     public function fakeProvider()

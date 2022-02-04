@@ -1,11 +1,13 @@
 <?php
 namespace Aura\Filter;
 
-class SubjectFilterTest extends \PHPUnit_Framework_TestCase
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+
+class SubjectFilterTest extends TestCase
 {
     protected $filter;
 
-    protected function setUp()
+    protected function set_up()
     {
         $filter_factory = new FilterFactory();
         $this->filter = $filter_factory->newSubjectFilter();
@@ -39,7 +41,7 @@ class SubjectFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testApply_notAnObject()
     {
-        $this->setExpectedException('InvalidArgumentException');
+        $this->expectException('InvalidArgumentException');
         $subject = 'string';
         $this->filter->apply($subject);
     }
