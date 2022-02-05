@@ -19,7 +19,6 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "ext-libxml": "*",
         "psr/http-message": "^1.0.0"
     },
     "autoload": {
