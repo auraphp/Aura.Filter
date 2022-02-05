@@ -6,7 +6,7 @@ This package provides tools to validate and sanitize objects and arrays.
 
 ### Installation
 
-This library requires PHP 5.6 or later; we recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
+This library requires PHP 7.4 or later; we recommend using the latest available version of PHP as a matter of principle. It has no userland dependencies.
 
 It is installable and autoloadable via Composer as [aura/filter](https://packagist.org/packages/aura/filter).
 
