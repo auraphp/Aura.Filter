@@ -18,7 +18,7 @@ Alternatively, [download a release](https://github.com/auraphp/Aura.Filter/relea
 [![codecov](https://codecov.io/gh/auraphp/Aura.Filter/branch/3.x/graph/badge.svg?token=UASDouLxyc)](https://codecov.io/gh/auraphp/Aura.Filter)
 [![Continuous Integration](https://github.com/auraphp/Aura.Filter/actions/workflows/continuous-integration.yml/badge.svg?branch=3.x)](https://github.com/auraphp/Aura.Filter/actions/workflows/continuous-integration.yml)
 
-To run the unit tests at the command line, issue `composer install` and then `phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`, and [PHPUnit](http://phpunit.de/manual/) to be available as `phpunit`.
+To run the unit tests at the command line, issue `composer install` and then `vendor/bin/phpunit` at the package root. This requires [Composer](http://getcomposer.org/) to be available as `composer`.
 
 This library attempts to comply with [PSR-1][], [PSR-2][], and [PSR-4][]. If
 you notice compliance oversights, please send a patch via pull request.
