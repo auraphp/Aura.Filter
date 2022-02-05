@@ -220,4 +220,32 @@ class SubjectFilterTest extends TestCase
         );
         $this->assertSame($actual, $expect);
     }
+
+
+    public function test_issue140_stopRule()
+    {
+        $this->filter->validate('first_name')->isNotBlank();
+        $this->filter->validate('last_name')->isNotBlank();
+        $this->filter->validate('email')->is('email');
+        $this->filter->validate('cell_number')->isNotBlank()->asStopRule();
+        $this->filter->validate('password')->isNotBlank();
+
+        $subject = (object) [
+            'first_name' => 'Hari',
+            'last_name' => 'KT',
+            'email' => 'spammers@harikt.com',
+            'cell_number' => '',
+        ];
+
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'cell_number' => array(
+                'cell_number should not have been blank',
+            ),
+        );
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
+    }
 }
