@@ -221,31 +221,94 @@ class SubjectFilterTest extends TestCase
         $this->assertSame($actual, $expect);
     }
 
-
-    public function test_issue140_stopRule()
+    public function test_issue140_case1()
     {
         $this->filter->validate('first_name')->isNotBlank();
-        $this->filter->validate('last_name')->isNotBlank();
-        $this->filter->validate('email')->is('email');
-        $this->filter->validate('cell_number')->isNotBlank()->asStopRule();
+        $this->filter->validate('first_name')->is('alpha')->asStopRule();
         $this->filter->validate('password')->isNotBlank();
 
         $subject = (object) [
-            'first_name' => 'Hari',
-            'last_name' => 'KT',
-            'email' => 'spammers@harikt.com',
-            'cell_number' => '',
+            'first_name' => '888',
         ];
 
         $result = $this->filter->apply($subject);
         $this->assertFalse($result);
 
         $expect = array(
-            'cell_number' => array(
-                'cell_number should not have been blank',
+            'first_name' => array(
+                'first_name should have validated as alpha',
             ),
         );
         $actual = $this->filter->getFailures()->getMessages();
         $this->assertSame($expect, $actual);
     }
+
+    public function test_issue140_case2()
+    {
+        $this->filter->validate('first_name')->isNotBlank();
+        $this->filter->validate('first_name')->is('alpha')->asStopRule();
+        $this->filter->validate('password')->isNotBlank();
+
+        // Provide blank
+        $subject = (object) [
+            'first_name' => '',
+        ];
+
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'first_name' => array(
+                'first_name should not have been blank',
+            ),
+        );
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
+    }
+
+    public function test_issue140_case2_multiple_stop_call()
+    {
+        $this->filter->validate('first_name')->isNotBlank()->asStopRule();
+        $this->filter->validate('first_name')->is('alpha')->asStopRule();
+        $this->filter->validate('password')->isNotBlank();
+
+        // Provide blank
+        $subject = (object) [
+            'first_name' => '',
+        ];
+
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'first_name' => array(
+                'first_name should not have been blank',
+            ),
+        );
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
+    }
+
+    public function test_issue140_case3()
+    {
+        $this->filter->validate('first_name')->isNotBlank()->is('alpha')->asStopRule();
+        $this->filter->validate('password')->isNotBlank();
+
+        // Provide blank
+        $subject = (object) [
+            'first_name' => '',
+        ];
+
+        $result = $this->filter->apply($subject);
+        $this->assertFalse($result);
+
+        $expect = array(
+            'first_name' => array(
+                'first_name should have validated as alpha',
+            ),
+        );
+        $actual = $this->filter->getFailures()->getMessages();
+        $this->assertSame($expect, $actual);
+    }
+
 }

@@ -338,6 +338,13 @@ class SubjectFilter
     protected function applySpec($spec, $subject)
     {
         if (isset($this->skip[$spec->getField()])) {
+
+            // Issue 140 . Some rule already failed for the field.
+            // Check the current one have a stop rule or not.
+            if ($spec->isStopRule()) {
+                return false;
+            }
+
             return true;
         }
 
@@ -346,6 +353,7 @@ class SubjectFilter
         }
 
         $this->failed($spec);
+
         if ($spec->isStopRule()) {
             return false;
         }
