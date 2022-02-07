@@ -21,7 +21,7 @@ class SubSpec extends Spec
     /**
      * Subject Filter
      *
-     * @var SubjectFitler
+     * @var SubjectFilter
      *
      * @access protected
      */

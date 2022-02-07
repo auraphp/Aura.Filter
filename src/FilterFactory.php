@@ -49,9 +49,6 @@ class FilterFactory
      * @param array $validate_factories Additional factories for the ValidateLocator.
      *
      * @param array $sanitize_factories Additional factories for the SanitizeLocator.
-     *
-     * @return self
-     *
      */
     public function __construct(
         array $validate_factories = array(),
@@ -123,7 +120,7 @@ class FilterFactory
      *
      * Returns a new SubSpecFactory instance.
      *
-     * @return SubSpec
+     * @return SubSpecFactory
      *
      */
     public function newSubSpecFactory()

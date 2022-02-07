@@ -9,8 +9,10 @@
 namespace Aura\Filter;
 
 use Aura\Filter\Exception;
+use Aura\Filter\Failure\Failure;
 use Aura\Filter\Failure\FailureCollection;
 use Aura\Filter\Spec\SanitizeSpec;
+use Aura\Filter\Spec\Spec;
 use Aura\Filter\Spec\ValidateSpec;
 use Aura\Filter\Spec\SubSpecFactory;
 use Aura\Filter\Spec\SubSpec;
@@ -109,9 +111,6 @@ class SubjectFilter
      * @param SubSpecFactory $sub_spec_factory A factory for SubSpec
      *
      * @param FailureCollection $failures A prototype FailureCollection.
-     *
-     * @return self
-     *
      */
     public function __construct(
         ValidateSpec $validate_spec,
