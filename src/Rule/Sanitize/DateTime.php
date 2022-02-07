@@ -12,7 +12,7 @@ use Aura\Filter\Rule\AbstractDateTime;
 
 /**
  *
- * Sanitize a datetime to a specifed format.
+ * Sanitize a datetime to a specified format.
  *
  * @package Aura.Filter
  *
