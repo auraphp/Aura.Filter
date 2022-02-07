@@ -39,7 +39,7 @@ We can call one of the following methods after `validate()`:
   match the rule
 - `isBlankOrNot(...)` to specify that the value may be blank, or that it
   **must not** match the rule
-- `isNotBlank()` to specifiy that the value **must not** be blank (note that this makes sense only if you don't care about other validations)
+- `isNotBlank()` to specify that the value **must not** be blank (note that this makes sense only if you don't care about other validations)
 
 We can call one of the following methods after `sanitize()`:
 
