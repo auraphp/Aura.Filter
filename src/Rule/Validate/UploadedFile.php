@@ -37,12 +37,12 @@ class UploadedFile
 
     /**
      *
-     * Validates the presenece and properites if a PSR7 FileUploadInterface
+     * Validates the presence and properties if a PSR7 FileUploadInterface
      *
      * valid options:
      *  - required      : bool require file is uploaded
-     *  - fileExtension : array or strign of acceptable file extensions
-     *  - fileMedia     : array or strign of acceptable file media types
+     *  - fileExtension : array or string of acceptable file extensions
+     *  - fileMedia     : array or string of acceptable file media types
      *  - sizeMax       : bytes or human readable string
      *  - sizeMin       : bytes or human readable string
      *

@@ -23,7 +23,7 @@ class ValueFilter
 {
     /**
      *
-     * A pesudo-subject to hold the value being filtered.
+     * A pseudo-subject to hold the value being filtered.
      *
      * @var object
      *
@@ -94,7 +94,7 @@ class ValueFilter
      *
      * @param Locator $locator A rule locator.
      *
-     * @param string $args Arugments for the rule.
+     * @param string $args Arguments for the rule.
      *
      * @return bool True on success, false on failure.
      *

@@ -292,7 +292,7 @@ $filter->validate('field')->is('upload');
 
 ## uploadedFile
 
-Validates the presence and properites of a PSR7 UploadedFileInterface
+Validates the presence and properties of a PSR7 UploadedFileInterface
 
 ```php
 $filter->validate('field')->is(

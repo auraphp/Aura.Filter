@@ -14,7 +14,7 @@ This library also makes a distinction between a "value" filter and a "subject" f
 
 - A "value" filter validates and sanitizes an individual value
 
-- A "subject" filter validates and sanitzes the collection of elements in an array, or the collection of properties in an object. (The "subject" is the array or object.)
+- A "subject" filter validates and sanitizes the collection of elements in an array, or the collection of properties in an object. (The "subject" is the array or object.)
 
 ## Filter Container
 

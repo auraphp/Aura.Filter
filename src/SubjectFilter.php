@@ -63,7 +63,7 @@ class SubjectFilter
 
     /**
      *
-     * A prototype ValidateSpect.
+     * A prototype ValidateSpec.
      *
      * @var ValidateSpec
      *
@@ -72,7 +72,7 @@ class SubjectFilter
 
     /**
      *
-     * A prototype SanitizeSpect.
+     * A prototype SanitizeSpec.
      *
      * @var SanitizeSpec
      *
