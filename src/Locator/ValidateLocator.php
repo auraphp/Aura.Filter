@@ -3,7 +3,7 @@
  *
  * This file is part of the Aura Project for PHP.
  *
- * @license http://opensource.org/licenses/bsd-license.php BSD
+ * @license http://opensource.org/licenses/mit-license.php MIT
  *
  */
 namespace Aura\Filter\Locator;
