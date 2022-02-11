@@ -28,7 +28,7 @@ class Isbn
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field)
     {
         $value = $this->normalize($subject, $field);
         if (! $value) {

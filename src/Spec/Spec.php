@@ -24,17 +24,17 @@ class Spec
     /**
      * Stop filtering on a field when a rule for that field fails.
      */
-    const HARD_RULE = 'HARD_RULE';
+    public const HARD_RULE = 'HARD_RULE';
 
     /**
      * Continue filtering on a field even when a rule for that field fails.
      */
-    const SOFT_RULE = 'SOFT_RULE';
+    public const SOFT_RULE = 'SOFT_RULE';
 
     /**
      * Stop filtering on all fields when a rule fails.
      */
-    const STOP_RULE = 'STOP_RULE';
+    public const STOP_RULE = 'STOP_RULE';
 
     /**
      *
@@ -155,7 +155,7 @@ class Spec
      * @return self
      *
      */
-    public function asSoftRule($message = null): \Aura\Filter\Spec\Spec
+    public function asSoftRule(?string $message = null): \Aura\Filter\Spec\Spec
     {
         return $this->setFailureMode(self::SOFT_RULE, $message);
     }
@@ -169,7 +169,7 @@ class Spec
      * @return self
      *
      */
-    public function asHardRule($message = null): \Aura\Filter\Spec\Spec
+    public function asHardRule(?string $message = null): \Aura\Filter\Spec\Spec
     {
         return $this->setFailureMode(self::HARD_RULE, $message);
     }
@@ -183,7 +183,7 @@ class Spec
      * @return self
      *
      */
-    public function asStopRule($message = null): \Aura\Filter\Spec\Spec
+    public function asStopRule(?string $message = null): \Aura\Filter\Spec\Spec
     {
         return $this->setFailureMode(self::STOP_RULE, $message);
     }

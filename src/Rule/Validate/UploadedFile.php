@@ -20,11 +20,11 @@ use Psr\Http\Message\UploadedFileInterface;
 class UploadedFile
 {
 
-    const REQUIRED       = 'required';
-    const FILE_EXTENSION = 'fileExtension';
-    const FILE_MEDIA     = 'fileMedia';
-    const SIZE_MAX       = 'sizeMax';
-    const SIZE_MIN       = 'sizeMin';
+    public const REQUIRED       = 'required';
+    public const FILE_EXTENSION = 'fileExtension';
+    public const FILE_MEDIA     = 'fileMedia';
+    public const SIZE_MAX       = 'sizeMax';
+    public const SIZE_MIN       = 'sizeMin';
 
     /**
      * @var string[]

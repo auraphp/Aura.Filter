@@ -68,7 +68,7 @@ abstract class AbstractStaticFilter
      * @return bool True on success, false on failure.
      *
      */
-    public static function validate($value, $rule)
+    public static function validate($value, string $rule): bool
     {
         if (! static::$instance) {
             $class = get_called_class();
@@ -95,7 +95,7 @@ abstract class AbstractStaticFilter
      * @return bool True on success, false on failure.
      *
      */
-    public static function sanitize(&$value, $rule)
+    public static function sanitize(&$value, string $rule): bool
     {
         if (! static::$instance) {
             $class = get_called_class();

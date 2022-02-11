@@ -66,7 +66,7 @@ class FilterFactory
      *
      *
      */
-    public function newSubjectFilter(string $class = 'Aura\Filter\SubjectFilter'): object
+    public function newSubjectFilter(string $class = SubjectFilter::class): object
     {
         return new $class(
             $this->newValidateSpec(),

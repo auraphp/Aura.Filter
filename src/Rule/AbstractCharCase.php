@@ -84,10 +84,9 @@ abstract class AbstractCharCase extends AbstractStrlen
      *
      * @param string $str String to convert case.
      *
-     * @return int
      *
      */
-    protected function ucfirst(string $str)
+    protected function ucfirst(string $str): string
     {
         $len = $this->strlen($str);
         if ($len == 0) {
@@ -108,10 +107,9 @@ abstract class AbstractCharCase extends AbstractStrlen
      *
      * @param string $str String to convert case.
      *
-     * @return int
      *
      */
-    protected function lcfirst(string $str)
+    protected function lcfirst(string $str): string
     {
         $len = $this->strlen($str);
         if ($len == 0) {

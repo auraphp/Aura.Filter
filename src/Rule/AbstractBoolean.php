@@ -41,10 +41,9 @@ abstract class AbstractBoolean
      *
      * @param mixed $value The value to check.
      *
-     * @return bool
      *
      */
-    protected function isTrue($value)
+    protected function isTrue($value): bool
     {
         if (! $this->isBoolIsh($value)) {
             return false;
@@ -59,10 +58,9 @@ abstract class AbstractBoolean
      *
      * @param mixed $value The value to check.
      *
-     * @return bool
      *
      */
-    protected function isFalse($value)
+    protected function isFalse($value): bool
     {
         if (! $this->isBoolIsh($value)) {
             return false;
@@ -77,10 +75,9 @@ abstract class AbstractBoolean
      *
      * @param mixed $value The value to check.
      *
-     * @return bool
      *
      */
-    protected function isBoolIsh($value)
+    protected function isBoolIsh($value): bool
     {
         if (is_string($value) || is_int($value) || is_bool($value)) {
             return true;
