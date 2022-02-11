@@ -60,10 +60,9 @@ class ValidateSpec extends Spec
      *
      * @param ...$args Arguments for the rule.
      *
-     * @return self
      *
      */
-    public function is($rule)
+    public function is(string $rule): Spec
     {
         $this->allow_blank = false;
         $this->reverse = false;
@@ -74,10 +73,9 @@ class ValidateSpec extends Spec
      *
      * Validate the field is blank.
      *
-     * @return self
      *
      */
-    public function isBlank()
+    public function isBlank(): Spec
     {
         $this->allow_blank = true;
         $this->reverse = false;
@@ -92,10 +90,9 @@ class ValidateSpec extends Spec
      *
      * @param ...$args Arguments for the rule.
      *
-     * @return self
      *
      */
-    public function isBlankOr($rule)
+    public function isBlankOr(string $rule): Spec
     {
         $this->allow_blank = true;
         $this->reverse = false;
@@ -110,10 +107,9 @@ class ValidateSpec extends Spec
      *
      * @param ...$args Arguments for the rule.
      *
-     * @return self
      *
      */
-    public function isNot($rule)
+    public function isNot(string $rule): Spec
     {
         $this->allow_blank = false;
         $this->reverse = true;
@@ -124,10 +120,9 @@ class ValidateSpec extends Spec
      *
      * Validate the field is not blank.
      *
-     * @return self
      *
      */
-    public function isNotBlank()
+    public function isNotBlank(): Spec
     {
         $this->allow_blank = false;
         $this->reverse = true;
@@ -142,10 +137,9 @@ class ValidateSpec extends Spec
      *
      * @param ...$args Arguments for the rule.
      *
-     * @return self
      *
      */
-    public function isBlankOrNot($rule)
+    public function isBlankOrNot(string $rule): Spec
     {
         $this->allow_blank = true;
         $this->reverse = true;
@@ -156,10 +150,9 @@ class ValidateSpec extends Spec
      *
      * Returns the default failure message for this rule specification.
      *
-     * @return string
      *
      */
-    protected function getDefaultMessage()
+    protected function getDefaultMessage(): string
     {
         $message = $this->field . ' should';
 

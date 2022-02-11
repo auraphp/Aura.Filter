@@ -383,10 +383,9 @@ class Email
      *
      * Is the intl extension loaded?
      *
-     * @return bool
      *
      */
-    protected function intl()
+    protected function intl(): bool
     {
         return extension_loaded('intl');
     }
@@ -400,7 +399,7 @@ class Email
      * @return string The email with the IDN converted to ASCII (if possible).
      *
      */
-    protected function idnToAscii($email)
+    protected function idnToAscii(string $email): string
     {
         $parts = explode('@', $email);
         $domain = array_pop($parts);
@@ -434,7 +433,7 @@ class Email
      * $errorlevel = false and $errorlevel = 0.
      *
      */
-    protected function isEmail($email, $checkDns = false, $errorlevel = false)
+    protected function isEmail(string $email, bool $checkDns = false, $errorlevel = false)
     {
         $this->reset($email, $checkDns, $errorlevel);
         $this->parse();
@@ -460,7 +459,7 @@ class Email
      * @return null
      *
      */
-    protected function reset($email, $checkDns, $errorlevel)
+    protected function reset(string $email, bool $checkDns, $errorlevel): void
     {
         $this->email = $email;
 
@@ -523,7 +522,7 @@ class Email
      * @return null
      *
      */
-    protected function setThresholdDiagnose($errorlevel)
+    protected function setThresholdDiagnose($errorlevel): void
     {
         if (is_bool($errorlevel)) {
             $this->threshold = Email::VALID;
@@ -554,7 +553,7 @@ class Email
      * @return null
      *
      */
-    protected function parse()
+    protected function parse(): void
     {
         for ($this->pos = 0; $this->pos < $this->rawLength; $this->pos++) {
             $this->token = $this->email[$this->pos];
@@ -574,7 +573,7 @@ class Email
      * @return null
      *
      */
-    protected function parseContext()
+    protected function parseContext(): void
     {
         switch ($this->context) {
             case Email::COMPONENT_LOCALPART:
@@ -610,7 +609,7 @@ class Email
      * @return null
      *
      */
-    protected function parseComponentLocalPart()
+    protected function parseComponentLocalPart(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.4.1
         //   local-part = dot-atom / quoted-string / obs-local-part
@@ -809,7 +808,7 @@ class Email
      * @return null
      *
      */
-    protected function parseComponentDomain()
+    protected function parseComponentDomain(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.4.1
         //   domain = dot-atom / domain-literal / obs-domain
@@ -1020,7 +1019,7 @@ class Email
      * @return null
      *
      */
-    protected function parseComponentLiteral()
+    protected function parseComponentLiteral(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.4.1
         //   domain-literal = [CFWS] "[" *([FWS] dtext) [FWS] "]" [CFWS]
@@ -1222,7 +1221,7 @@ class Email
      * @return null
      *
      */
-    protected function parseContextQuotedString()
+    protected function parseContextQuotedString(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.4
         //   quoted-string = [CFWS]
@@ -1322,7 +1321,7 @@ class Email
      * @return null
      *
      */
-    protected function parseContextQuotedPair()
+    protected function parseContextQuotedPair(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.1
         //   quoted-pair = ("\" (VCHAR / WSP)) / obs-qp
@@ -1389,7 +1388,7 @@ class Email
      * @return null
      *
      */
-    protected function parseContextComment()
+    protected function parseContextComment(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.2
         //   comment = "(" *([FWS] ccontent) [FWS] ")"
@@ -1483,7 +1482,7 @@ class Email
      * @return null
      *
      */
-    protected function parseContextFws()
+    protected function parseContextFws(): void
     {
         // http://tools.ietf.org/html/rfc5322#section-3.2.2
         //   FWS = ([*WSP CRLF] 1*WSP) /  obs-FWS
@@ -1569,7 +1568,7 @@ class Email
      * @return null
      *
      */
-    protected function parseFinal()
+    protected function parseFinal(): void
     {
         // Some simple final tests
         if ((int) max($this->returnStatus) < Email::RFC5322) {
@@ -1636,7 +1635,7 @@ class Email
      * @return null
      *
      */
-    protected function checkDns()
+    protected function checkDns(): void
     {
         // Check DNS?
         if ($this->checkDns && ((int) max($this->returnStatus) < Email::DNSWARN) && function_exists('dns_get_record')) {
@@ -1690,7 +1689,7 @@ class Email
      * @return null
      *
      */
-    protected function checkTld()
+    protected function checkTld(): void
     {
         // Check for TLD addresses
         // -----------------------
@@ -1742,7 +1741,7 @@ class Email
      * @return null
      *
      */
-    protected function finalStatus()
+    protected function finalStatus(): void
     {
         $this->returnStatus = array_unique($this->returnStatus);
         $this->finalStatus = (int) max($this->returnStatus);

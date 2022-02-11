@@ -112,7 +112,7 @@ class Failure implements JsonSerializable
     * @return array
     *
     */
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         return array(
             'field' => $this->field,

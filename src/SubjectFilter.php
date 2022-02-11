@@ -8,6 +8,7 @@
  */
 namespace Aura\Filter;
 
+use Aura\Filter\Exception\FilterFailed;
 use Aura\Filter\Exception;
 use Aura\Filter\Failure\Failure;
 use Aura\Filter\Failure\FailureCollection;
@@ -132,7 +133,7 @@ class SubjectFilter
      * @return null
      *
      */
-    protected function init()
+    protected function init(): void
     {
         // do nothing
     }
@@ -164,7 +165,7 @@ class SubjectFilter
      * @throws Exception\FilterFailed when the assertion fails.
      *
      */
-    public function assert(&$subject)
+    public function assert(&$subject): void
     {
         if ($this->apply($subject)) {
             return;
@@ -176,7 +177,7 @@ class SubjectFilter
                  . "  Fields:" . PHP_EOL
                  . $this->failures->getMessagesAsString('    ');
 
-        $e = new Exception\FilterFailed($message);
+        $e = new FilterFailed($message);
         $e->setFilterClass($class);
         $e->setFailures($this->failures);
         $e->setSubject($subject);
@@ -189,10 +190,9 @@ class SubjectFilter
      *
      * @param string $field The subject field name.
      *
-     * @return ValidateSpec
      *
      */
-    public function validate($field)
+    public function validate(string $field): Spec
     {
         return $this->addSpec(clone $this->validate_spec, $field);
     }
@@ -203,10 +203,9 @@ class SubjectFilter
      *
      * @param string $field The subject field name.
      *
-     * @return SanitizeSpec
      *
      */
-    public function sanitize($field)
+    public function sanitize(string $field): Spec
     {
         return $this->addSpec(clone $this->sanitize_spec, $field);
     }
@@ -217,10 +216,9 @@ class SubjectFilter
      *
      * @param string $field The subject field name.
      *
-     * @return SubSpec
      *
      */
-    public function subfilter($field, $class = 'Aura\Filter\SubjectFilter')
+    public function subfilter(string $field, $class = 'Aura\Filter\SubjectFilter'): Spec
     {
         $spec = $this->sub_spec_factory->newSubSpec($class);
         return $this->addSpec($spec, $field);
@@ -234,10 +232,9 @@ class SubjectFilter
      *
      * @param string $field The subject field name.
      *
-     * @return Spec
      *
      */
-    protected function addSpec($spec, $field)
+    protected function addSpec(Spec $spec, string $field): Spec
     {
         $this->specs[] = $spec;
         $spec->field($field);
@@ -255,7 +252,7 @@ class SubjectFilter
      * @return null
      *
      */
-    public function useFieldMessage($field, $message)
+    public function useFieldMessage(string $field, string $message): void
     {
         $this->field_messages[$field] = $message;
     }
@@ -269,7 +266,7 @@ class SubjectFilter
      * @return bool True on success, false on failure.
      *
      */
-    public function apply(&$subject)
+    public function apply(&$subject): bool
     {
         if (is_array($subject)) {
             return $this->applyToArray($subject);
@@ -293,7 +290,7 @@ class SubjectFilter
      * @return bool True if all rules passed, false if not.
      *
      */
-    protected function applyToArray(&$array)
+    protected function applyToArray(array &$array): bool
     {
         $object = (object) $array;
         $result = $this->applyToObject($object);
@@ -305,12 +302,11 @@ class SubjectFilter
      *
      * Applies the rule specifications to an object.
      *
-     * @param object $object The filter subject.
      *
      * @return bool True if all rules passed, false if not.
      *
      */
-    protected function applyToObject($object)
+    protected function applyToObject(object $object): bool
     {
         $this->skip = array();
         $this->failures = clone $this->proto_failures;
@@ -329,12 +325,11 @@ class SubjectFilter
      *
      * @param Spec $spec The rule specification.
      *
-     * @param object $subject The filter subject.
      *
      * @return bool True to continue, false to stop.
      *
      */
-    protected function applySpec($spec, $subject)
+    protected function applySpec(Spec $spec, object $subject): bool
     {
         if (isset($this->skip[$spec->getField()])) {
 
@@ -366,10 +361,9 @@ class SubjectFilter
      *
      * @param Spec $spec The failed rule specification.
      *
-     * @return Failure
      *
      */
-    protected function failed($spec)
+    protected function failed(Spec $spec): Failure
     {
         $field = $spec->getField();
 
@@ -388,10 +382,9 @@ class SubjectFilter
      *
      * Returns the failures.
      *
-     * @return FailureCollection
      *
      */
-    public function getFailures()
+    public function getFailures(): FailureCollection
     {
         return $this->failures;
     }

@@ -26,6 +26,9 @@ class UploadedFile
     const SIZE_MAX       = 'sizeMax';
     const SIZE_MIN       = 'sizeMin';
 
+    /**
+     * @var string[]
+     */
     protected $rules = array(
         self::REQUIRED,
         self::FILE_EXTENSION,
@@ -79,11 +82,10 @@ class UploadedFile
      *
      * @param array $options the options passed tot the filter
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function isRequired(array $options)
+    protected function isRequired(array $options): bool
     {
         return (
             isset($options[self::REQUIRED])
@@ -96,11 +98,10 @@ class UploadedFile
      *
      * @param mixed $value value being validated
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function isUploadedFile($value)
+    protected function isUploadedFile($value): bool
     {
         return ($value instanceof UploadedFileInterface);
     }
@@ -110,11 +111,10 @@ class UploadedFile
      *
      * @param mixed $value value being validated
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function fileWasUploaded($value)
+    protected function fileWasUploaded($value): bool
     {
         if (! $this->isUploadedFile($value)) {
             return false;
@@ -133,11 +133,10 @@ class UploadedFile
      * @param mixed $value  value being validated
      * @param bool  $option if the file is required
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function required($value, $option)
+    protected function required($value, bool $option): bool
     {
         if ($option === false) {
             return true;
@@ -152,11 +151,10 @@ class UploadedFile
      * @param mixed        $value value being validated
      * @param string|array $exts  array or string of valid extensions
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function fileExtension($value, $exts)
+    protected function fileExtension($value, $exts): bool
     {
         $filename = $value->getClientFilename();
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
@@ -169,11 +167,10 @@ class UploadedFile
      * @param mixed        $value  value being validated
      * @param string|array $medias array or string of valid media types
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function fileMedia($value, $medias)
+    protected function fileMedia($value, $medias): bool
     {
         $media = $value->getClientMediaType();
         return in_array($media, (array) $medias);
@@ -185,11 +182,10 @@ class UploadedFile
      * @param mixed $value value being validated
      * @param mixed $max   maximum file size
      *
-     * @return bool
      *
      * @access protected
      */
-    protected function sizeMax($value, $max)
+    protected function sizeMax($value, $max): bool
     {
         $size = $value->getSize();
         return $size < $this->parseHumanSize($max);
@@ -205,7 +201,7 @@ class UploadedFile
      *
      * @access protected
      */
-    protected function sizeMin($value, $min)
+    protected function sizeMin($value, $min): bool
     {
         $size = $value->getSize();
         return $size > $this->parseHumanSize($min);

@@ -56,7 +56,7 @@ class FilterFailed extends Exception
      * @return null
      *
      */
-    public function setFilterClass($filter_class)
+    public function setFilterClass(string $filter_class): void
     {
         $this->filter_class = $filter_class;
     }
@@ -65,10 +65,9 @@ class FilterFailed extends Exception
      *
      * Gets the class of the filter being applied.
      *
-     * @return string
      *
      */
-    public function getFilterClass()
+    public function getFilterClass(): string
     {
         return $this->filter_class;
     }
@@ -82,7 +81,7 @@ class FilterFailed extends Exception
      * @return null
      *
      */
-    public function setFailures(FailureCollection $failures)
+    public function setFailures(FailureCollection $failures): void
     {
         $this->failures = $failures;
     }
@@ -91,10 +90,9 @@ class FilterFailed extends Exception
      *
      * Gets the failures from the filter.
      *
-     * @return FailureCollection
      *
      */
-    public function getFailures()
+    public function getFailures(): FailureCollection
     {
         return $this->failures;
     }
@@ -108,7 +106,7 @@ class FilterFailed extends Exception
      * @return null
      *
      */
-    public function setSubject($subject)
+    public function setSubject($subject): void
     {
         $this->subject = $subject;
     }

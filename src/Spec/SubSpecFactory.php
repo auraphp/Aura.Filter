@@ -12,7 +12,7 @@ class SubSpecFactory
         $this->factory = $factory;
     }
 
-    public function newSubSpec($class = 'Aura\Filter\SubjectFilter')
+    public function newSubSpec($class = 'Aura\Filter\SubjectFilter'): SubSpec
     {
         $subject = $this->factory->newSubjectFilter($class);
         return new SubSpec($subject);

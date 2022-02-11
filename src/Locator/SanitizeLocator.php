@@ -29,7 +29,7 @@ class SanitizeLocator extends Locator
      * @return null
      *
      */
-    protected function initFactories(array $factories)
+    protected function initFactories(array $factories): void
     {
         $this->factories = array(
             'alnum'                 => function () { return new Sanitize\Alnum(); },

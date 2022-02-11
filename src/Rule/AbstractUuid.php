@@ -26,7 +26,7 @@ abstract class AbstractUuid
      * @return bool
      *
      */
-    protected function isCanonical($value)
+    protected function isCanonical(string $value)
     {
         $regex = '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i';
         return (bool) preg_match($regex, $value);
@@ -41,7 +41,7 @@ abstract class AbstractUuid
      * @return bool
      *
      */
-    protected function isHexOnly($value)
+    protected function isHexOnly(string $value)
     {
         $regex = '/^[a-f0-9]{32}$/i';
         return (bool) preg_match($regex, $value);

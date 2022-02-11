@@ -74,10 +74,9 @@ class SanitizeSpec extends Spec
      *
      * @param ...$args Arguments for the rule.
      *
-     * @return self
      *
      */
-    public function to($rule)
+    public function to(string $rule): Spec
     {
         $this->allow_blank = false;
         return $this->init(func_get_args());
@@ -91,10 +90,9 @@ class SanitizeSpec extends Spec
      *
      * @param ...$args Arguments for the rule.
      *
-     * @return self
      *
      */
-    public function toBlankOr($rule)
+    public function toBlankOr(string $rule): Spec
     {
         $this->allow_blank = true;
         return $this->init(func_get_args());
@@ -106,10 +104,9 @@ class SanitizeSpec extends Spec
      *
      * @param mixed $blank_value Replace the blank field with this value.
      *
-     * @return self
      *
      */
-    public function useBlankValue($blank_value)
+    public function useBlankValue($blank_value): self
     {
         $this->allow_blank = true;
         $this->blank_value = $blank_value;
@@ -122,10 +119,9 @@ class SanitizeSpec extends Spec
      *
      * @param string $field_name Replace the blank field with the value from field.
      *
-     * @return self
      *
      */
-    public function useBlankField($field_name)
+    public function useBlankField(string $field_name): self
     {
         $this->blank_field = $field_name;
         return $this;
@@ -135,10 +131,9 @@ class SanitizeSpec extends Spec
      *
      * Returns the default failure message for this rule specification.
      *
-     * @return string
      *
      */
-    protected function getDefaultMessage()
+    protected function getDefaultMessage(): string
     {
         return $this->field . ' should have sanitized to '
              . parent::getDefaultMessage();

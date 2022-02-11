@@ -30,7 +30,7 @@ abstract class AbstractCharCase extends AbstractStrlen
      * @return string
      *
      */
-    protected function strtolower($str)
+    protected function strtolower(string $str): string
     {
         if ($this->mbstring()) {
             return mb_convert_case($str, MB_CASE_LOWER, 'UTF-8');
@@ -49,7 +49,7 @@ abstract class AbstractCharCase extends AbstractStrlen
      * @return string
      *
      */
-    protected function strtoupper($str)
+    protected function strtoupper(string $str): string
     {
         if ($this->mbstring()) {
             return mb_convert_case($str, MB_CASE_UPPER, 'UTF-8');
@@ -68,7 +68,7 @@ abstract class AbstractCharCase extends AbstractStrlen
      * @return int
      *
      */
-    protected function ucwords($str)
+    protected function ucwords(string $str): string
     {
         if ($this->mbstring()) {
             return mb_convert_case($str, MB_CASE_TITLE, 'UTF-8');
@@ -87,7 +87,7 @@ abstract class AbstractCharCase extends AbstractStrlen
      * @return int
      *
      */
-    protected function ucfirst($str)
+    protected function ucfirst(string $str)
     {
         $len = $this->strlen($str);
         if ($len == 0) {
@@ -111,7 +111,7 @@ abstract class AbstractCharCase extends AbstractStrlen
      * @return int
      *
      */
-    protected function lcfirst($str)
+    protected function lcfirst(string $str)
     {
         $len = $this->strlen($str);
         if ($len == 0) {

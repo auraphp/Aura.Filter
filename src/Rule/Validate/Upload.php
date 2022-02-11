@@ -35,7 +35,7 @@ class Upload
      */
     public function __invoke($subject, $field)
     {
-        $value = $subject->$field;
+        $value = (array) $subject->$field;
 
         $well_formed = $this->preCheck($value);
         if (! $well_formed) {
@@ -63,10 +63,9 @@ class Upload
      *
      * @param array $value The file-upload array.
      *
-     * @return bool
      *
      */
-    protected function preCheck(&$value)
+    protected function preCheck(array &$value): bool
     {
         // has to be an array
         if (! is_array($value)) {
@@ -105,7 +104,7 @@ class Upload
      * @return bool True if the file was uploaded via HTTP POST, false if not.
      *
      */
-    protected function isUploadedFile($file)
+    protected function isUploadedFile(string $file): bool
     {
         return is_uploaded_file($file);
     }

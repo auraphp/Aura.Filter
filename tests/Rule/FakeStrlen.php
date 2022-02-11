@@ -3,22 +3,22 @@ namespace Aura\Filter\Rule;
 
 class FakeStrlen extends AbstractStrlen
 {
-    protected function iconv()
+    protected function iconv(): bool
     {
         return false;
     }
 
-    protected function mbstring()
+    protected function mbstring(): bool
     {
         return false;
     }
 
-    public function strlen($str)
+    public function strlen($str): int
     {
         return parent::strlen($str);
     }
 
-    public function substr($str, $start, $length = null)
+    public function substr($str, $start, $length = null): string
     {
         return parent::substr($str, $start, $length);
     }
