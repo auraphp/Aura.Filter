@@ -410,7 +410,7 @@ class Email
         }
 
         // put the parts back together, with the domain part converted to ascii
-        return implode('@', $parts) . '@' . idn_to_ascii($domain);
+        return implode('@', $parts) . '@' . idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
     }
 
     /**
