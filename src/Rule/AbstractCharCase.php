@@ -65,7 +65,6 @@ abstract class AbstractCharCase extends AbstractStrlen
      *
      * @param string $str String to convert case.
      *
-     * @return int
      *
      */
     protected function ucwords(string $str): string
