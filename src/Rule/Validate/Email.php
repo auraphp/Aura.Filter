@@ -66,110 +66,110 @@ class Email
     /*:diagnostic constants start:*/
 
     // Categories
-    public const VALID_CATEGORY = 1;
-    public const DNSWARN = 7;
-    public const RFC5321 = 15;
-    public const CFWS = 31;
-    public const DEPREC = 63;
-    public const RFC5322 = 127;
-    public const ERR = 255;
+    protected const VALID_CATEGORY = 1;
+    protected const DNSWARN = 7;
+    protected const RFC5321 = 15;
+    protected const CFWS = 31;
+    protected const DEPREC = 63;
+    protected const RFC5322 = 127;
+    protected const ERR = 255;
 
     // Diagnoses
     // Address is valid
-    public const VALID = 0;
+    protected const VALID = 0;
     // Address is valid but a DNS check was not successful
-    public const DNSWARN_NO_MX_RECORD = 5;
-    public const DNSWARN_NO_RECORD = 6;
+    protected const DNSWARN_NO_MX_RECORD = 5;
+    protected const DNSWARN_NO_RECORD = 6;
     // Address is valid for SMTP but has unusual elements
-    public const RFC5321_TLD = 9;
-    public const RFC5321_TLDNUMERIC = 10;
-    public const RFC5321_QUOTEDSTRING = 11;
-    public const RFC5321_ADDRESSLITERAL = 12;
-    public const RFC5321_IPV6DEPRECATED = 13;
+    protected const RFC5321_TLD = 9;
+    protected const RFC5321_TLDNUMERIC = 10;
+    protected const RFC5321_QUOTEDSTRING = 11;
+    protected const RFC5321_ADDRESSLITERAL = 12;
+    protected const RFC5321_IPV6DEPRECATED = 13;
     // Address is valid within the message but cannot be used unmodified for the envelope
-    public const CFWS_COMMENT = 17;
-    public const CFWS_FWS = 18;
+    protected const CFWS_COMMENT = 17;
+    protected const CFWS_FWS = 18;
     // Address contains deprecated elements but may still be valid in restricted contexts
-    public const DEPREC_LOCALPART = 33;
-    public const DEPREC_FWS = 34;
-    public const DEPREC_QTEXT = 35;
-    public const DEPREC_QP = 36;
-    public const DEPREC_COMMENT = 37;
-    public const DEPREC_CTEXT = 38;
-    public const DEPREC_CFWS_NEAR_AT = 49;
+    protected const DEPREC_LOCALPART = 33;
+    protected const DEPREC_FWS = 34;
+    protected const DEPREC_QTEXT = 35;
+    protected const DEPREC_QP = 36;
+    protected const DEPREC_COMMENT = 37;
+    protected const DEPREC_CTEXT = 38;
+    protected const DEPREC_CFWS_NEAR_AT = 49;
     // The address is only valid according to the broad definition of RFC 5322.
     // It is otherwise invalid.
-    public const RFC5322_DOMAIN = 65;
-    public const RFC5322_TOOLONG = 66;
-    public const RFC5322_LOCAL_TOOLONG = 67;
-    public const RFC5322_DOMAIN_TOOLONG = 68;
-    public const RFC5322_LABEL_TOOLONG = 69;
-    public const RFC5322_DOMAINLITERAL = 70;
-    public const RFC5322_DOMLIT_OBSDTEXT = 71;
-    public const RFC5322_IPV6_GRPCOUNT = 72;
-    public const RFC5322_IPV6_2X2XCOLON = 73;
-    public const RFC5322_IPV6_BADCHAR = 74;
-    public const RFC5322_IPV6_MAXGRPS = 75;
-    public const RFC5322_IPV6_COLONSTRT = 76;
-    public const RFC5322_IPV6_COLONEND = 77;
+    protected const RFC5322_DOMAIN = 65;
+    protected const RFC5322_TOOLONG = 66;
+    protected const RFC5322_LOCAL_TOOLONG = 67;
+    protected const RFC5322_DOMAIN_TOOLONG = 68;
+    protected const RFC5322_LABEL_TOOLONG = 69;
+    protected const RFC5322_DOMAINLITERAL = 70;
+    protected const RFC5322_DOMLIT_OBSDTEXT = 71;
+    protected const RFC5322_IPV6_GRPCOUNT = 72;
+    protected const RFC5322_IPV6_2X2XCOLON = 73;
+    protected const RFC5322_IPV6_BADCHAR = 74;
+    protected const RFC5322_IPV6_MAXGRPS = 75;
+    protected const RFC5322_IPV6_COLONSTRT = 76;
+    protected const RFC5322_IPV6_COLONEND = 77;
     // Address is invalid for any purpose
-    public const ERR_EXPECTING_DTEXT = 129;
-    public const ERR_NOLOCALPART = 130;
-    public const ERR_NODOMAIN = 131;
-    public const ERR_CONSECUTIVEDOTS = 132;
-    public const ERR_ATEXT_AFTER_CFWS = 133;
-    public const ERR_ATEXT_AFTER_QS = 134;
-    public const ERR_ATEXT_AFTER_DOMLIT = 135;
-    public const ERR_EXPECTING_QPAIR = 136;
-    public const ERR_EXPECTING_ATEXT = 137;
-    public const ERR_EXPECTING_QTEXT = 138;
-    public const ERR_EXPECTING_CTEXT = 139;
-    public const ERR_BACKSLASHEND = 140;
-    public const ERR_DOT_START = 141;
-    public const ERR_DOT_END = 142;
-    public const ERR_DOMAINHYPHENSTART = 143;
-    public const ERR_DOMAINHYPHENEND = 144;
-    public const ERR_UNCLOSEDQUOTEDSTR = 145;
-    public const ERR_UNCLOSEDCOMMENT = 146;
-    public const ERR_UNCLOSEDDOMLIT = 147;
-    public const ERR_FWS_CRLF_X2 = 148;
-    public const ERR_FWS_CRLF_END = 149;
-    public const ERR_CR_NO_LF = 150;
+    protected const ERR_EXPECTING_DTEXT = 129;
+    protected const ERR_NOLOCALPART = 130;
+    protected const ERR_NODOMAIN = 131;
+    protected const ERR_CONSECUTIVEDOTS = 132;
+    protected const ERR_ATEXT_AFTER_CFWS = 133;
+    protected const ERR_ATEXT_AFTER_QS = 134;
+    protected const ERR_ATEXT_AFTER_DOMLIT = 135;
+    protected const ERR_EXPECTING_QPAIR = 136;
+    protected const ERR_EXPECTING_ATEXT = 137;
+    protected const ERR_EXPECTING_QTEXT = 138;
+    protected const ERR_EXPECTING_CTEXT = 139;
+    protected const ERR_BACKSLASHEND = 140;
+    protected const ERR_DOT_START = 141;
+    protected const ERR_DOT_END = 142;
+    protected const ERR_DOMAINHYPHENSTART = 143;
+    protected const ERR_DOMAINHYPHENEND = 144;
+    protected const ERR_UNCLOSEDQUOTEDSTR = 145;
+    protected const ERR_UNCLOSEDCOMMENT = 146;
+    protected const ERR_UNCLOSEDDOMLIT = 147;
+    protected const ERR_FWS_CRLF_X2 = 148;
+    protected const ERR_FWS_CRLF_END = 149;
+    protected const ERR_CR_NO_LF = 150;
     /*:diagnostic constants end:*/
 
     // function control
-    public const THRESHOLD = 16;
+    protected const THRESHOLD = 16;
 
     // Email parts
-    public const COMPONENT_LOCALPART = 0;
-    public const COMPONENT_DOMAIN = 1;
-    public const COMPONENT_LITERAL = 2;
-    public const CONTEXT_COMMENT = 3;
-    public const CONTEXT_FWS = 4;
-    public const CONTEXT_QUOTEDSTRING = 5;
-    public const CONTEXT_QUOTEDPAIR = 6;
+    protected const COMPONENT_LOCALPART = 0;
+    protected const COMPONENT_DOMAIN = 1;
+    protected const COMPONENT_LITERAL = 2;
+    protected const CONTEXT_COMMENT = 3;
+    protected const CONTEXT_FWS = 4;
+    protected const CONTEXT_QUOTEDSTRING = 5;
+    protected const CONTEXT_QUOTEDPAIR = 6;
 
     // Miscellaneous string constants
-    public const STRING_AT = '@';
-    public const STRING_BACKSLASH = '\\';
-    public const STRING_DOT = '.';
-    public const STRING_DQUOTE = '"';
-    public const STRING_OPENPARENTHESIS = '(';
-    public const STRING_CLOSEPARENTHESIS = ')';
-    public const STRING_OPENSQBRACKET = '[';
-    public const STRING_CLOSESQBRACKET = ']';
-    public const STRING_HYPHEN = '-';
-    public const STRING_COLON = ':';
-    public const STRING_DOUBLECOLON = '::';
-    public const STRING_SP = ' ';
-    public const STRING_HTAB = "\t";
-    public const STRING_CR = "\r";
-    public const STRING_LF = "\n";
-    public const STRING_IPV6TAG = 'IPv6:';
+    protected const STRING_AT = '@';
+    protected const STRING_BACKSLASH = '\\';
+    protected const STRING_DOT = '.';
+    protected const STRING_DQUOTE = '"';
+    protected const STRING_OPENPARENTHESIS = '(';
+    protected const STRING_CLOSEPARENTHESIS = ')';
+    protected const STRING_OPENSQBRACKET = '[';
+    protected const STRING_CLOSESQBRACKET = ']';
+    protected const STRING_HYPHEN = '-';
+    protected const STRING_COLON = ':';
+    protected const STRING_DOUBLECOLON = '::';
+    protected const STRING_SP = ' ';
+    protected const STRING_HTAB = "\t";
+    protected const STRING_CR = "\r";
+    protected const STRING_LF = "\n";
+    protected const STRING_IPV6TAG = 'IPv6:';
 
     // US-ASCII visible characters not valid for atext
     // <http://tools.ietf.org/html/rfc5322#section-3.2.3>
-    public const STRING_SPECIALS = '()<>[]:;@\\,."';
+    protected const STRING_SPECIALS = '()<>[]:;@\\,."';
 
     /**
      *
@@ -1143,7 +1143,7 @@ class Email
                         } elseif ((substr($IPv6, -1) === Email::STRING_COLON) && (substr($IPv6, -2, 1) !== Email::STRING_COLON)) {
                             // Address ends with a single colon
                             $this->returnStatus[] = Email::RFC5322_IPV6_COLONEND;
-                        } elseif ((is_array(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) || preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT) instanceof Countable ? count(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) : 0) !== 0) {
+                        } elseif (is_array(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) && count(preg_grep('/^[0-9A-Fa-f]{0,4}$/', $matchesIP, PREG_GREP_INVERT)) !== 0) {
                             // Check for unmatched characters
                             $this->returnStatus[] = Email::RFC5322_IPV6_BADCHAR;
                         } else {
@@ -1672,7 +1672,7 @@ class Email
                     // MX-record for domain can't be found
                     $this->returnStatus[] = Email::DNSWARN_NO_MX_RECORD;
                     $result = @dns_get_record($this->parseData[Email::COMPONENT_DOMAIN], DNS_A + DNS_CNAME);
-                    if ((is_array($result) || $result instanceof Countable ? count($result) : 0) === 0) {
+                    if (is_array($result) && count($result) === 0) {
                         // No usable records for the domain can be found
                         $this->returnStatus[] = Email::DNSWARN_NO_RECORD;
                     }
