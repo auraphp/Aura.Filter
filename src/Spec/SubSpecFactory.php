@@ -3,6 +3,7 @@
 
 namespace Aura\Filter\Spec;
 
+use Aura\Filter\SubjectFilter;
 class SubSpecFactory
 {
     protected $factory;
@@ -12,7 +13,7 @@ class SubSpecFactory
         $this->factory = $factory;
     }
 
-    public function newSubSpec($class = 'Aura\Filter\SubjectFilter')
+    public function newSubSpec($class = SubjectFilter::class): SubSpec
     {
         $subject = $this->factory->newSubjectFilter($class);
         return new SubSpec($subject);

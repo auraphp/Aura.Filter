@@ -64,10 +64,9 @@ class FilterFactory
      *
      * @param string $class The filter class to instantiate.
      *
-     * @return SubjectFilter
      *
      */
-    public function newSubjectFilter($class = 'Aura\Filter\SubjectFilter')
+    public function newSubjectFilter(string $class = SubjectFilter::class): object
     {
         return new $class(
             $this->newValidateSpec(),
@@ -81,10 +80,9 @@ class FilterFactory
      *
      * Returns a new ValueFilter instance.
      *
-     * @return ValueFilter
      *
      */
-    public function newValueFilter()
+    public function newValueFilter(): ValueFilter
     {
         return new ValueFilter(
             $this->newValidateLocator(),
@@ -96,10 +94,9 @@ class FilterFactory
      *
      * Returns a new ValidateSpec instance.
      *
-     * @return ValidateSpec
      *
      */
-    public function newValidateSpec()
+    public function newValidateSpec(): ValidateSpec
     {
         return new ValidateSpec($this->newValidateLocator());
     }
@@ -108,10 +105,9 @@ class FilterFactory
      *
      * Returns a new SanitizeSpec instance.
      *
-     * @return SanitizeSpec
      *
      */
-    public function newSanitizeSpec()
+    public function newSanitizeSpec(): SanitizeSpec
     {
         return new SanitizeSpec($this->newSanitizeLocator());
     }
@@ -120,10 +116,9 @@ class FilterFactory
      *
      * Returns a new SubSpecFactory instance.
      *
-     * @return SubSpecFactory
      *
      */
-    public function newSubSpecFactory()
+    public function newSubSpecFactory(): SubSpecFactory
     {
         return new SubSpecFactory($this);
     }
@@ -132,10 +127,9 @@ class FilterFactory
      *
      * Returns a new ValidateLocator instance.
      *
-     * @return ValidateLocator
      *
      */
-    public function newValidateLocator()
+    public function newValidateLocator(): ValidateLocator
     {
         return new ValidateLocator($this->validate_factories);
     }
@@ -144,10 +138,9 @@ class FilterFactory
      *
      * Returns a new SanitizeLocator instance.
      *
-     * @return SanitizeLocator
      *
      */
-    public function newSanitizeLocator()
+    public function newSanitizeLocator(): SanitizeLocator
     {
         return new SanitizeLocator($this->sanitize_factories);
     }
@@ -156,10 +149,9 @@ class FilterFactory
      *
      * Returns a new FailureCollection instance.
      *
-     * @return FailureCollection
      *
      */
-    public function newFailureCollection()
+    public function newFailureCollection(): FailureCollection
     {
         return new FailureCollection();
     }

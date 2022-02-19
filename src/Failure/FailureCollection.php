@@ -35,10 +35,9 @@ class FailureCollection extends ArrayObject
      *
      * Is the failure collection empty?
      *
-     * @return bool
      *
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return count($this) === 0;
     }
@@ -53,10 +52,9 @@ class FailureCollection extends ArrayObject
      *
      * @param array $args The arguments passed to the rule specification.
      *
-     * @return Failure
      *
      */
-    public function set($field, $message, array $args = array())
+    public function set(string $field, string $message, array $args = array()): Failure
     {
         $failure = $this->newFailure($field, $message, $args);
         $this[$field] = array($failure);
@@ -73,10 +71,9 @@ class FailureCollection extends ArrayObject
      *
      * @param array $args The arguments passed to the rule specification.
      *
-     * @return Failure
      *
      */
-    public function add($field, $message, array $args = array())
+    public function add(string $field, string $message, array $args = array()): Failure
     {
         $failure = $this->newFailure($field, $message, $args);
         $this[$field][] = $failure;
@@ -93,10 +90,9 @@ class FailureCollection extends ArrayObject
      *
      * @param array $args The arguments passed to the rule specification.
      *
-     * @return Failure
      *
      */
-    protected function newFailure($field, $message, array $args = array())
+    protected function newFailure(string $field, string $message, array $args = array()): Failure
     {
         return new Failure($field, $message, $args);
     }
@@ -107,10 +103,10 @@ class FailureCollection extends ArrayObject
      *
      * @param string $field The field name.
      *
-     * @return array
      *
+     * @return mixed[]
      */
-    public function forField($field)
+    public function forField(string $field): array
     {
         if (! isset($this[$field])) {
             return array();
@@ -123,10 +119,10 @@ class FailureCollection extends ArrayObject
      *
      * Returns all failure messages for all fields.
      *
-     * @return array
      *
+     * @return mixed[][]
      */
-    public function getMessages()
+    public function getMessages(): array
     {
         $messages = array();
         foreach ($this as $field => $failures) {
@@ -141,10 +137,10 @@ class FailureCollection extends ArrayObject
      *
      * @param string $field The field name.
      *
-     * @return array
      *
+     * @return mixed[]
      */
-    public function getMessagesForField($field)
+    public function getMessagesForField(string $field): array
     {
         if (! isset($this[$field])) {
             return array();
@@ -163,10 +159,9 @@ class FailureCollection extends ArrayObject
      *
      * @param string $prefix Prefix each line with this string.
      *
-     * @return string
      *
      */
-    public function getMessagesAsString($prefix = '')
+    public function getMessagesAsString(string $prefix = ''): string
     {
         $string = '';
         foreach ($this as $field => $failures) {
@@ -186,10 +181,9 @@ class FailureCollection extends ArrayObject
      *
      * @param string $prefix Prefix each line with this string.
      *
-     * @return string
      *
      */
-    public function getMessagesForFieldAsString($field, $prefix = '')
+    public function getMessagesForFieldAsString(string $field, string $prefix = ''): string
     {
         $string = '';
         foreach ($this->forField($field) as $failure) {

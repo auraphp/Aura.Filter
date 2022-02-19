@@ -24,17 +24,17 @@ class Spec
     /**
      * Stop filtering on a field when a rule for that field fails.
      */
-    const HARD_RULE = 'HARD_RULE';
+    public const HARD_RULE = 'HARD_RULE';
 
     /**
      * Continue filtering on a field even when a rule for that field fails.
      */
-    const SOFT_RULE = 'SOFT_RULE';
+    public const SOFT_RULE = 'SOFT_RULE';
 
     /**
      * Stop filtering on all fields when a rule fails.
      */
-    const STOP_RULE = 'STOP_RULE';
+    public const STOP_RULE = 'STOP_RULE';
 
     /**
      *
@@ -140,7 +140,7 @@ class Spec
      * @return self
      *
      */
-    public function field($field)
+    public function field(string $field)
     {
         $this->field = $field;
         return $this;
@@ -155,7 +155,7 @@ class Spec
      * @return self
      *
      */
-    public function asSoftRule($message = null)
+    public function asSoftRule(?string $message = null): \Aura\Filter\Spec\Spec
     {
         return $this->setFailureMode(self::SOFT_RULE, $message);
     }
@@ -169,7 +169,7 @@ class Spec
      * @return self
      *
      */
-    public function asHardRule($message = null)
+    public function asHardRule(?string $message = null): \Aura\Filter\Spec\Spec
     {
         return $this->setFailureMode(self::HARD_RULE, $message);
     }
@@ -183,7 +183,7 @@ class Spec
      * @return self
      *
      */
-    public function asStopRule($message = null)
+    public function asStopRule(?string $message = null): \Aura\Filter\Spec\Spec
     {
         return $this->setFailureMode(self::STOP_RULE, $message);
     }
@@ -199,7 +199,7 @@ class Spec
      * @return self
      *
      */
-    protected function setFailureMode($failure_mode, $message)
+    protected function setFailureMode(string $failure_mode, ?string $message)
     {
         $this->failure_mode = $failure_mode;
         if ($message) {
@@ -217,7 +217,7 @@ class Spec
      * @return self
      *
      */
-    public function setMessage($message)
+    public function setMessage(string $message)
     {
         $this->message = $message;
         return $this;
@@ -307,7 +307,7 @@ class Spec
      * @return self
      *
      */
-    protected function init($args)
+    protected function init(array $args)
     {
         $this->args = $args;
         $this->rule = array_shift($this->args);

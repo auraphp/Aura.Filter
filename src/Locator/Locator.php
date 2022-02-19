@@ -8,6 +8,7 @@
  */
 namespace Aura\Filter\Locator;
 
+use Aura\Filter\Exception\RuleNotMapped;
 use Aura\Filter\Exception;
 
 /**
@@ -60,7 +61,7 @@ class Locator
      * @return null
      *
      */
-    protected function initFactories(array $factories)
+    protected function initFactories(array $factories): void
     {
         foreach ($factories as $name => $spec) {
             $this->set($name, $spec);
@@ -78,7 +79,7 @@ class Locator
      * @return void
      *
      */
-    public function set($name, $spec)
+    public function set(string $name, callable $spec): void
     {
         $this->factories[$name] = $spec;
         unset($this->instances[$name]);
@@ -95,13 +96,13 @@ class Locator
      * @throws Exception\RuleNotMapped
      *
      */
-    public function get($name)
+    public function get(string $name)
     {
         $mapped = isset($this->factories[$name])
                || isset($this->instances[$name]);
 
         if (! $mapped) {
-            throw new Exception\RuleNotMapped($name);
+            throw new RuleNotMapped($name);
         }
 
         if (! isset($this->instances[$name])) {

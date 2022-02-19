@@ -8,6 +8,7 @@
  */
 namespace Aura\Filter;
 
+use stdClass;
 use Aura\Filter\Locator\Locator;
 use Aura\Filter\Locator\SanitizeLocator;
 use Aura\Filter\Locator\ValidateLocator;
@@ -25,8 +26,7 @@ class ValueFilter
      *
      * A pseudo-subject to hold the value being filtered.
      *
-     * @var object
-     *
+     * @var stdClass
      */
     protected $subject;
 
@@ -63,7 +63,7 @@ class ValueFilter
      * @return bool True on success, false on failure.
      *
      */
-    public function validate($value, $rule)
+    public function validate($value, string $rule): bool
     {
         $this->subject->value = $value;
         return $this->apply($this->validate_locator, func_get_args());
@@ -82,7 +82,7 @@ class ValueFilter
      * @return bool True on success, false on failure.
      *
      */
-    public function sanitize(&$value, $rule)
+    public function sanitize(&$value, string $rule): bool
     {
         $this->subject->value =& $value;
         return $this->apply($this->sanitize_locator, func_get_args());
@@ -94,12 +94,12 @@ class ValueFilter
      *
      * @param Locator $locator A rule locator.
      *
-     * @param string $args Arguments for the rule.
+     * @param array $args Arguments for the rule.
      *
      * @return bool True on success, false on failure.
      *
      */
-    protected function apply(Locator $locator, $args)
+    protected function apply(Locator $locator, array $args): bool
     {
         array_shift($args); // remove $value
         $rule = array_shift($args); // remove $rule

@@ -58,11 +58,10 @@ class SubSpec extends Spec
     /**
      * Get the Subject filter
      *
-     * @return SubjectFilter
      *
      * @access public
      */
-    public function filter()
+    public function filter(): SubjectFilter
     {
         return $this->filter;
     }
@@ -70,11 +69,11 @@ class SubSpec extends Spec
     /**
      * Returns the default failure message for this rule specification.
      *
-     * @return array
      *
      * @access protected
+     * @return mixed[][]
      */
-    protected function getDefaultMessage()
+    protected function getDefaultMessage(): array
     {
         return $this->filter
             ->getFailures()

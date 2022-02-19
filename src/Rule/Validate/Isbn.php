@@ -28,7 +28,7 @@ class Isbn
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field)
     {
         $value = $this->normalize($subject, $field);
         if (! $value) {
@@ -41,14 +41,13 @@ class Isbn
      *
      * Removes all non-ISBN characters to test if it is a valid ISBN.
      *
-     * @param object $subject The subject to be filtered.
      *
      * @param string $field The subject field name.
      *
      * @return string|false The normalized string, or false on failure.
      *
      */
-    public function normalize($subject, $field)
+    public function normalize(object $subject, string $field)
     {
         $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $subject->$field);
         if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value)) {
@@ -63,10 +62,9 @@ class Isbn
      *
      * @param $value The value to test.
      *
-     * @return bool
      *
      */
-    protected function isbn13($value)
+    protected function isbn13($value): bool
     {
         if (strlen($value) != 13) {
             return false;
@@ -93,10 +91,9 @@ class Isbn
      *
      * @param $value The value to test.
      *
-     * @return bool
      *
      */
-    protected function isbn10($value)
+    protected function isbn10($value): bool
     {
         if (strlen($value) != 10) {
             return false;

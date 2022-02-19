@@ -73,10 +73,9 @@ class Failure implements JsonSerializable
      *
      * Returns the field that failed.
      *
-     * @return string
      *
      */
-    public function getField()
+    public function getField(): string
     {
         return $this->field;
     }
@@ -85,10 +84,9 @@ class Failure implements JsonSerializable
      *
      * Returns the failure message.
      *
-     * @return string
      *
      */
-    public function getMessage()
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -97,22 +95,22 @@ class Failure implements JsonSerializable
      *
      * Returns the arguments passed to the rule specification.
      *
-     * @return array
      *
+     * @return mixed[]
      */
-    public function getArgs()
+    public function getArgs(): array
     {
         return $this->args;
     }
 
    /**
-    *
-    * Returns an array for json_encode.
-    *
-    * @return array
-    *
-    */
-    public function jsonSerialize()
+     *
+     * Returns an array for json_encode.
+     *
+     *
+     * @return array<string, mixed[]>
+     */
+    public function jsonSerialize(): array
     {
         return array(
             'field' => $this->field,

@@ -5,7 +5,7 @@ class FakeUpload extends Upload
 {
     public $is_uploaded_file = true;
 
-    protected function isUploadedFile($file)
+    protected function isUploadedFile(string $file): bool
     {
         // hit the parent method ...
         parent::isUploadedFile($file);

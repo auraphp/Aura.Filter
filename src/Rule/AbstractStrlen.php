@@ -8,6 +8,7 @@
  */
 namespace Aura\Filter\Rule;
 
+use Aura\Filter\Exception\MalformedUtf8;
 use Aura\Filter\Exception;
 
 /**
@@ -27,7 +28,7 @@ abstract class AbstractStrlen
      * @return bool
      *
      */
-    protected function mbstring()
+    protected function mbstring(): bool
     {
         return extension_loaded('mbstring');
     }
@@ -39,7 +40,7 @@ abstract class AbstractStrlen
      * @return bool
      *
      */
-    protected function iconv()
+    protected function iconv(): bool
     {
         return extension_loaded('iconv');
     }
@@ -54,7 +55,7 @@ abstract class AbstractStrlen
      * @return int
      *
      */
-    protected function strlen($str)
+    protected function strlen(string $str): int
     {
         if ($this->iconv()) {
             return $this->strlenIconv($str);
@@ -82,7 +83,7 @@ abstract class AbstractStrlen
      * @throws Exception\MalformedUtf8
      *
      */
-    protected function substrIconv($str,$start,$length)
+    protected function substrIconv(string $str,int $start,int $length)
     {
         $level = error_reporting(0);
         $substr = iconv_substr($str,$start,$length, 'UTF-8');
@@ -92,9 +93,9 @@ abstract class AbstractStrlen
             return $substr;
         }
 
-        throw new Exception\MalformedUtf8();
+        throw new MalformedUtf8();
     }
-    
+
     /**
      *
      * Wrapper for `iconv_strlen()` to throw an exception on malformed UTF-8.
@@ -106,7 +107,7 @@ abstract class AbstractStrlen
      * @throws Exception\MalformedUtf8
      *
      */
-    protected function strlenIconv($str)
+    protected function strlenIconv(string $str)
     {
         $level = error_reporting(0);
         $strlen = iconv_strlen($str, 'UTF-8');
@@ -116,7 +117,7 @@ abstract class AbstractStrlen
             return $strlen;
         }
 
-        throw new Exception\MalformedUtf8();
+        throw new MalformedUtf8();
     }
 
     /**
@@ -133,7 +134,7 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function substr($str, $start, $length = null)
+    protected function substr(string $str, int $start, $length = null): string
     {
         if ($this->iconv()) {
             return $this->substrIconv($str, $start, $length);
@@ -167,7 +168,7 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function strpad($input, $pad_length, $pad_str = ' ', $pad_type = STR_PAD_RIGHT)
+    protected function strpad(string $input, int $pad_length, string $pad_str = ' ', int $pad_type = STR_PAD_RIGHT)
     {
         $input_len = $this->strlen($input);
         if ($pad_length <= $input_len) {
