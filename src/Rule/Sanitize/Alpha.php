@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -28,7 +30,7 @@ class Alpha
      * @return bool Always true.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $subject->$field = preg_replace('/[^\p{L}]/u', '', $subject->$field);
         return true;

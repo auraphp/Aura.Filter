@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -9,6 +11,8 @@
 namespace Aura\Filter\Failure;
 
 use ArrayObject;
+use Aura\Filter_Interface\FailureInterface;
+use Aura\Filter_Interface\FailureCollectionInterface;
 
 /**
  *
@@ -17,7 +21,7 @@ use ArrayObject;
  * @package Aura.Filter
  *
  */
-class FailureCollection extends ArrayObject
+class FailureCollection extends ArrayObject implements FailureCollectionInterface
 {
     /**
      *
@@ -54,7 +58,7 @@ class FailureCollection extends ArrayObject
      *
      *
      */
-    public function set(string $field, string $message, array $args = array()): Failure
+    public function set(string $field, string $message, array $args = array()): FailureInterface
     {
         $failure = $this->newFailure($field, $message, $args);
         $this[$field] = array($failure);
@@ -71,9 +75,8 @@ class FailureCollection extends ArrayObject
      *
      * @param array $args The arguments passed to the rule specification.
      *
-     *
      */
-    public function add(string $field, string $message, array $args = array()): Failure
+    public function add(string $field, string $message, array $args = array()): FailureInterface
     {
         $failure = $this->newFailure($field, $message, $args);
         $this[$field][] = $failure;
@@ -92,7 +95,7 @@ class FailureCollection extends ArrayObject
      *
      *
      */
-    protected function newFailure(string $field, string $message, array $args = array()): Failure
+    protected function newFailure(string $field, string $message, array $args = array()): FailureInterface
     {
         return new Failure($field, $message, $args);
     }
@@ -137,8 +140,6 @@ class FailureCollection extends ArrayObject
      *
      * @param string $field The field name.
      *
-     *
-     * @return mixed[]
      */
     public function getMessagesForField(string $field): array
     {

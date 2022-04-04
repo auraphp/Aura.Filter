@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -32,7 +34,7 @@ class Str
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($subject, $field, $find = null, $replace = null)
+    public function __invoke(object $subject, string $field, $find = null, $replace = null): bool
     {
         $value = (string) $subject->$field;
         if ($find || $replace) {

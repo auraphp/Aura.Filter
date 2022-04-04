@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -30,7 +32,7 @@ class Now
      * @return bool Always true.
      *
      */
-    public function __invoke($subject, $field, $format = 'Y-m-d H:i:s')
+    public function __invoke(object $subject, string $field, $format = 'Y-m-d H:i:s'): bool
     {
         $subject->$field = date($format);
         return true;

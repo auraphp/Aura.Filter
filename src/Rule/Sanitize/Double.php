@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -34,7 +36,7 @@ class Double
      * @todo Extract scientific notation from weird strings?
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $value = $subject->$field;
 

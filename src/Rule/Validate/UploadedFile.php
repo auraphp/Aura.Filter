@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -56,7 +58,7 @@ class UploadedFile
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, array $options)
+    public function __invoke(object $subject, string $field, array $options): bool
     {
         $value = $subject->$field;
 

@@ -19,7 +19,8 @@
     ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "psr/http-message": "^1.0.0"
+        "psr/http-message": "^1.0.0",
+        "aura/filter-interface":"dev-initial"
     },
     "autoload": {
         "psr-4": {

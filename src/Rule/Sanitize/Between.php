@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -33,7 +35,7 @@ class Between
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($subject, $field, $min, $max)
+    public function __invoke(object $subject, string $field, $min, $max): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

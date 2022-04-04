@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -33,7 +35,7 @@ class EqualToField
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function __invoke($subject, $field, $other_field)
+    public function __invoke(object $subject, string $field, $other_field): bool
     {
         // the other field needs to exist and *not* be null
         if (! isset($subject->$other_field)) {

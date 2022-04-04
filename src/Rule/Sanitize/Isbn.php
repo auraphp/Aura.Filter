@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -28,7 +30,7 @@ class Isbn
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $value = preg_replace('/(?:(?!([0-9|X$])).)*/', '', $subject->$field);
         if (preg_match('/^[0-9]{10,13}$|^[0-9]{9}X$/', $value) == 1) {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -30,7 +32,7 @@ class Value
      * @return bool Always true.
      *
      */
-    public function __invoke($subject, $field, $other_value)
+    public function __invoke(object $subject, string $field, $other_value): bool
     {
         $subject->$field = $other_value;
         return true;

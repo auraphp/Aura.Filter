@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -34,7 +36,7 @@ class Boolean extends AbstractBoolean
      * @return bool Always true.
      *
      */
-    public function __invoke($subject, $field, $true = true, $false = false)
+    public function __invoke(object $subject, string $field, $true = true, $false = false): bool
     {
         $value = $subject->$field;
 

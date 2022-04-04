@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -32,7 +34,7 @@ class DateTime extends AbstractDateTime
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($subject, $field, $format = 'Y-m-d H:i:s')
+    public function __invoke(object $subject, string $field, $format = 'Y-m-d H:i:s'): bool
     {
         $value = $subject->$field;
         $datetime = $this->newDateTime($value);
