@@ -50,8 +50,12 @@ abstract class AbstractBoolean
         if (! $this->isBoolIsh($value)) {
             return false;
         }
+
+        // trim only expects string
+        $value = is_string($value) ? strtolower(trim($value)) : $value;
+
         return $value === true
-            || in_array(strtolower(trim($value)), $this->true);
+            || in_array($value, $this->true);
     }
 
     /**
@@ -67,8 +71,12 @@ abstract class AbstractBoolean
         if (! $this->isBoolIsh($value)) {
             return false;
         }
+
+        // trim only expects string
+        $value = is_string($value) ? strtolower(trim($value)) : $value;
+
         return $value === false
-            || in_array(strtolower(trim($value)), $this->false);
+            || in_array($value, $this->false);
     }
 
     /**

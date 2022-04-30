@@ -24,7 +24,7 @@ class FailureCollectionTest extends TestCase
         $this->assertCount(2, $actual);
 
         $failure = $actual[0];
-        $this->assertInstanceOf('Aura\Filter_Interface\Failure', $failure);
+        $this->assertInstanceOf(\Aura\Filter_Interface\FailureInterface::class, $failure);
         $this->assertSame('foo', $failure->getField());
         $this->assertSame('message 1', $failure->getMessage());
         $this->assertEquals(array('bar' => 'baz'), $failure->getArgs());

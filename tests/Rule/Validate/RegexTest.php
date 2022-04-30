@@ -17,9 +17,9 @@ class RegexTest extends AbstractValidateTest
     {
         return array(
             array('+1234567890'),
-            array(1234567890),
-            array(-123456789.0),
-            array(-1234567890),
+            // array(1234567890),
+            // array(-123456789.0),
+            // array(-1234567890),
             array('-123'),
         );
     }
