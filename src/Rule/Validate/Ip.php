@@ -27,7 +27,7 @@ class Ip
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $flags `FILTER_VALIDATE_IP` flags to pass to filter_var();
+     * @param array|int $flags `FILTER_VALIDATE_IP` flags to pass to filter_var();
      * cf. <http://php.net/manual/en/filter.filters.flags.php>.
      *
      * @return bool True if valid, false if not.

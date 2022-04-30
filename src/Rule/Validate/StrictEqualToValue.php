@@ -32,7 +32,7 @@ class StrictEqualToValue
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function __invoke(object $subject, string $field, $other_value): bool
+    public function __invoke(object $subject, string $field, string $other_value): bool
     {
         return $subject->$field === $other_value;
     }

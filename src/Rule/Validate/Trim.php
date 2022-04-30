@@ -32,7 +32,7 @@ class Trim
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke(object $subject, string $field, $chars = " \t\n\r\0\x0B"): bool
+    public function __invoke(object $subject, string $field, string $chars = " \t\n\r\0\x0B"): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

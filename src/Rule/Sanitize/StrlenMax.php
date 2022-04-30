@@ -34,7 +34,7 @@ class StrlenMax extends AbstractStrlen
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke(object $subject, string $field, $max): bool
+    public function __invoke(object $subject, string $field, int $max): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

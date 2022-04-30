@@ -27,7 +27,7 @@ class Max
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $max The maximum valid value.
+     * @param int|float $max The maximum valid value.
      *
      * @return bool True if valid, false if not.
      *

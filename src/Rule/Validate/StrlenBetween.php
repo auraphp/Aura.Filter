@@ -29,9 +29,9 @@ class StrlenBetween extends AbstractStrlen
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $min The minimum valid length.
+     * @param int|float $min The minimum valid length.
      *
-     * @param mixed $max The maximum valid length.
+     * @param int|float $max The maximum valid length.
      *
      * @return bool True if valid, false if not.
      *

@@ -35,7 +35,7 @@ class EqualToField
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function __invoke(object $subject, string $field, $other_field): bool
+    public function __invoke(object $subject, string $field, string $other_field): bool
     {
         // the other field needs to exist and *not* be null
         if (! isset($subject->$other_field)) {
