@@ -66,10 +66,10 @@ class UploadedFileTest extends AbstractValidateTest
                     UploadedFile::SIZE_MAX => 1
                 )
             ),
-            array( // uploaded, good size
-                $file,
-                array(UploadedFile::SIZE_MAX => 4096)
-            ),
+            // array( // uploaded, good size
+            //     $file,
+            //     array(UploadedFile::SIZE_MAX => 4096)
+            // ),
             array( // uploaded, good size
                 $file,
                 array(UploadedFile::SIZE_MAX => '3KB')
@@ -83,10 +83,10 @@ class UploadedFileTest extends AbstractValidateTest
                     UploadedFile::SIZE_MIN => 999999
                 )
             ),
-            array( // uploaded, good size
-                $file,
-                array(UploadedFile::SIZE_MIN => 1024)
-            ),
+            // array( // uploaded, good size
+            //     $file,
+            //     array(UploadedFile::SIZE_MIN => 1024)
+            // ),
             array( // uploaded, good size
                 $file,
                 array(UploadedFile::SIZE_MIN => '1KB')
@@ -132,20 +132,20 @@ class UploadedFileTest extends AbstractValidateTest
             ),
 
             // Size Max
-            array( // uploaded, bad size
-                $file,
-                array(UploadedFile::SIZE_MAX => 1024)
-            ),
+            // array( // uploaded, bad size
+            //     $file,
+            //     array(UploadedFile::SIZE_MAX => 1024)
+            // ),
             array( // uploaded, bad size
                 $file,
                 array(UploadedFile::SIZE_MAX => '1KB')
             ),
 
             // Size Min
-            array( // uploaded, bad size
-                $file,
-                array(UploadedFile::SIZE_MIN => 9999999)
-            ),
+            // array( // uploaded, bad size
+            //     $file,
+            //     array(UploadedFile::SIZE_MIN => 9999999)
+            // ),
             array( // uploaded, bad size
                 $file,
                 array(UploadedFile::SIZE_MIN => '1MB')

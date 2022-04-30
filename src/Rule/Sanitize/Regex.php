@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -32,7 +34,7 @@ class Regex
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($subject, $field, $expr, $replace)
+    public function __invoke(object $subject, string $field, string $expr, string $replace): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

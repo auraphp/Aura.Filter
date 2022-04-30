@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -30,7 +32,7 @@ class Trim
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, $chars = " \t\n\r\0\x0B")
+    public function __invoke(object $subject, string $field, $chars = " \t\n\r\0\x0B"): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -34,7 +36,7 @@ class InValues
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, array $array)
+    public function __invoke(object $subject, string $field, array $array): bool
     {
         return in_array($subject->$field, $array, true);
     }

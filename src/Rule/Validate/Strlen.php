@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -32,13 +34,13 @@ class Strlen extends AbstractStrlen
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, $len)
+    public function __invoke(object $subject, string $field, $len): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {
             return false;
         }
 
-        return $this->strlen($value) == $len;
+        return $this->strlen((string) $value) == $len;
     }
 }

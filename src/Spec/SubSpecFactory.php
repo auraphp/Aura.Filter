@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // @codingStandardsIgnoreFile
 
 namespace Aura\Filter\Spec;

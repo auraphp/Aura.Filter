@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -30,7 +32,7 @@ class DateTime extends AbstractDateTime
      * @return bool
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $value = $subject->$field;
         $datetime = $this->newDateTime($value);

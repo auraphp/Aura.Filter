@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -134,7 +136,7 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function substr(string $str, int $start, $length = null): string
+    protected function substr(string $str, int $start, int $length = null): string
     {
         if ($this->iconv()) {
             return $this->substrIconv($str, $start, $length);
@@ -179,17 +181,17 @@ abstract class AbstractStrlen
         $pad_len = $pad_length - $input_len;
 
         if ($pad_type == STR_PAD_LEFT) {
-            $repeat_times = ceil($pad_len / $pad_str_len);
+            $repeat_times = (int) ceil($pad_len / $pad_str_len);
             $prefix = str_repeat($pad_str, $repeat_times);
-            return $this->substr($prefix, 0, floor($pad_len)) . $input;
+            return $this->substr($prefix, 0, (int) floor($pad_len)) . $input;
         }
 
         if ($pad_type == STR_PAD_BOTH) {
             $pad_len /= 2;
-            $pad_amount_left = floor($pad_len);
-            $pad_amount_right = ceil($pad_len);
-            $repeat_times_left = ceil($pad_amount_left / $pad_str_len);
-            $repeat_times_right = ceil($pad_amount_right / $pad_str_len);
+            $pad_amount_left = (int) floor($pad_len);
+            $pad_amount_right = (int) ceil($pad_len);
+            $repeat_times_left = (int) ceil($pad_amount_left / $pad_str_len);
+            $repeat_times_right = (int) ceil($pad_amount_right / $pad_str_len);
 
             $prefix = str_repeat($pad_str, $repeat_times_left);
             $padding_left = $this->substr($prefix, 0, $pad_amount_left);
@@ -201,7 +203,7 @@ abstract class AbstractStrlen
         }
 
         // STR_PAD_RIGHT
-        $repeat_times = ceil($pad_len / $pad_str_len);
+        $repeat_times = (int) ceil($pad_len / $pad_str_len);
         $input .= str_repeat($pad_str, $repeat_times);
         return $this->substr($input, 0, $pad_length);
     }

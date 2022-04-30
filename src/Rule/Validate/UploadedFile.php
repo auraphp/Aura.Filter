@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -56,7 +58,7 @@ class UploadedFile
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, array $options)
+    public function __invoke(object $subject, string $field, array $options): bool
     {
         $value = $subject->$field;
 
@@ -210,28 +212,28 @@ class UploadedFile
     /**
      * Parse human readable size to bytes
      *
-     * @param mixed $size size indicator
+     * @param string $size size indicator
      *
      * @return double|int
      *
      * @access public
      */
-    public function parseHumanSize($size)
+    public function parseHumanSize(string $size)
     {
         $number = substr($size, 0, -2);
         switch(strtoupper(substr($size, -2))){
-        case "KB":
-            return $number * 1024;
-        case "MB":
-            return $number * pow(1024, 2);
-        case "GB":
-            return $number * pow(1024, 3);
-        case "TB":
-            return $number * pow(1024, 4);
-        case "PB":
-            return $number * pow(1024, 5);
-        default:
-            return $size;
+            case "KB":
+                return $number * 1024;
+            case "MB":
+                return $number * pow(1024, 2);
+            case "GB":
+                return $number * pow(1024, 3);
+            case "TB":
+                return $number * pow(1024, 4);
+            case "PB":
+                return $number * pow(1024, 5);
+            default:
+                return $size;
         }
     }
 }

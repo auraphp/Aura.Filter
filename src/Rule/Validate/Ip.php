@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -31,7 +33,7 @@ class Ip
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, $flags = null)
+    public function __invoke(object $subject, string $field, $flags = null): bool
     {
         if ($flags === null) {
             $flags = FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6;

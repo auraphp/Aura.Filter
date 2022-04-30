@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -30,7 +32,7 @@ class Callback
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke($subject, $field, callable $callable)
+    public function __invoke(object $subject, string $field, callable $callable): bool
     {
         return $callable($subject, $field);
     }

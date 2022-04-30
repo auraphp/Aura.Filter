@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -28,7 +30,7 @@ class CreditCard
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         // get the value; remove spaces, dashes, and dots
         $value = str_replace(array(' ', '-', '.'), '', (string) $subject->$field);

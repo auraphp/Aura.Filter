@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -33,7 +35,7 @@ class Str
      * @todo allow for __toString() implementations
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         return is_scalar($subject->$field);
     }

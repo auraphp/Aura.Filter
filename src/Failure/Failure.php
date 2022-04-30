@@ -8,7 +8,7 @@
  */
 namespace Aura\Filter\Failure;
 
-use JsonSerializable;
+use Aura\Filter_Interface\FailureInterface;
 
 /**
  *
@@ -17,7 +17,7 @@ use JsonSerializable;
  * @package Aura.Filter
  *
  */
-class Failure implements JsonSerializable
+class Failure implements FailureInterface
 {
     /**
      *

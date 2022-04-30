@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -33,7 +35,7 @@ class StrlenMax extends AbstractStrlen
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field, $max)
+    public function __invoke(object $subject, string $field, $max): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

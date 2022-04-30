@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -28,7 +30,7 @@ class Isbn
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke(object $subject, string $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $value = $this->normalize($subject, $field);
         if (! $value) {

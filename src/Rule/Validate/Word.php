@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -29,7 +31,7 @@ class Word
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

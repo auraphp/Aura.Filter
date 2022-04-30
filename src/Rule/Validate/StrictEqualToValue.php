@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -30,7 +32,7 @@ class StrictEqualToValue
      * @return bool True if the values are equal, false if not equal.
      *
      */
-    public function __invoke($subject, $field, $other_value)
+    public function __invoke(object $subject, string $field, $other_value): bool
     {
         return $subject->$field === $other_value;
     }

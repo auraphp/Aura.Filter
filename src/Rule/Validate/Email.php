@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -371,7 +373,7 @@ class Email
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke($subject, $field)
+    public function __invoke(object $subject, string $field): bool
     {
         $email = $subject->$field;
         if ($this->intl()) {

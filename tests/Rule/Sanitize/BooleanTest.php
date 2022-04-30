@@ -40,7 +40,7 @@ class BooleanTest extends AbstractSanitizeTest
             array('FaLsE',       true, false),
             array('f',           true, false),
             array('F',           true, false),
-            array(0,             true, false),
+            // array(0,             true, false),
             array('0',           true, false),
         );
     }
