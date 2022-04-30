@@ -34,7 +34,7 @@ class Regex
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke(object $subject, string $field, $expr, $replace): bool
+    public function __invoke(object $subject, string $field, string $expr, string $replace): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {
