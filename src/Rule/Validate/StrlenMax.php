@@ -29,7 +29,7 @@ class StrlenMax extends AbstractStrlen
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $max The value must have no more than this many
+     * @param int|float $max The value must have no more than this many
      * characters.
      *
      * @return bool True if valid, false if not.

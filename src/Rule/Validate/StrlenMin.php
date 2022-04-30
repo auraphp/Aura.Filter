@@ -29,7 +29,7 @@ class StrlenMin extends AbstractStrlen
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $min The value must have at least this many characters.
+     * @param int|float $min The value must have at least this many characters.
      *
      * @return bool True if valid, false if not.
      *

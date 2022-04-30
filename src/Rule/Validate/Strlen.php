@@ -29,12 +29,12 @@ class Strlen extends AbstractStrlen
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $len The minimum valid length.
+     * @param int $len String length equal to length.
      *
      * @return bool True if valid, false if not.
      *
      */
-    public function __invoke(object $subject, string $field, $len): bool
+    public function __invoke(object $subject, string $field, int $len): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

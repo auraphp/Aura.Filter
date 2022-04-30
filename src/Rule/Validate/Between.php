@@ -27,9 +27,9 @@ class Between
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $min The minimum valid value.
+     * @param int $min The minimum valid value.
      *
-     * @param mixed $max The maximum valid value.
+     * @param int $max The maximum valid value.
      *
      * @return bool True if valid, false if not.
      *

@@ -40,7 +40,7 @@ class StrlenBetween extends AbstractStrlen
      * @return bool True if the value was sanitized, false if not.
      *
      */
-    public function __invoke(object $subject, string $field, $min, $max, $pad_string = ' ', $pad_type = STR_PAD_RIGHT): bool
+    public function __invoke(object $subject, string $field, int $min, int $max, string $pad_string = ' ', int $pad_type = STR_PAD_RIGHT): bool
     {
         $value = $subject->$field;
         if (! is_scalar($value)) {

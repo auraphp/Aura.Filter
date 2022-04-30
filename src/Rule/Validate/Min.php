@@ -27,7 +27,7 @@ class Min
      *
      * @param string $field The subject field name.
      *
-     * @param mixed $min The minimum valid value.
+     * @param int|float $min The minimum valid value.
      *
      * @return bool True if valid, false if not.
      *
