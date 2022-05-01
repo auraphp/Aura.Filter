@@ -148,9 +148,15 @@ class FailureCollection extends ArrayObject implements FailureCollectionInterfac
         }
 
         $messages = array();
-        foreach ($this[$field] as $failure) {
-            $messages[] = $failure->getMessage();
+
+        if ($this[$field] instanceof FailureCollection) {
+            $messages = $this[$field]->getMessages();
+        } else {
+            foreach ($this[$field] as $failure) {
+                $messages[] = $failure->getMessage();
+            }
         }
+
         return $messages;
     }
 
@@ -192,5 +198,18 @@ class FailureCollection extends ArrayObject implements FailureCollectionInterfac
             $string .= "{$prefix}{$message}" . PHP_EOL;
         }
         return $string;
+    }
+
+    public function addSubfieldFailures($field, $spec)
+    {
+        $failure_collection = new FailureCollection();
+
+        foreach ($spec->getMessage() as $f => $messages) {
+            foreach ($messages as $message) {
+                $failure_collection->add($f, $message, $spec->getArgs());
+            }
+        }
+
+        $this[$field] = $failure_collection;
     }
 }

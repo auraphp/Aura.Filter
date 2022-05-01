@@ -365,7 +365,7 @@ class SubjectFilter
      *
      *
      */
-    protected function failed(Spec $spec): Failure
+    protected function failed(Spec $spec)
     {
         $field = $spec->getField();
 
@@ -373,11 +373,15 @@ class SubjectFilter
             $this->skip[$field] = true;
         }
 
-        if (isset($this->field_messages[$field])) {
-            return $this->failures->set($field, $this->field_messages[$field]);
-        }
+        if ($spec instanceof SubSpec) {
+            return $this->failures->addSubfieldFailures($field, $spec);
+        } else {
+            if (isset($this->field_messages[$field])) {
+                return $this->failures->set($field, $this->field_messages[$field]);
+            }
 
-        return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
+            return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
+        }
     }
 
     /**
