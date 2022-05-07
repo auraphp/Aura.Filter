@@ -277,7 +277,7 @@ class Spec
      *
      * Returns the failure message for this rule specification.
      *
-     * @return string
+     * @return string|array<string, array<int, string>>
      *
      */
     public function getMessage()
