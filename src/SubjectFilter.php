@@ -363,7 +363,7 @@ class SubjectFilter
      *
      * @param Spec $spec The failed rule specification.
      *
-     *
+     * @return void
      */
     protected function failed(Spec $spec)
     {
@@ -374,14 +374,18 @@ class SubjectFilter
         }
 
         if ($spec instanceof SubSpec) {
-            return $this->failures->addSubfieldFailures($field, $spec);
-        } else {
-            if (isset($this->field_messages[$field])) {
-                return $this->failures->set($field, $this->field_messages[$field]);
-            }
+            $this->failures->addSubfieldFailures($field, $spec);
 
-            return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
+            return;
         }
+
+        if (isset($this->field_messages[$field])) {
+            $this->failures->set($field, $this->field_messages[$field]);
+
+            return;
+        }
+
+        $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
     }
 
     /**
