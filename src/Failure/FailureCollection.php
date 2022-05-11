@@ -107,7 +107,7 @@ class FailureCollection extends ArrayObject implements FailureCollectionInterfac
      * @param string $field The field name.
      *
      *
-     * @return mixed[]
+     * @return array<int, Failure>
      */
     public function forField(string $field): array
     {
@@ -123,7 +123,7 @@ class FailureCollection extends ArrayObject implements FailureCollectionInterfac
      * Returns all failure messages for all fields.
      *
      *
-     * @return mixed[][]
+     * @return array<string, array<int, string>>
      */
     public function getMessages(): array
     {
@@ -139,6 +139,8 @@ class FailureCollection extends ArrayObject implements FailureCollectionInterfac
      * Returns all failure messages for one field.
      *
      * @param string $field The field name.
+     *
+     * @return array<int, string>
      *
      */
     public function getMessagesForField(string $field): array
