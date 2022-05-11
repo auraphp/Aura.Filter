@@ -220,7 +220,7 @@ class SubjectFilter
      *
      *
      */
-    public function subfilter(string $field, $class = \Aura\Filter\SubjectFilter::class): Spec
+    public function subFilter(string $field, $class = \Aura\Filter\SubjectFilter::class): Spec
     {
         $spec = $this->sub_spec_factory->newSubSpec($class);
         return $this->addSpec($spec, $field);
