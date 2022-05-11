@@ -2,10 +2,12 @@
 namespace Aura\Filter\Spec;
 
 use Aura\Filter\FilterFactory;
+use Aura\Filter\SubjectFilter;
 use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 class SubspecTest extends TestCase
 {
+    /** @var SubjectFilter */
     protected $filter;
 
     protected function set_up()
@@ -28,7 +30,7 @@ class SubspecTest extends TestCase
         $this->filter->validate('id')->is('int');
         $this->filter->validate('url')->is('url');
 
-        $user_spec = $this->filter->subfilter('user'); // add a "SubSpec"
+        $user_spec = $this->filter->subFilter('user'); // add a "SubSpec"
         $user_filter = $user_spec->filter();  // Get the "SubSpec" SubjectFilter
 
         $user_filter->validate('given-name')->isNotBlank();

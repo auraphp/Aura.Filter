@@ -220,7 +220,7 @@ class SubjectFilter
      *
      *
      */
-    public function subfilter(string $field, $class = \Aura\Filter\SubjectFilter::class): Spec
+    public function subFilter(string $field, $class = \Aura\Filter\SubjectFilter::class): Spec
     {
         $spec = $this->sub_spec_factory->newSubSpec($class);
         return $this->addSpec($spec, $field);
@@ -363,7 +363,7 @@ class SubjectFilter
      *
      * @param Spec $spec The failed rule specification.
      *
-     *
+     * @return void
      */
     protected function failed(Spec $spec)
     {
@@ -374,14 +374,18 @@ class SubjectFilter
         }
 
         if ($spec instanceof SubSpec) {
-            return $this->failures->addSubfieldFailures($field, $spec);
-        } else {
-            if (isset($this->field_messages[$field])) {
-                return $this->failures->set($field, $this->field_messages[$field]);
-            }
+            $this->failures->addSubfieldFailures($field, $spec);
 
-            return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
+            return;
         }
+
+        if (isset($this->field_messages[$field])) {
+            $this->failures->set($field, $this->field_messages[$field]);
+
+            return;
+        }
+
+        $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
     }
 
     /**
