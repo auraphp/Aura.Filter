@@ -27,13 +27,6 @@ class ValidateSpec extends Spec
     protected $reverse = false;
 
     /**
-     * Skip checking whether field value is blank
-     *
-     * @var boolean
-     */
-    protected $skip_blank = false;
-
-    /**
      *
      * Applies the rule specification to a subject.
      *
@@ -185,16 +178,5 @@ class ValidateSpec extends Spec
         }
 
         return "{$message} have validated as " . parent::getDefaultMessage();
-    }
-
-    /**
-     * Skip checking whether field is blank
-     *
-     * @return self
-     */
-    public function skipBlankRule()
-    {
-        $this->skip_blank = true;
-        return $this;
     }
 }
