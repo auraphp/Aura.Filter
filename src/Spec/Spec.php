@@ -82,6 +82,13 @@ class Spec
     protected $allow_blank = false;
 
     /**
+     * Skip checking whether field value is blank
+     *
+     * @var boolean
+     */
+    protected $skip_blank = false;
+
+    /**
      *
      * The failure mode to use.
      *
@@ -399,5 +406,16 @@ class Spec
 
         // strings that trim down to exactly nothing are blank
         return trim($subject->$field) === '';
+    }
+
+    /**
+     * Skip checking whether field is blank
+     *
+     * @return self
+     */
+    public function skipBlankRule()
+    {
+      $this->skip_blank = true;
+      return $this;
     }
 }
