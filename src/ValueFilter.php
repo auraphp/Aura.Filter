@@ -33,6 +33,16 @@ class ValueFilter
     protected $subject;
 
     /**
+     * @var ValidateLocator
+     */
+    protected $validate_locator;
+
+    /**
+     * @var SanitizeLocator
+     */
+    protected $sanitize_locator;
+
+    /**
      *
      * Constructor.
      *
