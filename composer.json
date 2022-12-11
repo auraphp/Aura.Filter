@@ -25,7 +25,8 @@
     "autoload": {
         "psr-4": {
             "Aura\\Filter\\": "src/"
-        }
+        },
+        "files": ["utf8_to_iso8859_1.php"]
     },
     "suggest": {
         "ext-iconv": "To support UTF-8 in string-length filters.",
