@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace Aura\Filter\Rule;
 
-use Aura\Filter\Exception;
+use function Aura\Filter\utf8_to_iso8859_1;
 
 /**
  *
@@ -38,7 +38,7 @@ abstract class AbstractCharCase extends AbstractStrlen
             return mb_convert_case($str, MB_CASE_LOWER, 'UTF-8');
         }
 
-        return strtolower(utf8_decode($str));
+        return strtolower(utf8_to_iso8859_1($str));
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class AbstractCharCase extends AbstractStrlen
             return mb_convert_case($str, MB_CASE_UPPER, 'UTF-8');
         }
 
-        return strtoupper(utf8_decode($str));
+        return strtoupper(utf8_to_iso8859_1($str));
     }
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractCharCase extends AbstractStrlen
             return mb_convert_case($str, MB_CASE_TITLE, 'UTF-8');
         }
 
-        return ucwords(utf8_decode($str));
+        return ucwords(utf8_to_iso8859_1($str));
     }
 
     /**

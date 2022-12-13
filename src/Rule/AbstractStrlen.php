@@ -13,6 +13,8 @@ namespace Aura\Filter\Rule;
 use Aura\Filter\Exception\MalformedUtf8;
 use Aura\Filter\Exception;
 
+use function Aura\Filter\utf8_to_iso8859_1;
+
 /**
  *
  * Abstract rule for string-length filters; supports the `iconv` and `mbstring`
@@ -67,7 +69,7 @@ abstract class AbstractStrlen
             return mb_strlen($str, 'UTF-8');
         }
 
-        return strlen(utf8_decode($str));
+        return strlen(utf8_to_iso8859_1($str));
     }
 
      /**

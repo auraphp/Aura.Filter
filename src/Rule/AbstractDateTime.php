@@ -50,7 +50,7 @@ abstract class AbstractDateTime
 
         // invalid dates (like 1979-02-29) show up as warnings.
         $errors = DateTime::getLastErrors();
-        if ($errors['warnings']) {
+        if (is_array($errors) && $errors['warnings']) {
             return false;
         }
 
