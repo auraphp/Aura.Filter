@@ -53,7 +53,8 @@ class SubSpec extends Spec
     public function __invoke($subject)
     {
         $field = $this->field;
-        $values =& $subject->$field;
+        $field_values = isset($subject->$field) ? $subject->$field : [];
+        $values =& $field_values;
         return $this->filter->apply($values);
     }
 

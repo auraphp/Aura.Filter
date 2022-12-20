@@ -96,7 +96,7 @@ class Failure implements FailureInterface
      * Returns the arguments passed to the rule specification.
      *
      *
-     * @return mixed[]
+     * @return array<string, string>
      */
     public function getArgs(): array
     {
