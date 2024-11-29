@@ -37,7 +37,7 @@ class SanitizeSpec extends Spec
      */
     public function __invoke($subject)
     {
-        if (! $this->subjectFieldIsBlank($subject)) {
+        if ($this->skip_blank || ! $this->subjectFieldIsBlank($subject)) {
             return parent::__invoke($subject);
         }
 
