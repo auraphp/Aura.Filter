@@ -404,15 +404,24 @@ class Email
      */
     protected function idnToAscii(string $email): string
     {
-        $parts = explode('@', $email);
-        $domain = array_pop($parts);
-        if (! $parts) {
-            // no parts remaining, so no @ symbol, so not valid to begin with
+        if (strpos($email, '@') === false) {
             return $email;
         }
 
-        // put the parts back together, with the domain part converted to ascii
-        return implode('@', $parts) . '@' . idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+        $parts = explode('@', $email);
+
+        if (!isset($parts[1]) || empty($parts[1])) {
+            return $email;
+        }
+
+        $domain = array_pop($parts);
+        $localPart = implode('@', $parts);
+
+        $asciiDomain = idn_to_ascii($domain, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46);
+        if ($asciiDomain === false) {
+            return $email;
+        }
+        return $localPart . '@' . $asciiDomain;
     }
 
     /**

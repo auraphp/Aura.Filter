@@ -72,7 +72,7 @@ abstract class AbstractStrlen
         return strlen(utf8_to_iso8859_1($str));
     }
 
-     /**
+    /**
      *
      * Wrapper for `iconv_substr()` to throw an exception on malformed UTF-8.
      *
@@ -87,10 +87,10 @@ abstract class AbstractStrlen
      * @throws Exception\MalformedUtf8
      *
      */
-    protected function substrIconv(string $str,int $start,int $length)
+    protected function substrIconv(string $str, int $start, ?int $length = null): string
     {
         $level = error_reporting(0);
-        $substr = iconv_substr($str,$start,$length, 'UTF-8');
+        $substr = iconv_substr($str, $start, $length ?? 0, 'UTF-8');
         error_reporting($level);
 
         if ($substr !== false) {
@@ -111,7 +111,7 @@ abstract class AbstractStrlen
      * @throws Exception\MalformedUtf8
      *
      */
-    protected function strlenIconv(string $str)
+    protected function strlenIconv(string $str): int
     {
         $level = error_reporting(0);
         $strlen = iconv_strlen($str, 'UTF-8');
