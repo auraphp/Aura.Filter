@@ -23,6 +23,24 @@ class ValueFilter
 {
     /**
      *
+     * A locator for "validate" rules.
+     *
+     * @var ValidateLocator
+     *
+     */
+    protected $validate_locator;
+
+    /**
+     *
+     * A locator for "sanitize" rules.
+     *
+     * @var SanitizeLocator
+     *
+     */
+    protected $sanitize_locator;
+
+    /**
+     *
      * A pesudo-subject to hold the value being filtered.
      *
      * @var object
