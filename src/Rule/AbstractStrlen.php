@@ -138,7 +138,7 @@ abstract class AbstractStrlen
      * @return string
      *
      */
-    protected function substr(string $str, int $start, int $length = null): string
+    protected function substr(string $str, int $start, ?int $length = null): string
     {
         if ($this->iconv()) {
             return $this->substrIconv($str, $start, $length);
