@@ -19,7 +19,6 @@ use Aura\Filter\Spec\Spec;
 use Aura\Filter\Spec\ValidateSpec;
 use Aura\Filter\Spec\SubSpecFactory;
 use Aura\Filter\Spec\SubSpec;
-use Aura\Filter_Interface\FilterInterface;
 use Aura\Filter_Interface\SubjectFilterInterface;
 use InvalidArgumentException;
 
@@ -222,7 +221,7 @@ class SubjectFilter implements SubjectFilterInterface
      *
      *
      */
-    public function subfilter(string $field, string $subClass = ''): FilterInterface
+    public function subfilter(string $field, string $subClass = ''): SubjectFilterInterface
     {
         $class = $subClass !== '' ? $subClass : static::class;
         $spec = $this->sub_spec_factory->newSubSpec($class);

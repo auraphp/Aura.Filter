@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\SubjectFilter;
+use Aura\Filter_Interface\SubjectFilterInterface;
 
 /**
  * A specification for a "sub" subject
@@ -23,7 +23,7 @@ class SubSpec extends Spec
     /**
      * Subject Filter
      *
-     * @var SubjectFilter
+     * @var SubjectFilterInterface
      *
      * @access protected
      */
@@ -32,11 +32,11 @@ class SubSpec extends Spec
     /**
      * __construct
      *
-     * @param SubjectFilter $filter The filter to apply to the sub subject
+     * @param SubjectFilterInterface $filter The filter to apply to the sub subject
      *
      * @access public
      */
-    public function __construct(SubjectFilter $filter)
+    public function __construct(SubjectFilterInterface $filter)
     {
         $this->filter = $filter;
     }
@@ -63,7 +63,7 @@ class SubSpec extends Spec
      *
      * @access public
      */
-    public function filter(): SubjectFilter
+    public function filter(): SubjectFilterInterface
     {
         return $this->filter;
     }
