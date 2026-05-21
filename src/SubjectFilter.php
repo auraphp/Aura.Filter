@@ -19,6 +19,8 @@ use Aura\Filter\Spec\Spec;
 use Aura\Filter\Spec\ValidateSpec;
 use Aura\Filter\Spec\SubSpecFactory;
 use Aura\Filter\Spec\SubSpec;
+use Aura\Filter_Interface\FilterInterface;
+use Aura\Filter_Interface\SubjectFilterInterface;
 use InvalidArgumentException;
 
 /**
@@ -28,7 +30,7 @@ use InvalidArgumentException;
  * @package Aura.Filter
  *
  */
-class SubjectFilter
+class SubjectFilter implements SubjectFilterInterface
 {
     /**
      *
@@ -220,10 +222,12 @@ class SubjectFilter
      *
      *
      */
-    public function subfilter(string $field, $class = \Aura\Filter\SubjectFilter::class): Spec
+    public function subfilter(string $field, string $subClass = ''): FilterInterface
     {
+        $class = $subClass !== '' ? $subClass : static::class;
         $spec = $this->sub_spec_factory->newSubSpec($class);
-        return $this->addSpec($spec, $field);
+        $this->addSpec($spec, $field);
+        return $spec->filter();
     }
 
     /**
@@ -294,10 +298,44 @@ class SubjectFilter
      */
     protected function applyToArray(array &$array): bool
     {
-        $object = (object) $array;
+        $object = $this->arrayToObject($array);
         $result = $this->applyToObject($object);
-        $array = (array) $object;
+        $array  = $this->objectToArray($object);
         return $result;
+    }
+
+    /**
+     *
+     * Recursively converts an array to a stdClass object so nested arrays
+     * are accessible as object properties by sub-filters.
+     *
+     * @param array $array The array to convert.
+     *
+     */
+    private function arrayToObject(array $array): object
+    {
+        $obj = new \stdClass();
+        foreach ($array as $key => $value) {
+            $obj->$key = is_array($value) ? $this->arrayToObject($value) : $value;
+        }
+        return $obj;
+    }
+
+    /**
+     *
+     * Recursively converts a stdClass object back to an array so any
+     * sanitized values are written back to the caller's array.
+     *
+     * @param object $obj The object to convert.
+     *
+     */
+    private function objectToArray(object $obj): array
+    {
+        $arr = [];
+        foreach ((array) $obj as $key => $value) {
+            $arr[$key] = is_object($value) ? $this->objectToArray($value) : $value;
+        }
+        return $arr;
     }
 
     /**
