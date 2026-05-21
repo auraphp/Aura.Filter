@@ -380,6 +380,27 @@ class SubjectFilter implements SubjectFilterInterface
             return $this->failures->set($field, $this->field_messages[$field]);
         }
 
+        // Sub-filters carry their own FailureCollection keyed by sub-field
+        // names. Propagate those directly into the parent so callers can
+        // inspect individual nested failures (e.g. 'city' not just 'address').
+        if ($spec instanceof SubSpec) {
+            $lastFailure = null;
+            foreach ($spec->filter()->getFailures() as $subField => $failures) {
+                foreach ($failures as $failure) {
+                    $lastFailure = $this->failures->add(
+                        $subField,
+                        $failure->getMessage(),
+                        $failure->getArgs()
+                    );
+                }
+            }
+            if ($lastFailure !== null) {
+                return $lastFailure;
+            }
+            // Fallback: sub-filter failed but reported no individual failures.
+            return $this->failures->add($field, 'subfilter failed');
+        }
+
         return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
     }
 

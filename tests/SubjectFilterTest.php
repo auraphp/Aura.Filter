@@ -378,9 +378,10 @@ class SubjectFilterTest extends TestCase
         $sub = $this->filter->subfilter('address');
         $sub->validate('city')->isNotBlank();
 
-        // 'tags' is a plain array field — its rule receives it as an array
-        $this->filter->validate('tags')->is('callback', function ($value) {
-            return is_array($value);   // must still be an array, not stdClass
+        // 'tags' is a plain array field — its rule receives the whole subject
+        // object; extract the field value and confirm it is still an array.
+        $this->filter->validate('tags')->is('callback', function ($subject, $field) {
+            return is_array($subject->$field);   // must still be an array, not stdClass
         });
 
         $data = [
