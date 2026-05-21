@@ -90,13 +90,19 @@ class SubSpec extends Spec
      * Recursively converts a stdClass back to an array so that sanitized
      * values are returned in the original data structure.
      *
+     * Only stdClass nodes are converted — objects that were not created by
+     * arrayToObject() (e.g. DTOs passed in the original input data) are
+     * returned as-is to avoid incorrectly flattening them.
+     *
      * @param object $obj
      */
     private function objectToArray(object $obj): array
     {
         $arr = [];
         foreach ((array) $obj as $key => $value) {
-            $arr[$key] = is_object($value) ? $this->objectToArray($value) : $value;
+            $arr[$key] = $value instanceof \stdClass
+                ? $this->objectToArray($value)
+                : $value;
         }
         return $arr;
     }
