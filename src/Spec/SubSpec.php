@@ -42,7 +42,13 @@ class SubSpec extends Spec
     }
 
     /**
-     * Apply sub filter to sub subject
+     * Apply sub filter to sub subject.
+     *
+     * If the field value is an array it is converted to a stdClass before
+     * filtering so sub-filter rules can access nested values as properties,
+     * then converted back afterwards so sanitized values are written through
+     * to the caller. Fields that are not targeted by a subfilter are never
+     * touched and continue to reach their own rules as arrays.
      *
      * @param mixed $subject parent subject
      *
@@ -52,9 +58,47 @@ class SubSpec extends Spec
      */
     public function __invoke($subject)
     {
-        $field = $this->field;
+        $field  = $this->field;
         $values =& $subject->$field;
+
+        if (is_array($values)) {
+            $obj    = $this->arrayToObject($values);
+            $result = $this->filter->apply($obj);
+            $values = $this->objectToArray($obj);
+            return $result;
+        }
+
         return $this->filter->apply($values);
+    }
+
+    /**
+     * Recursively converts an array to a stdClass so nested values are
+     * reachable as object properties inside the sub-filter.
+     *
+     * @param array $array
+     */
+    private function arrayToObject(array $array): object
+    {
+        $obj = new \stdClass();
+        foreach ($array as $key => $value) {
+            $obj->$key = is_array($value) ? $this->arrayToObject($value) : $value;
+        }
+        return $obj;
+    }
+
+    /**
+     * Recursively converts a stdClass back to an array so that sanitized
+     * values are returned in the original data structure.
+     *
+     * @param object $obj
+     */
+    private function objectToArray(object $obj): array
+    {
+        $arr = [];
+        foreach ((array) $obj as $key => $value) {
+            $arr[$key] = is_object($value) ? $this->objectToArray($value) : $value;
+        }
+        return $arr;
     }
 
     /**

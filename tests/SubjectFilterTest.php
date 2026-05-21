@@ -311,4 +311,126 @@ class SubjectFilterTest extends TestCase
         $this->assertSame($expect, $actual);
     }
 
+    // ------------------------------------------------------------------
+    // subfilter + nested array tests
+    // ------------------------------------------------------------------
+
+    /**
+     * A nested array field targeted by subfilter() is validated correctly;
+     * a failing nested field surfaces failures on the sub-filter.
+     */
+    public function testSubfilter_nestedArrayValidationFails()
+    {
+        $sub = $this->filter->subfilter('address');
+        $sub->validate('city')->isNotBlank();
+        $sub->validate('zip')->is('alnum');
+
+        $data = ['address' => ['city' => '', 'zip' => '90210']];
+        $result = $this->filter->apply($data);
+
+        $this->assertFalse($result);
+        $messages = $this->filter->getFailures()->getMessages();
+        $this->assertArrayHasKey('city', $messages);
+    }
+
+    /**
+     * A nested array field targeted by subfilter() passes when all rules
+     * are satisfied.
+     */
+    public function testSubfilter_nestedArrayValidationPasses()
+    {
+        $sub = $this->filter->subfilter('address');
+        $sub->validate('city')->isNotBlank();
+        $sub->validate('zip')->is('alnum');
+
+        $data = ['address' => ['city' => 'Beverly Hills', 'zip' => '90210']];
+        $result = $this->filter->apply($data);
+
+        $this->assertTrue($result);
+        $this->assertTrue($this->filter->getFailures()->isEmpty());
+    }
+
+    /**
+     * Sanitize rules inside a subfilter write the sanitized value back
+     * through to the original array.
+     */
+    public function testSubfilter_nestedArraySanitizeWritesBack()
+    {
+        $sub = $this->filter->subfilter('address');
+        $sub->sanitize('city')->to('string');
+        $sub->sanitize('zip')->to('strlenMax', 5);
+
+        $data = ['address' => ['city' => 'Beverly Hills', 'zip' => '902101234']];
+        $result = $this->filter->apply($data);
+
+        $this->assertTrue($result);
+        $this->assertSame('90210', $data['address']['zip']);
+    }
+
+    /**
+     * Array fields that do NOT have a subfilter registered must still reach
+     * their own rules as plain arrays, not as stdClass objects.
+     * Regression guard for the over-broad arrayToObject() fix.
+     */
+    public function testSubfilter_plainArrayFieldUnaffectedBySubfilter()
+    {
+        // Register a subfilter on 'address' only
+        $sub = $this->filter->subfilter('address');
+        $sub->validate('city')->isNotBlank();
+
+        // 'tags' is a plain array field — its rule receives it as an array
+        $this->filter->validate('tags')->is('callback', function ($value) {
+            return is_array($value);   // must still be an array, not stdClass
+        });
+
+        $data = [
+            'tags'    => ['php', 'aura'],
+            'address' => ['city' => 'NYC'],
+        ];
+        $result = $this->filter->apply($data);
+
+        $this->assertTrue($result);
+    }
+
+    /**
+     * Deeply nested arrays (three levels) are handled correctly by chained
+     * subfilter() calls.
+     */
+    public function testSubfilter_deeplyNestedArray()
+    {
+        $sub     = $this->filter->subfilter('order');
+        $subItem = $sub->subfilter('item');
+        $subItem->validate('name')->isNotBlank();
+
+        $data = ['order' => ['item' => ['name' => '']]];
+        $result = $this->filter->apply($data);
+
+        $this->assertFalse($result);
+
+        // passing case
+        $filter2 = (new FilterFactory())->newSubjectFilter();
+        $s       = $filter2->subfilter('order');
+        $s->subfilter('item')->validate('name')->isNotBlank();
+
+        $data2 = ['order' => ['item' => ['name' => 'Widget']]];
+        $this->assertTrue($filter2->apply($data2));
+    }
+
+    /**
+     * subfilter() on an object field (original pre-fix behaviour) still works.
+     */
+    public function testSubfilter_nestedObjectUnchanged()
+    {
+        $sub = $this->filter->subfilter('address');
+        $sub->validate('city')->isNotBlank();
+
+        $address        = new \stdClass();
+        $address->city  = 'NYC';
+        $subject        = new \stdClass();
+        $subject->address = $address;
+
+        $result = $this->filter->apply($subject);
+        $this->assertTrue($result);
+    }
+
 }

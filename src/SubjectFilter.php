@@ -297,44 +297,10 @@ class SubjectFilter implements SubjectFilterInterface
      */
     protected function applyToArray(array &$array): bool
     {
-        $object = $this->arrayToObject($array);
+        $object = (object) $array;
         $result = $this->applyToObject($object);
-        $array  = $this->objectToArray($object);
+        $array  = (array) $object;
         return $result;
-    }
-
-    /**
-     *
-     * Recursively converts an array to a stdClass object so nested arrays
-     * are accessible as object properties by sub-filters.
-     *
-     * @param array $array The array to convert.
-     *
-     */
-    private function arrayToObject(array $array): object
-    {
-        $obj = new \stdClass();
-        foreach ($array as $key => $value) {
-            $obj->$key = is_array($value) ? $this->arrayToObject($value) : $value;
-        }
-        return $obj;
-    }
-
-    /**
-     *
-     * Recursively converts a stdClass object back to an array so any
-     * sanitized values are written back to the caller's array.
-     *
-     * @param object $obj The object to convert.
-     *
-     */
-    private function objectToArray(object $obj): array
-    {
-        $arr = [];
-        foreach ((array) $obj as $key => $value) {
-            $arr[$key] = is_object($value) ? $this->objectToArray($value) : $value;
-        }
-        return $arr;
     }
 
     /**
