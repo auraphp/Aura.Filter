@@ -45,20 +45,46 @@ class UploadTest extends AbstractValidateTest
         return $class;
     }
 
-    public function providerIs()
+    public static function providerIs(): array
     {
         return array(
-            array($this->good_upload),
+            array(array(
+                'error'     => UPLOAD_ERR_OK,
+                'name'      => 'file.jpg',
+                'size'      => '1024',
+                'tmp_name'  => '/tmp/asdfghjkl.jpg',
+                'type'      => 'image/jpeg',
+                'extra_key' => 'extra',
+            )),
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot(): array
     {
         return array(
-            array(null), // not an array,
-            array($this->bad_upload_1),
-            array($this->bad_upload_2),
-            array($this->bad_upload_3),
+            array(null),
+            array(array(                            // bad_upload_1: partial
+                'error'     => UPLOAD_ERR_PARTIAL,
+                'name'      => 'file.jpg',
+                'size'      => '1024',
+                'tmp_name'  => '/tmp/asdfghjkl.jpg',
+                'type'      => 'image/jpeg',
+                'extra_key' => 'extra',
+            )),
+            array(array(                            // bad_upload_2: unknown error code
+                'error'     => 96,
+                'name'      => 'file.jpg',
+                'size'      => '1024',
+                'tmp_name'  => '/tmp/asdfghjkl.jpg',
+                'type'      => 'image/jpeg',
+                'extra_key' => 'extra',
+            )),
+            array(array(                            // bad_upload_3: missing key
+                'error'     => 96,
+                'name'      => 'file.jpg',
+                'tmp_name'  => '/tmp/asdfghjkl.jpg',
+                'type'      => 'image/jpeg',
+            )),
         );
     }
 

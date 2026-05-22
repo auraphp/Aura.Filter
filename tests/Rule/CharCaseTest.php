@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class CharCaseTest extends TestCase
 {

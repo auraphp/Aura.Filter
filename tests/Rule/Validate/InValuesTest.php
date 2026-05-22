@@ -16,7 +16,7 @@ class InValuesTest extends AbstractValidateTest
         return array($this->opts);
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('val0'),
@@ -27,7 +27,7 @@ class InValuesTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(3),

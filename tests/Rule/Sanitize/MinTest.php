@@ -10,7 +10,7 @@ class MinTest extends AbstractSanitizeTest
         return array($this->min);
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(), false, array()),

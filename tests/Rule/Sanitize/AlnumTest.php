@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 class AlnumTest extends AbstractSanitizeTest
 {
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             // value, result, expect

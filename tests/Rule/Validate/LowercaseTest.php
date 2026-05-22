@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class LowercaseTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('abcd'),
@@ -13,7 +13,7 @@ class LowercaseTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

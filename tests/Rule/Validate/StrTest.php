@@ -13,7 +13,7 @@ class StrTest extends AbstractValidateTest
         return $rule->fixBlankOr(' ', '@');
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(12345),
@@ -25,7 +25,7 @@ class StrTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

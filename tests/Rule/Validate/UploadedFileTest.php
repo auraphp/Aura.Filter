@@ -5,7 +5,7 @@ use GuzzleHttp\Psr7\UploadedFile as Psr7File;
 
 class UploadedFileTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         $file = new Psr7File('file', 2048, UPLOAD_ERR_OK, 'foo.bar', 'foo/bar');
         $noFile = new Psr7File('file', 0,  UPLOAD_ERR_NO_FILE);
@@ -96,7 +96,7 @@ class UploadedFileTest extends AbstractValidateTest
         return $params;
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         $file = new Psr7File('file', 2048, UPLOAD_ERR_OK, 'foo.bar', 'foo/bar');
         $noFile = new Psr7File('file', 0,  UPLOAD_ERR_NO_FILE);

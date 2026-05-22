@@ -10,7 +10,7 @@ class StrlenMaxTest extends AbstractSanitizeTest
         return array($this->max);
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(),   false, array()),

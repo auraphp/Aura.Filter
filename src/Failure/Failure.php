@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 /**
  *
  * This file is part of Aura for PHP.
@@ -20,60 +22,21 @@ use Aura\Filter_Interface\FailureInterface;
 class Failure implements FailureInterface
 {
     /**
-     *
-     * The field that failed.
-     *
-     * @var string
-     *
-     */
-    protected $field;
-
-    /**
-     *
-     * The failure message.
-     *
-     * @var string
-     *
-     */
-    protected $message;
-
-    /**
-     *
-     * The arguments passed to the rule specification.
-     *
-     * @var array
-     *
-     */
-    protected $args = array();
-
-    /**
-     *
      * Constructor.
      *
-     * @param string $field The field that failed.
-     *
-     * @param string $message The failure message.
-     *
-     * @param array $args The arguments passed to the rule specification.
-     *
-     * @return self
-     *
+     * @param string  $field   The name of the field that failed.
+     * @param string  $message The failure message.
+     * @param mixed[] $args    Arguments that were passed to the rule specification.
      */
     public function __construct(
-        $field,
-        $message,
-        array $args = array()
+        private readonly string $field,
+        private readonly string $message,
+        private readonly array $args = [],
     ) {
-        $this->field = $field;
-        $this->message = $message;
-        $this->args = $args;
     }
 
     /**
-     *
-     * Returns the field that failed.
-     *
-     *
+     * Returns the name of the field that failed.
      */
     public function getField(): string
     {
@@ -81,10 +44,7 @@ class Failure implements FailureInterface
     }
 
     /**
-     *
      * Returns the failure message.
-     *
-     *
      */
     public function getMessage(): string
     {
@@ -92,9 +52,7 @@ class Failure implements FailureInterface
     }
 
     /**
-     *
-     * Returns the arguments passed to the rule specification.
-     *
+     * Returns the arguments that were passed to the rule specification.
      *
      * @return mixed[]
      */
@@ -103,19 +61,17 @@ class Failure implements FailureInterface
         return $this->args;
     }
 
-   /**
+    /**
+     * Returns a JSON-serializable representation of this failure.
      *
-     * Returns an array for json_encode.
-     *
-     *
-     * @return array<string, mixed[]>
+     * @return array<string, mixed>
      */
     public function jsonSerialize(): array
     {
-        return array(
-            'field' => $this->field,
+        return [
+            'field'   => $this->field,
             'message' => $this->message,
-            'args' => $this->args,
-        );
+            'args'    => $this->args,
+        ];
     }
 }

@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class CreditCardTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         // stolen from Respect Validate testing
         return array(
@@ -15,7 +15,7 @@ class CreditCardTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         // stolen from Respect Validate testing
         return array(

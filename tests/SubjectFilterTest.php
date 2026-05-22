@@ -1,314 +1,282 @@
 <?php
 namespace Aura\Filter;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class SubjectFilterTest extends TestCase
 {
-    protected $filter;
+    protected SubjectFilter $filter;
 
-    protected function set_up()
+    protected function setUp(): void
     {
         $filter_factory = new FilterFactory();
         $this->filter = $filter_factory->newSubjectFilter();
     }
 
-    public function testApply_softRule()
+    public function testApply_softRule(): void
     {
         $this->filter->sanitize('foo')->to('string');
         $this->filter->validate('foo')->is('alnum')->asSoftRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $subject = (object) array('foo' => 'foobar');
+        $subject = (object) ['foo' => 'foobar'];
         $result = $this->filter->apply($subject);
-        $this->assertTrue($result);
-        $expect = array();
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+        $this->assertTrue($result->isSuccess());
+        $this->assertSame([], $result->getFailures()->getMessages());
 
-        $subject = (object) array('foo' => '!@#');
+        $subject = (object) ['foo' => '!@#'];
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
-        $expect = array(
-            'foo' => array(
+        $this->assertFalse($result->isSuccess());
+        $expect = [
+            'foo' => [
                 'foo should have validated as alnum',
                 'foo should have validated as strlenMin(6)',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function testApply_notAnObject()
+    public function testApply_notAnObject(): void
     {
-        $this->expectException('InvalidArgumentException');
+        // PHP throws TypeError at the boundary for non-array/non-object input.
+        $this->expectException(\TypeError::class);
         $subject = 'string';
         $this->filter->apply($subject);
     }
 
-    public function testApply_hardRule()
+    public function testApply_hardRule(): void
     {
         $this->filter->validate('foo')->is('alnum')->asHardRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
-        $subject = (object) array('foo' => '!@#');
+        $subject = (object) ['foo' => '!@#'];
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'foo' => array(
+        $expect = [
+            'foo' => [
                 'foo should have validated as alnum',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
 
-        $expect = array(
-            'foo should have validated as alnum',
-        );
-        $actual = $this->filter->getFailures()->getMessagesForField('foo');
-        $this->assertSame($expect, $actual);
+        $expect = ['foo should have validated as alnum'];
+        $this->assertSame($expect, $result->getFailures()->getMessagesForField('foo'));
 
-        $expect = array();
-        $actual = $this->filter->getFailures()->getMessagesForField('no-such-field');
-        $this->assertSame($expect, $actual);
+        $this->assertSame([], $result->getFailures()->getMessagesForField('no-such-field'));
     }
 
-    public function testApply_stopRule()
+    public function testApply_stopRule(): void
     {
         $this->filter->validate('foo1')->is('alnum')->asSoftRule();
         $this->filter->validate('foo1')->is('strlenMin', 6)->asStopRule();
         $this->filter->validate('foo2')->is('alnum');
         $this->filter->validate('foo2')->is('strlenMin', 6);
 
-        $subject = (object) array('foo1' => '!@#', 'foo2' => 'abcdef');
+        $subject = (object) ['foo1' => '!@#', 'foo2' => 'abcdef'];
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'foo1' => array(
+        $expect = [
+            'foo1' => [
                 'foo1 should have validated as alnum',
                 'foo1 should have validated as strlenMin(6)',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function testApply_missingField()
+    public function testApply_missingField(): void
     {
         $this->filter->validate('foo1')->is('alnum')->asSoftRule();
         $this->filter->validate('foo1')->is('strlenMin', 6)->asSoftRule();
         $this->filter->validate('foo2')->is('alnum');
         $this->filter->validate('foo2')->is('strlenMin', 6);
 
-        $subject = (object) array('foo1' => '!@#', 'foo3' => null);
+        $subject = (object) ['foo1' => '!@#', 'foo3' => null];
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'foo1' => array(
+        $expect = [
+            'foo1' => [
                 'foo1 should have validated as alnum',
                 'foo1 should have validated as strlenMin(6)',
-            ),
-            'foo2' => array(
+            ],
+            'foo2' => [
                 'foo2 should have validated as alnum'
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function testUseFieldMessage()
+    public function testUseFieldMessage(): void
     {
         $this->filter->validate('foo')->isNotBlank()->asSoftRule();
         $this->filter->validate('foo')->is('alnum')->asSoftRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asSoftRule();
 
-        $subject = (object) array('foo' => '');
+        $subject = (object) ['foo' => ''];
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
-        $expect = array(
-            'foo' => array(
+        $this->assertFalse($result->isSuccess());
+        $expect = [
+            'foo' => [
                 'foo should not have been blank',
                 'foo should have validated as alnum',
                 'foo should have validated as strlenMin(6)',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
 
         $this->filter->useFieldMessage('foo', 'Please use 6-12 alphanumeric characters.');
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
-        $expect = array(
-            'foo' => array(
+        $this->assertFalse($result->isSuccess());
+        $expect = [
+            'foo' => [
                 'Please use 6-12 alphanumeric characters.',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function test__invoke()
+    public function test__invoke(): void
     {
         $this->filter->validate('foo')->is('alnum')->asSoftRule();
         $this->filter->validate('foo')->is('strlenMin', 6)->asHardRule();
 
         // check for success
-        $subject = (object) array('foo' => 'foobar');
+        $subject = (object) ['foo' => 'foobar'];
         $result = $this->filter->__invoke($subject);
         $this->assertNull($result);
 
         // check for failure
         try {
-
-            $subject = (object) array('foo' => '');
+            $subject = (object) ['foo' => ''];
             $this->filter->__invoke($subject);
             $this->fail('Should have thrown an exception');
-
         } catch (Exception\FilterFailed $e) {
-
             $this->assertSame($subject, $e->getSubject());
             $this->assertSame('Aura\Filter\SubjectFilter', $e->getFilterClass());
-            $expect = array(
-                'foo' => array(
+            $expect = [
+                'foo' => [
                     'foo should have validated as alnum',
                     'foo should have validated as strlenMin(6)',
-                ),
-            );
-
-            $actual = $e->getFailures()->getMessages();
-            $this->assertSame($expect, $actual);
+                ],
+            ];
+            $this->assertSame($expect, $e->getFailures()->getMessages());
         }
     }
 
-    public function testApply_onArray()
+    public function testApply_onArray(): void
     {
         $this->filter->sanitize('foo')->to('strlenMax', 3);
         $this->filter->sanitize('bar')->to('remove');
-        $array = array('foo' => '123456', 'bar' => 'remove-me');
+        $array = ['foo' => '123456', 'bar' => 'remove-me'];
         $result = $this->filter->apply($array);
-        $this->assertTrue($result);
-        $expect = array('foo' => '123');
-        $this->assertSame($expect, $array);
+        $this->assertTrue($result->isSuccess());
+        // apply() is stateless — sanitized values are in getValues(), not in $array
+        $expect = ['foo' => '123'];
+        $this->assertSame($expect, $result->getValues());
     }
 
-    public function test__invoke_onArray()
+    public function test__invoke_onArray(): void
     {
         $this->filter->sanitize('foo')->to('strlenMax', 3);
-        $array = array('foo' => '123456');
-        $result = $this->filter->__invoke($array);
-        $this->assertNull($result);
+        $array = ['foo' => '123456'];
+        // __invoke() writes sanitized values back via &$subject
+        $this->filter->__invoke($array);
         $this->assertSame('123', $array['foo']);
     }
 
-    public function testGetMessageOnClosure()
+    public function testGetMessageOnClosure(): void
     {
-        $this->filter->validate('age')->is('callback', function($s, $f) {
+        $this->filter->validate('age')->is('callback', function ($s, $f) {
             return false;
         });
 
-        $array = array('foo' => '123456');
-        $success = $this->filter->apply($array);
-        $failures = $this->filter->getFailures();
-        $actual = $failures->getMessages();
-        $expect = array(
-            'age' => array(
+        $array = ['foo' => '123456'];
+        $result = $this->filter->apply($array);
+        $actual = $result->getFailures()->getMessages();
+        $expect = [
+            'age' => [
                 'age should have validated as callback(*Closure*)',
-            ),
-        );
-        $this->assertSame($actual, $expect);
+            ],
+        ];
+        $this->assertSame($expect, $actual);
     }
 
-    public function test_issue140_case1()
+    public function test_issue140_case1(): void
     {
         $this->filter->validate('first_name')->isNotBlank();
         $this->filter->validate('first_name')->is('alpha')->asStopRule();
         $this->filter->validate('password')->isNotBlank();
 
-        $subject = (object) [
-            'first_name' => '888',
-        ];
+        $subject = (object) ['first_name' => '888'];
 
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'first_name' => array(
+        $expect = [
+            'first_name' => [
                 'first_name should have validated as alpha',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function test_issue140_case2()
+    public function test_issue140_case2(): void
     {
         $this->filter->validate('first_name')->isNotBlank();
         $this->filter->validate('first_name')->is('alpha')->asStopRule();
         $this->filter->validate('password')->isNotBlank();
 
-        // Provide blank
-        $subject = (object) [
-            'first_name' => '',
-        ];
+        $subject = (object) ['first_name' => ''];
 
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'first_name' => array(
+        $expect = [
+            'first_name' => [
                 'first_name should not have been blank',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function test_issue140_case2_multiple_stop_call()
+    public function test_issue140_case2_multiple_stop_call(): void
     {
         $this->filter->validate('first_name')->isNotBlank()->asStopRule();
         $this->filter->validate('first_name')->is('alpha')->asStopRule();
         $this->filter->validate('password')->isNotBlank();
 
-        // Provide blank
-        $subject = (object) [
-            'first_name' => '',
-        ];
+        $subject = (object) ['first_name' => ''];
 
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'first_name' => array(
+        $expect = [
+            'first_name' => [
                 'first_name should not have been blank',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
-    public function test_issue140_case3()
+    public function test_issue140_case3(): void
     {
         $this->filter->validate('first_name')->isNotBlank()->is('alpha')->asStopRule();
         $this->filter->validate('password')->isNotBlank();
 
-        // Provide blank
-        $subject = (object) [
-            'first_name' => '',
-        ];
+        $subject = (object) ['first_name' => ''];
 
         $result = $this->filter->apply($subject);
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
-        $expect = array(
-            'first_name' => array(
+        $expect = [
+            'first_name' => [
                 'first_name should have validated as alpha',
-            ),
-        );
-        $actual = $this->filter->getFailures()->getMessages();
-        $this->assertSame($expect, $actual);
+            ],
+        ];
+        $this->assertSame($expect, $result->getFailures()->getMessages());
     }
 
     // ------------------------------------------------------------------
@@ -317,9 +285,9 @@ class SubjectFilterTest extends TestCase
 
     /**
      * A nested array field targeted by subfilter() is validated correctly;
-     * a failing nested field surfaces failures on the sub-filter.
+     * failing nested fields surface their failures on the result.
      */
-    public function testSubfilter_nestedArrayValidationFails()
+    public function testSubfilter_nestedArrayValidationFails(): void
     {
         $sub = $this->filter->subfilter('address');
         $sub->validate('city')->isNotBlank();
@@ -328,16 +296,15 @@ class SubjectFilterTest extends TestCase
         $data = ['address' => ['city' => '', 'zip' => '90210']];
         $result = $this->filter->apply($data);
 
-        $this->assertFalse($result);
-        $messages = $this->filter->getFailures()->getMessages();
+        $this->assertFalse($result->isSuccess());
+        $messages = $result->getFailures()->getMessages();
         $this->assertArrayHasKey('city', $messages);
     }
 
     /**
-     * A nested array field targeted by subfilter() passes when all rules
-     * are satisfied.
+     * A nested array field targeted by subfilter() passes when all rules pass.
      */
-    public function testSubfilter_nestedArrayValidationPasses()
+    public function testSubfilter_nestedArrayValidationPasses(): void
     {
         $sub = $this->filter->subfilter('address');
         $sub->validate('city')->isNotBlank();
@@ -346,15 +313,14 @@ class SubjectFilterTest extends TestCase
         $data = ['address' => ['city' => 'Beverly Hills', 'zip' => '90210']];
         $result = $this->filter->apply($data);
 
-        $this->assertTrue($result);
-        $this->assertTrue($this->filter->getFailures()->isEmpty());
+        $this->assertTrue($result->isSuccess());
+        $this->assertTrue($result->getFailures()->isEmpty());
     }
 
     /**
-     * Sanitize rules inside a subfilter write the sanitized value back
-     * through to the original array.
+     * Sanitize rules inside a subfilter write sanitized values back via getValues().
      */
-    public function testSubfilter_nestedArraySanitizeWritesBack()
+    public function testSubfilter_nestedArraySanitizeWritesBack(): void
     {
         $sub = $this->filter->subfilter('address');
         $sub->sanitize('city')->to('string');
@@ -363,25 +329,22 @@ class SubjectFilterTest extends TestCase
         $data = ['address' => ['city' => 'Beverly Hills', 'zip' => '902101234']];
         $result = $this->filter->apply($data);
 
-        $this->assertTrue($result);
-        $this->assertSame('90210', $data['address']['zip']);
+        $this->assertTrue($result->isSuccess());
+        // apply() is stateless — sanitized values are in getValues()
+        $values = $result->getValues();
+        $this->assertSame('90210', $values['address']['zip']);
     }
 
     /**
-     * Array fields that do NOT have a subfilter registered must still reach
-     * their own rules as plain arrays, not as stdClass objects.
-     * Regression guard for the over-broad arrayToObject() fix.
+     * Array fields without a subfilter are not converted to stdClass.
      */
-    public function testSubfilter_plainArrayFieldUnaffectedBySubfilter()
+    public function testSubfilter_plainArrayFieldUnaffectedBySubfilter(): void
     {
-        // Register a subfilter on 'address' only
         $sub = $this->filter->subfilter('address');
         $sub->validate('city')->isNotBlank();
 
-        // 'tags' is a plain array field — its rule receives the whole subject
-        // object; extract the field value and confirm it is still an array.
         $this->filter->validate('tags')->is('callback', function ($subject, $field) {
-            return is_array($subject->$field);   // must still be an array, not stdClass
+            return is_array($subject->$field);
         });
 
         $data = [
@@ -390,14 +353,13 @@ class SubjectFilterTest extends TestCase
         ];
         $result = $this->filter->apply($data);
 
-        $this->assertTrue($result);
+        $this->assertTrue($result->isSuccess());
     }
 
     /**
-     * Deeply nested arrays (three levels) are handled correctly by chained
-     * subfilter() calls.
+     * Deeply nested arrays (three levels) are handled correctly.
      */
-    public function testSubfilter_deeplyNestedArray()
+    public function testSubfilter_deeplyNestedArray(): void
     {
         $sub     = $this->filter->subfilter('order');
         $subItem = $sub->subfilter('item');
@@ -405,8 +367,7 @@ class SubjectFilterTest extends TestCase
 
         $data = ['order' => ['item' => ['name' => '']]];
         $result = $this->filter->apply($data);
-
-        $this->assertFalse($result);
+        $this->assertFalse($result->isSuccess());
 
         // passing case
         $filter2 = (new FilterFactory())->newSubjectFilter();
@@ -414,13 +375,13 @@ class SubjectFilterTest extends TestCase
         $s->subfilter('item')->validate('name')->isNotBlank();
 
         $data2 = ['order' => ['item' => ['name' => 'Widget']]];
-        $this->assertTrue($filter2->apply($data2));
+        $this->assertTrue($filter2->apply($data2)->isSuccess());
     }
 
     /**
      * subfilter() on an object field (original pre-fix behaviour) still works.
      */
-    public function testSubfilter_nestedObjectUnchanged()
+    public function testSubfilter_nestedObjectUnchanged(): void
     {
         $sub = $this->filter->subfilter('address');
         $sub->validate('city')->isNotBlank();
@@ -431,7 +392,6 @@ class SubjectFilterTest extends TestCase
         $subject->address = $address;
 
         $result = $this->filter->apply($subject);
-        $this->assertTrue($result);
+        $this->assertTrue($result->isSuccess());
     }
-
 }

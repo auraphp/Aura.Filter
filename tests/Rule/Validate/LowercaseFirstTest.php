@@ -4,7 +4,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class LowercaseFirstTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('ab Cd'),
@@ -14,7 +14,7 @@ class LowercaseFirstTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

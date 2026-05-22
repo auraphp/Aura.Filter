@@ -13,7 +13,7 @@ class RegexTest extends AbstractValidateTest
     }
 
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('+1234567890'),
@@ -24,7 +24,7 @@ class RegexTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

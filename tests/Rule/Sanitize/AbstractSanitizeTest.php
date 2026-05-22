@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Sanitize;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 abstract class AbstractSanitizeTest extends TestCase
 {
@@ -52,5 +52,5 @@ abstract class AbstractSanitizeTest extends TestCase
         $this->assertSame($expect_value, $actual_value);
     }
 
-    abstract public function providerTo();
+    abstract public static function providerTo();
 }

@@ -12,7 +12,7 @@ class CallbackTest extends AbstractSanitizeTest
         });
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(0, true, false),

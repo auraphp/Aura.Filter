@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Aura\Filter\Exception;
 
 use Aura\Filter\Exception;
-use Aura\Filter\Failure\FailureCollection;
+use Aura\Filter_Interface\FailuresInterface;
 
 /**
  *
@@ -23,104 +23,46 @@ use Aura\Filter\Failure\FailureCollection;
 class FilterFailed extends Exception
 {
     /**
-     *
      * Failures from the filter.
-     *
-     * @var FailureCollection
-     *
      */
-    protected $failures;
+    protected FailuresInterface $failures;
 
     /**
-     *
      * The subject being filtered.
-     *
-     * @var mixed
-     *
      */
-    protected $subject;
+    protected mixed $subject;
 
     /**
-     *
      * The class of the filter being applied.
-     *
-     * @var string
-     *
      */
-    protected $filter_class;
+    protected string $filter_class;
 
-    /**
-     *
-     * Sets the class of the filter being applied.
-     *
-     * @param string $filter_class The filter class.
-     *
-     * @return null
-     *
-     */
     public function setFilterClass(string $filter_class): void
     {
         $this->filter_class = $filter_class;
     }
 
-    /**
-     *
-     * Gets the class of the filter being applied.
-     *
-     *
-     */
     public function getFilterClass(): string
     {
         return $this->filter_class;
     }
 
-    /**
-     *
-     * Sets the failures from the filter.
-     *
-     * @param FailureCollection $failures The filter failures.
-     *
-     * @return null
-     *
-     */
-    public function setFailures(FailureCollection $failures): void
+    public function setFailures(FailuresInterface $failures): void
     {
         $this->failures = $failures;
     }
 
-    /**
-     *
-     * Gets the failures from the filter.
-     *
-     *
-     */
-    public function getFailures(): FailureCollection
+    public function getFailures(): FailuresInterface
     {
         return $this->failures;
     }
 
-    /**
-     *
-     * Sets the subject of the filter.
-     *
-     * @param mixed $subject The subject being filtered.
-     *
-     * @return null
-     *
-     */
-    public function setSubject($subject): void
+    public function setSubject(mixed $subject): void
     {
         $this->subject = $subject;
     }
 
-    /**
-     *
-     * Gets the subject of the filter.
-     *
-     * @return mixed
-     *
-     */
-    public function getSubject()
+    public function getSubject(): mixed
     {
         return $this->subject;
     }

@@ -19,6 +19,9 @@ use Aura\Filter\Spec\Spec;
 use Aura\Filter\Spec\ValidateSpec;
 use Aura\Filter\Spec\SubSpecFactory;
 use Aura\Filter\Spec\SubSpec;
+use Aura\Filter_Interface\FailureInterface;
+use Aura\Filter_Interface\FilterResult;
+use Aura\Filter_Interface\FilterResultInterface;
 use Aura\Filter_Interface\SubjectFilterInterface;
 use InvalidArgumentException;
 
@@ -32,89 +35,41 @@ use InvalidArgumentException;
 class SubjectFilter implements SubjectFilterInterface
 {
     /**
-     *
      * An array of specifications for the filter subject.
      *
-     * @var array
-     *
+     * @var Spec[]
      */
-    protected $specs = array();
+    protected array $specs = [];
 
     /**
-     *
-     * Skip these fields on the filter subject.
-     *
-     * @var array
-     *
-     */
-    protected $skip = array();
-
-    /**
-     *
-     * A collection of failure objects.
-     *
-     * @var FailureCollection
-     *
-     */
-    protected $failures;
-
-    /**
-     *
      * Use these field-specific messages when a subject field fails.
      *
-     * @var array
-     *
+     * @var array<string, string>
      */
-    protected $field_messages = array();
+    protected array $field_messages = [];
 
     /**
-     *
      * A prototype ValidateSpec.
-     *
-     * @var ValidateSpec
-     *
      */
-    protected $validate_spec;
+    protected ValidateSpec $validate_spec;
 
     /**
-     *
      * A prototype SanitizeSpec.
-     *
-     * @var SanitizeSpec
-     *
      */
-    protected $sanitize_spec;
-
+    protected SanitizeSpec $sanitize_spec;
 
     /**
-     * Factory for Sub subject specifications
-     *
-     * @var SubSpecFactory
-     *
-     * @access protected
+     * Factory for Sub subject specifications.
      */
-    protected $sub_spec_factory;
+    protected SubSpecFactory $sub_spec_factory;
 
     /**
-     *
      * A prototype FailureCollection.
-     *
-     * @var FailureCollection
-     *
      */
-    protected $proto_failures;
+    protected FailureCollection $proto_failures;
 
     /**
-     *
      * Constructor.
-     *
-     * @param ValidateSpec $validate_spec A prototype ValidateSpec.
-     *
-     * @param ValidateSpec $sanitize_spec A prototype SanitizeSpec.
-     *
-     * @param SubSpecFactory $sub_spec_factory A factory for SubSpec
-     *
-     * @param FailureCollection $failures A prototype FailureCollection.
      */
     public function __construct(
         ValidateSpec $validate_spec,
@@ -122,19 +77,15 @@ class SubjectFilter implements SubjectFilterInterface
         SubSpecFactory $sub_spec_factory,
         FailureCollection $failures
     ) {
-        $this->validate_spec = $validate_spec;
-        $this->sanitize_spec = $sanitize_spec;
+        $this->validate_spec    = $validate_spec;
+        $this->sanitize_spec    = $sanitize_spec;
         $this->sub_spec_factory = $sub_spec_factory;
-        $this->proto_failures = $failures;
+        $this->proto_failures   = $failures;
         $this->init();
     }
 
     /**
-     *
-     * Initialization logic for this filter.
-     *
-     * @return null
-     *
+     * Initialization hook for subclasses.
      */
     protected function init(): void
     {
@@ -142,58 +93,68 @@ class SubjectFilter implements SubjectFilterInterface
     }
 
     /**
+     * Assertion-callable shortcut: applies the filter, writes sanitized values
+     * back into $subject on success, throws FilterFailed on failure.
+     * Intentionally keeps &$subject so sanitized values are written back.
      *
-     * Asserts that the subject passes the filter.
-     *
-     * @param array|object $subject The subject to be filtered.
-     *
-     * @return null
-     *
-     * @throws Exception\FilterFailed when the assertion fails.
-     *
+     * @throws Exception\FilterFailed
      */
-    public function __invoke(&$subject)
+    public function __invoke(array|object &$subject): void
     {
-        return $this->assert($subject);
+        $result = $this->apply($subject);
+
+        if (! $result->isSuccess()) {
+            $class   = get_class($this);
+            $message = PHP_EOL
+                     . "  Filter: {$class}" . PHP_EOL
+                     . "  Fields:" . PHP_EOL
+                     . $result->getFailures()->getMessagesAsString('    ');
+            $e = new FilterFailed($message);
+            $e->setFilterClass($class);
+            $e->setFailures($result->getFailures());
+            $e->setSubject($subject);
+            throw $e;
+        }
+
+        // Write sanitized values back into the caller's variable.
+        $sanitized = $result->getValues();
+        if (is_array($subject)) {
+            $subject = $sanitized;
+        } else {
+            foreach (get_object_vars($sanitized) as $key => $value) {
+                $subject->$key = $value;
+            }
+        }
     }
 
     /**
-     *
      * Asserts that the subject passes the filter.
+     * Throws FilterFailed when the assertion fails.
      *
-     * @param array|object $subject The subject to be filtered.
-     *
-     * @return null
-     *
-     * @throws Exception\FilterFailed when the assertion fails.
-     *
+     * @throws Exception\FilterFailed
      */
-    public function assert(&$subject): void
+    public function assert(array|object $subject): void
     {
-        if ($this->apply($subject)) {
+        $result = $this->apply($subject);
+        if ($result->isSuccess()) {
             return;
         }
 
-        $class = get_class($this);
+        $class   = get_class($this);
         $message = PHP_EOL
                  . "  Filter: {$class}" . PHP_EOL
                  . "  Fields:" . PHP_EOL
-                 . $this->failures->getMessagesAsString('    ');
+                 . $result->getFailures()->getMessagesAsString('    ');
 
         $e = new FilterFailed($message);
         $e->setFilterClass($class);
-        $e->setFailures($this->failures);
+        $e->setFailures($result->getFailures());
         $e->setSubject($subject);
         throw $e;
     }
 
     /**
-     *
      * Adds a "validate" specification for a subject field.
-     *
-     * @param string $field The subject field name.
-     *
-     *
      */
     public function validate(string $field): Spec
     {
@@ -201,12 +162,7 @@ class SubjectFilter implements SubjectFilterInterface
     }
 
     /**
-     *
      * Adds a "sanitize" specification for a subject field.
-     *
-     * @param string $field The subject field name.
-     *
-     *
      */
     public function sanitize(string $field): Spec
     {
@@ -214,30 +170,19 @@ class SubjectFilter implements SubjectFilterInterface
     }
 
     /**
-     *
      * Adds a "subfilter" specification for a subject field.
-     *
-     * @param string $field The subject field name.
-     *
-     *
+     * Returns the sub-filter for fluent chaining.
      */
     public function subfilter(string $field, string $subClass = ''): SubjectFilterInterface
     {
         $class = $subClass !== '' ? $subClass : static::class;
-        $spec = $this->sub_spec_factory->newSubSpec($class);
+        $spec  = $this->sub_spec_factory->newSubSpec($class);
         $this->addSpec($spec, $field);
         return $spec->filter();
     }
 
     /**
-     *
      * Adds a specification for a subject field.
-     *
-     * @param Spec $spec The specification object.
-     *
-     * @param string $field The subject field name.
-     *
-     *
      */
     protected function addSpec(Spec $spec, string $field): Spec
     {
@@ -247,15 +192,7 @@ class SubjectFilter implements SubjectFilterInterface
     }
 
     /**
-     *
      * Specifies a custom message to use when a subject field fails.
-     *
-     * @param string $field The subject field name.
-     *
-     * @param string $message The failure message to use.
-     *
-     * @return null
-     *
      */
     public function useFieldMessage(string $field, string $message): void
     {
@@ -263,87 +200,75 @@ class SubjectFilter implements SubjectFilterInterface
     }
 
     /**
-     *
-     * Applies the filter to a subject.
-     *
-     * @param array|object $subject The subject to be filtered.
-     *
-     * @return bool True on success, false on failure.
-     *
+     * Applies the filter to a subject. Never mutates $values.
+     * Returns a result containing the (sanitized) values and any failures.
      */
-    public function apply(&$subject): bool
+    public function apply(array|object $values): FilterResultInterface
     {
-        if (is_array($subject)) {
-            return $this->applyToArray($subject);
+        if (is_array($values)) {
+            return $this->applyToArray($values);
         }
 
-        if (! is_object($subject)) {
-            $type = gettype($subject);
-            $message = "Apply the filter to an array or object, not a {$type}.";
-            throw new InvalidArgumentException($message);
+        if (! is_object($values)) {
+            $type = gettype($values);
+            throw new InvalidArgumentException(
+                "Apply the filter to an array or object, not a {$type}."
+            );
         }
 
-        return $this->applyToObject($subject);
+        return $this->applyToObject($values);
     }
 
     /**
-     *
      * Applies the rule specifications to an array.
-     *
-     * @param array $array The filter subject.
-     *
-     * @return bool True if all rules passed, false if not.
-     *
+     * Converts the array to an object, filters, converts back.
      */
-    protected function applyToArray(array &$array): bool
+    protected function applyToArray(array $array): FilterResult
     {
         $object = (object) $array;
         $result = $this->applyToObject($object);
-        $array  = (array) $object;
-        return $result;
+        return new FilterResult(
+            $result->isSuccess(),
+            (array) $result->getValues(),
+            $result->getFailures()
+        );
     }
 
     /**
-     *
      * Applies the rule specifications to an object.
-     *
-     *
-     * @return bool True if all rules passed, false if not.
-     *
+     * Works on a clone so the caller's original is never mutated.
      */
-    protected function applyToObject(object $object): bool
+    protected function applyToObject(object $subject): FilterResult
     {
-        $this->skip = array();
-        $this->failures = clone $this->proto_failures;
+        $working = clone $subject;
+        $ctx     = [
+            'failures' => clone $this->proto_failures,
+            'skip'     => [],
+        ];
+
         foreach ($this->specs as $spec) {
-            $continue = $this->applySpec($spec, $object);
+            $continue = $this->applySpec($spec, $working, $ctx);
             if (! $continue) {
                 break;
             }
         }
-        return $this->failures->isEmpty();
+
+        return new FilterResult($ctx['failures']->isEmpty(), $working, $ctx['failures']);
     }
 
     /**
+     * Applies a single rule specification to the subject.
      *
-     * Apply a rule specification to the subject.
-     *
-     * @param Spec $spec The rule specification.
-     *
-     *
-     * @return bool True to continue, false to stop.
-     *
+     * @param array{failures: FailureCollection, skip: array<string, bool>} $ctx
      */
-    protected function applySpec(Spec $spec, object $subject): bool
+    protected function applySpec(Spec $spec, object $subject, array &$ctx): bool
     {
-        if (isset($this->skip[$spec->getField()])) {
+        $field = $spec->getField();
 
-            // Issue 140 . Some rule already failed for the field.
-            // Check the current one have a stop rule or not.
+        if (isset($ctx['skip'][$field])) {
             if ($spec->isStopRule()) {
                 return false;
             }
-
             return true;
         }
 
@@ -351,7 +276,7 @@ class SubjectFilter implements SubjectFilterInterface
             return true;
         }
 
-        $this->failed($spec);
+        $this->failed($spec, $subject, $ctx);
 
         if ($spec->isStopRule()) {
             return false;
@@ -361,57 +286,45 @@ class SubjectFilter implements SubjectFilterInterface
     }
 
     /**
+     * Records a failure for the given spec.
      *
-     * Adds a failure.
-     *
-     * @param Spec $spec The failed rule specification.
-     *
-     *
+     * @param array{failures: FailureCollection, skip: array<string, bool>} $ctx
      */
-    protected function failed(Spec $spec): Failure
+    protected function failed(Spec $spec, object $subject, array &$ctx): FailureInterface
     {
         $field = $spec->getField();
 
         if ($spec->isHardRule()) {
-            $this->skip[$field] = true;
+            $ctx['skip'][$field] = true;
         }
 
         if (isset($this->field_messages[$field])) {
-            return $this->failures->set($field, $this->field_messages[$field]);
+            return $ctx['failures']->set($field, $this->field_messages[$field]);
         }
 
-        // Sub-filters carry their own FailureCollection keyed by sub-field
-        // names. Propagate those directly into the parent so callers can
-        // inspect individual nested failures (e.g. 'city' not just 'address').
+        // Sub-filters carry their own failures keyed by sub-field names.
+        // Propagate those directly into the parent so callers can inspect
+        // individual nested failures (e.g. 'city' not just 'address').
         if ($spec instanceof SubSpec) {
+            $lastResult  = $spec->getLastResult();
             $lastFailure = null;
-            foreach ($spec->filter()->getFailures() as $subField => $failures) {
-                foreach ($failures as $failure) {
-                    $lastFailure = $this->failures->add(
-                        $subField,
-                        $failure->getMessage(),
-                        $failure->getArgs()
-                    );
+
+            if ($lastResult !== null) {
+                foreach ($lastResult->getFailures()->getMessages() as $subField => $messages) {
+                    foreach ($messages as $message) {
+                        $lastFailure = $ctx['failures']->add($subField, $message);
+                    }
                 }
             }
+
             if ($lastFailure !== null) {
                 return $lastFailure;
             }
+
             // Fallback: sub-filter failed but reported no individual failures.
-            return $this->failures->add($field, 'subfilter failed');
+            return $ctx['failures']->add($field, 'subfilter failed');
         }
 
-        return $this->failures->add($field, $spec->getMessage(), $spec->getArgs());
-    }
-
-    /**
-     *
-     * Returns the failures.
-     *
-     *
-     */
-    public function getFailures(): FailureCollection
-    {
-        return $this->failures;
+        return $ctx['failures']->add($field, $spec->getMessage(), $spec->getArgs());
     }
 }

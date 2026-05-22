@@ -46,7 +46,7 @@ class SanitizeSpec extends Spec
      * @return bool True on success, false on failure.
      *
      */
-    public function __invoke($subject)
+    public function __invoke(object $subject): bool
     {
 
         if ($this->subjectFieldIsBlank($subject) && $this->blank_field) {

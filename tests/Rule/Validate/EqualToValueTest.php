@@ -12,7 +12,7 @@ class EqualToValueTest extends AbstractValidateTest
         return $args;
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(1),
@@ -21,7 +21,7 @@ class EqualToValueTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(0),

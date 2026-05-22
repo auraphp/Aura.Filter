@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class BooleanTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(true),
@@ -41,7 +41,7 @@ class BooleanTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array('nothing'),

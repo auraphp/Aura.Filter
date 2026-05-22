@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 class TrimTest extends AbstractSanitizeTest
 {
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(), false, array()),

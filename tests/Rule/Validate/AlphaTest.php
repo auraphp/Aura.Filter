@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class AlphaTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('alphaonly'),
@@ -13,7 +13,7 @@ class AlphaTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(' '),

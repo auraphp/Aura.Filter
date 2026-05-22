@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class TrimTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('abc'),
@@ -11,7 +11,7 @@ class TrimTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

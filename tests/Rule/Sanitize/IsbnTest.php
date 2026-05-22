@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Sanitize;
 
 class IsbnTest extends AbstractSanitizeTest
 {
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             // sanitize to true

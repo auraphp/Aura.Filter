@@ -10,10 +10,11 @@ declare(strict_types=1);
 
 namespace Aura\Filter\Spec;
 
+use Aura\Filter_Interface\FilterResultInterface;
 use Aura\Filter_Interface\SubjectFilterInterface;
 
 /**
- * A specification for a "sub" subject
+ * A specification for a "sub" subject.
  *
  * @package Aura.Filter
  *
@@ -21,20 +22,17 @@ use Aura\Filter_Interface\SubjectFilterInterface;
 class SubSpec extends Spec
 {
     /**
-     * Subject Filter
-     *
-     * @var SubjectFilterInterface
-     *
-     * @access protected
+     * The sub-filter to apply.
      */
-    protected $filter;
+    protected SubjectFilterInterface $filter;
 
     /**
-     * __construct
-     *
-     * @param SubjectFilterInterface $filter The filter to apply to the sub subject
-     *
-     * @access public
+     * The result of the last __invoke() call.
+     */
+    private ?FilterResultInterface $lastResult = null;
+
+    /**
+     * @param SubjectFilterInterface $filter The filter to apply to the sub subject.
      */
     public function __construct(SubjectFilterInterface $filter)
     {
@@ -42,40 +40,59 @@ class SubSpec extends Spec
     }
 
     /**
-     * Apply sub filter to sub subject.
+     * Apply the sub-filter to the named field on the parent subject.
      *
-     * If the field value is an array it is converted to a stdClass before
-     * filtering so sub-filter rules can access nested values as properties,
-     * then converted back afterwards so sanitized values are written through
-     * to the caller. Fields that are not targeted by a subfilter are never
-     * touched and continue to reach their own rules as arrays.
+     * The parent subject is always a stdClass working copy — assignment to
+     * $subject->$field propagates the sanitized sub-values back into it.
+     * Arrays are converted to stdClass before filtering and back afterwards
+     * so sub-filter rules can access nested values as properties.
      *
-     * @param mixed $subject parent subject
-     *
-     * @return bool
-     *
-     * @access public
+     * Fields that are not targeted by a subfilter are never touched.
      */
-    public function __invoke($subject)
+    public function __invoke(object $subject): bool
     {
         $field  = $this->field;
-        $values =& $subject->$field;
+        $values = $subject->$field;
 
         if (is_array($values)) {
-            $obj    = $this->arrayToObject($values);
-            $result = $this->filter->apply($obj);
-            $values = $this->objectToArray($obj);
-            return $result;
+            $obj               = $this->arrayToObject($values);
+            $this->lastResult  = $this->filter->apply($obj);
+            $subject->$field   = $this->objectToArray($this->lastResult->getValues());
+        } else {
+            $this->lastResult  = $this->filter->apply($values);
+            $subject->$field   = $this->lastResult->getValues();
         }
 
-        return $this->filter->apply($values);
+        return $this->lastResult->isSuccess();
+    }
+
+    /**
+     * Returns the result of the last __invoke() call, or null before first call.
+     */
+    public function getLastResult(): ?FilterResultInterface
+    {
+        return $this->lastResult;
+    }
+
+    /**
+     * Returns the sub-filter for fluent chaining after subfilter() is called.
+     */
+    public function filter(): SubjectFilterInterface
+    {
+        return $this->filter;
+    }
+
+    /**
+     * Returns the default failure message: the sub-filter's field messages.
+     */
+    protected function getDefaultMessage(): array
+    {
+        return $this->lastResult?->getFailures()->getMessages() ?? [];
     }
 
     /**
      * Recursively converts an array to a stdClass so nested values are
      * reachable as object properties inside the sub-filter.
-     *
-     * @param array $array
      */
     private function arrayToObject(array $array): object
     {
@@ -91,10 +108,7 @@ class SubSpec extends Spec
      * values are returned in the original data structure.
      *
      * Only stdClass nodes are converted — objects that were not created by
-     * arrayToObject() (e.g. DTOs passed in the original input data) are
-     * returned as-is to avoid incorrectly flattening them.
-     *
-     * @param object $obj
+     * arrayToObject() (e.g. DTOs) are returned as-is.
      */
     private function objectToArray(object $obj): array
     {
@@ -105,30 +119,5 @@ class SubSpec extends Spec
                 : $value;
         }
         return $arr;
-    }
-
-    /**
-     * Get the Subject filter
-     *
-     *
-     * @access public
-     */
-    public function filter(): SubjectFilterInterface
-    {
-        return $this->filter;
-    }
-
-    /**
-     * Returns the default failure message for this rule specification.
-     *
-     *
-     * @access protected
-     * @return mixed[][]
-     */
-    protected function getDefaultMessage(): array
-    {
-        return $this->filter
-            ->getFailures()
-            ->getMessages();
     }
 }

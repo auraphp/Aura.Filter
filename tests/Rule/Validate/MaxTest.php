@@ -10,7 +10,7 @@ class MaxTest extends AbstractValidateTest
         return array($this->max);
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(1),
@@ -19,7 +19,7 @@ class MaxTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

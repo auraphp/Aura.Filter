@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class StrlenTest extends TestCase
 {
@@ -64,7 +64,7 @@ class StrlenTest extends TestCase
         $fake->substr($bad,0,1);
     }
 
-    public function fakeProvider()
+    public static function fakeProvider()
     {
         $fakes = array(
             array(new FakeStrlen()),

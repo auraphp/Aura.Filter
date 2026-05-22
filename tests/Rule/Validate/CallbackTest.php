@@ -10,7 +10,7 @@ class CallbackTest extends AbstractValidateTest
         });
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(true),
@@ -18,7 +18,7 @@ class CallbackTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(0),
@@ -27,7 +27,7 @@ class CallbackTest extends AbstractValidateTest
         );
     }
 
-    public function providerFix()
+    public static function providerFix()
     {
         return array(
             array(0, true, false),

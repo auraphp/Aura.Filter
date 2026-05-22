@@ -11,7 +11,7 @@ class StrTest extends AbstractSanitizeTest
         return array($this->find, $this->repl);
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array('abc 123 ,./', true, 'abc@123@,./'),
