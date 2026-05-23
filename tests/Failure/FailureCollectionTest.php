@@ -42,4 +42,65 @@ class FailureCollectionTest extends TestCase
         $json = json_encode($this->failures);
         $this->assertEquals('{"foo":[{"field":"foo","message":"message 1","args":{"bar":"baz"}},{"field":"foo","message":"message 2","args":{"zim":"dib"}}]}', $json);
     }
+
+    public function testGetNestedMessagesSimple(): void
+    {
+        $this->failures->add('address.city', 'City is required');
+        $this->failures->add('address.zip', 'Zip is required');
+
+        $expected = [
+            'address' => [
+                'city' => ['City is required'],
+                'zip'  => ['Zip is required'],
+            ],
+        ];
+        $this->assertSame($expected, $this->failures->getNestedMessages());
+    }
+
+    /**
+     * Both "address" (parent) and "address.city" (child) carry failures.
+     * The tree builder must preserve both; neither may overwrite the other.
+     */
+    public function testGetNestedMessagesParentAndChildPathBothFail(): void
+    {
+        // Parent added first, child added second.
+        $this->failures->add('address', 'Address is invalid');
+        $this->failures->add('address.city', 'City is required');
+
+        $actual = $this->failures->getNestedMessages();
+
+        $this->assertSame(
+            ['Address is invalid'],
+            $actual['address']['_messages'],
+            'Parent-level messages must survive when a child path also has failures'
+        );
+        $this->assertSame(
+            ['City is required'],
+            $actual['address']['city'],
+            'Child-level messages must survive when the parent path also has failures'
+        );
+    }
+
+    /**
+     * Same scenario but child is stored before parent — iteration order must not matter.
+     */
+    public function testGetNestedMessagesChildBeforeParentBothFail(): void
+    {
+        // Child added first, parent added second.
+        $this->failures->add('address.city', 'City is required');
+        $this->failures->add('address', 'Address is invalid');
+
+        $actual = $this->failures->getNestedMessages();
+
+        $this->assertSame(
+            ['Address is invalid'],
+            $actual['address']['_messages'],
+            'Parent-level messages must survive regardless of insertion order'
+        );
+        $this->assertSame(
+            ['City is required'],
+            $actual['address']['city'],
+            'Child-level messages must survive regardless of insertion order'
+        );
+    }
 }

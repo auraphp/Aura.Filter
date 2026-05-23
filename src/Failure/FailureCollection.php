@@ -80,6 +80,17 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
      * Nested map that mirrors the input data structure.
      * Splits each dot-notation key and builds nested arrays.
      *
+     * When a path has failures at both a parent level and a child level
+     * (e.g. "address" and "address.city"), the parent node's own messages
+     * are stored under the reserved key "_messages" so that both survive:
+     *
+     *   [
+     *     'address' => [
+     *       '_messages' => ['Address is required'],
+     *       'city'      => ['City is required'],
+     *     ],
+     *   ]
+     *
      * @return array
      */
     public function getNestedMessages(): array
@@ -92,12 +103,26 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
             );
             $parts = explode('.', $field);
             $node  = &$result;
+            $last  = count($parts) - 1;
             foreach ($parts as $i => $part) {
-                if ($i === count($parts) - 1) {
-                    $node[$part] = $messages;
+                if ($i === $last) {
+                    // Last segment: store this field's own messages.
+                    // If the node already has child entries (because a deeper path
+                    // was processed earlier), keep the children and add own messages
+                    // under the reserved '_messages' key instead of overwriting.
+                    if (isset($node[$part]) && is_array($node[$part])) {
+                        $node[$part]['_messages'] = $messages;
+                    } else {
+                        $node[$part] = $messages;
+                    }
                 } else {
-                    if (! isset($node[$part]) || ! is_array($node[$part])) {
+                    if (! isset($node[$part])) {
                         $node[$part] = [];
+                    } elseif (array_is_list($node[$part])) {
+                        // The node was previously stored as a flat messages list
+                        // (i.e. this parent path also had its own failures).
+                        // Promote it to a node that holds both own messages and children.
+                        $node[$part] = ['_messages' => $node[$part]];
                     }
                     $node = &$node[$part];
                 }
