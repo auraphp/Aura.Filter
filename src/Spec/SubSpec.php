@@ -83,14 +83,6 @@ class SubSpec extends Spec
     }
 
     /**
-     * Returns the default failure message: the sub-filter's field messages.
-     */
-    protected function getDefaultMessage(): array
-    {
-        return $this->lastResult?->getFailures()->getMessages() ?? [];
-    }
-
-    /**
      * Recursively converts an array to a stdClass so nested values are
      * reachable as object properties inside the sub-filter.
      */
