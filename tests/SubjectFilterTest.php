@@ -298,7 +298,41 @@ class SubjectFilterTest extends TestCase
 
         $this->assertFalse($result->isSuccess());
         $messages = $result->getFailures()->getMessages();
-        $this->assertArrayHasKey('city', $messages);
+        // Failures are keyed by full dot-notation path, not just the sub-field name,
+        // so two subfilters with a shared child key (e.g. address.city and
+        // shipping.city) remain distinguishable in the parent collection.
+        $this->assertArrayHasKey('address.city', $messages);
+        $this->assertArrayNotHasKey('city', $messages);
+    }
+
+    /**
+     * Two subfilters that each validate a child field with the same name must
+     * produce distinct keys in the parent failure collection.
+     * Before the fix both would be stored under the bare child name (e.g.
+     * 'city'), causing one to overwrite the other.
+     */
+    public function testSubfilter_twoSubfiltersWithSameChildKeyAreDistinct(): void
+    {
+        $sub1 = $this->filter->subfilter('address');
+        $sub1->validate('city')->isNotBlank();
+
+        $sub2 = $this->filter->subfilter('shipping');
+        $sub2->validate('city')->isNotBlank();
+
+        $data = [
+            'address'  => ['city' => ''],
+            'shipping' => ['city' => ''],
+        ];
+
+        $result   = $this->filter->apply($data);
+        $messages = $result->getFailures()->getMessages();
+
+        $this->assertArrayHasKey('address.city', $messages,
+            'address.city failure must be stored under the full path');
+        $this->assertArrayHasKey('shipping.city', $messages,
+            'shipping.city failure must be stored under the full path');
+        $this->assertArrayNotHasKey('city', $messages,
+            'bare child key must not appear — it would collapse both failures onto one key');
     }
 
     /**

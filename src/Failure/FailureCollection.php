@@ -14,17 +14,36 @@ use Aura\Filter_Interface\FailureCollectionInterface;
 use Aura\Filter_Interface\FailureInterface;
 
 /**
+ * A collection of Failure objects.
  *
- * A collection of Failure objects, implementing the read+write
- * FailureCollectionInterface (which extends the read-only FailuresInterface).
+ * Failures are stored in a flat map keyed by field name or dot-notation path.
+ * Nested failures from sub-filters are stored under their full path
+ * (e.g. "address.city", "items.0.name") so that failures from different
+ * sub-filters that share a child field name (e.g. address.city vs
+ * shipping.city) remain distinguishable.
+ *
+ * Reading failures
+ * ----------------
+ * - forField('name') / forPath('address.city') — FailureInterface[] for one key
+ * - getMessages()        — flat map: path → string[]
+ * - getNestedMessages()  — nested map mirroring the input data shape
+ * - getMessagesAsString() — all failures as a single human-readable string
+ *
+ * Writing failures
+ * ----------------
+ * - add() — appends a failure (multiple failures per field are supported)
+ * - set() — replaces all previous failures for a field with one new failure
  *
  * @package Aura.Filter
- *
  */
 class FailureCollection implements FailureCollectionInterface, \JsonSerializable
 {
     /**
-     * Failures keyed by field name → Failure[].
+     * Failures keyed by field name or dot-notation path → Failure[].
+     *
+     * Sub-filter failures are stored under their full dot-notation path
+     * (e.g. "address.city") so that keys from different sub-filters never
+     * collide in this flat map.
      *
      * @var array<string, FailureInterface[]>
      */
@@ -34,12 +53,19 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     // FailuresInterface — read side
     // -------------------------------------------------------------------------
 
+    /**
+     * Returns true when no failures have been recorded.
+     */
     public function isEmpty(): bool
     {
         return $this->items === [];
     }
 
     /**
+     * Returns all Failure objects recorded for a field or dot-notation path.
+     *
+     * Returns an empty array when no failures exist for the given key.
+     *
      * @return FailureInterface[]
      */
     public function forField(string $field): array
@@ -49,8 +75,10 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
 
     /**
      * Dot-notation path lookup: "address.city", "items.0.name".
-     * Since nested failures are stored with dot-notation keys in the flat
-     * collection, this is equivalent to forField().
+     *
+     * Sub-filter failures are stored under their full dot-notation path, so
+     * this is the preferred method when working with nested subjects.
+     * Internally equivalent to forField().
      *
      * @return FailureInterface[]
      */
@@ -60,7 +88,11 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     }
 
     /**
-     * Flat map: field/path → string[].
+     * Returns all failures as a flat map of path → message strings.
+     *
+     * Keys are field names or dot-notation paths (e.g. "address.city").
+     * Multiple failures for the same field appear as multiple strings in the
+     * array value.
      *
      * @return array<string, string[]>
      */
@@ -77,16 +109,27 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     }
 
     /**
-     * Nested map that mirrors the input data structure.
-     * Splits each dot-notation key and builds nested arrays.
+     * Returns failures as a nested map that mirrors the input data structure.
      *
-     * When a path has failures at both a parent level and a child level
-     * (e.g. "address" and "address.city"), the parent node's own messages
-     * are stored under the reserved key "_messages" so that both survive:
+     * Each dot-notation key is split and placed into a nested array, making it
+     * easy to pair error messages with the field that produced them:
+     *
+     *   // failures: "address.city", "address.zip", "name"
+     *   [
+     *     'address' => [
+     *       'city' => ['City is required'],
+     *       'zip'  => ['Zip must be numeric'],
+     *     ],
+     *     'name' => ['Name is required'],
+     *   ]
+     *
+     * When a path has failures at both a parent level and a nested child level
+     * (e.g. "address" and "address.city"), the parent node's own messages are
+     * stored under the reserved key "_messages" so that both survive:
      *
      *   [
      *     'address' => [
-     *       '_messages' => ['Address is required'],
+     *       '_messages' => ['Address block is invalid'],
      *       'city'      => ['City is required'],
      *     ],
      *   ]
@@ -137,9 +180,12 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     // -------------------------------------------------------------------------
 
     /**
-     * Appends a failure for a field.
+     * Appends a failure for a field or dot-notation path.
      *
-     * @param string  $field   The field that failed.
+     * Multiple calls with the same field accumulate failures; they do not
+     * replace each other. Use set() when only one failure per field is needed.
+     *
+     * @param string  $field   Field name or dot-notation path (e.g. "address.city").
      * @param string  $message The failure message.
      * @param mixed[] $args    Arguments passed to the rule specification.
      */
@@ -151,9 +197,12 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     }
 
     /**
-     * Sets a single failure for a field, replacing any previous failures for that field.
+     * Records a single failure for a field, replacing any previous failures for that field.
      *
-     * @param string  $field   The field that failed.
+     * Useful when only the last (or most authoritative) failure for a field
+     * matters, e.g. when a field-level message overrides individual rule messages.
+     *
+     * @param string  $field   Field name or dot-notation path (e.g. "address.city").
      * @param string  $message The failure message.
      * @param mixed[] $args    Arguments passed to the rule specification.
      */
@@ -169,7 +218,9 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     // -------------------------------------------------------------------------
 
     /**
-     * Returns all failure message strings for one field.
+     * Returns all failure message strings for one field or dot-notation path.
+     *
+     * Returns an empty array when no failures exist for the given key.
      *
      * @return string[]
      */
@@ -182,7 +233,12 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     }
 
     /**
-     * Returns a single string of all failure messages for all fields.
+     * Returns all failures across all fields as a single human-readable string.
+     *
+     * Each line has the format: "{prefix}{field}: {message}".
+     * Useful for exception messages and log output.
+     *
+     * @param string $prefix Optional string prepended to every line (e.g. "  ").
      */
     public function getMessagesAsString(string $prefix = ''): string
     {
@@ -196,7 +252,11 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     }
 
     /**
-     * Returns a single string of all failure messages for one field.
+     * Returns all failure messages for one field as a single human-readable string.
+     *
+     * Each line has the format: "{prefix}{message}".
+     *
+     * @param string $prefix Optional string prepended to every line.
      */
     public function getMessagesForFieldAsString(string $field, string $prefix = ''): string
     {
@@ -208,7 +268,9 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
     }
 
     /**
-     * Returns a JSON-serializable representation: field name → FailureInterface[].
+     * Returns a JSON-serializable representation of all failures.
+     *
+     * Shape: field/path → FailureInterface[].
      *
      * @return array<string, FailureInterface[]>
      */

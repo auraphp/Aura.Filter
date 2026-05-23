@@ -303,8 +303,12 @@ class SubjectFilter implements SubjectFilterInterface
         }
 
         // Sub-filters carry their own failures keyed by sub-field names.
-        // Propagate those directly into the parent so callers can inspect
-        // individual nested failures (e.g. 'city' not just 'address').
+        // Propagate those into the parent prefixed with the parent field so
+        // callers can resolve them by full dot-notation path
+        // (e.g. 'address.city' not just 'city').  Without the prefix,
+        // failures from two different subfilters that share a child key
+        // (e.g. address.city and shipping.city) would collapse onto the same
+        // key and become indistinguishable.
         if ($spec instanceof SubSpec) {
             $lastResult  = $spec->getLastResult();
             $lastFailure = null;
@@ -312,7 +316,7 @@ class SubjectFilter implements SubjectFilterInterface
             if ($lastResult !== null) {
                 foreach ($lastResult->getFailures()->getMessages() as $subField => $messages) {
                     foreach ($messages as $message) {
-                        $lastFailure = $ctx['failures']->add($subField, $message);
+                        $lastFailure = $ctx['failures']->add($field . '.' . $subField, $message);
                     }
                 }
             }

@@ -52,35 +52,64 @@ For more about blanks, see the section on [Blank Fields](#blank-fields).
 
 ## Applying The Subject Filter
 
-We can then apply the filter specifications to the subject. A `true` result
-means all the rules passed, while `false` means one or more failed.
+`apply()` returns a _FilterResult_. Call `isSuccess()` on it to see whether all rules passed, then retrieve the failures or the sanitized values from the same object:
 
 ```php
 // the data to be filtered; could also be an object
-$subject = array(
+$subject = [
     'username' => 'bolivar',
     'password' => 'p@55w0rd',
     'password_confirm' => 'p@sword', // not the same!
-);
+];
 
-// filter the object and see if there were failures
-$success = $filter->apply($subject);
-if (! $success) {
-    // get the failures
-    $failures = $filter->getFailures();
-    echo $failures->getMessages();
+$result = $filter->apply($subject);
+
+if (! $result->isSuccess()) {
+    $failures = $result->getFailures();
+    // ...inspect failures (see Filter Failures below)
 }
+
+// sanitized values (original $subject is never mutated)
+$clean = $result->getValues();
 ```
 
 ## Filter Failures
 
-When we get the failures via `getFailures()`, we can examine in detail which fields failed, and what the failure messages were. The `getFailures()` method returns a _FailureCollection_ (essentially an _ArrayObject_ keyed on the field names). Each field in the _FailureCollection_ has an array of _Failure_ objects, each with these methods:
+`$result->getFailures()` returns a _FailureCollection_ keyed by field name. Each field maps to an array of _Failure_ objects:
 
-- `Failure::getField()` -- the field that failed
-- `Failure::getMessage()` -- the failure message
-- `Failure::getArgs()` -- arguments passed to the rule specification
+- `Failure::getField()` — the field that failed
+- `Failure::getMessage()` — the failure message
+- `Failure::getArgs()` — arguments passed to the rule specification
 
-These can be combined in various ways to generate output regarding the filter failures.
+### Retrieving failure messages
+
+**Flat map** — all fields as `field => string[]`:
+
+```php
+$messages = $result->getFailures()->getMessages();
+// ['username' => ['...'], 'password_confirm' => ['...']]
+```
+
+**Single field** — failures for one field:
+
+```php
+$failures = $result->getFailures()->forField('username'); // Failure[]
+$strings  = $result->getFailures()->getMessagesForField('username'); // string[]
+```
+
+**As a string** — useful for logs or exception messages:
+
+```php
+echo $result->getFailures()->getMessagesAsString('  ');
+// "  username: username must be alphanumeric" ...
+```
+
+**Nested map** — mirrors the shape of the input data, handy for rendering inline form errors:
+
+```php
+$nested = $result->getFailures()->getNestedMessages();
+// ['address' => ['city' => ['City is required'], 'zip' => ['Zip is required']]]
+```
 
 
 ## Failure Modes
@@ -121,6 +150,74 @@ $filter->validate('field')->is('strlenMax', 12)->asSoftRule();
 $filter->useFieldMessage('field', 'Please use 6-12 alphanumeric characters.');
 ```
 
+
+## Sub-filters (Nested Arrays and Objects)
+
+When a field contains a nested array or object that itself needs filtering, use `subfilter()`. It returns a new filter instance that you configure with the same `validate()` / `sanitize()` calls:
+
+```php
+// validate an 'address' field whose value is an array or object
+$address = $filter->subfilter('address');
+$address->validate('city')->isNotBlank();
+$address->validate('zip')->is('alnum');
+$address->sanitize('zip')->to('string');
+```
+
+### How failures are reported
+
+Failures from the sub-filter are merged into the parent _FailureCollection_ under their **full dot-notation path** (`parent.child`), so failures from different sub-filters never collide:
+
+```php
+$result   = $filter->apply(['address' => ['city' => ''], 'shipping' => ['city' => '']]);
+$messages = $result->getFailures()->getMessages();
+// [
+//   'address.city'  => ['city should not have been blank'],
+//   'shipping.city' => ['city should not have been blank'],
+// ]
+```
+
+Retrieve a single nested field's failures by its full path:
+
+```php
+$result->getFailures()->forPath('address.city');          // Failure[]
+$result->getFailures()->getMessagesForField('address.city'); // string[]
+```
+
+Or use `getNestedMessages()` to get a nested array that mirrors the input shape:
+
+```php
+$nested = $result->getFailures()->getNestedMessages();
+// [
+//   'address'  => ['city' => ['city should not have been blank']],
+//   'shipping' => ['city' => ['city should not have been blank']],
+// ]
+echo $nested['address']['city'][0]; // "city should not have been blank"
+```
+
+### Sub-filter classes
+
+By default `subfilter()` uses the same filter class as the parent. To use a dedicated filter class for a specific field, extend `SubjectFilter`, define its rules in `init()`, then pass the class name as the second argument:
+
+```php
+namespace Vendor\Package;
+
+use Aura\Filter\SubjectFilter;
+
+class AddressFilter extends SubjectFilter
+{
+    protected function init(): void
+    {
+        $this->validate('city')->isNotBlank();
+        $this->validate('zip')->is('alnum');
+        $this->sanitize('zip')->to('string');
+    }
+}
+```
+
+```php
+// the parent filter delegates the 'address' field to AddressFilter
+$filter->subfilter('address', \Vendor\Package\AddressFilter::class);
+```
 
 ## Blank Fields
 
