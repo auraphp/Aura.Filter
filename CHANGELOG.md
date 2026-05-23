@@ -26,7 +26,7 @@
 - ADD: `Rule\Validate\UploadedFile` — validates a PSR-7 `UploadedFileInterface` value with configurable rules: `required`, `fileExtension`, `fileMedia`, `sizeMax`, `sizeMin`.
 - ADD: `Rule\Sanitize\UploadedFileOrNull` — sanitizes a value to `null` if it is not a valid PSR-7 uploaded file (i.e. not an `UploadedFileInterface` or upload error is not `UPLOAD_ERR_OK`).
 - ADD: `SubjectFilter::useFieldMessage(string $field, string $message)` — set a custom failure message for a specific field, overriding all per-rule messages.
-- ADD: PHP 8.1, 8.2, 8.3, and 8.4 support added to CI test matrix.
+- ADD: PHP 8.4, 8.5 support added to CI test matrix.
 - ADD: `aura/filter-interface` package dependency introducing `SubjectFilterInterface`, `FilterResultInterface`, `FilterResult`, and `FailureInterface`.
 
 ### Fixes
