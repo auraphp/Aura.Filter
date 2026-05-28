@@ -12,7 +12,7 @@ class NowTest extends AbstractSanitizeTest
         return $args;
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         $now = date('Y-m-d');
         return array(

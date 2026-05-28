@@ -4,13 +4,13 @@ namespace Aura\Filter\Spec;
 use Aura\Filter\Filter;
 use Aura\Filter\Locator\SanitizeLocator;
 use Aura\Filter\Rule\Sanitize;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class SanitizeSpecTest extends TestCase
 {
     protected $spec;
 
-    protected function set_up()
+    protected function setUp(): void
     {
         $this->spec = new SanitizeSpec(new SanitizeLocator(array(
             'strlen' => function () { return new Sanitize\Strlen; },

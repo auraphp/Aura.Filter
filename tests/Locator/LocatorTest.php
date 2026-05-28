@@ -3,7 +3,7 @@ namespace Aura\Filter\Locator;
 
 use Aura\Filter\Rule\Validate;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class LocatorTest extends TestCase
 {

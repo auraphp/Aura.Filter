@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class IpTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('141.225.185.101'),
@@ -28,7 +28,7 @@ class IpTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(' '),

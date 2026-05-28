@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class UuidTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('12345678-90ab-cdef-1234-567890123456'),
@@ -14,7 +14,7 @@ class UuidTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array('1000067890abcdef1234562340123456'),

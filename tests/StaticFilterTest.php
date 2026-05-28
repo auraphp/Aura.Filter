@@ -3,11 +3,11 @@ namespace Aura\Filter;
 
 use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Locator\SanitizeLocator;
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class StaticFilterTest extends TestCase
 {
-    protected function set_up()
+    protected function setUp(): void
     {
         FakeStaticFilter::reset();
     }

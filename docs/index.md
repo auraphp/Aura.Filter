@@ -6,3 +6,4 @@
 - [Rules To Validate Fields](validate.md)
 - [Rules To Sanitize Fields](sanitize.md)
 - [Custom Rules](custom.md)
+- [Upgrading from 2.x → 6.0.0](upgrade.md)

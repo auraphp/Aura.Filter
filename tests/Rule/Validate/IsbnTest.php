@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class IsbnTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('3-7814-0334-3'),
@@ -25,7 +25,7 @@ class IsbnTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array('978-3836211391'),

@@ -10,7 +10,7 @@ class MinTest extends AbstractValidateTest
         return array($this->min);
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(4),
@@ -19,7 +19,7 @@ class MinTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

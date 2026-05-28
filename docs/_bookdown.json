@@ -6,6 +6,7 @@
         "subject-filter.md",
         "validate.md",
         "sanitize.md",
-        "custom.md"
+        "custom.md",
+        "upgrade.md"
     ]
 }

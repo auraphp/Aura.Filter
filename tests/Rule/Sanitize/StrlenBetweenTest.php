@@ -12,7 +12,7 @@ class StrlenBetweenTest extends AbstractSanitizeTest
         return array($this->min, $this->max);
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(), false, array()),

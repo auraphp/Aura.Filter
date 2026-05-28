@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class UuidHexonlyTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         // random 32-char hex strings
         $data = array();
@@ -13,7 +13,7 @@ class UuidHexonlyTest extends AbstractValidateTest
         return $data;
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array('12345678-90ab-cdef-1234-5678901234567'),

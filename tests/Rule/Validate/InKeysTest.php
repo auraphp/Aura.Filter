@@ -18,7 +18,7 @@ class InKeysTest extends AbstractValidateTest
         return $args;
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array(0),
@@ -29,7 +29,7 @@ class InKeysTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(null),

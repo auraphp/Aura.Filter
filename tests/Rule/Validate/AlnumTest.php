@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class AlnumTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             // array(0),
@@ -21,7 +21,7 @@ class AlnumTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(""),

@@ -1,13 +1,13 @@
 <?php
 namespace Aura\Filter;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 class ValueFilterTest extends TestCase
 {
     protected $filter;
 
-    protected function set_up()
+    protected function setUp(): void
     {
         $filter_factory = new FilterFactory();
         $this->filter = $filter_factory->newValueFilter();

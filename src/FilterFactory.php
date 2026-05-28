@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace Aura\Filter;
 
 use Aura\Filter\Failure\FailureCollection;
+use Aura\Filter_Interface\SubjectFilterInterface;
 use Aura\Filter\Locator\SanitizeLocator;
 use Aura\Filter\Locator\ValidateLocator;
 use Aura\Filter\Spec\SanitizeSpec;
@@ -27,48 +28,28 @@ use Aura\Filter\Spec\SubSpecFactory;
 class FilterFactory
 {
     /**
-     *
      * Additional factories for the ValidateLocator.
      *
      * @var array
-     *
      */
-    protected $validate_factories;
+    protected array $validate_factories;
 
     /**
-     *
      * Additional factories for the SanitizeLocator.
      *
      * @var array
-     *
      */
-    protected $sanitize_factories;
+    protected array $sanitize_factories;
 
-    /**
-     *
-     * Constructor.
-     *
-     * @param array $validate_factories Additional factories for the ValidateLocator.
-     *
-     * @param array $sanitize_factories Additional factories for the SanitizeLocator.
-     */
     public function __construct(
-        array $validate_factories = array(),
-        array $sanitize_factories = array()
+        array $validate_factories = [],
+        array $sanitize_factories = []
     ) {
         $this->validate_factories = $validate_factories;
         $this->sanitize_factories = $sanitize_factories;
     }
 
-    /**
-     *
-     * Returns a new Filter instance.
-     *
-     * @param string $class The filter class to instantiate.
-     *
-     *
-     */
-    public function newSubjectFilter(string $class = SubjectFilter::class): object
+    public function newSubjectFilter(string $class = SubjectFilter::class): SubjectFilterInterface
     {
         return new $class(
             $this->newValidateSpec(),
@@ -78,12 +59,6 @@ class FilterFactory
         );
     }
 
-    /**
-     *
-     * Returns a new ValueFilter instance.
-     *
-     *
-     */
     public function newValueFilter(): ValueFilter
     {
         return new ValueFilter(
@@ -92,67 +67,31 @@ class FilterFactory
         );
     }
 
-    /**
-     *
-     * Returns a new ValidateSpec instance.
-     *
-     *
-     */
     public function newValidateSpec(): ValidateSpec
     {
         return new ValidateSpec($this->newValidateLocator());
     }
 
-    /**
-     *
-     * Returns a new SanitizeSpec instance.
-     *
-     *
-     */
     public function newSanitizeSpec(): SanitizeSpec
     {
         return new SanitizeSpec($this->newSanitizeLocator());
     }
 
-    /**
-     *
-     * Returns a new SubSpecFactory instance.
-     *
-     *
-     */
     public function newSubSpecFactory(): SubSpecFactory
     {
         return new SubSpecFactory($this);
     }
 
-    /**
-     *
-     * Returns a new ValidateLocator instance.
-     *
-     *
-     */
     public function newValidateLocator(): ValidateLocator
     {
         return new ValidateLocator($this->validate_factories);
     }
 
-    /**
-     *
-     * Returns a new SanitizeLocator instance.
-     *
-     *
-     */
     public function newSanitizeLocator(): SanitizeLocator
     {
         return new SanitizeLocator($this->sanitize_factories);
     }
 
-    /**
-     *
-     * Returns a new FailureCollection instance.
-     *
-     *
-     */
     public function newFailureCollection(): FailureCollection
     {
         return new FailureCollection();

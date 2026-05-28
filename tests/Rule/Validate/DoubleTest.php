@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class DoubleTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array("+123456.7890"),
@@ -14,7 +14,7 @@ class DoubleTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(' '),

@@ -1,7 +1,7 @@
 <?php
 namespace Aura\Filter\Rule\Validate;
 
-use Yoast\PHPUnitPolyfills\TestCases\TestCase;
+use PHPUnit\Framework\TestCase;
 
 abstract class AbstractValidateTest extends TestCase
 {
@@ -55,7 +55,7 @@ abstract class AbstractValidateTest extends TestCase
         $this->assertFalse($this->invoke($value));
     }
 
-    abstract public function providerIs();
+    abstract public static function providerIs();
 
-    abstract public function providerIsNot();
+    abstract public static function providerIsNot();
 }

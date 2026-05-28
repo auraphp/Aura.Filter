@@ -124,13 +124,13 @@ class Spec
      * @return bool True on success, false on failure.
      *
      */
-    public function __invoke($subject)
+    public function __invoke(object $subject): bool
     {
         $rule = $this->locator->get($this->rule);
         $args = $this->args;
         array_unshift($args, $this->field);
         array_unshift($args, $subject);
-        return call_user_func_array($rule, $args);
+        return (bool) call_user_func_array($rule, $args);
     }
 
     /**

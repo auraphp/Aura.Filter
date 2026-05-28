@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class LocaleTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('en_US'),
@@ -12,7 +12,7 @@ class LocaleTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(""),

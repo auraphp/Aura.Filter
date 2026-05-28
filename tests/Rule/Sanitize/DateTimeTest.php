@@ -5,7 +5,7 @@ use DateTime as PhpDateTime;
 
 class DateTimeTest extends AbstractSanitizeTest
 {
-    public function providerTo()
+    public static function providerTo()
     {
         $dt = new PhpDateTime('Nov 7, 1979, 12:34pm');
 

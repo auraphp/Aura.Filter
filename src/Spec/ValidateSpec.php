@@ -37,7 +37,7 @@ class ValidateSpec extends Spec
      * @return bool True on success, false on failure.
      *
      */
-    public function __invoke($subject)
+    public function __invoke(object $subject): bool
     {
         if ($this->subjectFieldIsBlank($subject)) {
             return $this->allow_blank;

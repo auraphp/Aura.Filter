@@ -10,7 +10,7 @@ class StrlenTest extends AbstractSanitizeTest
         return array($this->len);
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(), false, array()),

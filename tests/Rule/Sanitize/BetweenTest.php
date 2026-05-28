@@ -15,7 +15,7 @@ class BetweenTest extends AbstractSanitizeTest
         return $args;
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(), false, array()),

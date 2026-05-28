@@ -10,7 +10,7 @@ class RegexTest extends AbstractSanitizeTest
         return array($this->expr_sanitize, '@');
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(array(), false, array()),

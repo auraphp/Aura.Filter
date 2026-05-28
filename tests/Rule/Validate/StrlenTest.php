@@ -10,7 +10,7 @@ class StrlenTest extends AbstractValidateTest
         return array($this->len);
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('abcd'),
@@ -20,7 +20,7 @@ class StrlenTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

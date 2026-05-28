@@ -13,32 +13,32 @@ namespace Aura\Filter\Rule\Validate;
  */
 class EmailTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs(): array
     {
         $xml = simplexml_load_file(__DIR__ . DIRECTORY_SEPARATOR . 'EmailTest.xml');
         $provide = array();
         foreach ($xml->test as $test) {
-            if ($this->isValidAddressRegardlessOfDns($test)) {
-                $this->appendToProvide($provide, $test);
+            if (static::isValidAddressRegardlessOfDns($test)) {
+                static::appendToProvide($provide, $test);
             }
         }
 
         return $provide;
     }
 
-    public function providerIsNot()
+    public static function providerIsNot(): array
     {
         $xml = simplexml_load_file(__DIR__ . DIRECTORY_SEPARATOR . 'EmailTest.xml');
         $provide = array();
         foreach ($xml->test as $test) {
-            if (! $this->isValidAddressRegardlessOfDns($test)) {
-                $this->appendToProvide($provide, $test);
+            if (! static::isValidAddressRegardlessOfDns($test)) {
+                static::appendToProvide($provide, $test);
             }
         }
         return $provide;
     }
 
-    protected function isValidAddressRegardlessOfDns($test)
+    protected static function isValidAddressRegardlessOfDns($test): bool
     {
         return $test->diagnosis == 'ISEMAIL_VALID'
             || $test->diagnosis == 'ISEMAIL_RFC5321_IPV6DEPRECATED'
@@ -46,10 +46,10 @@ class EmailTest extends AbstractValidateTest
             || $test->category == 'ISEMAIL_DNSWARN';
     }
 
-    protected function appendToProvide(&$provide, $test)
+    protected static function appendToProvide(array &$provide, $test): void
     {
         $provide[(string) $test['id']] = array(
-            $this->convertSymbolsToControls((string) $test->address)
+            static::convertSymbolsToControls((string) $test->address)
         );
     }
 
@@ -57,7 +57,7 @@ class EmailTest extends AbstractValidateTest
      * The XML test file uses text symbol strings to represent ASCII control
      * codes. This converts the text symbols to the actual control characters.
      */
-    protected function convertSymbolsToControls($address)
+    protected static function convertSymbolsToControls(string $address): string
     {
         // &#x2407; => BEL 7 ␇
         // &#x2409; => HT 9  ␉

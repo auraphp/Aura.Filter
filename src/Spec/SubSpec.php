@@ -10,10 +10,11 @@ declare(strict_types=1);
 
 namespace Aura\Filter\Spec;
 
-use Aura\Filter\SubjectFilter;
+use Aura\Filter_Interface\FilterResultInterface;
+use Aura\Filter_Interface\SubjectFilterInterface;
 
 /**
- * A specification for a "sub" subject
+ * A specification for a "sub" subject.
  *
  * @package Aura.Filter
  *
@@ -21,64 +22,94 @@ use Aura\Filter\SubjectFilter;
 class SubSpec extends Spec
 {
     /**
-     * Subject Filter
-     *
-     * @var SubjectFilter
-     *
-     * @access protected
+     * The sub-filter to apply.
      */
-    protected $filter;
+    protected SubjectFilterInterface $filter;
 
     /**
-     * __construct
-     *
-     * @param SubjectFilter $filter The filter to apply to the sub subject
-     *
-     * @access public
+     * The result of the last __invoke() call.
      */
-    public function __construct(SubjectFilter $filter)
+    private ?FilterResultInterface $lastResult = null;
+
+    /**
+     * @param SubjectFilterInterface $filter The filter to apply to the sub subject.
+     */
+    public function __construct(SubjectFilterInterface $filter)
     {
         $this->filter = $filter;
     }
 
     /**
-     * Apply sub filter to sub subject
+     * Apply the sub-filter to the named field on the parent subject.
      *
-     * @param mixed $subject parent subject
+     * The parent subject is always a stdClass working copy — assignment to
+     * $subject->$field propagates the sanitized sub-values back into it.
+     * Arrays are converted to stdClass before filtering and back afterwards
+     * so sub-filter rules can access nested values as properties.
      *
-     * @return bool
-     *
-     * @access public
+     * Fields that are not targeted by a subfilter are never touched.
      */
-    public function __invoke($subject)
+    public function __invoke(object $subject): bool
     {
-        $field = $this->field;
-        $values =& $subject->$field;
-        return $this->filter->apply($values);
+        $field  = $this->field;
+        $values = $subject->$field;
+
+        if (is_array($values)) {
+            $obj               = $this->arrayToObject($values);
+            $this->lastResult  = $this->filter->apply($obj);
+            $subject->$field   = $this->objectToArray($this->lastResult->getValues());
+        } else {
+            $this->lastResult  = $this->filter->apply($values);
+            $subject->$field   = $this->lastResult->getValues();
+        }
+
+        return $this->lastResult->isSuccess();
     }
 
     /**
-     * Get the Subject filter
-     *
-     *
-     * @access public
+     * Returns the result of the last __invoke() call, or null before first call.
      */
-    public function filter(): SubjectFilter
+    public function getLastResult(): ?FilterResultInterface
+    {
+        return $this->lastResult;
+    }
+
+    /**
+     * Returns the sub-filter for fluent chaining after subfilter() is called.
+     */
+    public function filter(): SubjectFilterInterface
     {
         return $this->filter;
     }
 
     /**
-     * Returns the default failure message for this rule specification.
-     *
-     *
-     * @access protected
-     * @return mixed[][]
+     * Recursively converts an array to a stdClass so nested values are
+     * reachable as object properties inside the sub-filter.
      */
-    protected function getDefaultMessage(): array
+    private function arrayToObject(array $array): object
     {
-        return $this->filter
-            ->getFailures()
-            ->getMessages();
+        $obj = new \stdClass();
+        foreach ($array as $key => $value) {
+            $obj->$key = is_array($value) ? $this->arrayToObject($value) : $value;
+        }
+        return $obj;
+    }
+
+    /**
+     * Recursively converts a stdClass back to an array so that sanitized
+     * values are returned in the original data structure.
+     *
+     * Only stdClass nodes are converted — objects that were not created by
+     * arrayToObject() (e.g. DTOs) are returned as-is.
+     */
+    private function objectToArray(object $obj): array
+    {
+        $arr = [];
+        foreach ((array) $obj as $key => $value) {
+            $arr[$key] = $value instanceof \stdClass
+                ? $this->objectToArray($value)
+                : $value;
+        }
+        return $arr;
     }
 }

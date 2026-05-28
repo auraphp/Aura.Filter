@@ -10,7 +10,7 @@ class StrlenMaxTest extends AbstractValidateTest
         return array($this->max);
     }
 
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('a'),
@@ -22,7 +22,7 @@ class StrlenMaxTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

@@ -12,7 +12,7 @@ class ValueTest extends AbstractSanitizeTest
         return $args;
     }
 
-    public function providerTo()
+    public static function providerTo()
     {
         return array(
             array(0,         true, '1'),

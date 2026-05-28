@@ -3,7 +3,7 @@ namespace Aura\Filter\Rule\Validate;
 
 class UrlTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array("http://example.com"),
@@ -15,7 +15,7 @@ class UrlTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(array()),

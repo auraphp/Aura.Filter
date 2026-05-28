@@ -5,7 +5,7 @@ use DateTime as PhpDateTime;
 
 class DateTimeTest extends AbstractValidateTest
 {
-    public function providerIs()
+    public static function providerIs()
     {
         return array(
             array('Nov 7, 1979, 12:34pm'),
@@ -21,7 +21,7 @@ class DateTimeTest extends AbstractValidateTest
         );
     }
 
-    public function providerIsNot()
+    public static function providerIsNot()
     {
         return array(
             array(' '),
