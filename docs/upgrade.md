@@ -137,7 +137,7 @@ class MyService
 
 ## New Dependency: `aura/filter-interface`
 
-The package now requires `aura/filter-interface` (currently at `dev-sub-filter`). This introduces:
+The package now requires `aura/filter-interface` (currently at `6.x`). This introduces:
 
 | Interface / Class | Description |
 |---|---|
