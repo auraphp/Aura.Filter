@@ -8,7 +8,7 @@
 - License changed from BSD to MIT.
 - Removed Aura.Di integration (`config/Common.php` and `autoload.php`).
 - Removed `tests/ContainerTest.php` and `config/Common.php`; the library is now DI-container-agnostic.
-- `SubjectFilter::__invoke()` no longer mutates the passed subject directly; use `apply()` to receive a `FilterResultInterface` with the sanitized copy and failures.
+- `SubjectFilter::__invoke(array|object &$subject)` still mutates the subject: on success it writes the sanitized values back into `$subject`; on failure it throws `FilterFailed`. Use the new `apply()` instead to leave the subject untouched and receive a `FilterResultInterface` with the sanitized copy and failures.
 - `SubjectFilter::assert()` now accepts `array|object` and throws `FilterFailed` on failure (unchanged signature, but now typed).
 - `Failure` now implements `Aura\Filter_Interface\FailureInterface` instead of `JsonSerializable` directly (it still serializes to JSON via the interface).
 - `SubjectFilter` now implements `Aura\Filter_Interface\SubjectFilterInterface`.
