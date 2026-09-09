@@ -391,6 +391,44 @@ class SubjectFilterTest extends TestCase
     }
 
     /**
+     * Rule arguments recorded inside a sub-filter must survive being moved
+     * into the parent collection: a nested failure carries the same args as
+     * the equivalent failure on a flat (non-nested) filter.
+     */
+    public function testSubfilter_nestedFailurePreservesRuleArgs(): void
+    {
+        $sub = $this->filter->subfilter('address');
+        $sub->validate('zip')->is('strlenMin', 5);
+
+        $result   = $this->filter->apply(['address' => ['zip' => 'ab']]);
+        $failures = $result->getFailures()->forPath('address.zip');
+
+        $this->assertCount(1, $failures);
+        $this->assertSame([5], $failures[0]->getArgs());
+        $this->assertSame('address.zip', $failures[0]->getField());
+    }
+
+    /**
+     * Every failure a sub-filter records is propagated, not just the last one
+     * per field.
+     */
+    public function testSubfilter_multipleFailuresOnSameNestedFieldArePropagated(): void
+    {
+        $sub = $this->filter->subfilter('address');
+        // Soft rules do not stop later specs for the same field, so both
+        // rules get a chance to record a failure.
+        $sub->validate('zip')->is('strlenMin', 5)->asSoftRule();
+        $sub->validate('zip')->is('alpha')->asSoftRule();
+
+        $result   = $this->filter->apply(['address' => ['zip' => '1']]);
+        $failures = $result->getFailures()->forPath('address.zip');
+
+        $this->assertCount(2, $failures);
+        $this->assertSame([5], $failures[0]->getArgs());
+        $this->assertSame([], $failures[1]->getArgs());
+    }
+
+    /**
      * Deeply nested arrays (three levels) are handled correctly.
      */
     public function testSubfilter_deeplyNestedArray(): void
@@ -402,6 +440,15 @@ class SubjectFilterTest extends TestCase
         $data = ['order' => ['item' => ['name' => '']]];
         $result = $this->filter->apply($data);
         $this->assertFalse($result->isSuccess());
+
+        // The path is built up recursively, one prefix per nesting level, so a
+        // failure three levels down is addressable by its full path.
+        $messages = $result->getFailures()->getMessages();
+        $this->assertArrayHasKey('order.item.name', $messages);
+        $this->assertSame(
+            ['order' => ['item' => ['name' => $messages['order.item.name']]]],
+            $result->getFailures()->getNestedMessages()
+        );
 
         // passing case
         $filter2 = (new FilterFactory())->newSubjectFilter();
