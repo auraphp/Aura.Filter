@@ -314,9 +314,17 @@ class SubjectFilter implements SubjectFilterInterface
             $lastFailure = null;
 
             if ($lastResult !== null) {
-                foreach ($lastResult->getFailures()->getMessages() as $subField => $messages) {
-                    foreach ($messages as $message) {
-                        $lastFailure = $ctx['failures']->add($field . '.' . $subField, $message);
+                $subFailures = $lastResult->getFailures();
+                foreach (array_keys($subFailures->getMessages()) as $subField) {
+                    // Re-add the sub-failure objects themselves rather than just
+                    // their message strings, so the rule arguments recorded by the
+                    // sub-filter survive the move into the parent collection.
+                    foreach ($subFailures->forField((string) $subField) as $subFailure) {
+                        $lastFailure = $ctx['failures']->add(
+                            $field . '.' . $subField,
+                            $subFailure->getMessage(),
+                            $subFailure->getArgs()
+                        );
                     }
                 }
             }

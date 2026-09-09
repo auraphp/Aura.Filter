@@ -39,6 +39,7 @@
 - FIX: Missing property declarations added throughout rule classes to fix PHP 8.2 dynamic-property deprecation warnings.
 - FIX: Array-type checks added where subjects could be passed as arrays to rule `__invoke()` methods.
 - FIX: Shallow-cast bug in multidimensional filter support — only `stdClass` nodes are converted, preserving plain array fields passed to validators and sanitizers.
+- FIX: Rule arguments are no longer lost when a sub-filter failure is propagated into the parent `FailureCollection`; a nested failure now reports the same `getArgs()` as the equivalent failure on a flat filter.
 
 ### Changes
 
