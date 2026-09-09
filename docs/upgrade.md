@@ -1,12 +1,12 @@
-# Upgrade Guide: 2.x → 6.0.0
+# Upgrade Guide: 2.x → 7.0.0
 
-This guide covers the breaking changes introduced in 6.0.0 and how to update your code accordingly.
+This guide covers the breaking changes introduced in 7.0.0 and how to update your code accordingly.
 
 ---
 
 ## PHP Version Requirement
 
-**2.x required PHP >= 5.4. 6.0.0 requires PHP >= 8.4.**
+**2.x required PHP >= 5.4. 7.0.0 requires PHP >= 8.4.**
 
 Ensure your runtime and CI pipeline are running PHP 8.4 or later before upgrading.
 
@@ -31,7 +31,7 @@ $di->params['Aura\Filter\FilterFactory'] = [
 ];
 ```
 
-**After (6.0.0):**
+**After (7.0.0):**
 
 Instantiate `FilterFactory` directly. No container config is provided by the package; wire it yourself with whichever DI container you use:
 
@@ -49,7 +49,7 @@ $filter = $factory->newSubjectFilter();
 
 ## `SubjectFilter`: `apply()` Now Returns a `FilterResultInterface`
 
-In 2.x, `apply()` mutated the subject in place and returned a `bool`. In 6.0.0, `apply()` is **immutable** — it never mutates your original subject. Instead, it returns a `FilterResultInterface` containing the sanitized copy and any failures.
+In 2.x, `apply()` mutated the subject in place and returned a `bool`. In 7.0.0, `apply()` is **immutable** — it never mutates your original subject. Instead, it returns a `FilterResultInterface` containing the sanitized copy and any failures.
 
 **Before (2.x):**
 ```php
@@ -60,7 +60,7 @@ if ($filter->apply($subject)) {
 }
 ```
 
-**After (6.0.0):**
+**After (7.0.0):**
 ```php
 $result = $filter->apply($subject);
 
@@ -79,7 +79,7 @@ if ($result->isSuccess()) {
 
 In 2.x, `__invoke()` was equivalent to `assert()` — it mutated the subject and threw `FilterFailed` on failure (returning `null` on success).
 
-In 6.0.0, `__invoke()` still mutates the subject (writing sanitized values back) and throws `FilterFailed` on failure, but internally it now uses `apply()`. The visible behaviour when catching `FilterFailed` remains the same.
+In 7.0.0, `__invoke()` still mutates the subject (writing sanitized values back) and throws `FilterFailed` on failure, but internally it now uses `apply()`. The visible behaviour when catching `FilterFailed` remains the same.
 
 If you were calling `$filter($subject)` and then `$filter->getFailures()` after catching the exception, use `$e->getFailures()` instead:
 
@@ -107,7 +107,7 @@ if (! $filter->apply($subject)) {
 }
 ```
 
-**After (6.0.0):**
+**After (7.0.0):**
 ```php
 $result = $filter->apply($subject);
 if (! $result->isSuccess()) {
@@ -137,7 +137,7 @@ class MyService
 
 ## New Dependency: `aura/filter-interface`
 
-The package now requires `aura/filter-interface` (currently at `6.x`). This introduces:
+The package now requires `aura/filter-interface` (currently at `7.x`). This introduces:
 
 | Interface / Class | Description |
 |---|---|
@@ -166,7 +166,7 @@ public function getField()
     return $this->field;
 }
 
-// After (6.0.0 compatible override)
+// After (7.0.0 compatible override)
 public function getField(): string
 {
     return $this->field;
@@ -177,7 +177,7 @@ public function getField(): string
 
 ## New Feature: Sub-Filters (Nested / Multidimensional Filtering)
 
-6.0.0 introduces first-class support for filtering nested objects and arrays via `SubjectFilter::subfilter()`.
+7.0.0 introduces first-class support for filtering nested objects and arrays via `SubjectFilter::subfilter()`.
 
 ```php
 $filter = $factory->newSubjectFilter();

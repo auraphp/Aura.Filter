@@ -20,7 +20,7 @@
     "require": {
         "php": "^8.4",
         "psr/http-message": "^1.0 || ^2.0",
-        "aura/filter-interface": "6.0.0-beta1"
+        "aura/filter-interface": "^7.0@dev"
     },
     "autoload": {
         "psr-4": {
