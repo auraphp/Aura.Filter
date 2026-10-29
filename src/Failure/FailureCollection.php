@@ -138,39 +138,45 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
      */
     public function getNestedMessages(): array
     {
-        $result = [];
+        $tree = ['messages' => null, 'children' => []];
         foreach ($this->items as $field => $failures) {
             $messages = array_map(
                 static fn(FailureInterface $f) => $f->getMessage(),
                 $failures
             );
-            $parts = explode('.', $field);
-            $node  = &$result;
-            $last  = count($parts) - 1;
-            foreach ($parts as $i => $part) {
-                if ($i === $last) {
-                    // Last segment: store this field's own messages.
-                    // If the node already has child entries (because a deeper path
-                    // was processed earlier), keep the children and add own messages
-                    // under the reserved '_messages' key instead of overwriting.
-                    if (isset($node[$part]) && is_array($node[$part])) {
-                        $node[$part]['_messages'] = $messages;
-                    } else {
-                        $node[$part] = $messages;
-                    }
-                } else {
-                    if (! isset($node[$part])) {
-                        $node[$part] = [];
-                    } elseif (array_is_list($node[$part])) {
-                        // The node was previously stored as a flat messages list
-                        // (i.e. this parent path also had its own failures).
-                        // Promote it to a node that holds both own messages and children.
-                        $node[$part] = ['_messages' => $node[$part]];
-                    }
-                    $node = &$node[$part];
+            $node = &$tree;
+            foreach (explode('.', $field) as $part) {
+                if (! isset($node['children'][$part])) {
+                    $node['children'][$part] = ['messages' => null, 'children' => []];
                 }
+                $node = &$node['children'][$part];
             }
+            $node['messages'] = $messages;
             unset($node);
+        }
+
+        $toNestedMessages = static function (array $node) use (&$toNestedMessages): array {
+            if ($node['children'] === []) {
+                return $node['messages'] ?? [];
+            }
+
+            $result = [];
+            if ($node['messages'] !== null) {
+                $result['_messages'] = $node['messages'];
+            }
+            $parts = array_keys($node['children']);
+            $numericParts = array_filter($parts, 'is_int');
+            $stringParts = array_filter($parts, 'is_string');
+            sort($numericParts, SORT_NUMERIC);
+            foreach (array_merge($numericParts, $stringParts) as $part) {
+                $result[$part] = $toNestedMessages($node['children'][$part]);
+            }
+            return $result;
+        };
+
+        $result = [];
+        foreach ($tree['children'] as $part => $child) {
+            $result[$part] = $toNestedMessages($child);
         }
         return $result;
     }
