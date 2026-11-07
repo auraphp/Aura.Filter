@@ -174,11 +174,9 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
             return $result;
         };
 
-        $result = [];
-        foreach ($tree['children'] as $part => $child) {
-            $result[$part] = $toNestedMessages($child);
-        }
-        return $result;
+        // The root never has own messages, so this applies the same
+        // numeric-key ordering at the top level as at deeper levels.
+        return $toNestedMessages($tree);
     }
 
     // -------------------------------------------------------------------------

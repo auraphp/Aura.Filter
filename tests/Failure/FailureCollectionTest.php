@@ -337,6 +337,34 @@ class FailureCollectionTest extends TestCase
         );
     }
 
+    public function testGetNestedMessagesRootNumericPathsRegardlessOfOrder(): void
+    {
+        $this->failures->add('1.name', 'Second name is required');
+        $this->failures->add('0.name', 'First name is required');
+
+        $this->assertSame(
+            [
+                ['name' => ['First name is required']],
+                ['name' => ['Second name is required']],
+            ],
+            $this->failures->getNestedMessages()
+        );
+    }
+
+    public function testGetNestedMessagesPreservesSparseListIndex(): void
+    {
+        $this->failures->add('items.2.name', 'Third name is required');
+
+        $this->assertSame(
+            [
+                'items' => [
+                    2 => ['name' => ['Third name is required']],
+                ],
+            ],
+            $this->failures->getNestedMessages()
+        );
+    }
+
     public function testGetNestedMessagesTwoSubfiltersWithSameChildKey(): void
     {
         // address.city and shipping.city must appear as distinct nested keys.
