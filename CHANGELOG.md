@@ -6,6 +6,7 @@
 
 - FIX: `FailureCollection::getNestedMessages()` now returns correct nested messages for numeric field paths such as `items.0.name` and `items.1.name`. Previously the second path could move the first entry under a `_messages` key (#175).
 - FIX: `getNestedMessages()` now orders numeric keys ascending at every level, including the top level (e.g. `0.name`, `1.name`), whatever order the failures were added in (#175, #176).
+- FIX: `getNestedMessages()` no longer throws a `TypeError` when a field name is purely numeric (e.g. `add('1', ...)`) (#176).
 
 ### Notes
 

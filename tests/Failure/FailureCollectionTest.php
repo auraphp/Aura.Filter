@@ -341,13 +341,45 @@ class FailureCollectionTest extends TestCase
     {
         $this->failures->add('1.name', 'Second name is required');
         $this->failures->add('0.name', 'First name is required');
+        $this->failures->add('10.name', 'Eleventh name is required');
+        $this->failures->add('2.name', 'Third name is required');
+
+        // Keys must sort as integers (2 before 10), not as strings.
+        $this->assertSame(
+            [
+                0  => ['name' => ['First name is required']],
+                1  => ['name' => ['Second name is required']],
+                2  => ['name' => ['Third name is required']],
+                10 => ['name' => ['Eleventh name is required']],
+            ],
+            $this->failures->getNestedMessages()
+        );
+    }
+
+    public function testGetNestedMessagesNumericOnlyFieldName(): void
+    {
+        // '1' becomes an int array key internally; this must not TypeError.
+        $this->failures->add('1', 'Row is invalid');
+        $this->failures->add('0', 'Row is invalid');
 
         $this->assertSame(
             [
-                ['name' => ['First name is required']],
-                ['name' => ['Second name is required']],
+                ['Row is invalid'],
+                ['Row is invalid'],
             ],
             $this->failures->getNestedMessages()
+        );
+    }
+
+    public function testGetNestedMessagesSortsLargeNumericKeysExactly(): void
+    {
+        // SORT_NUMERIC compares via float and would misorder these two.
+        $this->failures->add(PHP_INT_MAX . '.name', 'Last');
+        $this->failures->add((PHP_INT_MAX - 1) . '.name', 'Second to last');
+
+        $this->assertSame(
+            [PHP_INT_MAX - 1, PHP_INT_MAX],
+            array_keys($this->failures->getNestedMessages())
         );
     }
 
