@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## Unreleased
+
+### Fixes
+
+- FIX: `FailureCollection::getNestedMessages()` now returns correct nested messages for numeric field paths such as `items.0.name` and `items.1.name`. Previously the second path could move the first entry under a `_messages` key (#175).
+- FIX: `getNestedMessages()` now orders numeric keys ascending at every level, including the top level (e.g. `0.name`, `1.name`), whatever order the failures were added in (#175, #176).
+
+### Notes
+
+- Numeric keys in `getNestedMessages()` keep the original row index; they are never renumbered. When the failing indexes are exactly `0, 1, 2, …` the result is a PHP list and `json_encode()` produces a JSON array. When there are gaps (for example only row `1` failed), it produces a JSON object such as `{"1": {"name": [...]}}`. Clients should look up per-row errors by index (`errors[i]`, or `Object.entries(errors)` in JavaScript) rather than relying on array methods like `.length` or `.map()`.
+
 ## 7.0.0
 
 ### Breaking Changes
