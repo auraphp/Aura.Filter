@@ -145,7 +145,8 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
                 $failures
             );
             $node = &$tree;
-            foreach (explode('.', $field) as $part) {
+            // PHP stores a numeric field name such as '1' as an int key.
+            foreach (explode('.', (string) $field) as $part) {
                 if (! isset($node['children'][$part])) {
                     $node['children'][$part] = ['messages' => null, 'children' => []];
                 }
@@ -167,18 +168,17 @@ class FailureCollection implements FailureCollectionInterface, \JsonSerializable
             $parts = array_keys($node['children']);
             $numericParts = array_filter($parts, 'is_int');
             $stringParts = array_filter($parts, 'is_string');
-            sort($numericParts, SORT_NUMERIC);
+            // Plain sort() compares ints exactly; SORT_NUMERIC goes via float.
+            sort($numericParts);
             foreach (array_merge($numericParts, $stringParts) as $part) {
                 $result[$part] = $toNestedMessages($node['children'][$part]);
             }
             return $result;
         };
 
-        $result = [];
-        foreach ($tree['children'] as $part => $child) {
-            $result[$part] = $toNestedMessages($child);
-        }
-        return $result;
+        // The root never has own messages, so this applies the same
+        // numeric-key ordering at the top level as at deeper levels.
+        return $toNestedMessages($tree);
     }
 
     // -------------------------------------------------------------------------
