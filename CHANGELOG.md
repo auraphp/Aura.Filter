@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 7.0.1
 
 ### Fixes
 
